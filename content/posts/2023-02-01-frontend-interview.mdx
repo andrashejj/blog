@@ -1,0 +1,60 @@
+---
+title: "Frontend Interview"
+date: "2023-02-01"
+slug: "frontend-interview"
+summary: "A practical checklist of frontend interview topics I like to cover, especially around CSS and React."
+coverImage: "https://picsum.photos/id/180/1600/900"
+tags:
+  - software-development
+---
+
+Things I typically like to ask during a frontend dev interview:
+
+- CSS fundamentals
+- React pair coding ([challenge template](https://codesandbox.io/s/coding-challenge-template-7gkem1))
+
+## CSS and layout questions
+
+Can you explain CSS specificity?
+
+Which units do you know, and when would you use each one?
+
+- `%`
+- `px`
+- `em`
+- `rem`
+- `vh`
+
+Let's talk about height. How would you style a div so it is full-page height?
+
+Talk about internationalization and LTR/RTL. How would you style a paragraph with a `1em` margin at the end of text?
+
+Talk about margins. How would you style a footer with predictable spacing?
+
+Can you name different positioning algorithms and how they work?
+
+- `static` (default)
+- `initial`
+- `absolute`
+- `fixed`
+- `relative`
+- `sticky`
+
+Explain the logic of an absolutely positioned element. How will it be positioned with `inset: 10px`?
+
+## Stacking context
+
+What is a stacking context? What are different ways to create one?
+
+- Setting `opacity` to a value less than `1`
+- Setting `position` to `fixed` or `sticky`
+- Applying a `mix-blend-mode` other than `normal`
+- Adding a `z-index` to a child inside a `display: flex` or `display: grid` container
+- Using `transform`, `filter`, `clip-path`, or `perspective`
+- Explicitly creating a context with `isolation: isolate`
+
+How do you achieve a container that can overflow on the y-axis but not on x-axis?
+
+One practical pattern is to use an outer wrapper to control clipping/rounding and an inner scroller to control the overflow behavior.
+
+Copyright 2022 Andras Hejj

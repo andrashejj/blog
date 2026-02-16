@@ -1,0 +1,16 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title='Not found' path='/404'>
+  <section class='py-16 text-center'>
+    <h1 class='text-4xl tracking-[-0.03em]'>Page not found</h1>
+    <p class='mt-2 text-muted'>The page you requested does not exist.</p>
+    <a
+      href='/blog'
+      class='mt-6 inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+    >
+      Go to blog
+    </a>
+  </section>
+</SiteLayout>

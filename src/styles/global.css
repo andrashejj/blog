@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-bg: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-text: #16181d;
+  --color-muted: #586079;
+  --color-border: #e5e9f2;
+  --color-brand: #0b69ff;
+  --color-brand-strong: #0852c9;
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --radius-soft: 16px;
+  --shadow-soft: 0 14px 36px rgba(22, 24, 29, 0.08);
+  --shadow-card: 0 6px 20px rgba(22, 24, 29, 0.05);
+}
+
+@layer base {
+  body {
+    @apply bg-bg font-sans text-text antialiased;
+    line-height: 1.6;
+  }
+}

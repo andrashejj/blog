@@ -1,0 +1,29 @@
+---
+import type { PostMeta } from "../lib/content";
+import PostMetaView from "./PostMeta.astro";
+
+interface Props {
+  post: PostMeta;
+}
+
+const { post } = Astro.props;
+---
+
+<article class='group flex flex-col overflow-hidden rounded-soft border border-border bg-surface shadow-card'>
+  <a href={post.routePath} class='block aspect-video overflow-hidden bg-gradient-to-br from-[#edf2ff] to-[#f8faff]'>
+    <img
+      src={post.coverImage}
+      alt={post.title}
+      loading='lazy'
+      class='h-full w-full object-contain p-1 transition duration-200 group-hover:scale-[1.01]'
+    />
+  </a>
+  <div class='flex flex-1 flex-col p-4'>
+    <PostMetaView post={post} />
+    <h2 class='mt-2 mb-1 text-xl leading-tight tracking-[-0.01em]'>
+      <a href={post.routePath}>{post.title}</a>
+    </h2>
+    <p class='text-muted'>{post.summary}</p>
+    <a href={post.routePath} class='mt-auto inline-flex pt-4 font-bold text-brand'>Read article</a>
+  </div>
+</article>

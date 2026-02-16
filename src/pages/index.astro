@@ -1,0 +1,52 @@
+---
+import PostCard from "../components/PostCard.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getAllPostMeta } from "../lib/content";
+
+const posts = await getAllPostMeta();
+---
+
+<SiteLayout path='/'>
+  <section class='mb-10 rounded-[22px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-soft md:grid md:grid-cols-[120px_1fr] md:items-center md:gap-5 md:p-10'>
+    <img
+      src='/images/posts/andras.png'
+      alt='Portrait of Andras'
+      class='mb-3 h-[120px] w-[120px] rounded-full border-3 border-white shadow-[0_10px_24px_rgba(15,23,42,0.16)] md:mb-0'
+      width='120'
+      height='120'
+      loading='eager'
+    />
+    <div class='min-w-0'>
+      <h1 class='text-[clamp(1.9rem,4.2vw,3.2rem)] leading-[1.15] tracking-[-0.03em]'>Hi, I’m Andras</h1>
+      <p class='max-w-[68ch] text-muted'>Founder, software engineer, husband, dad.</p>
+      <p class='max-w-[68ch] text-muted'>
+        Made with 💕 in Budapest, 🌳 up in Switzerland, enjoying 🏄‍♂️ in Mauritius!
+      </p>
+      <div class='mt-4 flex flex-wrap gap-3'>
+        <a
+          href='/blog'
+          class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+        >
+          Browse posts
+        </a>
+        <a
+          href='/about'
+          class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+        >
+          Read intro
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class='mb-4 flex items-baseline justify-between'>
+      <h2 class='text-2xl tracking-[-0.02em]'>Latest posts</h2>
+      <a href='/blog' class='text-brand'>All posts</a>
+    </div>
+
+    <div class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5'>
+      {posts.slice(0, 6).map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</SiteLayout>

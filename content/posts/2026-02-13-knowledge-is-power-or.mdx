@@ -1,0 +1,167 @@
+---
+title: "Knowledge is power, or..?"
+date: "2026-02-13"
+slug: "knowledge-is-power-or"
+summary: "Why structured, time-aware knowledge is becoming core infrastructure for modern product building."
+coverImage: "/images/posts/knowledge-is-power-or-cover.png"
+tags:
+  - product
+  - ai
+  - knowledge
+---
+
+I think a lot about knowledge these days. Not in a smart way. In a survival way.
+
+Building digital products right now feels like trying to drink from a firehose. Every week there is a new tool, new framework, new must-know pattern, new way to reach users, and new way to lose them.
+
+The old rhythm does not really work anymore: ship features, check metrics, repeat. That used to be enough. It is not now.
+
+Now the game is understanding. Not just understanding the tech, but understanding who the user actually is, what problem they are really facing, what they already tried, what they are afraid of, and what solved looks like for them.
+
+This is the hard part. Not building. Building is the easy part. The hard part is knowing what to build, why, and for whom.
+
+That is why I started thinking in graphs, not lists. A personal knowledge graph is just a fancy way of saying: connect what you learn to what you build.
+
+I use Obsidian for this: simple notes, linked thoughts, small reflections after user calls, experiments, failed launches, and aha moments. Not perfect notes. Useful notes.
+
+- notes about users (their words, not mine)
+- notes about problems (what is real, what is assumed)
+- notes about solutions (what worked, what flopped, what surprised me)
+- notes about decisions (why we chose A over B)
+
+If we do not build our own memory system, we outsource our thinking to randomness: random bookmarks, random chat history, random AI outputs, random half-remembered feedback.
+
+AI and LLMs are amazing. I use them every day. But they are not a replacement for understanding your user. They are a multiplier. If your understanding is shallow, they multiply noise. If your understanding is deep, they multiply leverage.
+
+So what do we need when building products? Habits:
+
+- continuous learning about users
+- note-taking, even messy notes
+- connecting user insights to product decisions
+- creating content from what we learn
+
+Writing a blog post. Recording a short video. Sharing what we learned this week. This is not just content. It is consolidation. It is memory.
+
+And yes, it is overwhelming. If you feel lost sometimes, you are not broken. Most people building products feel this way right now. They just do not always say it.
+
+- I do not really know if users want this.
+- I am not sure we are solving the right problem.
+- Everyone else seems to know their market better.
+
+That is why community matters more than ever. Talk to other builders. Share unfinished thoughts. Ask questions that feel too basic. Let people say I do not know. Create space where being confused is normal.
+
+We do not need to pretend we have it all figured out. We need people who can ground us, help us zoom out, and remind us we are learning in public together.
+
+The goal is not to know everything about your market. The goal is to keep building a better map of it, for users, for decisions, and for each other.
+
+## Deep-Dive: Knowledge Graphs, Triplets, and Why Time Matters
+
+At the core, a knowledge graph is entities connected by relationships. The basic unit is a triplet:
+
+```text
+(subject, predicate, object)
+```
+
+Examples:
+
+- `(User-segment-A, struggles-with, onboarding-flow)`
+- `(Feature-X, solves, Problem-Y)`
+- `(Project-Z, uses, Postgres)`
+- `(Decision-123, was-driven-by, user-feedback)`
+
+When you link these triplets, you get a graph. Not a folder. Not a list. A web of connected ideas.
+
+### The Problem With Static Facts
+
+Most notes are static. But product knowledge is temporal:
+
+- we targeted enterprise, then pivoted to SMB in Q3
+- a pricing model worked until we hit a certain scale
+- competitor X was core, now competitor Y is
+
+If your system does not track time, it quietly lies.
+
+### Temporal Knowledge Graphs
+
+A temporal fact is a triplet with time:
+
+```text
+(subject, predicate, object, valid_from, valid_to)
+```
+
+or:
+
+```text
+(subject, relation, object, timestamp)
+```
+
+That lets you ask: what was true then, what is true now, and when did it change?
+
+### Interactive Graph Example
+
+<div className="aspect-video w-full overflow-hidden rounded-[14px] border border-border bg-[#0b1220] shadow-[0_12px_30px_rgba(22,24,29,0.12)]">
+  <iframe
+    className="block h-full w-full border-0"
+    src="https://vasturiano.github.io/3d-force-graph/example/large-graph/"
+    title="3D force graph large graph example"
+    loading="lazy"
+    referrerPolicy="no-referrer"
+    allowFullScreen
+  />
+</div>
+
+### Types of Facts
+
+- Atemporal: always true
+- Static: true from a point in time and then stable
+- Dynamic: changes over time
+
+Most product knowledge is dynamic, and that is exactly the part that gets stale fastest.
+
+### Why Agents Are Interesting Here
+
+Temporal knowledge graph reasoning research suggests single-pass retrieval is fragile. Agentic approaches do better by:
+
+1. breaking questions into sub-queries
+2. retrieving with temporal constraints
+3. checking if facts are still valid
+4. iterating when context is missing
+
+This mirrors real product debugging: you do not ask once, you probe and triangulate.
+
+Typical temporal operators:
+
+- `Search_time(query)`
+- `Search_specific(query, t)`
+- `Search_before(query, t)`
+- `Search_after(query, t)`
+- `Search_between(query, t1, t2)`
+
+### Practical Personal Setup
+
+You do not need to build a full temporal graph system to benefit:
+
+1. Track when things change.
+2. Link facts to context.
+3. Invalidate stale notes.
+4. Connect notes instead of collecting notes.
+
+### Obsidian Workflow
+
+My setup is simple:
+
+- daily notes: what changed, what confused me
+- concept notes: one atomic idea per note
+- project notes: decisions, trade-offs, outcomes
+- links between notes
+- dates on decisions
+
+Weekly, I merge duplicates, archive stale notes, and add missing links. Over time this becomes a personal knowledge graph that is practical, not theoretical.
+
+### Sources
+
+- [Temporal Agents with Knowledge Graphs](https://developers.openai.com/cookbook/examples/partners/temporal_agents_with_knowledge_graphs/temporal_agents/)
+- [TKG-Thinker paper](https://arxiv.org/html/2602.05818v2)
+- [Obsidian](https://obsidian.md/)
+
+Structured knowledge, connected over time and shared with others, is resilience.

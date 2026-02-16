@@ -1,0 +1,24 @@
+---
+import { render } from "astro:content";
+
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getPageBySlug } from "../lib/content";
+
+const aboutPage = await getPageBySlug("about");
+
+if (!aboutPage) {
+  throw new Error("Missing content/pages/about.mdx");
+}
+
+const { Content } = await render(aboutPage);
+---
+
+<SiteLayout title='About' path='/about'>
+  <article class='rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f8fbff] p-6 shadow-soft md:p-9'>
+    <div
+      class='prose prose-slate max-w-none prose-headings:tracking-[-0.02em] prose-a:text-brand-strong prose-a:underline prose-code:before:content-none prose-code:after:content-none'
+    >
+      <Content />
+    </div>
+  </article>
+</SiteLayout>

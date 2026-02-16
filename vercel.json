@@ -1,0 +1,19 @@
+{
+  "redirects": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:year(\\d{4})/:month(\\d{2})/:slug",
+      "destination": "/blog/:slug",
+      "permanent": true
+    }
+  ]
+}

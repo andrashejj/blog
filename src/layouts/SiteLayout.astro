@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import { buildSeo } from "../lib/seo";
+import { site } from "../lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+
+const { title, description, path, image, type = "website" } = Astro.props;
+
+const seo = buildSeo({ title, description, path, image });
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>{seo.title}</title>
+    <meta name='description' content={seo.description} />
+    <link rel='canonical' href={seo.canonicalUrl} />
+    <meta property='og:type' content={type} />
+    <meta property='og:title' content={seo.title} />
+    <meta property='og:description' content={seo.description} />
+    <meta property='og:url' content={seo.canonicalUrl} />
+    <meta property='og:image' content={seo.image} />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content={seo.title} />
+    <meta name='twitter:description' content={seo.description} />
+    <meta name='twitter:image' content={seo.image} />
+    <link rel='shortcut icon' href='/favicon.ico' />
+    <link rel='manifest' href='/manifest.json' />
+  </head>
+  <body>
+    <div class='grid min-h-dvh grid-rows-[auto_1fr_auto]'>
+      <header class='sticky top-0 z-20 border-b border-border bg-white/80 backdrop-blur-md'>
+        <div class='mx-auto flex w-[min(100%-2rem,1080px)] items-center justify-between py-3'>
+          <a href='/' class='text-lg font-extrabold tracking-[-0.02em]'>{site.name}</a>
+          <nav class='flex gap-4 text-muted'>
+            <a class='transition hover:text-text' href='/blog'>Blog</a>
+            <a class='transition hover:text-text' href='/about'>About</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class='mx-auto w-[min(100%-2rem,1080px)] py-10 md:py-12'>
+        <slot />
+      </main>
+
+      <footer class='border-t border-border bg-white/75'>
+        <div class='mx-auto flex w-[min(100%-2rem,1080px)] flex-col items-start justify-between gap-2 py-4 text-muted md:flex-row md:items-center'>
+          <p>© {new Date().getFullYear()} {site.author}</p>
+          <div class='flex gap-4'>
+            <a href={site.social.github} target='_blank' rel='noreferrer'>GitHub</a>
+            <a href={site.social.linkedin} target='_blank' rel='noreferrer'>LinkedIn</a>
+            <a href={site.social.x} target='_blank' rel='noreferrer'>X</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

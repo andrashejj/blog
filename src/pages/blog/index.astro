@@ -1,0 +1,18 @@
+---
+import PostCard from "../../components/PostCard.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getAllPostMeta } from "../../lib/content";
+
+const posts = await getAllPostMeta();
+---
+
+<SiteLayout title='Blog' path='/blog'>
+  <section class='mb-8'>
+    <h1 class='text-4xl leading-tight tracking-[-0.03em]'>Blog</h1>
+    <p class='mt-2 text-muted'>A chronologically organized archive of articles.</p>
+  </section>
+
+  <section class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5'>
+    {posts.map((post) => <PostCard post={post} />)}
+  </section>
+</SiteLayout>

@@ -1,0 +1,25 @@
+---
+import type { PostMeta } from "../lib/content";
+
+interface Props {
+  post: PostMeta;
+}
+
+const { post } = Astro.props;
+
+const date = new Date(`${post.date}T00:00:00.000Z`).toLocaleDateString(
+  "en-US",
+  {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  },
+);
+---
+
+<p class='flex items-center gap-2 text-sm text-muted'>
+  <span>{date}</span>
+  <span aria-hidden='true'>•</span>
+  <span>{post.readingTimeText}</span>
+</p>
