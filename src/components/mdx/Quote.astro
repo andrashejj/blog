@@ -1,0 +1,18 @@
+---
+interface Props {
+  author?: string;
+}
+
+const { author } = Astro.props;
+---
+
+<figure class="my-8 pl-4 border-l-4 border-brand">
+  <blockquote class="text-xl md:text-2xl italic text-gray-700 dark:text-gray-200 leading-relaxed">
+    <slot />
+  </blockquote>
+  {author && (
+    <figcaption class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+      — <span class="font-medium">{author}</span>
+    </figcaption>
+  )}
+</figure>

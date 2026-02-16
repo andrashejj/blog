@@ -1,0 +1,42 @@
+---
+interface Props {
+  type?: "default" | "info" | "warning" | "error" | "success";
+  title?: string;
+}
+
+const { type = "default", title } = Astro.props;
+
+const styles = {
+  default: {
+    container: "bg-gray-50 dark:bg-gray-800/50 border-l-4 border-gray-400",
+    title: "text-gray-700 dark:text-gray-200",
+  },
+  info: {
+    container: "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500",
+    title: "text-blue-700 dark:text-blue-200",
+  },
+  warning: {
+    container: "bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500",
+    title: "text-amber-700 dark:text-amber-200",
+  },
+  error: {
+    container: "bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500",
+    title: "text-red-700 dark:text-red-200",
+  },
+  success: {
+    container: "bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500",
+    title: "text-green-700 dark:text-green-200",
+  },
+};
+
+const style = styles[type] || styles.default;
+---
+
+<div class={`my-6 p-5 rounded-r-xl ${style.container}`}>
+  {title && (
+    <h4 class={`font-semibold mb-2 ${style.title}`}>{title}</h4>
+  )}
+  <div class="text-gray-600 dark:text-gray-300">
+    <slot />
+  </div>
+</div>
