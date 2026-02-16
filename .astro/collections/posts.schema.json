@@ -49,13 +49,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "title",
-        "date",
-        "slug",
-        "summary",
-        "coverImage"
-      ],
+      "required": ["title", "date", "slug", "summary", "coverImage"],
       "additionalProperties": false
     }
   },
