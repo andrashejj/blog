@@ -8,16 +8,18 @@ tags:
   - software-development
 ---
 
-Things I typically like to ask during a frontend dev interview:
+I keep coming back to the same two things in frontend interviews:
 
 - CSS fundamentals
 - React pair coding ([challenge template](https://codesandbox.io/s/coding-challenge-template-7gkem1))
 
+Not because I want trivia answers. I want to see how people think out loud and debug in real time.
+
 ## CSS and layout questions
 
-Can you explain CSS specificity?
+How do you explain CSS specificity to a teammate who is stuck?
 
-Which units do you know, and when would you use each one?
+Which units do you actually use in production, and why?
 
 - `%`
 - `px`
@@ -25,13 +27,13 @@ Which units do you know, and when would you use each one?
 - `rem`
 - `vh`
 
-Let's talk about height. How would you style a div so it is full-page height?
+Height question: how would you make a div truly full-page height?
 
-Talk about internationalization and LTR/RTL. How would you style a paragraph with a `1em` margin at the end of text?
+Internationalization question: in LTR/RTL layouts, how would you set a `1em` margin at the end of text correctly?
 
-Talk about margins. How would you style a footer with predictable spacing?
+Spacing question: how would you build a footer with predictable margins across breakpoints?
 
-Can you name different positioning algorithms and how they work?
+Which positioning modes do you trust, and when?
 
 - `static` (default)
 - `initial`
@@ -40,11 +42,11 @@ Can you name different positioning algorithms and how they work?
 - `relative`
 - `sticky`
 
-Explain the logic of an absolutely positioned element. How will it be positioned with `inset: 10px`?
+Explain absolute positioning in plain language. What happens with `inset: 10px`?
 
 ## Stacking context
 
-What is a stacking context? What are different ways to create one?
+What is a stacking context, and what bugs have you seen because of it?
 
 - Setting `opacity` to a value less than `1`
 - Setting `position` to `fixed` or `sticky`
@@ -53,8 +55,8 @@ What is a stacking context? What are different ways to create one?
 - Using `transform`, `filter`, `clip-path`, or `perspective`
 - Explicitly creating a context with `isolation: isolate`
 
-How do you achieve a container that can overflow on the y-axis but not on x-axis?
+How would you make a container scroll on `y` but not `x`?
 
-One practical pattern is to use an outer wrapper to control clipping/rounding and an inner scroller to control the overflow behavior.
+The practical pattern I like: outer wrapper handles clipping/border radius, inner wrapper handles scrolling.
 
 Copyright 2022 Andras Hejj
