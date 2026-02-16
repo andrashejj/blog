@@ -44,9 +44,20 @@ Writing a blog post. Recording a short video. Sharing what we learned this week.
 
 And yes, it is overwhelming. If you feel lost sometimes, you are not broken. Most people building products feel this way right now. They just do not always say it.
 
-- I do not really know if users want this.
-- I am not sure we are solving the right problem.
-- Everyone else seems to know their market better.
+<div className="my-6 space-y-2">
+  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
+    <span className="text-gray-400">—</span>
+    <span>I do not really know if users want this.</span>
+  </div>
+  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
+    <span className="text-gray-400">—</span>
+    <span>I am not sure we are solving the right problem.</span>
+  </div>
+  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
+    <span className="text-gray-400">—</span>
+    <span>Everyone else seems to know their market better.</span>
+  </div>
+</div>
 
 That is why community matters more than ever. Talk to other builders. Share unfinished thoughts. Ask questions that feel too basic. Let people say I do not know. Create space where being confused is normal.
 
@@ -54,20 +65,22 @@ We do not need to pretend we have it all figured out. We need people who can gro
 
 The goal is not to know everything about your market. The goal is to keep building a better map of it, for users, for decisions, and for each other.
 
+<Divider />
+
 ## Deep-Dive: Knowledge Graphs, Triplets, and Why Time Matters
 
 At the core, a knowledge graph is entities connected by relationships. The basic unit is a triplet:
 
-```text
-(subject, predicate, object)
-```
+<div className="my-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg font-mono text-sm">
+  (subject, predicate, object)
+</div>
 
-Examples:
-
-- `(User-segment-A, struggles-with, onboarding-flow)`
-- `(Feature-X, solves, Problem-Y)`
-- `(Project-Z, uses, Postgres)`
-- `(Decision-123, was-driven-by, user-feedback)`
+<Callout type="info" title="Triplet examples">
+  - `(User-segment-A, struggles-with, onboarding-flow)`
+  - `(Feature-X, solves, Problem-Y)`
+  - `(Project-Z, uses, Postgres)`
+  - `(Decision-123, was-driven-by, user-feedback)`
+</Callout>
 
 When you link these triplets, you get a graph. Not a folder. Not a list. A web of connected ideas.
 
@@ -80,6 +93,10 @@ Most notes are static. But product knowledge is temporal:
 - competitor X was core, now competitor Y is
 
 If your system does not track time, it quietly lies.
+
+<div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 my-6 border-l-4 border-amber-500 italic text-lg text-gray-700 dark:text-gray-200">
+  A fact without a timestamp is a rumor waiting to mislead you.
+</div>
 
 ### Temporal Knowledge Graphs
 
@@ -139,12 +156,24 @@ Typical temporal operators:
 
 ### Practical Personal Setup
 
-You do not need to build a full temporal graph system to benefit:
+<Callout type="default" title="You do not need a full system">
+  You do not need to build a full temporal graph system to benefit:
+</Callout>
 
-1. Track when things change.
-2. Link facts to context.
-3. Invalidate stale notes.
-4. Connect notes instead of collecting notes.
+<div className="my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
+    <div className="font-semibold">1. Track when things change</div>
+  </div>
+  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
+    <div className="font-semibold">2. Link facts to context</div>
+  </div>
+  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
+    <div className="font-semibold">3. Invalidate stale notes</div>
+  </div>
+  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
+    <div className="font-semibold">4. Connect notes instead of collecting</div>
+  </div>
+</div>
 
 ### Obsidian Workflow
 
@@ -158,6 +187,8 @@ My setup is simple:
 
 Weekly, I merge duplicates, archive stale notes, and add missing links. Over time this becomes a personal knowledge graph that is practical, not theoretical.
 
+<Divider />
+
 ### Sources
 
 - [Temporal Agents with Knowledge Graphs](https://developers.openai.com/cookbook/examples/partners/temporal_agents_with_knowledge_graphs/temporal_agents/)
@@ -165,3 +196,12 @@ Weekly, I merge duplicates, archive stale notes, and add missing links. Over tim
 - [Obsidian](https://obsidian.md/)
 
 Structured knowledge, connected over time and shared with others, is resilience.
+
+<div className="my-10 p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl text-white text-center">
+  <p className="text-xl md:text-2xl font-light leading-relaxed">
+    Build your graph. Track your time. Connect the dots.
+  </p>
+  <p className="text-lg text-gray-400 mt-4">
+    Your future self will thank you.
+  </p>
+</div>

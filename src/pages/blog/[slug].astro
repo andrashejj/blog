@@ -42,7 +42,9 @@ if (!result) {
 const { Content, headings } = await render(result.post);
 const { meta } = result;
 
-const filteredHeadings = headings.filter((h: { depth: number }) => h.depth <= 2);
+const filteredHeadings = headings.filter(
+  (h: { depth: number }) => h.depth <= 2,
+);
 ---
 
 <SiteLayout
