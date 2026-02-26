@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Board Project — Weekly Journal</title>
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 0;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: #1e293b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cover h1 {
+    color: #fff;
+    font-size: 36pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .cover .subtitle {
+    color: #94a3b8;
+    font-size: 14pt;
+    margin-top: 8px;
+  }
+
+  .cover .line {
+    width: 60mm;
+    height: 2px;
+    background: #d97706;
+    margin: 18px 0;
+  }
+
+  .cover .label {
+    color: #64748b;
+    font-size: 11pt;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: #1e293b;
+    padding: 14px 20mm 12px 20mm;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .week-num {
+    color: #fff;
+    font-size: 20pt;
+    font-weight: 700;
+  }
+
+  .week-topic {
+    color: #cbd5e1;
+    font-size: 13pt;
+    font-weight: 400;
+  }
+
+  .date-field {
+    background: #334155;
+    border-radius: 4px;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .date-field span {
+    color: #94a3b8;
+    font-size: 8pt;
+  }
+
+  .date-field .date-line {
+    width: 28mm;
+    border-bottom: 1px solid #475569;
+    height: 1px;
+  }
+
+  .header-desc {
+    color: #94a3b8;
+    font-size: 8.5pt;
+    margin-top: 1px;
+  }
+
+  .header-project {
+    color: #64748b;
+    font-size: 7.5pt;
+    margin-top: 4px;
+  }
+
+  /* ── Content area ── */
+  .content {
+    padding: 5mm 15mm 0 15mm;
+    display: flex;
+    flex-direction: column;
+    gap: 4mm;
+  }
+
+  /* ── Sections ── */
+  .section {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+
+  .section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .section-hint {
+    font-size: 7.5pt;
+    color: #64748b;
+    margin-bottom: 6px;
+  }
+
+  .dotted-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 6.5mm;
+  }
+
+  .dotted-line {
+    border-bottom: 1px dotted #d1d5db;
+    height: 0;
+  }
+
+  /* ── Daniel section ── */
+  .section-daniel {
+    background: #e8f0f5;
+    border-color: #cbd5e1;
+  }
+
+  .section-daniel .section-title {
+    color: #3b82c8;
+  }
+
+  .section-daniel .dotted-line {
+    border-color: #b0c4d8;
+  }
+
+  /* ── Two columns ── */
+  .two-col {
+    display: flex;
+    gap: 4mm;
+  }
+
+  .two-col > * {
+    flex: 1;
+  }
+
+  /* ── Noah section ── */
+  .section-noah {
+    border-color: #fbbf24;
+    background: #fffbeb;
+  }
+
+  .section-noah .section-title {
+    color: #d97706;
+  }
+
+  .section-noah .dotted-line {
+    border-color: #e5d5a0;
+  }
+
+  .drawing-box {
+    border: 1px dashed #d1d5db;
+    border-radius: 4px;
+    height: 42mm;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    background: #fafaf9;
+    margin-bottom: 6px;
+  }
+
+  .drawing-box span {
+    font-size: 7pt;
+    color: #94a3b8;
+  }
+
+  .prompt-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+
+  .prompt-label {
+    font-size: 7.5pt;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1px;
+  }
+
+  /* ── Andris section ── */
+  .section-andris {
+    border-color: #c7d2fe;
+    background: #f5f3ff;
+  }
+
+  .section-andris .section-title {
+    color: #6366f1;
+  }
+
+  .section-andris .dotted-line {
+    border-color: #c4b5fd;
+  }
+
+  /* ── Checklist section ── */
+  .section-checklist {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+
+  .checklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2mm 8mm;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 7.5pt;
+    color: #1e293b;
+  }
+
+  .check-item .box {
+    width: 3.2mm;
+    height: 3.2mm;
+    border: 1px solid #94a3b8;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7pt;
+    color: #94a3b8;
+    padding: 6px 0;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  @media print {
+    body { background: none; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  @media screen {
+    body { background: #e5e7eb; padding: 20px 0; }
+    .page { margin: 20px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<div class="page cover">
+  <h1>The Board Project</h1>
+  <div class="subtitle">Noah & Andris · 12 Weeks</div>
+  <div class="line"></div>
+  <div class="label">Weekly Journal</div>
+</div>
+
+<script>
+const weeks = [
+  { num: 1, topic: "First Contact", desc: "Meet the shapers. Pick the shape. Order the blank." },
+  { num: 2, topic: "Anatomy", desc: "Daniel walks us through a board. Parts, foam types, rocker." },
+  { num: 3, topic: "Design Theory", desc: "Daniel explains our board's design choices. Rails, contours, tail." },
+  { num: 4, topic: "Watch the Pros", desc: "Watch Daniel shape. Ask questions while he works." },
+  { num: 5, topic: "Graffiti + Flame Sketches", desc: "Study graffiti style. Noah starts drawing flames on paper." },
+  { num: 6, topic: "Posca Pens + Paint Practice", desc: "Buy the pens. Practice on cardboard. Learn what works." },
+  { num: 7, topic: "Tools + Sanding", desc: "Daniel shows us the tools. Practice sanding on scrap foam." },
+  { num: 8, topic: "Lock the Design", desc: "Pick the final flame design. Draw it full scale." },
+  { num: 9, topic: "Blank Arrives + First Shaping", desc: "The blank is here. First hands-on session with the shapers." },
+  { num: 10, topic: "Sanding + Refinement", desc: "Fine sanding. Symmetry checks. Getting the shape right." },
+  { num: 11, topic: "Paint the Flames", desc: "Noah leads. Apply the flames. Seal with acrylic." },
+  { num: 12, topic: "Glass, Seal, Surf", desc: "Final glassing. Take it to the water." },
+];
+
+function dots(n) {
+  return '<div class="dotted-lines">' + Array(n).fill('<div class="dotted-line"></div>').join('') + '</div>';
+}
+
+function prompt(label) {
+  return `<div><div class="prompt-label">${label}</div><div class="dotted-lines"><div class="dotted-line"></div></div></div>`;
+}
+
+function check(label) {
+  return `<div class="check-item"><div class="box"></div>${label}</div>`;
+}
+
+weeks.forEach(w => {
+  const page = document.createElement('div');
+  page.className = 'page';
+  page.innerHTML = `
+    <div class="header">
+      <div class="header-top">
+        <div class="header-left">
+          <span class="week-num">Week ${w.num}</span>
+          <span class="week-topic">${w.topic}</span>
+        </div>
+        <div class="date-field">
+          <span>Date:</span>
+          <div class="date-line"></div>
+        </div>
+      </div>
+      <div class="header-desc">${w.desc}</div>
+      <div class="header-project">The Board Project · Noah & Andris</div>
+    </div>
+
+    <div class="content">
+      <!-- What we did -->
+      <div class="section">
+        <div class="section-title">What we did</div>
+        <div class="section-hint">Where were we? What did we work on? Who helped?</div>
+        ${dots(5)}
+      </div>
+
+      <!-- Daniel -->
+      <div class="section section-daniel">
+        <div class="section-title">What Daniel showed us / corrected</div>
+        ${dots(3)}
+      </div>
+
+      <!-- Two columns: Noah + Andris -->
+      <div class="two-col">
+        <div class="section section-noah">
+          <div class="section-title">Noah's turn</div>
+          <div class="drawing-box"><span>Draw something from today</span></div>
+          <div class="prompt-group">
+            ${prompt("The best part was:")}
+            ${prompt("The hardest part was:")}
+            ${prompt("I want to remember:")}
+            ${prompt("Next time I want to try:")}
+          </div>
+        </div>
+
+        <div class="section section-andris">
+          <div class="section-title">Andris's turn</div>
+          <div class="section-hint">Observations, things to ask Daniel, corrections, links</div>
+          ${dots(8)}
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="section section-checklist">
+        <div class="section-title" style="margin-bottom:5px;">Before we leave</div>
+        <div class="checklist">
+          ${check("1 photo + 1 short video clip")}
+          ${check("Noah picks his favorite photo")}
+          ${check("Close-ups of what we worked on")}
+          ${check("Noah drew or wrote something")}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">The Board Project · andrashejj.com</div>
+  `;
+  document.body.appendChild(page);
+});
+</script>
+
+</body>
+</html>
