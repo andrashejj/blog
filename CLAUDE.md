@@ -2,12 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Node / NVM execution
-
-If you hit the wrong Node version, run `nvm use --lts`, then `corepack prepare pnpm@latest --activate`, then `cd /Users/andras/Development/personal/blog`, and then run `pnpm run <command>` in the same shell session.
-
-It is important that `nvm use --lts`, `corepack prepare pnpm@latest --activate`, and `pnpm run <command>` are executed in the same shell session. Running them in different sessions can pick the wrong Node version or pnpm version.
-
 ## Project Overview
 
 This is **Andras Hejj's personal blog** using **Next.js 15 (Pages Router)** with **git-tracked MDX content**.

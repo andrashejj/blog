@@ -1,0 +1,537 @@
+---
+import { RefreshCw, Printer } from "@lucide/astro";
+---
+
+<div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
+
+  <!-- Header -->
+  <div class="px-6 py-8 border-b-2 border-slate-200 bg-slate-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none">
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Noah's Daily Exercises</h2>
+    <p class="text-slate-500 mt-2 font-medium text-sm sm:text-base px-2 print:text-[10px] print:mt-1">
+      ( 1 ) Exercise / Sport &nbsp;&bull;&nbsp; ( 2 ) Math & Logic &nbsp;&bull;&nbsp; ( 3 ) Brain & Body Challenges &nbsp;&bull;&nbsp; ( 4 ) Creative Writing &nbsp;&bull;&nbsp; ( 5 ) Drawing
+    </p>
+    <button id="print-btn" class="mt-4 text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer print:hidden">
+      <Printer size={16} />
+      Print Worksheet
+    </button>
+  </div>
+
+  <div class="p-6 space-y-12 print:p-2 print:space-y-0">
+
+    <!-- SECTION 1: PHYSICAL (static) -->
+    <section class="print:break-before-page">
+      <div class="flex items-center justify-between mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Physical Exercises</h3>
+      </div>
+      <div class="grid grid-cols-1 gap-4 print:gap-1">
+        {[
+          { name: 'Jumping Jacks', rep: '50x', hint: 'Warm up first' },
+          { name: 'Pushups', rep: '20x', hint: 'Keep back straight' },
+          { name: 'Squats', rep: '50x', hint: 'Go deep' },
+          { name: 'Lunges', rep: '50x', hint: 'Switch legs' },
+          { name: 'Calf Raises', rep: '50x', hint: 'Hold at top' },
+          { name: 'Arm Circles', rep: '100x', hint: 'Fast & small' },
+          { name: 'Burpees', rep: '10x', hint: 'Jump at the top' },
+          { name: 'Mountain Climbers', rep: '30x', hint: 'Fast pace' },
+          { name: 'Planks', rep: '2 min', hint: 'Alternating legs' },
+          { name: 'Cool-down Stretch', rep: '2 min', hint: 'Slow & deep breaths' }
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div>
+              <div class="text-xl font-medium font-caveat text-slate-700 print:text-sm">{ex.name}</div>
+              <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.hint}</div>
+            </div>
+            <div class="text-lg font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-md print:text-xs print:px-1.5 print:py-0.5">{ex.rep}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SECTION 2: MATH & LOGIC -->
+    <section class="print:break-before-page">
+      <div class="flex items-center justify-between mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Math & Logic</h3>
+        <button id="regen-math-btn" class="text-sm font-semibold bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-blue-200 print:hidden">
+          <RefreshCw size={16} />
+          New Problems
+        </button>
+      </div>
+      <div id="section-math" class="grid grid-cols-1 gap-6 print:gap-2">
+        <!-- Populated by client JS on load -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: BRAIN & BODY CHALLENGES -->
+    <section class="print:break-before-page">
+      <div class="flex items-center justify-between mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Brain & Body Challenges</h3>
+        <button id="regen-challenges-btn" class="text-sm font-semibold bg-rose-100 hover:bg-rose-200 text-rose-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-rose-200 print:hidden">
+          <RefreshCw size={16} />
+          New Challenges
+        </button>
+      </div>
+      <div id="section-challenges" class="grid grid-cols-1 gap-6 print:gap-2">
+        <!-- Default fallback content rendered at build time -->
+        <div class="border-2 border-slate-300 rounded-xl bg-orange-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
+          <div>
+            <div class="text-sm font-semibold text-orange-800 uppercase tracking-widest mb-2 border-b-2 border-orange-200 pb-1 print:text-[10px] print:mb-1">Daily Riddle</div>
+            <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+              I have keys but no locks. I have space but no room. You can enter but not go outside. What am I?
+            </p>
+          </div>
+          <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: <div class="w-40 border-b-2 border-slate-400"></div></div>
+        </div>
+        <div class="border-2 border-slate-300 rounded-xl bg-amber-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
+          <div>
+            <div class="text-sm font-semibold text-amber-800 uppercase tracking-widest mb-2 border-b-2 border-amber-200 pb-1 print:text-[10px] print:mb-1">Word Puzzle (Anagram)</div>
+            <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+              Unscramble this word: <strong class="tracking-widest uppercase text-amber-700">T N I E L S</strong> (Hint: Quiet)
+            </p>
+          </div>
+          <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: <div class="w-40 border-b-2 border-slate-400"></div></div>
+        </div>
+        <div class="border-2 border-slate-300 rounded-xl bg-red-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
+          <div class="text-sm font-semibold text-red-800 uppercase tracking-widest mb-2 border-b-2 border-red-200 pb-1 print:text-[10px] print:mb-1">Mini-Engineering</div>
+          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+            Build the tallest tower you can using exactly 10 books and 2 pieces of paper. Measure it!
+          </p>
+          <div class="mt-4 flex flex-col gap-2 print:mt-1">
+            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">Height: <div class="w-24 border-b-2 border-slate-400"></div> cm</div>
+            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 mt-2 font-caveat print:text-xs print:mt-0.5">Did it fall over? <div class="w-24 border-b-2 border-slate-400"></div></div>
+          </div>
+        </div>
+        <div class="border-2 border-slate-300 rounded-xl bg-teal-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
+          <div class="text-sm font-semibold text-teal-800 uppercase tracking-widest mb-2 border-b-2 border-teal-200 pb-1 print:text-[10px] print:mb-1">Observation / Mindfulness</div>
+          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+            Sit outside with your eyes closed for 2 minutes. Write down the 3 quietest sounds you heard.
+          </p>
+          <div class="mt-4 flex flex-col gap-3 print:mt-1 print:gap-1">
+            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">1. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">2. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">3. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: CREATIVE WRITING -->
+    <section class="print:break-before-page">
+      <div class="flex items-center justify-between mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Creative Writing</h3>
+        <button id="regen-words-btn" class="text-sm font-semibold bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-purple-200 print:hidden">
+          <RefreshCw size={16} />
+          New Words
+        </button>
+      </div>
+      <div class="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-5 mb-6 print:p-2 print:mb-2">
+        <p class="text-sm font-semibold text-indigo-800 mb-3 uppercase tracking-wide print:text-[10px] print:mb-1">Today's Word Bank (Include at least 5):</p>
+        <div id="word-bank-container" class="flex flex-wrap gap-2 print:gap-1">
+          {['Drifting', 'Glow', 'Silent', 'Unknown', 'Trail', 'Flicker', 'Signal', 'Float', 'Darkness', 'Beyond'].map(w => (
+            <span class="inline-block bg-white border-2 border-indigo-200 text-indigo-900 px-3 py-1 rounded-md text-lg font-medium shadow-sm font-caveat print:text-sm print:px-1.5 print:py-0.5 print:border">{w}</span>
+          ))}
+        </div>
+      </div>
+      <div
+        class="w-full min-h-[400px] border-2 border-slate-200 rounded-xl p-4 font-caveat text-[22px] font-medium text-slate-700 print:min-h-[350px] print:text-[16px] print:leading-[28px] print:[background-size:100%_28px]"
+        style="background-image: linear-gradient(#f1f5f9 2px, transparent 2px); background-size: 100% 36px; line-height: 36px;"
+        contenteditable="true"
+        id="story-hook-container"
+      >
+      </div>
+    </section>
+
+    <!-- SECTION 5: DRAWING -->
+    <section>
+      <div class="flex items-center justify-between mb-4 print:hidden">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0">5 | Sketch Book</h3>
+        <div class="flex items-center gap-4">
+          <p class="text-sm text-slate-500 font-medium hidden sm:block">Strict time limits. Fast & intuitive.</p>
+          <button id="regen-sketch-btn" class="text-sm font-semibold bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-emerald-200 print:hidden">
+            <RefreshCw size={16} />
+            New Prompts
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-6 print:gap-2">
+        <!-- Static first card -->
+        <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)] print:break-before-page">
+          <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">1. Strokes & Lines (Practice Control)</div>
+        </div>
+        <!-- AI-generated sketch prompts -->
+        <div id="section-sketches">
+          <div class="grid grid-cols-1 gap-6 print:gap-2">
+            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
+              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">2. Texture Study: Waves</div>
+            </div>
+            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)] print:break-before-page">
+              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">3. Object Study: Coffee Mug</div>
+            </div>
+            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative shadow-inner overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
+              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">4. Sketch of the Day: A Friendly Robot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: REFLECTION (static) -->
+    <section class="print:break-before-page">
+      <div class="flex items-center justify-between mb-4 mt-8 print:mb-1 print:mt-0">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">6 | Daily Reflection</h3>
+      </div>
+      <div class="space-y-8 print:space-y-3">
+        <div>
+          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">What I enjoyed most today:</span>
+          <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
+        </div>
+        <div>
+          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">What I would change about the exercises:</span>
+          <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
+        </div>
+        <div>
+          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">Biggest challenge I overcame:</span>
+          <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // ── Helpers ──────────────────────────────────────────────────────────
+  const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+  const answerLine = '<div class="flex-grow border-b-2 border-dotted border-slate-300 h-6"></div>';
+  const answerBlank = '<div class="w-40 border-b-2 border-slate-400"></div>';
+
+  function mathRow(expr: string) {
+    return `<div class="flex gap-4 items-center print:gap-1">&bull; <span>${expr} = </span>${answerLine}</div>`;
+  }
+
+  async function fetchJSON<T>(url: string, timeoutMs = 10_000): Promise<T> {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } finally {
+      clearTimeout(id);
+    }
+  }
+
+  function withLoading(btn: HTMLButtonElement, containerId: string, action: () => Promise<void>) {
+    return async () => {
+      const container = document.getElementById(containerId);
+      btn.disabled = true;
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
+      container?.classList.add('opacity-50', 'pointer-events-none');
+
+      try {
+        await action();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        container?.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    };
+  }
+
+  // ── Render: Math (client-side only) ─────────────────────────────────
+  function sub(max: number) {
+    let a = rand(100, max), b = rand(10, max);
+    if (b > a) [a, b] = [b, a];
+    return `${a} - ${b}`;
+  }
+
+  function divProblem() {
+    const divisor = rand(2, 12);
+    const quotient = rand(2, 12);
+    return `${divisor * quotient} &divide; ${divisor}`;
+  }
+
+  function logicProblem(): string {
+    const problems = [
+      () => { const ages = [rand(5, 9), rand(10, 14)]; const diff = ages[1] - ages[0]; return `Emma is ${diff} years older than Liam. Liam is ${ages[0]} years old. How old is Emma?`; },
+      () => { const n = rand(3, 6); return `${n} cats are sitting in a row. Each cat can see all the cats in front of it. How many cats does the last cat see?`; },
+      () => { const apples = rand(12, 30); const half = apples / 2; const isEven = apples % 2 === 0; const a = isEven ? apples : apples + 1; return `Noah and Mia picked ${a} apples together. If they split them equally, how many does each get?`; },
+      () => { const floors = rand(4, 8); const steps = rand(8, 14); return `A building has ${floors} floors. There are ${steps} steps between each floor. How many steps from the ground floor to the top?`; },
+      () => { const total = rand(15, 30); const diff = rand(2, 6) * 2; const small = (total - diff) / 2; const isEven = (total - diff) % 2 === 0; const t = isEven ? total : total + 1; const d = isEven ? diff : diff; return `Two boxes hold ${t} balls total. One box has ${d} more balls than the other. How many are in each box?`; },
+      () => { const people = rand(3, 6); return `${people} people meet and each shakes hands with everyone else exactly once. How many handshakes happen in total?`; },
+      () => { const coins = [rand(2, 5), rand(2, 5)]; const total = coins[0] * 10 + coins[1] * 5; return `You have ${coins[0] + coins[1]} coins made of only 10p and 5p coins. The total is ${total}p. How many of each coin do you have?`; },
+      () => { const chickens = rand(3, 8); const dogs = rand(2, 5); const legs = chickens * 2 + dogs * 4; const heads = chickens + dogs; return `A farmer sees ${heads} heads and ${legs} legs in a field of chickens and dogs. How many of each are there?`; },
+      () => { const speed = pick([3, 4, 5, 6]); const dist = speed * rand(2, 5); return `Noah walks ${speed} blocks every 10 minutes. How long will it take him to walk ${dist} blocks?`; },
+      () => { const age = rand(6, 10); return `Noah is ${age} years old. His mum is 3 times his age. In how many years will his mum be exactly twice his age?`; },
+    ];
+    return pick(problems)();
+  }
+
+  function geometryProblem(): string {
+    const problems = [
+      () => { const w = rand(3, 12), h = rand(3, 12); return `A rectangle has a width of ${w} and a length of ${h}. What is its area?`; },
+      () => { const w = rand(3, 12), h = rand(3, 12); return `A rectangle has side lengths of ${w} and ${h}. What is its perimeter?`; },
+      () => { const s = rand(3, 15); return `A square has a side length of ${s}. What is its perimeter?`; },
+      () => { const s = rand(2, 10); return `A square has a side length of ${s}. What is its area?`; },
+      () => { const a = rand(3, 10), b = rand(3, 10), c = rand(3, 10); return `A triangle has sides of ${a}, ${b}, and ${c}. What is its perimeter?`; },
+    ];
+    return pick(problems)();
+  }
+
+  function patternProblem(): string {
+    const problems = [
+      // Arithmetic sequences
+      () => { const start = rand(2, 20), step = rand(2, 7); const seq = [0,1,2,3].map(i => start + step * i); return `What comes next? ${seq.join(', ')}, __`; },
+      // Doubling
+      () => { const start = pick([2, 3, 5]); const seq = [0,1,2,3].map(i => start * Math.pow(2, i)); return `What comes next? ${seq.join(', ')}, __`; },
+      // Subtraction sequences
+      () => { const start = rand(50, 99), step = rand(3, 9); const seq = [0,1,2,3].map(i => start - step * i); return `What comes next? ${seq.join(', ')}, __`; },
+      // Alternating +/- patterns
+      () => { const a = rand(5, 20), up = rand(3, 6), down = rand(1, 2); const seq = [a, a+up, a+up-down, a+up-down+up, a+up-down+up-down]; return `Find the pattern: ${seq.join(', ')}, __`; },
+      // Skip counting by unusual numbers
+      () => { const step = pick([7, 9, 11, 13]); const start = rand(1, 5); const seq = [0,1,2,3].map(i => start + step * i); return `What comes next? ${seq.join(', ')}, __`; },
+      // Square numbers
+      () => { const start = rand(1, 4); const seq = [0,1,2,3].map(i => (start+i)*(start+i)); return `These are special numbers. What comes next? ${seq.join(', ')}, __`; },
+    ];
+    return pick(problems)();
+  }
+
+  function textQ(question: string) {
+    return `
+      <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">${question}</div>
+      <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+    `;
+  }
+
+  function renderMath(): string {
+    return `
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Addition &amp; Subtraction</div>
+        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+          ${mathRow(`${rand(10, 99)} + ${rand(10, 99)}`)}
+          ${mathRow(sub(199))}
+          ${mathRow(`${rand(100, 899)} + ${rand(100, 899)}`)}
+          ${mathRow(sub(899))}
+          ${mathRow(`${rand(1000, 4999)} + ${rand(100, 999)}`)}
+          ${mathRow(sub(4999))}
+          ${mathRow(`${rand(1000, 9999)} + ${rand(1000, 9999)}`)}
+        </div>
+      </div>
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Multiplication</div>
+        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+          ${mathRow(`${rand(2, 12)} &times; ${rand(2, 12)}`)}
+          ${mathRow(`${rand(2, 9)} &times; ${rand(10, 49)}`)}
+          ${mathRow(`${rand(2, 6)} &times; ${rand(1, 9) * 10}`)}
+          ${mathRow(`${rand(10, 30)} &times; ${rand(10, 30)}`)}
+          ${mathRow(`${rand(2, 9)} &times; ${rand(50, 99)}`)}
+          ${mathRow(`${rand(3, 9)} &times; ${rand(100, 250)}`)}
+        </div>
+      </div>
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Division</div>
+        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
+        </div>
+      </div>
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Geometry</div>
+        <div class="space-y-4 print:space-y-1">
+          ${textQ(geometryProblem())}
+          <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(geometryProblem())}</div>
+          <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(geometryProblem())}</div>
+        </div>
+      </div>
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Number Patterns</div>
+        <div class="space-y-4 print:space-y-1">
+          ${textQ(patternProblem())}
+          <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(patternProblem())}</div>
+          <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(patternProblem())}</div>
+        </div>
+      </div>
+      <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Logic Puzzles</div>
+        <div class="space-y-5 print:space-y-1">
+          <div>
+            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">1. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+          </div>
+          <div class="border-t border-slate-100 pt-4 print:pt-1">
+            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">2. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+          </div>
+          <div class="border-t border-slate-100 pt-4 print:pt-1">
+            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">3. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+          </div>
+          <div class="border-t border-slate-100 pt-4 print:pt-1">
+            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">4. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Render: Challenges (AI-powered) ─────────────────────────────────
+  interface ChallengesData {
+    riddle: string;
+    anagram: { scrambled: string; hint: string };
+    engineering: string;
+    mindfulness: string;
+  }
+
+  function renderChallenges(d: ChallengesData): string {
+    const riddle = d.riddle || "I have keys but no locks. What am I?";
+    const scrambled = d.anagram?.scrambled || "T N I E L S";
+    const hint = d.anagram?.hint || "Quiet";
+    const eng = d.engineering || "Build a tower with 10 books. Measure it!";
+    const mind = d.mindfulness || "Sit outside for 2 minutes. Write 3 sounds you heard.";
+
+    return `
+      <div class="border-2 border-slate-300 rounded-xl bg-orange-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
+        <div>
+          <div class="text-sm font-semibold text-orange-800 uppercase tracking-widest mb-2 border-b-2 border-orange-200 pb-1 print:text-[10px] print:mb-1">Daily Riddle</div>
+          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${riddle}</p>
+        </div>
+        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
+      </div>
+      <div class="border-2 border-slate-300 rounded-xl bg-amber-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
+        <div>
+          <div class="text-sm font-semibold text-amber-800 uppercase tracking-widest mb-2 border-b-2 border-amber-200 pb-1 print:text-[10px] print:mb-1">Word Puzzle (Anagram)</div>
+          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+            Unscramble this word: <strong class="tracking-widest uppercase text-amber-700">${scrambled}</strong> (Hint: ${hint})
+          </p>
+        </div>
+        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
+      </div>
+      <div class="border-2 border-slate-300 rounded-xl bg-red-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
+        <div class="text-sm font-semibold text-red-800 uppercase tracking-widest mb-2 border-b-2 border-red-200 pb-1 print:text-[10px] print:mb-1">Mini-Engineering</div>
+        <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${eng}</p>
+        <div class="mt-4 flex flex-col gap-2 print:mt-1">
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">Height: <div class="w-24 border-b-2 border-slate-400"></div> cm</div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 mt-2 font-caveat print:text-xs print:mt-0.5">Did it fall over? <div class="w-24 border-b-2 border-slate-400"></div></div>
+        </div>
+      </div>
+      <div class="border-2 border-slate-300 rounded-xl bg-teal-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
+        <div class="text-sm font-semibold text-teal-800 uppercase tracking-widest mb-2 border-b-2 border-teal-200 pb-1 print:text-[10px] print:mb-1">Observation / Mindfulness</div>
+        <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${mind}</p>
+        <div class="mt-4 flex flex-col gap-3 print:mt-1 print:gap-1">
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">1. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">2. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">3. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Render: Sketches (AI-powered) ───────────────────────────────────
+  interface SketchesData {
+    texture: string;
+    object: string;
+    sketch: string;
+  }
+
+  function renderSketches(d: SketchesData): string {
+    const texture = d.texture || "Waves";
+    const object = d.object || "Coffee Mug";
+    const sketch = d.sketch || "A Friendly Robot";
+
+    const box = 'border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]';
+    const boxBreak = box + ' print:break-before-page';
+    const hdr = 'bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs';
+    return `
+      <div class="grid grid-cols-1 gap-6 print:gap-2">
+        <div class="${box}"><div class="${hdr}">2. Texture Study: ${texture}</div></div>
+        <div class="${boxBreak}"><div class="${hdr}">3. Object Study: ${object}</div></div>
+        <div class="${box} shadow-inner"><div class="${hdr}">4. Sketch of the Day: ${sketch}</div></div>
+      </div>
+    `;
+  }
+
+  // ── Render: Words ───────────────────────────────────────────────────
+  interface WordsData {
+    words: string[];
+    hook: string;
+  }
+
+  function renderWords(words: string[]): string {
+    return words.map(w =>
+      `<span class="inline-block bg-white border-2 border-indigo-200 text-indigo-900 px-3 py-1 rounded-md text-lg font-medium shadow-sm font-caveat print:text-sm print:px-1.5 print:py-0.5 print:border">${w}</span>`
+    ).join('');
+  }
+
+  // ── Wire up sections ───────────────────────────────────────────────
+  // Math: client-side only, instant
+  const mathContainer = document.getElementById('section-math');
+  const mathBtn = document.getElementById('regen-math-btn') as HTMLButtonElement;
+  if (mathContainer) {
+    mathContainer.innerHTML = renderMath();
+    mathBtn?.addEventListener('click', () => { mathContainer.innerHTML = renderMath(); });
+  }
+
+  // Challenges: AI-powered
+  const challengesBtn = document.getElementById('regen-challenges-btn') as HTMLButtonElement;
+  if (challengesBtn) {
+    challengesBtn.addEventListener('click', withLoading(challengesBtn, 'section-challenges', async () => {
+      const data = await fetchJSON<ChallengesData>('/api/generate-challenges');
+      const container = document.getElementById('section-challenges');
+      if (container) container.innerHTML = renderChallenges(data);
+    }));
+  }
+
+  // Sketches: AI-powered
+  const sketchBtn = document.getElementById('regen-sketch-btn') as HTMLButtonElement;
+  if (sketchBtn) {
+    sketchBtn.addEventListener('click', withLoading(sketchBtn, 'section-sketches', async () => {
+      const data = await fetchJSON<SketchesData>('/api/generate-sketches');
+      const container = document.getElementById('section-sketches');
+      if (container) container.innerHTML = renderSketches(data);
+    }));
+  }
+
+  // Writing: AI-powered (word bank + story hook)
+  const wordsBtn = document.getElementById('regen-words-btn') as HTMLButtonElement;
+  if (wordsBtn) {
+    wordsBtn.addEventListener('click', withLoading(wordsBtn, 'word-bank-container', async () => {
+      const data = await fetchJSON<WordsData>('/api/generate-words');
+      const wordContainer = document.getElementById('word-bank-container');
+      const storyHook = document.getElementById('story-hook-container');
+      if (data.words && wordContainer) wordContainer.innerHTML = renderWords(data.words);
+      if (data.hook && storyHook) storyHook.textContent = data.hook + " ";
+    }));
+  }
+
+  // Print button — hides site chrome via JS since we can't target parent layout with Tailwind
+  const printBtn = document.getElementById('print-btn');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      const header = document.querySelector('body > div > header') as HTMLElement;
+      const footer = document.querySelector('body > div > footer') as HTMLElement;
+      const main = document.querySelector('body > div > main') as HTMLElement;
+      const proseEls = document.querySelectorAll<HTMLElement>('.prose > *:not(.worksheet-container)');
+
+      // Hide site chrome
+      if (header) header.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+      if (main) { main.style.width = '100%'; main.style.maxWidth = '100%'; main.style.padding = '0'; main.style.margin = '0'; }
+      proseEls.forEach(el => el.style.display = 'none');
+      document.body.style.background = 'white';
+
+      window.print();
+
+      // Restore after print dialog closes
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (main) { main.style.width = ''; main.style.maxWidth = ''; main.style.padding = ''; main.style.margin = ''; }
+      proseEls.forEach(el => el.style.display = '');
+      document.body.style.background = '';
+    });
+  }
+</script>
