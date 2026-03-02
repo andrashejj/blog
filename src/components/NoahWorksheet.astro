@@ -467,6 +467,27 @@ import { RefreshCw, Printer } from "@lucide/astro";
     ).join('');
   }
 
+  // ── Auto-load helpers ──────────────────────────────────────────────
+  async function loadChallenges(): Promise<void> {
+    const data = await fetchJSON<ChallengesData>('/api/generate-challenges');
+    const container = document.getElementById('section-challenges');
+    if (container) container.innerHTML = renderChallenges(data);
+  }
+
+  async function loadSketches(): Promise<void> {
+    const data = await fetchJSON<SketchesData>('/api/generate-sketches');
+    const container = document.getElementById('section-sketches');
+    if (container) container.innerHTML = renderSketches(data);
+  }
+
+  async function loadWords(): Promise<void> {
+    const data = await fetchJSON<WordsData>('/api/generate-words');
+    const wordContainer = document.getElementById('word-bank-container');
+    const storyHook = document.getElementById('story-hook-container');
+    if (data.words && wordContainer) wordContainer.innerHTML = renderWords(data.words);
+    if (data.hook && storyHook) storyHook.textContent = data.hook + ' ';
+  }
+
   // ── Wire up sections ───────────────────────────────────────────────
   // Math: client-side only, instant
   const mathContainer = document.getElementById('section-math');
@@ -479,34 +500,28 @@ import { RefreshCw, Printer } from "@lucide/astro";
   // Challenges: AI-powered
   const challengesBtn = document.getElementById('regen-challenges-btn') as HTMLButtonElement;
   if (challengesBtn) {
-    challengesBtn.addEventListener('click', withLoading(challengesBtn, 'section-challenges', async () => {
-      const data = await fetchJSON<ChallengesData>('/api/generate-challenges');
-      const container = document.getElementById('section-challenges');
-      if (container) container.innerHTML = renderChallenges(data);
-    }));
+    challengesBtn.addEventListener('click', withLoading(challengesBtn, 'section-challenges', loadChallenges));
   }
 
   // Sketches: AI-powered
   const sketchBtn = document.getElementById('regen-sketch-btn') as HTMLButtonElement;
   if (sketchBtn) {
-    sketchBtn.addEventListener('click', withLoading(sketchBtn, 'section-sketches', async () => {
-      const data = await fetchJSON<SketchesData>('/api/generate-sketches');
-      const container = document.getElementById('section-sketches');
-      if (container) container.innerHTML = renderSketches(data);
-    }));
+    sketchBtn.addEventListener('click', withLoading(sketchBtn, 'section-sketches', loadSketches));
   }
 
   // Writing: AI-powered (word bank + story hook)
   const wordsBtn = document.getElementById('regen-words-btn') as HTMLButtonElement;
   if (wordsBtn) {
-    wordsBtn.addEventListener('click', withLoading(wordsBtn, 'word-bank-container', async () => {
-      const data = await fetchJSON<WordsData>('/api/generate-words');
-      const wordContainer = document.getElementById('word-bank-container');
-      const storyHook = document.getElementById('story-hook-container');
-      if (data.words && wordContainer) wordContainer.innerHTML = renderWords(data.words);
-      if (data.hook && storyHook) storyHook.textContent = data.hook + " ";
-    }));
+    wordsBtn.addEventListener('click', withLoading(wordsBtn, 'word-bank-container', loadWords));
   }
+
+  // ── Auto-load AI content on page load ─────────────────────────────
+  const regenButtons = [challengesBtn, sketchBtn, wordsBtn].filter(Boolean) as HTMLButtonElement[];
+  regenButtons.forEach(btn => { btn.disabled = true; });
+
+  Promise.allSettled([loadChallenges(), loadSketches(), loadWords()]).then(() => {
+    regenButtons.forEach(btn => { btn.disabled = false; });
+  });
 
   // Print button — hides site chrome via JS since we can't target parent layout with Tailwind
   const printBtn = document.getElementById('print-btn');

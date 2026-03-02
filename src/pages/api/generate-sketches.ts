@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 
 interface SketchesResponse {
