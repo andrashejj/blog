@@ -11,10 +11,16 @@ const PROMPT = `Generate a creative writing prompt for an 8-year-old child. Retu
 
 {
   "words": ["word1", "word2", "word3", "word4", "word5", "word6", "word7", "word8", "word9", "word10"],
-  "hook": "One single engaging opening sentence to start their story."
+  "hook": "A vivid, intriguing opening sentence that drops the reader into the middle of action or a surprising moment."
 }
 
-The "words" array must contain exactly 10 interesting action verbs or descriptive nouns. The "hook" must be a single compelling opening sentence that sparks imagination.`;
+The "words" array must contain exactly 10 words — mix interesting verbs, unusual adjectives, and concrete nouns. Avoid generic or abstract words like "unknown", "beyond", "mystery". Instead, pick words a child can picture: "crumbling", "whisker", "avalanche", "copper", "howl".
+
+The "hook" must be a single sentence that is specific and vivid — NOT a generic "something magical happened" opener. Great hooks start in the middle of something happening, include a sensory detail, or present a concrete weird situation. Examples of GOOD hooks:
+- "The jar of pickles on the kitchen shelf had started to glow green, and it was humming."
+- "Maya found a door in the back of her wardrobe that definitely hadn't been there yesterday."
+- "The dog came home carrying a map in its mouth, and it was marked with a red X."
+Bad hooks (too vague): "Something strange was about to happen.", "It was a day unlike any other.", "Little did they know, everything was about to change."`;
 
 const fallback: WordsResponse = {
   words: [

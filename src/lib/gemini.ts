@@ -13,9 +13,13 @@ export async function generateJSON<T>(prompt: string, fallback: T): Promise<T> {
 
   try {
     const ai = new GoogleGenAI({ apiKey });
+    const today = new Date().toISOString().slice(0, 10);
+    const seed = Math.floor(Math.random() * 100_000);
+    const randomizedPrompt = `${prompt}\n\nToday is ${today}. Variation seed: ${seed}. Be creative and produce unique, varied output different from any previous request.`;
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: prompt,
+      contents: randomizedPrompt,
+      config: { temperature: 1.5 },
     });
 
     const text = response.text?.trim();

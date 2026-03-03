@@ -38,7 +38,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div>
-              <div class="text-xl font-medium font-caveat text-slate-700 print:text-sm">{ex.name}</div>
+              <div class="text-xl font-medium font-sans text-slate-700 print:text-sm">{ex.name}</div>
               <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.hint}</div>
             </div>
             <div class="text-lg font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-md print:text-xs print:px-1.5 print:py-0.5">{ex.rep}</div>
@@ -71,45 +71,15 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </button>
       </div>
       <div id="section-challenges" class="grid grid-cols-1 gap-6 print:gap-2">
-        <!-- Default fallback content rendered at build time -->
-        <div class="border-2 border-slate-300 rounded-xl bg-orange-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
-          <div>
-            <div class="text-sm font-semibold text-orange-800 uppercase tracking-widest mb-2 border-b-2 border-orange-200 pb-1 print:text-[10px] print:mb-1">Daily Riddle</div>
-            <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
-              I have keys but no locks. I have space but no room. You can enter but not go outside. What am I?
-            </p>
-          </div>
-          <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: <div class="w-40 border-b-2 border-slate-400"></div></div>
-        </div>
-        <div class="border-2 border-slate-300 rounded-xl bg-amber-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
-          <div>
-            <div class="text-sm font-semibold text-amber-800 uppercase tracking-widest mb-2 border-b-2 border-amber-200 pb-1 print:text-[10px] print:mb-1">Word Puzzle (Anagram)</div>
-            <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
-              Unscramble this word: <strong class="tracking-widest uppercase text-amber-700">T N I E L S</strong> (Hint: Quiet)
-            </p>
-          </div>
-          <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: <div class="w-40 border-b-2 border-slate-400"></div></div>
-        </div>
-        <div class="border-2 border-slate-300 rounded-xl bg-red-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
-          <div class="text-sm font-semibold text-red-800 uppercase tracking-widest mb-2 border-b-2 border-red-200 pb-1 print:text-[10px] print:mb-1">Mini-Engineering</div>
-          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
-            Build the tallest tower you can using exactly 10 books and 2 pieces of paper. Measure it!
-          </p>
-          <div class="mt-4 flex flex-col gap-2 print:mt-1">
-            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">Height: <div class="w-24 border-b-2 border-slate-400"></div> cm</div>
-            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 mt-2 font-caveat print:text-xs print:mt-0.5">Did it fall over? <div class="w-24 border-b-2 border-slate-400"></div></div>
-          </div>
-        </div>
-        <div class="border-2 border-slate-300 rounded-xl bg-teal-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
-          <div class="text-sm font-semibold text-teal-800 uppercase tracking-widest mb-2 border-b-2 border-teal-200 pb-1 print:text-[10px] print:mb-1">Observation / Mindfulness</div>
-          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
-            Sit outside with your eyes closed for 2 minutes. Write down the 3 quietest sounds you heard.
-          </p>
-          <div class="mt-4 flex flex-col gap-3 print:mt-1 print:gap-1">
-            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">1. <div class="flex-grow border-b-2 border-slate-400"></div></div>
-            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">2. <div class="flex-grow border-b-2 border-slate-400"></div></div>
-            <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">3. <div class="flex-grow border-b-2 border-slate-400"></div></div>
-          </div>
+        <!-- Loading skeleton, replaced by AI content on page load -->
+        <div class="loading-skeleton space-y-4">
+          {[1,2,3,4].map(() => (
+            <div class="border-2 border-slate-200 rounded-xl p-5 animate-pulse">
+              <div class="h-4 w-32 bg-slate-200 rounded mb-3"></div>
+              <div class="h-5 w-3/4 bg-slate-100 rounded mb-2"></div>
+              <div class="h-5 w-1/2 bg-slate-100 rounded"></div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -126,14 +96,14 @@ import { RefreshCw, Printer } from "@lucide/astro";
       <div class="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-5 mb-6 print:p-2 print:mb-2">
         <p class="text-sm font-semibold text-indigo-800 mb-3 uppercase tracking-wide print:text-[10px] print:mb-1">Today's Word Bank (Include at least 5):</p>
         <div id="word-bank-container" class="flex flex-wrap gap-2 print:gap-1">
-          {['Drifting', 'Glow', 'Silent', 'Unknown', 'Trail', 'Flicker', 'Signal', 'Float', 'Darkness', 'Beyond'].map(w => (
-            <span class="inline-block bg-white border-2 border-indigo-200 text-indigo-900 px-3 py-1 rounded-md text-lg font-medium shadow-sm font-caveat print:text-sm print:px-1.5 print:py-0.5 print:border">{w}</span>
+          {[1,2,3,4,5,6,7,8,9,10].map(() => (
+            <span class="inline-block bg-slate-100 border-2 border-slate-200 text-transparent px-3 py-1 rounded-md text-lg animate-pulse w-20 h-8"></span>
           ))}
         </div>
       </div>
       <div
-        class="w-full min-h-[400px] border-2 border-slate-200 rounded-xl p-4 font-caveat text-[22px] font-medium text-slate-700 print:min-h-[350px] print:text-[16px] print:leading-[28px] print:[background-size:100%_28px]"
-        style="background-image: linear-gradient(#f1f5f9 2px, transparent 2px); background-size: 100% 36px; line-height: 36px;"
+        class="w-full min-h-[400px] border-2 border-slate-200 rounded-xl px-4 font-sans text-lg font-medium text-slate-700 print:min-h-[350px] print:text-[14px] print:leading-[28px] print:bg-size-[100%_28px]"
+        style="background-image: linear-gradient(transparent 34px, #e2e8f0 34px, #e2e8f0 36px); background-size: 100% 36px; line-height: 36px; padding-top: 8px;"
         contenteditable="true"
         id="story-hook-container"
       >
@@ -153,21 +123,27 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="grid grid-cols-1 gap-6 print:gap-2">
-        <!-- Static first card -->
+        <!-- 4 constant exercises -->
         <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)] print:break-before-page">
           <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">1. Strokes & Lines (Practice Control)</div>
         </div>
-        <!-- AI-generated sketch prompts -->
+        <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
+          <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">2. Basic Shapes (Circles, Cubes, Cylinders)</div>
+        </div>
+        <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)] print:break-before-page">
+          <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">3. Light & Shadow (Shading Practice)</div>
+        </div>
+        <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
+          <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">4. Perspective & Proportions</div>
+        </div>
+        <!-- 2 AI-generated exercises -->
         <div id="section-sketches">
           <div class="grid grid-cols-1 gap-6 print:gap-2">
-            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
-              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">2. Texture Study: Waves</div>
+            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col animate-pulse print:h-[calc(50vh-20px)] print:break-before-page">
+              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">5. Shadow Study: Loading...</div>
             </div>
-            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)] print:break-before-page">
-              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">3. Object Study: Coffee Mug</div>
-            </div>
-            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative shadow-inner overflow-hidden flex flex-col print:h-[calc(50vh-20px)]">
-              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">4. Sketch of the Day: A Friendly Robot</div>
+            <div class="border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col animate-pulse print:h-[calc(50vh-20px)]">
+              <div class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs">6. Sketch of the Day: Loading...</div>
             </div>
           </div>
         </div>
@@ -181,15 +157,15 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
       <div class="space-y-8 print:space-y-3">
         <div>
-          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">What I enjoyed most today:</span>
+          <span class="text-xl font-medium text-slate-700 font-sans print:text-sm">What I enjoyed most today:</span>
           <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
         </div>
         <div>
-          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">What I would change about the exercises:</span>
+          <span class="text-xl font-medium text-slate-700 font-sans print:text-sm">What I would change about the exercises:</span>
           <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
         </div>
         <div>
-          <span class="text-xl font-medium text-slate-700 font-caveat print:text-sm">Biggest challenge I overcame:</span>
+          <span class="text-xl font-medium text-slate-700 font-sans print:text-sm">Biggest challenge I overcame:</span>
           <div class="mt-2 h-16 border-2 border-dotted border-slate-300 rounded-lg print:mt-1 print:h-12"></div>
         </div>
       </div>
@@ -299,16 +275,16 @@ import { RefreshCw, Printer } from "@lucide/astro";
 
   function textQ(question: string) {
     return `
-      <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">${question}</div>
-      <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+      <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">${question}</div>
+      <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-sans print:text-xs print:mt-1">Answer: ${answerBlank}</div>
     `;
   }
 
   function renderMath(): string {
     return `
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Addition &amp; Subtraction</div>
-        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Addition &amp; Subtraction</div>
+        <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
           ${mathRow(`${rand(10, 99)} + ${rand(10, 99)}`)}
           ${mathRow(sub(199))}
           ${mathRow(`${rand(100, 899)} + ${rand(100, 899)}`)}
@@ -319,8 +295,8 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Multiplication</div>
-        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Multiplication</div>
+        <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
           ${mathRow(`${rand(2, 12)} &times; ${rand(2, 12)}`)}
           ${mathRow(`${rand(2, 9)} &times; ${rand(10, 49)}`)}
           ${mathRow(`${rand(2, 6)} &times; ${rand(1, 9) * 10}`)}
@@ -330,8 +306,8 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Division</div>
-        <div class="space-y-4 text-xl font-medium font-caveat print:space-y-1 print:text-sm">
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Division</div>
+        <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
           ${mathRow(divProblem())}
           ${mathRow(divProblem())}
           ${mathRow(divProblem())}
@@ -340,7 +316,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Geometry</div>
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Geometry</div>
         <div class="space-y-4 print:space-y-1">
           ${textQ(geometryProblem())}
           <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(geometryProblem())}</div>
@@ -348,7 +324,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Number Patterns</div>
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Number Patterns</div>
         <div class="space-y-4 print:space-y-1">
           ${textQ(patternProblem())}
           <div class="border-t border-slate-100 pt-3 print:pt-1">${textQ(patternProblem())}</div>
@@ -356,23 +332,23 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-caveat print:text-[13px] print:mb-1 print:pb-1">Logic Puzzles</div>
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Logic Puzzles</div>
         <div class="space-y-5 print:space-y-1">
           <div>
-            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">1. ${logicProblem()}</div>
-            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+            <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">1. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-sans print:text-xs print:mt-1">Answer: ${answerBlank}</div>
           </div>
           <div class="border-t border-slate-100 pt-4 print:pt-1">
-            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">2. ${logicProblem()}</div>
-            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+            <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">2. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-sans print:text-xs print:mt-1">Answer: ${answerBlank}</div>
           </div>
           <div class="border-t border-slate-100 pt-4 print:pt-1">
-            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">3. ${logicProblem()}</div>
-            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+            <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">3. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-sans print:text-xs print:mt-1">Answer: ${answerBlank}</div>
           </div>
           <div class="border-t border-slate-100 pt-4 print:pt-1">
-            <div class="text-xl font-caveat font-medium text-slate-700 print:text-sm">4. ${logicProblem()}</div>
-            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-caveat print:text-xs print:mt-1">Answer: ${answerBlank}</div>
+            <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">4. ${logicProblem()}</div>
+            <div class="mt-2 text-xl font-medium text-slate-400 flex items-end gap-2 font-sans print:text-xs print:mt-1">Answer: ${answerBlank}</div>
           </div>
         </div>
       </div>
@@ -398,34 +374,34 @@ import { RefreshCw, Printer } from "@lucide/astro";
       <div class="border-2 border-slate-300 rounded-xl bg-orange-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
         <div>
           <div class="text-sm font-semibold text-orange-800 uppercase tracking-widest mb-2 border-b-2 border-orange-200 pb-1 print:text-[10px] print:mb-1">Daily Riddle</div>
-          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${riddle}</p>
+          <p class="text-xl font-medium text-slate-700 leading-tight font-sans print:text-sm">${riddle}</p>
         </div>
-        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
+        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-sans print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
       </div>
       <div class="border-2 border-slate-300 rounded-xl bg-amber-50/50 p-5 flex flex-col justify-between print:p-2 print:break-inside-avoid">
         <div>
           <div class="text-sm font-semibold text-amber-800 uppercase tracking-widest mb-2 border-b-2 border-amber-200 pb-1 print:text-[10px] print:mb-1">Word Puzzle (Anagram)</div>
-          <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">
+          <p class="text-xl font-medium text-slate-700 leading-tight font-sans print:text-sm">
             Unscramble this word: <strong class="tracking-widest uppercase text-amber-700">${scrambled}</strong> (Hint: ${hint})
           </p>
         </div>
-        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-caveat print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
+        <div class="mt-6 text-lg font-medium text-slate-400 flex items-end gap-2 font-sans print:mt-1 print:text-xs">Answer: ${answerBlank}</div>
       </div>
       <div class="border-2 border-slate-300 rounded-xl bg-red-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
         <div class="text-sm font-semibold text-red-800 uppercase tracking-widest mb-2 border-b-2 border-red-200 pb-1 print:text-[10px] print:mb-1">Mini-Engineering</div>
-        <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${eng}</p>
+        <p class="text-xl font-medium text-slate-700 leading-tight font-sans print:text-sm">${eng}</p>
         <div class="mt-4 flex flex-col gap-2 print:mt-1">
-          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">Height: <div class="w-24 border-b-2 border-slate-400"></div> cm</div>
-          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 mt-2 font-caveat print:text-xs print:mt-0.5">Did it fall over? <div class="w-24 border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-sans print:text-xs">Height: <div class="w-24 border-b-2 border-slate-400"></div> cm</div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 mt-2 font-sans print:text-xs print:mt-0.5">Did it fall over? <div class="w-24 border-b-2 border-slate-400"></div></div>
         </div>
       </div>
       <div class="border-2 border-slate-300 rounded-xl bg-teal-50/50 p-5 flex flex-col print:p-2 print:break-inside-avoid">
         <div class="text-sm font-semibold text-teal-800 uppercase tracking-widest mb-2 border-b-2 border-teal-200 pb-1 print:text-[10px] print:mb-1">Observation / Mindfulness</div>
-        <p class="text-xl font-medium text-slate-700 leading-tight font-caveat print:text-sm">${mind}</p>
+        <p class="text-xl font-medium text-slate-700 leading-tight font-sans print:text-sm">${mind}</p>
         <div class="mt-4 flex flex-col gap-3 print:mt-1 print:gap-1">
-          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">1. <div class="flex-grow border-b-2 border-slate-400"></div></div>
-          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">2. <div class="flex-grow border-b-2 border-slate-400"></div></div>
-          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-caveat print:text-xs">3. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-sans print:text-xs">1. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-sans print:text-xs">2. <div class="flex-grow border-b-2 border-slate-400"></div></div>
+          <div class="flex items-end gap-2 text-lg font-medium text-slate-400 font-sans print:text-xs">3. <div class="flex-grow border-b-2 border-slate-400"></div></div>
         </div>
       </div>
     `;
@@ -433,24 +409,21 @@ import { RefreshCw, Printer } from "@lucide/astro";
 
   // ── Render: Sketches (AI-powered) ───────────────────────────────────
   interface SketchesData {
-    texture: string;
-    object: string;
+    shadow: string;
     sketch: string;
   }
 
   function renderSketches(d: SketchesData): string {
-    const texture = d.texture || "Waves";
-    const object = d.object || "Coffee Mug";
-    const sketch = d.sketch || "A Friendly Robot";
+    const shadow = d.shadow || "A Pillow on a Chair";
+    const sketch = d.sketch || "A Castle on a Cliff";
 
     const box = 'border-2 border-blue-400 rounded-lg bg-blue-50/10 h-128 relative overflow-hidden flex flex-col print:h-[calc(50vh-20px)]';
     const boxBreak = box + ' print:break-before-page';
     const hdr = 'bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 uppercase tracking-wider border-b-2 border-blue-200 print:text-xs';
     return `
       <div class="grid grid-cols-1 gap-6 print:gap-2">
-        <div class="${box}"><div class="${hdr}">2. Texture Study: ${texture}</div></div>
-        <div class="${boxBreak}"><div class="${hdr}">3. Object Study: ${object}</div></div>
-        <div class="${box} shadow-inner"><div class="${hdr}">4. Sketch of the Day: ${sketch}</div></div>
+        <div class="${boxBreak}"><div class="${hdr}">5. Shadow Study: ${shadow}</div></div>
+        <div class="${box}"><div class="${hdr}">6. Sketch of the Day: ${sketch}</div></div>
       </div>
     `;
   }
@@ -463,7 +436,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
 
   function renderWords(words: string[]): string {
     return words.map(w =>
-      `<span class="inline-block bg-white border-2 border-indigo-200 text-indigo-900 px-3 py-1 rounded-md text-lg font-medium shadow-sm font-caveat print:text-sm print:px-1.5 print:py-0.5 print:border">${w}</span>`
+      `<span class="inline-block bg-white border-2 border-indigo-200 text-indigo-900 px-3 py-1 rounded-md text-lg font-medium shadow-sm font-sans print:text-sm print:px-1.5 print:py-0.5 print:border">${w}</span>`
     ).join('');
   }
 

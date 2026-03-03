@@ -3,23 +3,20 @@ export const prerender = false;
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 
 interface SketchesResponse {
-  texture: string;
-  object: string;
+  shadow: string;
   sketch: string;
 }
 
-const PROMPT = `Generate 3 drawing prompts for an 8-year-old child's daily sketch practice. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
+const PROMPT = `Generate 2 drawing prompts for an 8-year-old child's daily sketch practice. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
-  "texture": "A single texture or surface pattern for the child to practice drawing (e.g. 'Wood Grain', 'Fur', 'Waves'). Just the name, 2-3 words max.",
-  "object": "A single everyday household object for the child to find and draw from real life observation (e.g. 'Coffee Mug', 'Backpack'). Just the name, 2-3 words max.",
-  "sketch": "A creative, imaginative scene or subject for a larger sketch (e.g. 'A Dragon Flying Over a Castle', 'A Robot Walking a Dog'). Keep it fun and visual, 3-8 words."
+  "shadow": "A simple everyday object with interesting shadows for the child to draw, focusing on light and shadow (e.g. 'A Pillow on a Chair', 'A Ball on the Floor', 'A Folded Towel', 'A Crumpled Paper Bag'). The object should be something they can find at home and set up with a lamp. 3-6 words.",
+  "sketch": "A more complex, creative scene or subject for a detailed sketch (e.g. 'A Treehouse in a Storm', 'A Market Stall Full of Fruit', 'A Cat Sleeping on a Stack of Books'). Keep it fun, visual, and challenging. 4-10 words."
 }`;
 
 const fallback: SketchesResponse = {
-  texture: "Waves",
-  object: "Coffee Mug",
-  sketch: "A Friendly Robot",
+  shadow: "A Pillow on a Chair",
+  sketch: "A Castle on a Cliff",
 };
 
 export const GET = async () => {

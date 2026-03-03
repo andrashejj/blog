@@ -23,7 +23,6 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "Segoe UI", "system-ui", "sans-serif"],
-        caveat: ["Caveat", "cursive"],
       },
     },
   },

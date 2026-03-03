@@ -1,5 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;500;600;700&display=swap");
 @plugin "@tailwindcss/typography";
 
 @theme {
@@ -11,7 +11,6 @@
   --color-brand: #0b69ff;
   --color-brand-strong: #0852c9;
   --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-caveat: "Caveat", cursive;
   --radius-soft: 16px;
   --shadow-soft: 0 14px 36px rgba(22, 24, 29, 0.08);
   --shadow-card: 0 6px 20px rgba(22, 24, 29, 0.05);
