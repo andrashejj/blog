@@ -1,0 +1,433 @@
+---
+import { RefreshCw, Printer } from "@lucide/astro";
+---
+
+<div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
+
+  <!-- Header -->
+  <div class="px-6 py-8 border-b-2 border-slate-200 bg-gradient-to-r from-cyan-50 to-teal-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none">
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Surf Coaching Session Plan</h2>
+    <p class="text-slate-500 mt-2 font-medium text-sm sm:text-base px-2 print:text-[10px] print:mt-1">
+      Tamarin Bay &nbsp;&bull;&nbsp; Tuesday & Wednesday &nbsp;&bull;&nbsp; 17:00 – 19:00
+    </p>
+    <p class="text-slate-400 mt-1 text-sm print:text-[10px] print:mt-0.5">
+      Date: <span id="session-date" class="font-semibold text-slate-600">___________</span>
+    </p>
+    <div class="flex items-center justify-center gap-3 mt-4 print:hidden">
+      <button id="print-btn" class="text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer">
+        <Printer size={16} />
+        Print Session Plan
+      </button>
+      <button id="regen-all-btn" class="text-sm font-semibold bg-teal-100 hover:bg-teal-200 text-teal-700 px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer border border-teal-200">
+        <RefreshCw size={16} />
+        New Exercises
+      </button>
+    </div>
+  </div>
+
+  <div class="p-6 space-y-10 print:p-2 print:space-y-0">
+
+    <!-- SECTION 1: TEAM WARMUP (static) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Team Warmup</h3>
+        <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:00 – 17:15</span>
+      </div>
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        <!-- Beach jog (static) -->
+        <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-amber-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+            <div>
+              <div class="text-lg font-semibold text-slate-700 print:text-sm">Beach Jog</div>
+              <div class="text-sm text-slate-500 font-medium print:text-[10px]">Easy pace along the waterline, get the blood flowing</div>
+            </div>
+          </div>
+          <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">5 min</div>
+        </div>
+        <!-- Team game (AI-generated) -->
+        <div id="section-warmup-game">
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between animate-pulse print:p-1.5 print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="h-4 w-32 bg-slate-200 rounded mb-2"></div>
+                <div class="h-3 w-48 bg-slate-100 rounded"></div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MOBILITY & COORDINATION (mixed) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-teal-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Mobility & Coordination</h3>
+        <span class="text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:15 – 17:30</span>
+      </div>
+      <!-- Static base exercises -->
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        {[
+          { name: 'Arm Circles & Shoulder Rolls', reps: '20x each direction', notes: 'Big circles, get the shoulders warm' },
+          { name: 'Single Leg Balance', reps: '30s each leg', notes: 'Eyes closed for extra challenge' },
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-teal-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
+                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
+          </div>
+        ))}
+      </div>
+      <!-- AI-generated mobility exercises -->
+      <div id="section-mobility" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
+        <div class="loading-skeleton space-y-3 print:space-y-1">
+          {[1,2,3].map(() => (
+            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5">
+              <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: STRENGTH & CONDITIONING (mixed) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-blue-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Strength & Conditioning</h3>
+        <span class="text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:30 – 17:45</span>
+      </div>
+      <!-- Static base exercises -->
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        {[
+          { name: 'Pop-ups on Sand', reps: '10x', notes: 'Explosive! Chest down, pop to surf stance' },
+          { name: 'Plank Hold', reps: '45s', notes: 'Straight line from head to heels' },
+          { name: 'Bear Crawls', reps: '2x 10m', notes: 'Low to the ground, opposite hand and foot' },
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-blue-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
+                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
+          </div>
+        ))}
+      </div>
+      <!-- AI-generated strength exercises -->
+      <div id="section-strength" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
+        <div class="loading-skeleton space-y-3 print:space-y-1">
+          {[1,2,3].map(() => (
+            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5">
+              <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: PADDLING & WATER SKILLS (static) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-cyan-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Paddling & Water Skills</h3>
+        <span class="text-sm font-semibold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:45 – 18:15</span>
+      </div>
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        {[
+          { name: 'Paddle Technique Drill', duration: '10 min', notes: 'Focus on catch, pull, recovery — long deep strokes' },
+          { name: 'Duck Dive / Turtle Roll', duration: '5 min', notes: 'Practice on incoming whitewater' },
+          { name: 'Sprint Paddles', duration: '10 min', notes: '3x 50m sprints with 1 min rest between' },
+          { name: 'Wave Reading', duration: '5 min', notes: 'Sit in lineup, predict where the next set breaks' },
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-cyan-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
+                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SECTION 5: SURFING / WAVE PRACTICE (mixed) -->
+    <section class="print:break-before-page">
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Surfing / Wave Practice</h3>
+        <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:15 – 18:45</span>
+      </div>
+      <!-- AI technique focus -->
+      <div id="section-surf-focus" class="mb-3 print:mb-1">
+        <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 animate-pulse print:p-2">
+          <div class="h-4 w-48 bg-indigo-100 rounded mb-2"></div>
+          <div class="h-3 w-2/3 bg-indigo-50 rounded"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        {[
+          { name: 'Catching Waves', duration: '15 min', notes: 'Apply the technique focus on every wave' },
+          { name: 'Free Surf with Coaching', duration: '15 min', notes: 'Coach gives real-time feedback from the water or shore' },
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-indigo-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
+                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SURF CHALLENGE OF THE DAY (AI) -->
+    <section>
+      <div id="section-challenge" class="border-2 border-teal-300 rounded-xl bg-gradient-to-r from-teal-50 to-cyan-50 p-5 print:p-2 print:break-inside-avoid">
+        <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
+        <p class="text-lg font-medium text-slate-700 leading-snug font-sans animate-pulse print:text-sm">Loading challenge...</p>
+      </div>
+    </section>
+
+    <!-- SECTION 6: THEORY (AI) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">6 | Theory</h3>
+        <span class="text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:45 – 18:50</span>
+      </div>
+      <div id="section-theory" class="print:break-inside-avoid">
+        <div class="border-2 border-slate-200 rounded-xl p-5 animate-pulse print:p-2">
+          <div class="h-5 w-48 bg-slate-200 rounded mb-3"></div>
+          <div class="h-4 w-3/4 bg-slate-100 rounded mb-2"></div>
+          <div class="h-4 w-1/2 bg-slate-100 rounded"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: COOL-DOWN & STRETCHING (static) -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-emerald-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">7 | Cool-down & Stretching</h3>
+        <span class="text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:50 – 19:00</span>
+      </div>
+      <div class="grid grid-cols-1 gap-3 print:gap-1">
+        {[
+          { name: 'Hamstring Stretch', duration: '30s each', notes: 'Reach for toes, keep legs straight' },
+          { name: 'Hip Flexor Stretch', duration: '30s each', notes: 'Lunge position, push hips forward' },
+          { name: 'Shoulder Cross-body Stretch', duration: '30s each', notes: 'Pull arm across chest gently' },
+          { name: 'Deep Breathing', duration: '1 min', notes: 'Box breathing: 4s in, 4s hold, 4s out, 4s hold' },
+          { name: 'Session Reflection', duration: '2 min', notes: 'What went well? What to improve next time?' },
+        ].map((ex) => (
+          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-emerald-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div>
+                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
+                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
+              </div>
+            </div>
+            <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- SESSION NOTES -->
+    <section class="print:break-inside-avoid">
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-slate-600 px-1 m-0 print:text-[13px]">Session Notes</h3>
+      </div>
+      <div
+        class="w-full min-h-[200px] border-2 border-slate-200 rounded-xl px-4 font-sans text-base text-slate-700 print:min-h-[120px] print:text-[12px] print:leading-[24px] print:bg-size-[100%_24px]"
+        style="background-image: linear-gradient(transparent 30px, #e2e8f0 30px, #e2e8f0 32px); background-size: 100% 32px; line-height: 32px; padding-top: 6px;"
+        contenteditable="true"
+      >
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // ── Helpers ──────────────────────────────────────────────────────────
+  async function fetchJSON<T>(url: string, timeoutMs = 10_000): Promise<T> {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } finally {
+      clearTimeout(id);
+    }
+  }
+
+  function withLoading(btn: HTMLButtonElement, action: () => Promise<void>) {
+    return async () => {
+      btn.disabled = true;
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
+      try {
+        await action();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+      }
+    };
+  }
+
+  // ── Types ───────────────────────────────────────────────────────────
+  interface SurfExercisesData {
+    mobility: Array<{ name: string; description: string; reps: string }>;
+    strength: Array<{ name: string; description: string; reps: string }>;
+    warmupGame: { name: string; description: string };
+    theoryTopic: { title: string; description: string };
+    techniqueFocus: string;
+    surfChallenge: string;
+  }
+
+  // ── Render functions ────────────────────────────────────────────────
+  function renderExerciseRow(ex: { name: string; description: string; reps: string }, colorClass: string): string {
+    return `
+      <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
+        <div class="flex items-center gap-3">
+          <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+          <div>
+            <div class="text-lg font-semibold text-slate-700 print:text-sm">${ex.name}</div>
+            <div class="text-sm text-slate-500 font-medium print:text-[10px]">${ex.description}</div>
+          </div>
+        </div>
+        <div class="text-sm font-semibold ${colorClass} px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">${ex.reps}</div>
+      </div>
+    `;
+  }
+
+  function renderWarmupGame(game: { name: string; description: string }): string {
+    return `
+      <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
+        <div class="flex items-center gap-3">
+          <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
+          <div>
+            <div class="text-lg font-semibold text-slate-700 print:text-sm">${game.name}</div>
+            <div class="text-sm text-slate-500 font-medium print:text-[10px]">${game.description}</div>
+          </div>
+        </div>
+        <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
+      </div>
+    `;
+  }
+
+  function renderMobility(exercises: SurfExercisesData['mobility']): string {
+    return exercises.map(ex => renderExerciseRow(ex, 'text-teal-700 bg-teal-50')).join('');
+  }
+
+  function renderStrength(exercises: SurfExercisesData['strength']): string {
+    return exercises.map(ex => renderExerciseRow(ex, 'text-blue-700 bg-blue-50')).join('');
+  }
+
+  function renderSurfFocus(challenge: string): string {
+    return `
+      <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 print:p-2 print:break-inside-avoid">
+        <div class="text-sm font-bold text-indigo-800 uppercase tracking-widest mb-1 print:text-[10px]">Technique Focus of the Day</div>
+        <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm">${challenge}</p>
+      </div>
+    `;
+  }
+
+  function renderChallenge(challenge: string): string {
+    return `
+      <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
+      <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm">${challenge}</p>
+    `;
+  }
+
+  function renderTheory(topic: { title: string; description: string }): string {
+    return `
+      <div class="border-2 border-slate-200 rounded-xl p-5 print:p-2">
+        <div class="text-lg font-bold text-slate-800 mb-2 font-sans print:text-sm print:mb-1">${topic.title}</div>
+        <p class="text-base text-slate-600 leading-relaxed font-sans print:text-[11px]">${topic.description}</p>
+        <div class="mt-4 print:mt-2">
+          <span class="text-sm font-medium text-slate-500 print:text-[10px]">Notes:</span>
+          <div class="mt-1 h-12 border-2 border-dotted border-slate-300 rounded-lg print:h-8 print:mt-0.5"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Load & wire up ──────────────────────────────────────────────────
+  async function loadAll(): Promise<void> {
+    const data = await fetchJSON<SurfExercisesData>('/api/generate-surf-exercises');
+
+    const warmupGameEl = document.getElementById('section-warmup-game');
+    const mobilityEl = document.getElementById('section-mobility');
+    const strengthEl = document.getElementById('section-strength');
+    const surfFocusEl = document.getElementById('section-surf-focus');
+    const challengeEl = document.getElementById('section-challenge');
+    const theoryEl = document.getElementById('section-theory');
+
+    if (warmupGameEl && data.warmupGame) warmupGameEl.innerHTML = renderWarmupGame(data.warmupGame);
+    if (mobilityEl && data.mobility) mobilityEl.innerHTML = renderMobility(data.mobility);
+    if (strengthEl && data.strength) strengthEl.innerHTML = renderStrength(data.strength);
+    if (surfFocusEl && data.techniqueFocus) surfFocusEl.innerHTML = renderSurfFocus(data.techniqueFocus);
+    if (challengeEl && data.surfChallenge) challengeEl.innerHTML = renderChallenge(data.surfChallenge);
+    if (theoryEl && data.theoryTopic) theoryEl.innerHTML = renderTheory(data.theoryTopic);
+  }
+
+  // Set today's date
+  const dateEl = document.getElementById('session-date');
+  if (dateEl) {
+    const d = new Date();
+    dateEl.textContent = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Regenerate button
+  const regenBtn = document.getElementById('regen-all-btn') as HTMLButtonElement;
+  if (regenBtn) {
+    regenBtn.disabled = true;
+    regenBtn.addEventListener('click', withLoading(regenBtn, loadAll));
+  }
+
+  // Auto-load on page load
+  loadAll().then(() => {
+    if (regenBtn) regenBtn.disabled = false;
+  });
+
+  // Print button
+  const printBtn = document.getElementById('print-btn');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      const header = document.querySelector('body > div > header') as HTMLElement;
+      const footer = document.querySelector('body > div > footer') as HTMLElement;
+      const main = document.querySelector('body > div > main') as HTMLElement;
+      const proseEls = document.querySelectorAll<HTMLElement>('.prose > *:not(.worksheet-container)');
+
+      if (header) header.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+      if (main) { main.style.width = '100%'; main.style.maxWidth = '100%'; main.style.padding = '0'; main.style.margin = '0'; }
+      proseEls.forEach(el => el.style.display = 'none');
+      document.body.style.background = 'white';
+
+      window.print();
+
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (main) { main.style.width = ''; main.style.maxWidth = ''; main.style.padding = ''; main.style.margin = ''; }
+      proseEls.forEach(el => el.style.display = '');
+      document.body.style.background = '';
+    });
+  }
+</script>
