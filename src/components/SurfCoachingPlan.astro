@@ -1,5 +1,14 @@
 ---
-import { RefreshCw, Printer } from "@lucide/astro";
+import { Printer, RefreshCw } from "@lucide/astro";
+import { skills } from "../lib/surf-skills";
+
+function barColor(level: number): string {
+  if (level <= 1) return 'bg-red-400';
+  if (level === 2) return 'bg-amber-400';
+  if (level === 3) return 'bg-yellow-400';
+  if (level === 4) return 'bg-lime-400';
+  return 'bg-green-500';
+}
 ---
 
 <div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
@@ -27,7 +36,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
 
   <div class="p-6 space-y-10 print:p-2 print:space-y-0">
 
-    <!-- SECTION 1: TEAM WARMUP (static) -->
+    <!-- SECTION 1: TEAM WARMUP -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Team Warmup</h3>
@@ -37,37 +46,36 @@ import { RefreshCw, Printer } from "@lucide/astro";
         <!-- Beach jog (static) -->
         <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-amber-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
           <div class="flex items-center gap-3">
-            <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+            <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
             <div>
               <div class="text-lg font-semibold text-slate-700 print:text-sm">Beach Jog</div>
               <div class="text-sm text-slate-500 font-medium print:text-[10px]">Easy pace along the waterline, get the blood flowing</div>
             </div>
           </div>
-          <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">5 min</div>
+          <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">5 min</div>
         </div>
         <!-- Team game (AI-generated) -->
         <div id="section-warmup-game">
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between animate-pulse print:p-1.5 print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="h-4 w-32 bg-slate-200 rounded mb-2"></div>
                 <div class="h-3 w-48 bg-slate-100 rounded"></div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
+            <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 2: MOBILITY & COORDINATION (mixed) -->
+    <!-- SECTION 2: MOBILITY & COORDINATION -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-teal-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Mobility & Coordination</h3>
         <span class="text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:15 – 17:30</span>
       </div>
-      <!-- Static base exercises -->
       <div class="grid grid-cols-1 gap-3 print:gap-1">
         {[
           { name: 'Arm Circles & Shoulder Rolls', reps: '20x each direction', notes: 'Big circles, get the shoulders warm' },
@@ -75,17 +83,16 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-teal-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
                 <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
+            <div class="text-sm font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
           </div>
         ))}
       </div>
-      <!-- AI-generated mobility exercises -->
       <div id="section-mobility" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
           {[1,2,3].map(() => (
@@ -98,13 +105,12 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
     </section>
 
-    <!-- SECTION 3: STRENGTH & CONDITIONING (mixed) -->
+    <!-- SECTION 3: STRENGTH & CONDITIONING -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-blue-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Strength & Conditioning</h3>
         <span class="text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:30 – 17:45</span>
       </div>
-      <!-- Static base exercises -->
       <div class="grid grid-cols-1 gap-3 print:gap-1">
         {[
           { name: 'Pop-ups on Sand', reps: '10x', notes: 'Explosive! Chest down, pop to surf stance' },
@@ -113,17 +119,16 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-blue-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
                 <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
+            <div class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
           </div>
         ))}
       </div>
-      <!-- AI-generated strength exercises -->
       <div id="section-strength" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
           {[1,2,3].map(() => (
@@ -136,7 +141,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
     </section>
 
-    <!-- SECTION 4: PADDLING & WATER SKILLS (static) -->
+    <!-- SECTION 4: PADDLING & WATER SKILLS -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-cyan-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Paddling & Water Skills</h3>
@@ -151,25 +156,24 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-cyan-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
                 <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+            <div class="text-sm font-semibold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- SECTION 5: SURFING / WAVE PRACTICE (mixed) -->
+    <!-- SECTION 5: SURFING / WAVE PRACTICE -->
     <section class="print:break-before-page">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Surfing / Wave Practice</h3>
         <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:15 – 18:45</span>
       </div>
-      <!-- AI technique focus -->
       <div id="section-surf-focus" class="mb-3 print:mb-1">
         <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 animate-pulse print:p-2">
           <div class="h-4 w-48 bg-indigo-100 rounded mb-2"></div>
@@ -183,19 +187,19 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-indigo-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
                 <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+            <div class="text-sm font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- SURF CHALLENGE OF THE DAY (AI) -->
+    <!-- SURF CHALLENGE OF THE DAY -->
     <section>
       <div id="section-challenge" class="border-2 border-teal-300 rounded-xl bg-gradient-to-r from-teal-50 to-cyan-50 p-5 print:p-2 print:break-inside-avoid">
         <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
@@ -203,7 +207,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
     </section>
 
-    <!-- SECTION 6: THEORY (AI) -->
+    <!-- SECTION 6: THEORY -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">6 | Theory</h3>
@@ -218,7 +222,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
     </section>
 
-    <!-- SECTION 7: COOL-DOWN & STRETCHING (static) -->
+    <!-- SECTION 7: COOL-DOWN & STRETCHING -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-emerald-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">7 | Cool-down & Stretching</h3>
@@ -234,13 +238,13 @@ import { RefreshCw, Printer } from "@lucide/astro";
         ].map((ex) => (
           <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-emerald-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
             <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
+              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
               <div>
                 <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
                 <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
               </div>
             </div>
-            <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
+            <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
           </div>
         ))}
       </div>
@@ -259,12 +263,93 @@ import { RefreshCw, Printer } from "@lucide/astro";
       </div>
     </section>
 
+    <!-- SKILL LEVEL TRACKER -->
+    <section class="print:break-inside-avoid">
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-violet-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">Skill Level Tracker</h3>
+      </div>
+      <div class="border-2 border-slate-200 rounded-xl p-5 space-y-4 print:p-3 print:space-y-2">
+        {skills.map((skill) => (
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-semibold text-slate-700 print:text-[11px]">{skill.name}</span>
+              <span class="text-xs text-slate-400 font-medium print:text-[9px]">{skill.note}</span>
+            </div>
+            <div class="flex gap-1.5">
+              {Array.from({ length: skill.max }).map((_, i) => (
+                <div
+                  class:list={[
+                    'h-3 rounded-sm flex-1 print:h-2',
+                    i < skill.level ? barColor(skill.level) : 'bg-slate-100 border border-slate-200',
+                  ]}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+        <p class="text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 print:text-[9px] print:mt-1 print:pt-1">
+          Assessed March 2026 &nbsp;&bull;&nbsp; Group average (ages 7–9)
+        </p>
+      </div>
+    </section>
+
   </div>
 </div>
 
+<!-- ── Templates for AI-generated content ─────────────────────────── -->
+
+<template id="tpl-exercise-row">
+  <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
+    <div class="flex items-center gap-3">
+      <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
+      <div>
+        <div class="text-lg font-semibold text-slate-700 print:text-sm" data-slot="name"></div>
+        <div class="text-sm text-slate-500 font-medium print:text-[10px]" data-slot="description"></div>
+      </div>
+    </div>
+    <div class="text-sm font-semibold px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5" data-slot="reps"></div>
+  </div>
+</template>
+
+<template id="tpl-warmup-game">
+  <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
+    <div class="flex items-center gap-3">
+      <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
+      <div>
+        <div class="text-lg font-semibold text-slate-700 print:text-sm" data-slot="name"></div>
+        <div class="text-sm text-slate-500 font-medium print:text-[10px]" data-slot="description"></div>
+      </div>
+    </div>
+    <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
+  </div>
+</template>
+
+<template id="tpl-surf-focus">
+  <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 print:p-2 print:break-inside-avoid">
+    <div class="text-sm font-bold text-indigo-800 uppercase tracking-widest mb-1 print:text-[10px]">Technique Focus of the Day</div>
+    <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm" data-slot="text"></p>
+  </div>
+</template>
+
+<template id="tpl-challenge">
+  <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
+  <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm" data-slot="text"></p>
+</template>
+
+<template id="tpl-theory">
+  <div class="border-2 border-slate-200 rounded-xl p-5 print:p-2">
+    <div class="text-lg font-bold text-slate-800 mb-2 font-sans print:text-sm print:mb-1" data-slot="title"></div>
+    <p class="text-base text-slate-600 leading-relaxed font-sans print:text-[11px]" data-slot="description"></p>
+    <div class="mt-4 print:mt-2">
+      <span class="text-sm font-medium text-slate-500 print:text-[10px]">Notes:</span>
+      <div class="mt-1 h-12 border-2 border-dotted border-slate-300 rounded-lg print:h-8 print:mt-0.5"></div>
+    </div>
+  </div>
+</template>
+
 <script>
   // ── Helpers ──────────────────────────────────────────────────────────
-  async function fetchJSON<T>(url: string, timeoutMs = 10_000): Promise<T> {
+  async function fetchJSON<T>(url: string, timeoutMs = 35_000): Promise<T> {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
     try {
@@ -290,6 +375,18 @@ import { RefreshCw, Printer } from "@lucide/astro";
     };
   }
 
+  function cloneTemplate(id: string): DocumentFragment {
+    const tpl = document.getElementById(id) as HTMLTemplateElement;
+    return tpl.content.cloneNode(true) as DocumentFragment;
+  }
+
+  function fillSlots(fragment: DocumentFragment, data: Record<string, string>): void {
+    for (const [key, value] of Object.entries(data)) {
+      const el = fragment.querySelector(`[data-slot="${key}"]`);
+      if (el) el.textContent = value;
+    }
+  }
+
   // ── Types ───────────────────────────────────────────────────────────
   interface SurfExercisesData {
     mobility: Array<{ name: string; description: string; reps: string }>;
@@ -300,91 +397,140 @@ import { RefreshCw, Printer } from "@lucide/astro";
     surfChallenge: string;
   }
 
+  const FALLBACK_DATA: SurfExercisesData = {
+    mobility: [
+      {
+        name: "Surf Pop-up Flow",
+        description:
+          "From lying flat, pop up into a low surf stance, hold for 3 seconds, then back down.",
+        reps: "8x",
+      },
+      {
+        name: "Ankle Circles in Sand",
+        description:
+          "Stand on one leg in the sand and draw big circles with the other foot.",
+        reps: "10x each direction, each foot",
+      },
+      {
+        name: "Crab Walk Sideways",
+        description:
+          "Sit on the sand, lift your hips, and crab-walk sideways as fast as you can.",
+        reps: "2x 10m each direction",
+      },
+    ],
+    strength: [
+      {
+        name: "Wheelbarrow Walk Race",
+        description:
+          "One person holds their partner's ankles while they walk on their hands — race to the cone and switch.",
+        reps: "3x each",
+      },
+      {
+        name: "Partner Push-up High Fives",
+        description:
+          "Face your partner in push-up position. After each push-up, high-five with opposite hands.",
+        reps: "10x",
+      },
+      {
+        name: "Surf Paddle Plank",
+        description:
+          "Hold a plank while mimicking paddle strokes with alternating arms.",
+        reps: "3x 20s",
+      },
+    ],
+    warmupGame: {
+      name: "Sharks & Minnows",
+      description:
+        "One person is the shark in the middle. Everyone else (minnows) must run from one line to the other without getting tagged.",
+    },
+    theoryTopic: {
+      title: "Reading the Lineup",
+      description:
+        "Before paddling out, watch where waves break most consistently. That 'peak' is usually where you should sit.",
+    },
+    techniqueFocus:
+      "Focus on looking down the line, not at your feet, as soon as you pop up.",
+    surfChallenge:
+      "Try to catch 3 clean waves in a row where you pop up early and ride to the shoulder.",
+  };
+
+  // ── Color classes per section ─────────────────────────────────────
+  const COLORS = {
+    mobility: 'text-teal-700 bg-teal-50',
+    strength: 'text-blue-700 bg-blue-50',
+  } as const;
+
   // ── Render functions ────────────────────────────────────────────────
-  function renderExerciseRow(ex: { name: string; description: string; reps: string }, colorClass: string): string {
-    return `
-      <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
-        <div class="flex items-center gap-3">
-          <div class="w-5 h-5 border-2 border-slate-300 rounded-sm flex-shrink-0 print:w-3 print:h-3"></div>
-          <div>
-            <div class="text-lg font-semibold text-slate-700 print:text-sm">${ex.name}</div>
-            <div class="text-sm text-slate-500 font-medium print:text-[10px]">${ex.description}</div>
-          </div>
-        </div>
-        <div class="text-sm font-semibold ${colorClass} px-3 py-1 rounded-md flex-shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">${ex.reps}</div>
-      </div>
-    `;
+  function renderExerciseList(
+    container: HTMLElement,
+    exercises: Array<{ name: string; description: string; reps: string }>,
+    colorClasses: string,
+  ): void {
+    container.innerHTML = '';
+    for (const ex of exercises) {
+      const frag = cloneTemplate('tpl-exercise-row');
+      fillSlots(frag, { name: ex.name, description: ex.description, reps: ex.reps });
+      const badge = frag.querySelector('[data-slot="reps"]');
+      if (badge) {
+        for (const cls of colorClasses.split(' ')) badge.classList.add(cls);
+      }
+      container.appendChild(frag);
+    }
   }
 
-  function renderWarmupGame(game: { name: string; description: string }): string {
-    return `
-      <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
-        <div class="flex items-center gap-3">
-          <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-          <div>
-            <div class="text-lg font-semibold text-slate-700 print:text-sm">${game.name}</div>
-            <div class="text-sm text-slate-500 font-medium print:text-[10px]">${game.description}</div>
-          </div>
-        </div>
-        <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">10 min</div>
-      </div>
-    `;
+  function renderWarmupGame(container: HTMLElement, game: { name: string; description: string }): void {
+    container.innerHTML = '';
+    const frag = cloneTemplate('tpl-warmup-game');
+    fillSlots(frag, game);
+    container.appendChild(frag);
   }
 
-  function renderMobility(exercises: SurfExercisesData['mobility']): string {
-    return exercises.map(ex => renderExerciseRow(ex, 'text-teal-700 bg-teal-50')).join('');
+  function renderSurfFocus(container: HTMLElement, text: string): void {
+    container.innerHTML = '';
+    const frag = cloneTemplate('tpl-surf-focus');
+    fillSlots(frag, { text });
+    container.appendChild(frag);
   }
 
-  function renderStrength(exercises: SurfExercisesData['strength']): string {
-    return exercises.map(ex => renderExerciseRow(ex, 'text-blue-700 bg-blue-50')).join('');
+  function renderChallenge(container: HTMLElement, text: string): void {
+    container.innerHTML = '';
+    const frag = cloneTemplate('tpl-challenge');
+    fillSlots(frag, { text });
+    container.appendChild(frag);
   }
 
-  function renderSurfFocus(challenge: string): string {
-    return `
-      <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 print:p-2 print:break-inside-avoid">
-        <div class="text-sm font-bold text-indigo-800 uppercase tracking-widest mb-1 print:text-[10px]">Technique Focus of the Day</div>
-        <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm">${challenge}</p>
-      </div>
-    `;
-  }
-
-  function renderChallenge(challenge: string): string {
-    return `
-      <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
-      <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm">${challenge}</p>
-    `;
-  }
-
-  function renderTheory(topic: { title: string; description: string }): string {
-    return `
-      <div class="border-2 border-slate-200 rounded-xl p-5 print:p-2">
-        <div class="text-lg font-bold text-slate-800 mb-2 font-sans print:text-sm print:mb-1">${topic.title}</div>
-        <p class="text-base text-slate-600 leading-relaxed font-sans print:text-[11px]">${topic.description}</p>
-        <div class="mt-4 print:mt-2">
-          <span class="text-sm font-medium text-slate-500 print:text-[10px]">Notes:</span>
-          <div class="mt-1 h-12 border-2 border-dotted border-slate-300 rounded-lg print:h-8 print:mt-0.5"></div>
-        </div>
-      </div>
-    `;
+  function renderTheory(container: HTMLElement, topic: { title: string; description: string }): void {
+    container.innerHTML = '';
+    const frag = cloneTemplate('tpl-theory');
+    fillSlots(frag, topic);
+    container.appendChild(frag);
   }
 
   // ── Load & wire up ──────────────────────────────────────────────────
   async function loadAll(): Promise<void> {
-    const data = await fetchJSON<SurfExercisesData>('/api/generate-surf-exercises');
+    const ids = {
+      warmupGame: document.getElementById('section-warmup-game'),
+      mobility: document.getElementById('section-mobility'),
+      strength: document.getElementById('section-strength'),
+      surfFocus: document.getElementById('section-surf-focus'),
+      challenge: document.getElementById('section-challenge'),
+      theory: document.getElementById('section-theory'),
+    };
+    let data: SurfExercisesData;
 
-    const warmupGameEl = document.getElementById('section-warmup-game');
-    const mobilityEl = document.getElementById('section-mobility');
-    const strengthEl = document.getElementById('section-strength');
-    const surfFocusEl = document.getElementById('section-surf-focus');
-    const challengeEl = document.getElementById('section-challenge');
-    const theoryEl = document.getElementById('section-theory');
+    try {
+      data = await fetchJSON<SurfExercisesData>('/api/generate-surf-exercises');
+    } catch (error) {
+      console.error('Failed to load surf exercises, using fallback:', error);
+      data = FALLBACK_DATA;
+    }
 
-    if (warmupGameEl && data.warmupGame) warmupGameEl.innerHTML = renderWarmupGame(data.warmupGame);
-    if (mobilityEl && data.mobility) mobilityEl.innerHTML = renderMobility(data.mobility);
-    if (strengthEl && data.strength) strengthEl.innerHTML = renderStrength(data.strength);
-    if (surfFocusEl && data.techniqueFocus) surfFocusEl.innerHTML = renderSurfFocus(data.techniqueFocus);
-    if (challengeEl && data.surfChallenge) challengeEl.innerHTML = renderChallenge(data.surfChallenge);
-    if (theoryEl && data.theoryTopic) theoryEl.innerHTML = renderTheory(data.theoryTopic);
+    if (ids.warmupGame && data.warmupGame) renderWarmupGame(ids.warmupGame, data.warmupGame);
+    if (ids.mobility && data.mobility) renderExerciseList(ids.mobility, data.mobility, COLORS.mobility);
+    if (ids.strength && data.strength) renderExerciseList(ids.strength, data.strength, COLORS.strength);
+    if (ids.surfFocus && data.techniqueFocus) renderSurfFocus(ids.surfFocus, data.techniqueFocus);
+    if (ids.challenge && data.surfChallenge) renderChallenge(ids.challenge, data.surfChallenge);
+    if (ids.theory && data.theoryTopic) renderTheory(ids.theory, data.theoryTopic);
   }
 
   // Set today's date

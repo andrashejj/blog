@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
+import { skillsSummary } from "../../lib/surf-skills";
 
 interface SurfExercisesResponse {
   mobility: Array<{ name: string; description: string; reps: string }>;
@@ -11,7 +12,14 @@ interface SurfExercisesResponse {
   surfChallenge: string;
 }
 
-const PROMPT = `Generate surf coaching exercises for a group of kids aged 8-12 training at a beach in Mauritius. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
+const PROMPT = `Generate surf coaching exercises for a group of kids aged 7-9 training at a beach in Mauritius.
+
+Here are their current skill levels (scale of 1-5):
+${skillsSummary()}
+
+IMPORTANT: Tailor ALL exercises, theory, technique focus, and challenges to match these skill levels. For weak areas (1-2), focus on fundamentals and building confidence. For stronger areas (3+), push progression. The surf challenge and technique focus should be realistic for their abilities — don't assume they can do things their skill levels say they can't.
+
+Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
   "mobility": [
@@ -92,7 +100,13 @@ const fallback: SurfExercisesResponse = {
 };
 
 export const GET = async () => {
-  const data = await generateJSON<SurfExercisesResponse>(PROMPT, fallback);
+  // Surf exercise generation can be slower; use a lighter model and a longer timeout.
+  const model = process.env.GEMINI_SURF_MODEL || "gemini-3-flash-preview";
+  const data = await generateJSON<SurfExercisesResponse>(PROMPT, fallback, {
+    model,
+    timeoutMs: 25_000,
+    temperature: 1.1,
+  });
 
   if (!data.mobility?.length) data.mobility = fallback.mobility;
   if (!data.strength?.length) data.strength = fallback.strength;
