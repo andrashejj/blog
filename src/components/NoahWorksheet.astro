@@ -1,5 +1,5 @@
 ---
-import { RefreshCw, Printer } from "@lucide/astro";
+import { Printer, RefreshCw } from "@lucide/astro";
 ---
 
 <div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
@@ -216,59 +216,51 @@ import { RefreshCw, Printer } from "@lucide/astro";
   }
 
   // ── Render: Math (client-side only) ─────────────────────────────────
-  function sub(max: number) {
-    let a = rand(100, max), b = rand(10, max);
-    if (b > a) [a, b] = [b, a];
+  function sub(max: number, min = 0) {
+    const a = rand(Math.max(min + 1, 2), max);
+    const b = rand(min, a - 1);
     return `${a} - ${b}`;
   }
 
   function divProblem() {
-    const divisor = rand(2, 12);
-    const quotient = rand(2, 12);
+    const divisor = rand(2, 10);
+    const quotient = rand(2, 10);
     return `${divisor * quotient} &divide; ${divisor}`;
   }
 
   function logicProblem(): string {
     const problems = [
-      () => { const ages = [rand(5, 9), rand(10, 14)]; const diff = ages[1] - ages[0]; return `Emma is ${diff} years older than Liam. Liam is ${ages[0]} years old. How old is Emma?`; },
-      () => { const n = rand(3, 6); return `${n} cats are sitting in a row. Each cat can see all the cats in front of it. How many cats does the last cat see?`; },
-      () => { const apples = rand(12, 30); const half = apples / 2; const isEven = apples % 2 === 0; const a = isEven ? apples : apples + 1; return `Noah and Mia picked ${a} apples together. If they split them equally, how many does each get?`; },
-      () => { const floors = rand(4, 8); const steps = rand(8, 14); return `A building has ${floors} floors. There are ${steps} steps between each floor. How many steps from the ground floor to the top?`; },
-      () => { const total = rand(15, 30); const diff = rand(2, 6) * 2; const small = (total - diff) / 2; const isEven = (total - diff) % 2 === 0; const t = isEven ? total : total + 1; const d = isEven ? diff : diff; return `Two boxes hold ${t} balls total. One box has ${d} more balls than the other. How many are in each box?`; },
-      () => { const people = rand(3, 6); return `${people} people meet and each shakes hands with everyone else exactly once. How many handshakes happen in total?`; },
-      () => { const coins = [rand(2, 5), rand(2, 5)]; const total = coins[0] * 10 + coins[1] * 5; return `You have ${coins[0] + coins[1]} coins made of only 10p and 5p coins. The total is ${total}p. How many of each coin do you have?`; },
-      () => { const chickens = rand(3, 8); const dogs = rand(2, 5); const legs = chickens * 2 + dogs * 4; const heads = chickens + dogs; return `A farmer sees ${heads} heads and ${legs} legs in a field of chickens and dogs. How many of each are there?`; },
-      () => { const speed = pick([3, 4, 5, 6]); const dist = speed * rand(2, 5); return `Noah walks ${speed} blocks every 10 minutes. How long will it take him to walk ${dist} blocks?`; },
-      () => { const age = rand(6, 10); return `Noah is ${age} years old. His mum is 3 times his age. In how many years will his mum be exactly twice his age?`; },
+      () => { const monday = rand(12, 28); const tuesday = rand(12, 28); const target = monday + tuesday + rand(8, 20); return `Noah read ${monday} pages on Monday and ${tuesday} pages on Tuesday. He wants to read ${target} pages in total this week. How many more pages does he need?`; },
+      () => { const rows = rand(3, 6); const perRow = rand(4, 8); const absent = rand(2, 9); return `There are ${rows} rows of desks with ${perRow} students in each row. ${absent} students are absent today. How many students are in class?`; },
+      () => { const packs = rand(3, 6); const perPack = rand(6, 10); const given = rand(5, 14); return `Noah buys ${packs} packs of stickers. Each pack has ${perPack} stickers. He gives ${given} stickers to friends. How many stickers does he have left?`; },
+      () => { const boxes = rand(4, 7); const each = rand(3, 8); const used = rand(6, 15); return `A teacher has ${boxes} boxes of pencils with ${each} pencils in each box. She uses ${used} pencils for a project. How many pencils are left?`; },
+      () => { const rows = rand(3, 5); const seats = rand(6, 9); const filled = rand(8, rows * seats - 4); return `A mini-bus has ${rows} rows with ${seats} seats in each row. ${filled} seats are filled. How many empty seats are there?`; },
+      () => { const groups = rand(3, 6); const each = rand(4, 8); const shared = rand(4, 10); return `Noah made ${groups} equal groups of cards with ${each} cards in each group. Then he shared ${shared} cards with his sister. How many cards does he still have?`; },
+      () => { const minutes = pick([10, 15]); const rounds = rand(3, 6); const breakMin = pick([5, 10]); return `Soccer practice has ${rounds} drills. Each drill is ${minutes} minutes, and there is a ${breakMin}-minute break between drills. How many minutes in total?`; },
+      () => { const packs = rand(2, 5); const cups = rand(8, 12); const spilled = rand(3, 9); return `There are ${packs} packs of juice cups with ${cups} cups per pack. ${spilled} cups were spilled. How many full cups are left?`; },
     ];
     return pick(problems)();
   }
 
   function geometryProblem(): string {
     const problems = [
-      () => { const w = rand(3, 12), h = rand(3, 12); return `A rectangle has a width of ${w} and a length of ${h}. What is its area?`; },
-      () => { const w = rand(3, 12), h = rand(3, 12); return `A rectangle has side lengths of ${w} and ${h}. What is its perimeter?`; },
-      () => { const s = rand(3, 15); return `A square has a side length of ${s}. What is its perimeter?`; },
-      () => { const s = rand(2, 10); return `A square has a side length of ${s}. What is its area?`; },
-      () => { const a = rand(3, 10), b = rand(3, 10), c = rand(3, 10); return `A triangle has sides of ${a}, ${b}, and ${c}. What is its perimeter?`; },
+      () => { const w = rand(3, 11), h = rand(3, 11); return `A rectangle is ${w} units wide and ${h} units long. What is its area?`; },
+      () => { const w = rand(4, 12), h = rand(4, 12); return `A rectangle has side lengths ${w} units and ${h} units. What is its perimeter?`; },
+      () => { const side = rand(4, 12); return `A square has a perimeter of ${side * 4} units. What is the side length?`; },
+      () => { const length = rand(7, 14); const width = rand(4, 10); return `A playground is a rectangle with length ${length} m and width ${width} m. How many meters of fence are needed around it?`; },
+      () => { const length = rand(6, 12); const width = rand(3, 9); const perimeter = 2 * (length + width); return `A rectangle has perimeter ${perimeter} units and length ${length} units. What is its width?`; },
     ];
     return pick(problems)();
   }
 
   function patternProblem(): string {
     const problems = [
-      // Arithmetic sequences
-      () => { const start = rand(2, 20), step = rand(2, 7); const seq = [0,1,2,3].map(i => start + step * i); return `What comes next? ${seq.join(', ')}, __`; },
-      // Doubling
-      () => { const start = pick([2, 3, 5]); const seq = [0,1,2,3].map(i => start * Math.pow(2, i)); return `What comes next? ${seq.join(', ')}, __`; },
-      // Subtraction sequences
-      () => { const start = rand(50, 99), step = rand(3, 9); const seq = [0,1,2,3].map(i => start - step * i); return `What comes next? ${seq.join(', ')}, __`; },
-      // Alternating +/- patterns
-      () => { const a = rand(5, 20), up = rand(3, 6), down = rand(1, 2); const seq = [a, a+up, a+up-down, a+up-down+up, a+up-down+up-down]; return `Find the pattern: ${seq.join(', ')}, __`; },
-      // Skip counting by unusual numbers
-      () => { const step = pick([7, 9, 11, 13]); const start = rand(1, 5); const seq = [0,1,2,3].map(i => start + step * i); return `What comes next? ${seq.join(', ')}, __`; },
-      // Square numbers
-      () => { const start = rand(1, 4); const seq = [0,1,2,3].map(i => (start+i)*(start+i)); return `These are special numbers. What comes next? ${seq.join(', ')}, __`; },
+      () => { const start = rand(5, 25); const step = rand(3, 8); const seq = [0, 1, 2, 3, 4].map(i => start + step * i); return `What comes next? ${seq.join(', ')}, __`; },
+      () => { const start = rand(60, 90); const step = rand(4, 9); const seq = [0, 1, 2, 3].map(i => start - step * i); return `Find the missing number: ${seq[0]}, ${seq[1]}, __, ${seq[3]}, ${seq[3] - step}`; },
+      () => { const a = rand(3, 10); const b = a + rand(2, 5); const c = b + rand(3, 6); const d = c + rand(4, 7); return `The jumps get bigger by 1 each time. Fill in the blank: ${a}, ${b}, ${c}, ${d}, __`; },
+      () => { const start = pick([2, 3, 4]); const seq = [0, 1, 2, 3, 4].map(i => start * Math.pow(2, i)); return `What comes next in this doubling pattern? ${seq.join(', ')}, __`; },
+      () => { const n = rand(4, 8); const seq = [n, n + 5, n + 4, n + 9, n + 8]; return `Use +5, then -1, and repeat. What comes next? ${seq.join(', ')}, __`; },
+      () => { const step = pick([6, 7, 8, 9]); const start = rand(10, 25); const seq = [0, 1, 2, 3, 4].map(i => start + step * i); return `Continue the skip-counting pattern: ${seq.join(', ')}, __`; },
     ];
     return pick(problems)();
   }
@@ -285,29 +277,37 @@ import { RefreshCw, Printer } from "@lucide/astro";
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
         <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Addition &amp; Subtraction</div>
         <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
-          ${mathRow(`${rand(10, 99)} + ${rand(10, 99)}`)}
-          ${mathRow(sub(199))}
-          ${mathRow(`${rand(100, 899)} + ${rand(100, 899)}`)}
-          ${mathRow(sub(899))}
-          ${mathRow(`${rand(1000, 4999)} + ${rand(100, 999)}`)}
-          ${mathRow(sub(4999))}
-          ${mathRow(`${rand(1000, 9999)} + ${rand(1000, 9999)}`)}
+          ${mathRow(`${rand(20, 99)} + ${rand(20, 99)}`)}
+          ${mathRow(`${rand(100, 499)} + ${rand(100, 499)}`)}
+          ${mathRow(`${rand(200, 799)} + ${rand(20, 199)}`)}
+          ${mathRow(`${rand(200, 899)} + ${rand(100, 399)}`)}
+          ${mathRow(sub(99, 10))}
+          ${mathRow(sub(299, 50))}
+          ${mathRow(sub(599, 100))}
+          ${mathRow(sub(999, 200))}
+          ${mathRow(`${rand(150, 699)} + ${rand(150, 699)}`)}
+          ${mathRow(sub(1000, 150))}
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
         <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Multiplication</div>
         <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
-          ${mathRow(`${rand(2, 12)} &times; ${rand(2, 12)}`)}
-          ${mathRow(`${rand(2, 9)} &times; ${rand(10, 49)}`)}
-          ${mathRow(`${rand(2, 6)} &times; ${rand(1, 9) * 10}`)}
-          ${mathRow(`${rand(10, 30)} &times; ${rand(10, 30)}`)}
-          ${mathRow(`${rand(2, 9)} &times; ${rand(50, 99)}`)}
-          ${mathRow(`${rand(3, 9)} &times; ${rand(100, 250)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
+          ${mathRow(`${rand(2, 10)} &times; ${rand(2, 10)}`)}
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
         <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Division</div>
         <div class="space-y-4 text-xl font-medium font-sans print:space-y-1 print:text-sm">
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
+          ${mathRow(divProblem())}
           ${mathRow(divProblem())}
           ${mathRow(divProblem())}
           ${mathRow(divProblem())}
@@ -332,7 +332,7 @@ import { RefreshCw, Printer } from "@lucide/astro";
         </div>
       </div>
       <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 bg-white print:p-2 print:break-inside-avoid">
-        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Logic Puzzles</div>
+        <div class="text-lg font-semibold text-slate-700 border-b-2 border-slate-100 pb-2 mb-4 font-sans print:text-[13px] print:mb-1 print:pb-1">Word Problems (Grade 3)</div>
         <div class="space-y-5 print:space-y-1">
           <div>
             <div class="text-xl font-sans font-medium text-slate-700 print:text-sm">1. ${logicProblem()}</div>
