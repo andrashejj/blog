@@ -1,23 +1,13 @@
 ---
 import { Printer, RefreshCw } from "@lucide/astro";
-import { skills } from "../lib/surf-skills";
-
-function barColor(level: number): string {
-  if (level <= 1) return "bg-red-400";
-  if (level === 2) return "bg-amber-400";
-  if (level === 3) return "bg-yellow-400";
-  if (level === 4) return "bg-lime-400";
-  return "bg-green-500";
-}
 ---
 
 <div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
-
   <!-- Header -->
   <div class="px-6 py-8 border-b-2 border-slate-200 bg-gradient-to-r from-cyan-50 to-teal-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none">
     <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Surf Coaching Session Plan</h2>
     <p class="text-slate-500 mt-2 font-medium text-sm sm:text-base px-2 print:text-[10px] print:mt-1">
-      Tamarin Bay &nbsp;&bull;&nbsp; Tuesday & Wednesday &nbsp;&bull;&nbsp; 17:00 – 19:00
+      Tamarin Bay &nbsp;&bull;&nbsp; Tuesday & Wednesday &nbsp;&bull;&nbsp; ~90 min target (with slack)
     </p>
     <p class="text-slate-400 mt-1 text-sm print:text-[10px] print:mt-0.5">
       Date: <span id="session-date" class="font-semibold text-slate-600">___________</span>
@@ -35,289 +25,97 @@ function barColor(level: number): string {
   </div>
 
   <div class="p-6 space-y-10 print:p-2 print:space-y-0">
-
-    <!-- SECTION 1: TEAM WARMUP (PART OF 20' LAND BLOCK) -->
+    <!-- SECTION 1: GROUND RULES -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Team Warmup</h3>
-        <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:00 – 17:07</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Ground Rules (6)</h3>
+        <span class="text-sm font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">Always</span>
       </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        <!-- Beach jog (static) -->
-        <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-amber-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-          <div class="flex items-center gap-3">
-            <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-            <div>
-              <div class="text-lg font-semibold text-slate-700 print:text-sm">Beach Jog</div>
-              <div class="text-sm text-slate-500 font-medium print:text-[10px]">Easy pace along the waterline, get the blood flowing</div>
+      <div class="border-2 border-slate-200 rounded-xl p-5 bg-slate-50/60 print:p-2 print:break-inside-avoid">
+        <ol class="m-0 pl-5 space-y-2 text-sm text-slate-700 print:text-[10px] print:space-y-1">
+          <li>When we arrive, we greet the coaches and everyone else.</li>
+          <li>If we are late, we bring a healthy cake (banana bread) next time.</li>
+          <li>When we leave, we say goodbye to the coaches and everyone else.</li>
+          <li>We do not argue with coaches. We share feedback in the debrief at the end.</li>
+          <li>We do not go into the water alone. Ever.</li>
+          <li>The coaches coach. They are not here to push boards, but they might if they are nice.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SECTION 2: WARMUP + STRETCH -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Theola Warmup + Stretch</h3>
+        <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~20-30 min</span>
+      </div>
+      <div id="section-warmup-stretch" class="grid grid-cols-1 gap-3 print:gap-1">
+        <div class="loading-skeleton space-y-3 print:space-y-1">
+          {[1, 2, 3, 4].map(() => (
+            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
+              <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3 w-3/4 bg-slate-100 rounded mb-2"></div>
+              <div class="h-3 w-20 bg-amber-100 rounded"></div>
             </div>
-          </div>
-          <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">3 min</div>
+          ))}
         </div>
-        <!-- Team game (AI-generated) -->
-        <div id="section-warmup-game">
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between animate-pulse print:p-1.5 print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="h-4 w-32 bg-slate-200 rounded mb-2"></div>
-                <div class="h-3 w-48 bg-slate-100 rounded"></div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">4 min</div>
-          </div>
+      </div>
+      <div id="section-warmup-note" class="mt-3 print:mt-1">
+        <div class="border-2 border-amber-200 rounded-lg bg-amber-50/70 p-4 animate-pulse print:p-2">
+          <div class="h-3 w-24 bg-amber-100 rounded mb-2"></div>
+          <div class="h-3 w-3/4 bg-amber-50 rounded"></div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 2: MOBILITY & COORDINATION (PART OF 20' LAND BLOCK) -->
+    <!-- SECTION 3: BASICS -->
     <section>
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-teal-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Mobility & Coordination</h3>
-        <span class="text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:07 – 17:14</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-blue-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Basics: Stand-Up Mechanics</h3>
+        <span class="text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~10-15 min</span>
       </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Arm Circles & Shoulder Rolls', reps: '20x each direction', notes: 'Big circles, get the shoulders warm' },
-          { name: 'Single Leg Balance', reps: '30s each leg', notes: 'Eyes closed for extra challenge' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-teal-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
-          </div>
-        ))}
-      </div>
-      <div id="section-mobility" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
+      <div id="section-basics" class="grid grid-cols-1 gap-3 print:gap-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1,2,3].map(() => (
-            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5">
+          {[1, 2, 3, 4].map(() => (
+            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
               <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
-              <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
+              <div class="h-3 w-3/4 bg-slate-100 rounded mb-2"></div>
+              <div class="h-3 w-20 bg-blue-100 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div id="section-basics-note" class="mt-3 print:mt-1">
+        <div class="border-2 border-blue-200 rounded-lg bg-blue-50/70 p-4 animate-pulse print:p-2">
+          <div class="h-3 w-24 bg-blue-100 rounded mb-2"></div>
+          <div class="h-3 w-3/4 bg-blue-50 rounded"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: WATER BLOCK -->
+    <section>
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Paddle Out + Surf + Debrief</h3>
+        <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~45-55 min (remaining time)</span>
+      </div>
+      <div id="section-water-block" class="grid grid-cols-1 gap-3 print:gap-1">
+        <div class="loading-skeleton space-y-3 print:space-y-1">
+          {[1, 2, 3, 4].map(() => (
+            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
+              <div class="h-3 w-28 bg-indigo-100 rounded mb-2"></div>
+              <div class="h-3 w-4/5 bg-slate-100 rounded"></div>
             </div>
           ))}
         </div>
       </div>
     </section>
-
-    <!-- SECTION 3: STRENGTH & CONDITIONING (PART OF 20' LAND BLOCK) -->
-    <section>
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-blue-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Strength & Conditioning</h3>
-        <span class="text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:14 – 17:20</span>
-      </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Pop-ups on Sand', reps: '10x', notes: 'Explosive! Chest down, pop to surf stance' },
-          { name: 'Plank Hold', reps: '45s', notes: 'Straight line from head to heels' },
-          { name: 'Bear Crawls', reps: '2x 10m', notes: 'Low to the ground, opposite hand and foot' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-blue-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.reps}</div>
-          </div>
-        ))}
-      </div>
-      <div id="section-strength" class="grid grid-cols-1 gap-3 mt-3 print:gap-1 print:mt-1">
-        <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1,2,3].map(() => (
-            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5">
-              <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
-              <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: PADDLE OUT + THEORY & WATER SKILLS -->
-    <section>
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-cyan-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Paddle Out + Theory & Water Skills</h3>
-        <span class="text-sm font-semibold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:20 – 17:45</span>
-      </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Paddle Out to Lineup', duration: '10 min', notes: 'Move out as a group, choose channels, and hold efficient stroke rhythm' },
-          { name: 'Water Skills Circuit', duration: '10 min', notes: 'Duck dives / turtle rolls, short sprint paddles, and positioning resets' },
-          { name: 'Wave Reading + Priority Check', duration: '5 min', notes: 'Read the peak, call who goes, and reinforce safe surf etiquette' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-cyan-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
-          </div>
-        ))}
-      </div>
-      <div class="mt-3 print:mt-1">
-        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 print:text-[9px] print:mb-1">Daily Theory (In Water)</div>
-        <div id="section-theory" class="print:break-inside-avoid">
-          <div class="border-2 border-slate-200 rounded-xl p-5 animate-pulse print:p-2">
-            <div class="h-5 w-48 bg-slate-200 rounded mb-3"></div>
-            <div class="h-4 w-3/4 bg-slate-100 rounded mb-2"></div>
-            <div class="h-4 w-1/2 bg-slate-100 rounded"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5: SURFING / WAVE PRACTICE -->
-    <section class="print:break-before-page">
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Surfing Block</h3>
-        <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">17:45 – 18:40</span>
-      </div>
-      <div id="section-surf-focus" class="mb-3 print:mb-1">
-        <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 animate-pulse print:p-2">
-          <div class="h-4 w-48 bg-indigo-100 rounded mb-2"></div>
-          <div class="h-3 w-2/3 bg-indigo-50 rounded"></div>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Targeted Wave Practice', duration: '25 min', notes: 'Apply the session focus on takeoff timing, stance, and line choice' },
-          { name: 'Coached Free Surf', duration: '30 min', notes: 'Longer reps with real-time feedback, then quick reset cues between waves' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-indigo-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- SURF CHALLENGE OF THE DAY -->
-    <section>
-      <div id="section-challenge" class="border-2 border-teal-300 rounded-xl bg-gradient-to-r from-teal-50 to-cyan-50 p-5 print:p-2 print:break-inside-avoid">
-        <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
-        <p class="text-lg font-medium text-slate-700 leading-snug font-sans animate-pulse print:text-sm">Loading challenge...</p>
-      </div>
-    </section>
-
-    <!-- SECTION 6: PADDLE BACK -->
-    <section>
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">6 | Paddle Back</h3>
-        <span class="text-sm font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:40 – 18:50</span>
-      </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Group Paddle In', duration: '5 min', notes: 'Return together through safer channels and keep spacing between boards' },
-          { name: 'Shore Regroup', duration: '5 min', notes: 'Quick board check, hydration, and transition to cooldown area' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- SECTION 7: REFLECTION + STRETCH -->
-    <section>
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-emerald-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">7 | Reflection + Stretch</h3>
-        <span class="text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">18:50 – 19:00</span>
-      </div>
-      <div class="grid grid-cols-1 gap-3 print:gap-1">
-        {[
-          { name: 'Quick Session Reflection', duration: '2 min', notes: 'Each surfer shares one win and one point to improve next session' },
-          { name: 'Breathing Reset', duration: '1 min', notes: 'Slow nasal breathing to lower heart rate before stretching' },
-          { name: 'Hamstring + Calf Stretch', duration: '2 min', notes: 'Long holds with steady breathing, no bouncing' },
-          { name: 'Hip Flexor + Quad Stretch', duration: '2 min', notes: 'Lunge hold with upright torso and controlled depth' },
-          { name: 'Shoulder + Back Release', duration: '3 min', notes: 'Cross-body and overhead stretches to unload paddling muscles' },
-        ].map((ex) => (
-          <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-emerald-50/30 transition-colors print:p-1.5 print:break-inside-avoid print:border">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-              <div>
-                <div class="text-lg font-semibold text-slate-700 print:text-sm">{ex.name}</div>
-                <div class="text-sm text-slate-500 font-medium print:text-[10px]">{ex.notes}</div>
-              </div>
-            </div>
-            <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">{ex.duration}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- SESSION NOTES -->
-    <section class="print:break-inside-avoid">
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-slate-600 px-1 m-0 print:text-[13px]">Session Notes</h3>
-      </div>
-      <div
-        class="w-full min-h-[200px] border-2 border-slate-200 rounded-xl px-4 font-sans text-base text-slate-700 print:min-h-[120px] print:text-[12px] print:leading-[24px] print:bg-size-[100%_24px]"
-        style="background-image: linear-gradient(transparent 30px, #e2e8f0 30px, #e2e8f0 32px); background-size: 100% 32px; line-height: 32px; padding-top: 6px;"
-        contenteditable="true"
-      >
-      </div>
-    </section>
-
-    <!-- SKILL LEVEL TRACKER -->
-    <section class="print:break-inside-avoid">
-      <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-violet-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">Skill Level Tracker</h3>
-      </div>
-      <div class="border-2 border-slate-200 rounded-xl p-5 space-y-4 print:p-3 print:space-y-2">
-        {skills.map((skill) => (
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-sm font-semibold text-slate-700 print:text-[11px]">{skill.name}</span>
-              <span class="text-xs text-slate-400 font-medium print:text-[9px]">{skill.note}</span>
-            </div>
-            <div class="flex gap-1.5">
-              {Array.from({ length: skill.max }).map((_, i) => (
-                <div
-                  class:list={[
-                    'h-3 rounded-sm flex-1 print:h-2',
-                    i < skill.level ? barColor(skill.level) : 'bg-slate-100 border border-slate-200',
-                  ]}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
-        <p class="text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 print:text-[9px] print:mt-1 print:pt-1">
-          Assessed March 2026 &nbsp;&bull;&nbsp; Group average (ages 7–9)
-        </p>
-      </div>
-    </section>
-
   </div>
 </div>
 
 <!-- ── Templates for AI-generated content ─────────────────────────── -->
 
-<template id="tpl-exercise-row">
+<template id="tpl-activity-row">
   <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
     <div class="flex items-center gap-3">
       <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
@@ -326,48 +124,121 @@ function barColor(level: number): string {
         <div class="text-sm text-slate-500 font-medium print:text-[10px]" data-slot="description"></div>
       </div>
     </div>
-    <div class="text-sm font-semibold px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5" data-slot="reps"></div>
+    <div class="text-sm font-semibold px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5" data-slot="badge"></div>
   </div>
 </template>
 
-<template id="tpl-warmup-game">
-  <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
-    <div class="flex items-center gap-3">
-      <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
-      <div>
-        <div class="text-lg font-semibold text-slate-700 print:text-sm" data-slot="name"></div>
-        <div class="text-sm text-slate-500 font-medium print:text-[10px]" data-slot="description"></div>
-      </div>
-    </div>
-    <div class="text-sm font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5">4 min</div>
+<template id="tpl-coach-note">
+  <div class="border-2 rounded-lg p-4 print:p-2">
+    <div class="text-xs font-bold uppercase tracking-widest mb-2 print:text-[9px]" data-slot="label"></div>
+    <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="text"></p>
   </div>
 </template>
 
-<template id="tpl-surf-focus">
-  <div class="border-2 border-indigo-200 rounded-lg bg-indigo-50/50 p-4 print:p-2 print:break-inside-avoid">
-    <div class="text-sm font-bold text-indigo-800 uppercase tracking-widest mb-1 print:text-[10px]">Technique Focus of the Day</div>
-    <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm" data-slot="text"></p>
-  </div>
-</template>
-
-<template id="tpl-challenge">
-  <div class="text-sm font-bold text-teal-800 uppercase tracking-widest mb-2 print:text-[10px] print:mb-1">Surf Challenge of the Day</div>
-  <p class="text-lg font-medium text-slate-700 leading-snug font-sans print:text-sm" data-slot="text"></p>
-</template>
-
-<template id="tpl-theory">
-  <div class="border-2 border-slate-200 rounded-xl p-5 print:p-2">
-    <div class="text-lg font-bold text-slate-800 mb-2 font-sans print:text-sm print:mb-1" data-slot="title"></div>
-    <p class="text-base text-slate-600 leading-relaxed font-sans print:text-[11px]" data-slot="description"></p>
-    <div class="mt-4 print:mt-2">
-      <span class="text-sm font-medium text-slate-500 print:text-[10px]">Notes:</span>
-      <div class="mt-1 h-12 border-2 border-dotted border-slate-300 rounded-lg print:h-8 print:mt-0.5"></div>
-    </div>
+<template id="tpl-water-card">
+  <div class="border-2 border-slate-200 rounded-lg p-4 bg-white print:p-2 print:break-inside-avoid">
+    <div class="text-xs font-bold uppercase tracking-widest mb-2" data-slot="label"></div>
+    <p class="text-base text-slate-700 leading-snug m-0 print:text-[11px]" data-slot="text"></p>
   </div>
 </template>
 
 <script>
-  // ── Helpers ──────────────────────────────────────────────────────────
+  interface ActivityItem {
+    name: string;
+    description: string;
+    duration?: string;
+    reps?: string;
+  }
+
+  interface SurfExercisesData {
+    warmupStretch: {
+      drills: ActivityItem[];
+      coachNote: string;
+    };
+    basics: {
+      drills: ActivityItem[];
+      jumpUps: { reps: string; cue: string };
+      coachCue: string;
+    };
+    waterBlock: {
+      paddleFocus: string;
+      surfFocus: string;
+      challenge: string;
+      debriefPrompt: string;
+    };
+  }
+
+  const FALLBACK_DATA: SurfExercisesData = {
+    warmupStretch: {
+      drills: [
+        {
+          name: "Beach Jog Loop",
+          description:
+            "Jog together along the shoreline, then back to the group cone with relaxed breathing.",
+          duration: "4-5 min",
+        },
+        {
+          name: "Dynamic Arm Swings",
+          description:
+            "Do big arm circles, shoulder rolls, and cross-body swings to wake up paddling muscles.",
+          duration: "4-5 min",
+        },
+        {
+          name: "Hip Opener Lunges",
+          description:
+            "Step into controlled lunges and rotate over the front leg on each side.",
+          duration: "4-5 min",
+        },
+        {
+          name: "Ankle Balance Holds",
+          description:
+            "Hold single-leg balance in soft sand and switch legs with steady posture.",
+          duration: "3-4 min",
+        },
+      ],
+      coachNote:
+        "Theola leads this block: keep it playful, keep everyone moving, and finish with calm breathing.",
+    },
+    basics: {
+      drills: [
+        {
+          name: "Pop-up Landing",
+          description:
+            "From prone, pop up and freeze in stance with eyes forward and knees bent.",
+          reps: "8x",
+        },
+        {
+          name: "Rail Reach Drill",
+          description:
+            "Practice hand placement and chest lift before every pop-up to lock clean sequencing.",
+          reps: "8x",
+        },
+        {
+          name: "Low Stance Hold",
+          description:
+            "Hold a low surf stance for control, then reset with balanced feet.",
+          reps: "3x 20s",
+        },
+      ],
+      jumpUps: {
+        reps: "20x each surfer",
+        cue: "Quality over speed: stable feet, soft knees, eyes down the line.",
+      },
+      coachCue:
+        "No shortcuts on mechanics: every rep starts with clean hand placement and finishes in a stable stance.",
+    },
+    waterBlock: {
+      paddleFocus:
+        "Paddle out together through the easiest channel and keep spacing between boards.",
+      surfFocus:
+        "On every wave, pop up early and look where you want to go, not at your feet.",
+      challenge:
+        "Each surfer aims for 3 clean rides with controlled takeoff and balanced stance.",
+      debriefPrompt:
+        "What felt best today, and what is one thing you want to improve next session?",
+    },
+  };
+
   async function fetchJSON<T>(url: string, timeoutMs = 35_000): Promise<T> {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -406,178 +277,169 @@ function barColor(level: number): string {
     }
   }
 
-  // ── Types ───────────────────────────────────────────────────────────
-  interface SurfExercisesData {
-    mobility: Array<{ name: string; description: string; reps: string }>;
-    strength: Array<{ name: string; description: string; reps: string }>;
-    warmupGame: { name: string; description: string };
-    theoryTopic: { title: string; description: string };
-    techniqueFocus: string;
-    surfChallenge: string;
-  }
-
-  const FALLBACK_DATA: SurfExercisesData = {
-    mobility: [
-      {
-        name: "Surf Pop-up Flow",
-        description:
-          "From lying flat, pop up into a low surf stance, hold for 3 seconds, then back down.",
-        reps: "8x",
-      },
-      {
-        name: "Ankle Circles in Sand",
-        description:
-          "Stand on one leg in the sand and draw big circles with the other foot.",
-        reps: "10x each direction, each foot",
-      },
-      {
-        name: "Crab Walk Sideways",
-        description:
-          "Sit on the sand, lift your hips, and crab-walk sideways as fast as you can.",
-        reps: "2x 10m each direction",
-      },
-    ],
-    strength: [
-      {
-        name: "Wheelbarrow Walk Race",
-        description:
-          "One person holds their partner's ankles while they walk on their hands — race to the cone and switch.",
-        reps: "3x each",
-      },
-      {
-        name: "Partner Push-up High Fives",
-        description:
-          "Face your partner in push-up position. After each push-up, high-five with opposite hands.",
-        reps: "10x",
-      },
-      {
-        name: "Surf Paddle Plank",
-        description:
-          "Hold a plank while mimicking paddle strokes with alternating arms.",
-        reps: "3x 20s",
-      },
-    ],
-    warmupGame: {
-      name: "Sharks & Minnows",
-      description:
-        "One person is the shark in the middle. Everyone else (minnows) must run from one line to the other without getting tagged.",
-    },
-    theoryTopic: {
-      title: "Reading the Lineup",
-      description:
-        "Before paddling out, watch where waves break most consistently. That 'peak' is usually where you should sit.",
-    },
-    techniqueFocus:
-      "Focus on looking down the line, not at your feet, as soon as you pop up.",
-    surfChallenge:
-      "Try to catch 3 clean waves in a row where you pop up early and ride to the shoulder.",
-  };
-
-  // ── Color classes per section ─────────────────────────────────────
-  const COLORS = {
-    mobility: 'text-teal-700 bg-teal-50',
-    strength: 'text-blue-700 bg-blue-50',
-  } as const;
-
-  // ── Render functions ────────────────────────────────────────────────
-  function renderExerciseList(
+  function renderActivityList(
     container: HTMLElement,
-    exercises: Array<{ name: string; description: string; reps: string }>,
-    colorClasses: string,
+    activities: ActivityItem[],
+    badgeClasses: string,
   ): void {
-    container.innerHTML = '';
-    for (const ex of exercises) {
-      const frag = cloneTemplate('tpl-exercise-row');
-      fillSlots(frag, { name: ex.name, description: ex.description, reps: ex.reps });
-      const badge = frag.querySelector('[data-slot="reps"]');
+    container.innerHTML = "";
+    for (const activity of activities) {
+      const frag = cloneTemplate("tpl-activity-row");
+      fillSlots(frag, {
+        name: activity.name,
+        description: activity.description,
+        badge: activity.duration || activity.reps || "",
+      });
+      const badge = frag.querySelector('[data-slot="badge"]');
       if (badge) {
-        for (const cls of colorClasses.split(' ')) badge.classList.add(cls);
+        for (const cls of badgeClasses.split(" ")) badge.classList.add(cls);
       }
       container.appendChild(frag);
     }
   }
 
-  function renderWarmupGame(container: HTMLElement, game: { name: string; description: string }): void {
-    container.innerHTML = '';
-    const frag = cloneTemplate('tpl-warmup-game');
-    fillSlots(frag, game);
+  function renderCoachNote(
+    container: HTMLElement,
+    label: string,
+    text: string,
+    wrapperClasses: string,
+    labelClasses: string,
+  ): void {
+    container.innerHTML = "";
+    const frag = cloneTemplate("tpl-coach-note");
+    fillSlots(frag, { label, text });
+    const wrapper = frag.querySelector("div");
+    const labelEl = frag.querySelector('[data-slot="label"]');
+    if (wrapper) {
+      for (const cls of wrapperClasses.split(" ")) wrapper.classList.add(cls);
+    }
+    if (labelEl) {
+      for (const cls of labelClasses.split(" ")) labelEl.classList.add(cls);
+    }
     container.appendChild(frag);
   }
 
-  function renderSurfFocus(container: HTMLElement, text: string): void {
-    container.innerHTML = '';
-    const frag = cloneTemplate('tpl-surf-focus');
-    fillSlots(frag, { text });
-    container.appendChild(frag);
+  function renderWaterBlock(container: HTMLElement, data: SurfExercisesData["waterBlock"]): void {
+    container.innerHTML = "";
+    const cards = [
+      { label: "Paddle Focus", text: data.paddleFocus, labelClasses: "text-cyan-700" },
+      { label: "Surf Focus", text: data.surfFocus, labelClasses: "text-indigo-700" },
+      { label: "Session Challenge", text: data.challenge, labelClasses: "text-teal-700" },
+      { label: "Debrief Prompt", text: data.debriefPrompt, labelClasses: "text-emerald-700" },
+    ];
+
+    for (const card of cards) {
+      const frag = cloneTemplate("tpl-water-card");
+      fillSlots(frag, { label: card.label, text: card.text });
+      const labelEl = frag.querySelector('[data-slot="label"]');
+      if (labelEl) {
+        for (const cls of card.labelClasses.split(" ")) labelEl.classList.add(cls);
+      }
+      container.appendChild(frag);
+    }
   }
 
-  function renderChallenge(container: HTMLElement, text: string): void {
-    container.innerHTML = '';
-    const frag = cloneTemplate('tpl-challenge');
-    fillSlots(frag, { text });
-    container.appendChild(frag);
-  }
-
-  function renderTheory(container: HTMLElement, topic: { title: string; description: string }): void {
-    container.innerHTML = '';
-    const frag = cloneTemplate('tpl-theory');
-    fillSlots(frag, topic);
-    container.appendChild(frag);
-  }
-
-  // ── Load & wire up ──────────────────────────────────────────────────
   async function loadAll(): Promise<void> {
     const ids = {
-      warmupGame: document.getElementById('section-warmup-game'),
-      mobility: document.getElementById('section-mobility'),
-      strength: document.getElementById('section-strength'),
-      surfFocus: document.getElementById('section-surf-focus'),
-      challenge: document.getElementById('section-challenge'),
-      theory: document.getElementById('section-theory'),
+      warmupStretch: document.getElementById("section-warmup-stretch"),
+      warmupNote: document.getElementById("section-warmup-note"),
+      basics: document.getElementById("section-basics"),
+      basicsNote: document.getElementById("section-basics-note"),
+      waterBlock: document.getElementById("section-water-block"),
     };
+
     let data: SurfExercisesData;
 
     try {
-      data = await fetchJSON<SurfExercisesData>('/api/generate-surf-exercises');
+      data = await fetchJSON<SurfExercisesData>("/api/generate-surf-exercises");
     } catch (error) {
-      console.error('Failed to load surf exercises, using fallback:', error);
+      console.error("Failed to load surf exercises, using fallback:", error);
       data = FALLBACK_DATA;
     }
 
-    if (ids.warmupGame && data.warmupGame) renderWarmupGame(ids.warmupGame, data.warmupGame);
-    if (ids.mobility && data.mobility) renderExerciseList(ids.mobility, data.mobility, COLORS.mobility);
-    if (ids.strength && data.strength) renderExerciseList(ids.strength, data.strength, COLORS.strength);
-    if (ids.surfFocus && data.techniqueFocus) renderSurfFocus(ids.surfFocus, data.techniqueFocus);
-    if (ids.challenge && data.surfChallenge) renderChallenge(ids.challenge, data.surfChallenge);
-    if (ids.theory && data.theoryTopic) renderTheory(ids.theory, data.theoryTopic);
+    const warmupActivities = data.warmupStretch?.drills?.length
+      ? data.warmupStretch.drills
+      : FALLBACK_DATA.warmupStretch.drills;
+    const warmupNote = data.warmupStretch?.coachNote || FALLBACK_DATA.warmupStretch.coachNote;
+
+    const basicsDrills = data.basics?.drills?.length ? data.basics.drills : FALLBACK_DATA.basics.drills;
+    const jumpUps = {
+      reps: "20x each surfer",
+      cue: data.basics?.jumpUps?.cue || FALLBACK_DATA.basics.jumpUps.cue,
+    };
+    const basicsActivities: ActivityItem[] = [
+      {
+        name: "Jump-Ups (Mandatory)",
+        description: jumpUps.cue,
+        reps: jumpUps.reps,
+      },
+      ...basicsDrills,
+    ];
+    const basicsNote = data.basics?.coachCue || FALLBACK_DATA.basics.coachCue;
+
+    const waterBlock = data.waterBlock?.paddleFocus && data.waterBlock?.surfFocus
+      ? data.waterBlock
+      : FALLBACK_DATA.waterBlock;
+
+    if (ids.warmupStretch) {
+      renderActivityList(ids.warmupStretch, warmupActivities, "text-amber-700 bg-amber-50");
+    }
+    if (ids.warmupNote) {
+      renderCoachNote(
+        ids.warmupNote,
+        "Coach Note",
+        warmupNote,
+        "border-amber-200 bg-amber-50/70",
+        "text-amber-800",
+      );
+    }
+    if (ids.basics) {
+      renderActivityList(ids.basics, basicsActivities, "text-blue-700 bg-blue-50");
+    }
+    if (ids.basicsNote) {
+      renderCoachNote(
+        ids.basicsNote,
+        "Coach Cue",
+        basicsNote,
+        "border-blue-200 bg-blue-50/70",
+        "text-blue-800",
+      );
+    }
+    if (ids.waterBlock) {
+      renderWaterBlock(ids.waterBlock, waterBlock);
+    }
   }
 
   // Set today's date
-  const dateEl = document.getElementById('session-date');
+  const dateEl = document.getElementById("session-date");
   if (dateEl) {
     const d = new Date();
-    dateEl.textContent = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    dateEl.textContent = d.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   }
 
   // Regenerate button
-  const regenBtn = document.getElementById('regen-all-btn') as HTMLButtonElement;
+  const regenBtn = document.getElementById("regen-all-btn") as HTMLButtonElement;
   if (regenBtn) {
     regenBtn.disabled = true;
-    regenBtn.addEventListener('click', withLoading(regenBtn, loadAll));
+    regenBtn.addEventListener("click", withLoading(regenBtn, loadAll));
   }
 
   // Auto-load on page load
   const generatedSections = [
-    document.getElementById('section-warmup-game'),
-    document.getElementById('section-mobility'),
-    document.getElementById('section-strength'),
-    document.getElementById('section-surf-focus'),
-    document.getElementById('section-challenge'),
-    document.getElementById('section-theory'),
+    document.getElementById("section-warmup-stretch"),
+    document.getElementById("section-warmup-note"),
+    document.getElementById("section-basics"),
+    document.getElementById("section-basics-note"),
+    document.getElementById("section-water-block"),
   ];
 
-  const shouldLoadAll = generatedSections.some(section =>
-    !section || Boolean(section.querySelector('.loading-skeleton, .animate-pulse')),
+  const shouldLoadAll = generatedSections.some((section) =>
+    !section || Boolean(section.querySelector(".loading-skeleton, .animate-pulse")),
   );
 
   if (shouldLoadAll) {
@@ -589,34 +451,44 @@ function barColor(level: number): string {
   }
 
   // Print button
-  const printBtn = document.getElementById('print-btn');
+  const printBtn = document.getElementById("print-btn");
   if (printBtn) {
-    printBtn.addEventListener('click', () => {
-      const header = document.querySelector('body > div > header') as HTMLElement;
-      const footer = document.querySelector('body > div > footer') as HTMLElement;
-      const main = document.querySelector('body > div > main') as HTMLElement;
-      const proseEls = document.querySelectorAll<HTMLElement>('.prose > *:not(.worksheet-container)');
+    printBtn.addEventListener("click", () => {
+      const header = document.querySelector("body > div > header") as HTMLElement;
+      const footer = document.querySelector("body > div > footer") as HTMLElement;
+      const main = document.querySelector("body > div > main") as HTMLElement;
+      const proseEls = document.querySelectorAll<HTMLElement>(".prose > *:not(.worksheet-container)");
 
-      if (header) header.style.display = 'none';
-      if (footer) footer.style.display = 'none';
-      if (main) { main.style.width = '100%'; main.style.maxWidth = '100%'; main.style.padding = '0'; main.style.margin = '0'; }
-      proseEls.forEach(el => el.style.display = 'none');
-      document.body.style.background = 'white';
+      if (header) header.style.display = "none";
+      if (footer) footer.style.display = "none";
+      if (main) {
+        main.style.width = "100%";
+        main.style.maxWidth = "100%";
+        main.style.padding = "0";
+        main.style.margin = "0";
+      }
+      proseEls.forEach((el) => (el.style.display = "none"));
+      document.body.style.background = "white";
 
       let restored = false;
       const restoreLayout = () => {
         if (restored) return;
         restored = true;
-        if (header) header.style.display = '';
-        if (footer) footer.style.display = '';
-        if (main) { main.style.width = ''; main.style.maxWidth = ''; main.style.padding = ''; main.style.margin = ''; }
-        proseEls.forEach(el => el.style.display = '');
-        document.body.style.background = '';
+        if (header) header.style.display = "";
+        if (footer) footer.style.display = "";
+        if (main) {
+          main.style.width = "";
+          main.style.maxWidth = "";
+          main.style.padding = "";
+          main.style.margin = "";
+        }
+        proseEls.forEach((el) => (el.style.display = ""));
+        document.body.style.background = "";
       };
 
-      window.addEventListener('afterprint', restoreLayout, { once: true });
+      window.addEventListener("afterprint", restoreLayout, { once: true });
       window.print();
-      if (!('onafterprint' in window)) {
+      if (!("onafterprint" in window)) {
         setTimeout(restoreLayout, 1200);
       }
     });

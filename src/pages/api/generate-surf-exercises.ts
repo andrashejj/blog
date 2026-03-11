@@ -3,104 +3,176 @@ export const prerender = false;
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 import { skillsSummary } from "../../lib/surf-skills";
 
-interface SurfExercisesResponse {
-  mobility: Array<{ name: string; description: string; reps: string }>;
-  strength: Array<{ name: string; description: string; reps: string }>;
-  warmupGame: { name: string; description: string };
-  theoryTopic: { title: string; description: string };
-  techniqueFocus: string;
-  surfChallenge: string;
+interface ActivityItem {
+  name: string;
+  description: string;
+  duration?: string;
+  reps?: string;
 }
 
-const PROMPT = `Generate surf coaching exercises for a group of kids aged 7-9 training at a beach in Mauritius.
+interface SurfExercisesResponse {
+  warmupStretch: {
+    drills: ActivityItem[];
+    coachNote: string;
+  };
+  basics: {
+    drills: ActivityItem[];
+    jumpUps: { reps: string; cue: string };
+    coachCue: string;
+  };
+  waterBlock: {
+    paddleFocus: string;
+    surfFocus: string;
+    challenge: string;
+    debriefPrompt: string;
+  };
+}
+
+const PROMPT = `Generate a flexible surf coaching session for a group of kids aged 7-9 training at a beach in Mauritius.
 
 Here are their current skill levels (scale of 1-5):
 ${skillsSummary()}
 
-IMPORTANT: Tailor ALL exercises, theory, technique focus, and challenges to match these skill levels. For weak areas (1-2), focus on fundamentals and building confidence. For stronger areas (3+), push progression. The surf challenge and technique focus should be realistic for their abilities — don't assume they can do things their skill levels say they can't.
+IMPORTANT:
+- Tailor all drills and cues to these skill levels.
+- Keep all language short, clear, and coach-friendly.
+- Session is designed for ~90 minutes total with some slack.
+- All activities must be safe on a sandy beach with no equipment.
+- Basics MUST include jump-ups with reps fixed to "20x each surfer".
 
 Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
-  "mobility": [
-    { "name": "Exercise name (2-4 words)", "description": "Clear one-sentence instruction a child can follow", "reps": "e.g. 10x each side" }
-  ],
-  "strength": [
-    { "name": "Exercise name (2-4 words)", "description": "Clear one-sentence instruction. Must be a partner or group exercise.", "reps": "e.g. 3x 30s" }
-  ],
-  "warmupGame": {
-    "name": "Game name (2-4 words)",
-    "description": "Clear 1-2 sentence rules explanation. Must be a fun, high-energy team game playable on sand with no equipment. Examples: beach tag, relay races, capture the flag, sharks & minnows, red light green light, ultimate frisbee without a frisbee (use a ball of sand), king of the hill. Should get the whole group running and laughing."
+  "warmupStretch": {
+    "drills": [
+      {
+        "name": "2-5 words",
+        "description": "One sentence instruction",
+        "duration": "e.g. 4-6 min"
+      }
+    ],
+    "coachNote": "One short coaching note for this block"
   },
-  "theoryTopic": {
-    "title": "Short topic title (2-5 words)",
-    "description": "A 1-2 sentence explanation of a surf theory concept appropriate for kids. Topics can include: how tides work, wave formation, rip currents and safety, how fins affect turning, why wax matters, reading the ocean, wind and swell direction, board types and when to use them, surf etiquette and priority rules, ocean currents."
+  "basics": {
+    "drills": [
+      {
+        "name": "2-5 words",
+        "description": "One sentence instruction",
+        "reps": "e.g. 8x or 3 rounds"
+      }
+    ],
+    "jumpUps": {
+      "reps": "20x each surfer",
+      "cue": "One sentence cue for quality jump-ups"
+    },
+    "coachCue": "One short coaching cue for stand-up mechanics"
   },
-  "techniqueFocus": "A specific surf technique to focus on during the wave practice. Should be a single concrete coaching point that the kids can think about on every wave. Examples: 'Keep your eyes looking down the line, not at your feet, when you pop up', 'Bend your knees low and compress before starting a bottom turn'. One sentence.",
-  "surfChallenge": "A fun, specific surf challenge for the group to attempt during the session. Should be achievable but push their skills. Examples: 'Catch 3 green waves in a row', 'Try one forehand turn on every wave'. One sentence."
+  "waterBlock": {
+    "paddleFocus": "One sentence on paddle-out focus",
+    "surfFocus": "One sentence on surf focus",
+    "challenge": "One fun achievable challenge sentence",
+    "debriefPrompt": "One short debrief question for end of session"
+  }
 }
 
-Generate exactly 3 mobility exercises and 3 strength exercises. Keep descriptions short and action-oriented. All exercises must be safe for kids on a sandy beach with no equipment. Strength exercises MUST involve partners or the whole group (wheelbarrow walks, partner push-ups, team relay planks, etc).`;
+Generate exactly 4 warmup/stretch drills and exactly 3 basics drills.`;
 
 const fallback: SurfExercisesResponse = {
-  mobility: [
-    {
-      name: "Surf Pop-up Flow",
-      description:
-        "From lying flat, pop up into a low surf stance, hold for 3 seconds, then back down.",
-      reps: "8x",
-    },
-    {
-      name: "Ankle Circles in Sand",
-      description:
-        "Stand on one leg in the sand and draw big circles with the other foot.",
-      reps: "10x each direction, each foot",
-    },
-    {
-      name: "Crab Walk Sideways",
-      description:
-        "Sit on the sand, lift your hips, and crab-walk sideways as fast as you can.",
-      reps: "2x 10m each direction",
-    },
-  ],
-  strength: [
-    {
-      name: "Wheelbarrow Walk Race",
-      description:
-        "One person holds their partner's ankles while they walk on their hands — race to the cone and switch.",
-      reps: "3x each",
-    },
-    {
-      name: "Partner Push-up High Fives",
-      description:
-        "Face your partner in push-up position. After each push-up, high-five with opposite hands.",
-      reps: "10x",
-    },
-    {
-      name: "Surf Paddle Plank",
-      description:
-        "Hold a plank while mimicking paddle strokes with alternating arms.",
-      reps: "3x 20s",
-    },
-  ],
-  warmupGame: {
-    name: "Sharks & Minnows",
-    description:
-      "One person is the shark in the middle. Everyone else (minnows) must run from one line to the other without getting tagged. If tagged, you become a shark too. Last minnow standing wins!",
+  warmupStretch: {
+    drills: [
+      {
+        name: "Beach Jog Loop",
+        description:
+          "Jog together along the shoreline, then back to the group cone with relaxed breathing.",
+        duration: "4-5 min",
+      },
+      {
+        name: "Dynamic Arm Swings",
+        description:
+          "Do big arm circles, shoulder rolls, and cross-body swings to wake up paddling muscles.",
+        duration: "4-5 min",
+      },
+      {
+        name: "Hip Opener Lunges",
+        description:
+          "Step into controlled lunges and rotate over the front leg on each side.",
+        duration: "4-5 min",
+      },
+      {
+        name: "Ankle Balance Holds",
+        description:
+          "Hold single-leg balance in soft sand and switch legs with steady posture.",
+        duration: "3-4 min",
+      },
+    ],
+    coachNote:
+      "Theola leads this block: keep it playful, keep everyone moving, and finish with calm breathing.",
   },
-  theoryTopic: {
-    title: "Reading the Lineup",
-    description:
-      "Before paddling out, sit on the beach for 2 minutes and watch where the waves break. The spot where they consistently break is called 'the peak' — that's where you want to sit.",
+  basics: {
+    drills: [
+      {
+        name: "Pop-up Landing",
+        description:
+          "From prone, pop up and freeze in stance with eyes forward and knees bent.",
+        reps: "8x",
+      },
+      {
+        name: "Rail Reach Drill",
+        description:
+          "Practice hand placement and chest lift before every pop-up to lock clean sequencing.",
+        reps: "8x",
+      },
+      {
+        name: "Low Stance Hold",
+        description:
+          "Hold a low surf stance for control, then reset with balanced feet.",
+        reps: "3x 20s",
+      },
+    ],
+    jumpUps: {
+      reps: "20x each surfer",
+      cue: "Quality over speed: stable feet, soft knees, eyes down the line.",
+    },
+    coachCue:
+      "No shortcuts on mechanics: every rep starts with clean hand placement and finishes in a stable stance.",
   },
-  techniqueFocus:
-    "Focus on looking down the line — not at your feet — the moment you pop up. Pick a point on the wave face and steer towards it.",
-  surfChallenge:
-    "Catch a wave and try to do one turn before kicking out cleanly at the end. Count how many you land out of 5 attempts.",
+  waterBlock: {
+    paddleFocus:
+      "Paddle out together through the easiest channel and keep spacing between boards.",
+    surfFocus:
+      "On every wave, pop up early and look where you want to go, not at your feet.",
+    challenge:
+      "Each surfer aims for 3 clean rides with controlled takeoff and balanced stance.",
+    debriefPrompt:
+      "What felt best today, and what is one thing you want to improve next session?",
+  },
 };
 
+function hasWarmupData(data: SurfExercisesResponse): boolean {
+  return Boolean(
+    data.warmupStretch?.drills?.length >= 1 && data.warmupStretch?.coachNote,
+  );
+}
+
+function hasBasicsData(data: SurfExercisesResponse): boolean {
+  return Boolean(
+    data.basics?.drills?.length >= 1 &&
+      data.basics?.jumpUps?.reps &&
+      data.basics?.jumpUps?.cue &&
+      data.basics?.coachCue,
+  );
+}
+
+function hasWaterBlockData(data: SurfExercisesResponse): boolean {
+  return Boolean(
+    data.waterBlock?.paddleFocus &&
+      data.waterBlock?.surfFocus &&
+      data.waterBlock?.challenge &&
+      data.waterBlock?.debriefPrompt,
+  );
+}
+
 export const GET = async () => {
-  // Surf exercise generation can be slower; use a lighter model and a longer timeout.
   const model = process.env.GEMINI_SURF_MODEL || "gemini-3-flash-preview";
   const data = await generateJSON<SurfExercisesResponse>(PROMPT, fallback, {
     model,
@@ -108,12 +180,11 @@ export const GET = async () => {
     temperature: 1.1,
   });
 
-  if (!data.mobility?.length) data.mobility = fallback.mobility;
-  if (!data.strength?.length) data.strength = fallback.strength;
-  if (!data.warmupGame?.name) data.warmupGame = fallback.warmupGame;
-  if (!data.theoryTopic?.title) data.theoryTopic = fallback.theoryTopic;
-  if (!data.techniqueFocus) data.techniqueFocus = fallback.techniqueFocus;
-  if (!data.surfChallenge) data.surfChallenge = fallback.surfChallenge;
+  if (!hasWarmupData(data)) data.warmupStretch = fallback.warmupStretch;
+  if (!hasBasicsData(data)) data.basics = fallback.basics;
+  if (!hasWaterBlockData(data)) data.waterBlock = fallback.waterBlock;
+
+  data.basics.jumpUps.reps = "20x each surfer";
 
   return jsonResponse(data);
 };
