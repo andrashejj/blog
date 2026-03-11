@@ -7,7 +7,7 @@ interface WordsResponse {
   hook: string;
 }
 
-const PROMPT = `Generate a creative writing prompt for an 8-year-old child. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
+const PROMPT = `Generate a creative writing prompt for a 9-year-old boy. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
   "words": ["word1", "word2", "word3", "word4", "word5", "word6", "word7", "word8", "word9", "word10"],
@@ -24,16 +24,16 @@ Bad hooks (too vague): "Something strange was about to happen.", "It was a day u
 
 const fallback: WordsResponse = {
   words: [
-    "Drifting",
-    "Glow",
-    "Silent",
-    "Unknown",
-    "Trail",
-    "Flicker",
-    "Signal",
-    "Float",
-    "Darkness",
-    "Beyond",
+    "thunder",
+    "lantern",
+    "clattering",
+    "midnight",
+    "jungle",
+    "whisper",
+    "copper",
+    "zigzag",
+    "backpack",
+    "splash",
   ],
   hook: "The old clock tower hadn't chimed in fifty years, but tonight, right at midnight, it struck thirteen times.",
 };

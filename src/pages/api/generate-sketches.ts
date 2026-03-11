@@ -6,7 +6,7 @@ interface SketchesResponse {
   exercises: string[];
 }
 
-const PROMPT = `Generate 6 drawing exercises for an 8-year-old child's daily sketch practice. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
+const PROMPT = `Generate 6 drawing exercises for a 9-year-old boy's daily sketch practice. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
   "exercises": [

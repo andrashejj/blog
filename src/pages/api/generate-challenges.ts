@@ -9,12 +9,12 @@ interface ChallengesResponse {
   mindfulness: string;
 }
 
-const PROMPT = `Generate 4 challenges for an 8-year-old child's daily worksheet. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
+const PROMPT = `Generate 4 challenges for a 9-year-old boy's daily worksheet. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
 {
   "riddle": "A short clever riddle with a clear one-word or short-phrase answer. Do NOT include the answer.",
   "anagram": {
-    "word": "A SINGLE common English word in UPPERCASE that an 8-year-old would know (5-7 letters). Examples: PLANET, BRIDGE, CASTLE, MARKET, FROZEN. Do NOT scramble it — just provide the plain word.",
+    "word": "A SINGLE common English word in UPPERCASE that a 9-year-old would know (5-7 letters). Examples: PLANET, BRIDGE, CASTLE, MARKET, FROZEN. Do NOT scramble it — just provide the plain word.",
     "hint": "A one-word hint for the word"
   },
   "engineering": "A hands-on mini-engineering challenge using common household items (books, paper, tape, coins, cups, rubber bands, spoons, pencils). Include specific quantities and a measurable goal.",
@@ -45,7 +45,9 @@ function scramble(word: string): string {
 export const GET = async () => {
   const data = await generateJSON<ChallengesResponse>(PROMPT, fallback);
   // Scramble the anagram server-side — LLMs can't reliably shuffle letters
-  const word = (data.anagram?.word || fallback.anagram.word).toUpperCase().replace(/[^A-Z]/g, "");
+  const word = (data.anagram?.word || fallback.anagram.word)
+    .toUpperCase()
+    .replace(/[^A-Z]/g, "");
   return jsonResponse({
     ...data,
     anagram: {
