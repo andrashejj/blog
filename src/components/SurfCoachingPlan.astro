@@ -3,11 +3,10 @@ import { Printer, RefreshCw } from "@lucide/astro";
 ---
 
 <div class="worksheet-container not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
-  <!-- Header -->
   <div class="px-6 py-8 border-b-2 border-slate-200 bg-gradient-to-r from-cyan-50 to-teal-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none">
-    <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Surf Coaching Session Plan</h2>
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Kids Surf Session Plan</h2>
     <p class="text-slate-500 mt-2 font-medium text-sm sm:text-base px-2 print:text-[10px] print:mt-1">
-      Tamarin Bay &nbsp;&bull;&nbsp; Tuesday & Wednesday &nbsp;&bull;&nbsp; ~90 min target (with slack)
+      Tamarin Bay &nbsp;&bull;&nbsp; Tuesday & Wednesday &nbsp;&bull;&nbsp; 60-100 min coaching session
     </p>
     <p class="text-slate-400 mt-1 text-sm print:text-[10px] print:mt-0.5">
       Date: <span id="session-date" class="font-semibold text-slate-600">___________</span>
@@ -19,43 +18,82 @@ import { Printer, RefreshCw } from "@lucide/astro";
       </button>
       <button type="button" id="regen-all-btn" class="text-sm font-semibold bg-teal-100 hover:bg-teal-200 text-teal-700 px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer border border-teal-200">
         <RefreshCw size={16} />
-        New Exercises
+        New Session
       </button>
     </div>
   </div>
 
-  <div class="p-6 space-y-10 print:p-2 print:space-y-0">
-    <!-- SECTION 1: GROUND RULES -->
-    <section>
+  <div class="p-6 space-y-8 print:p-2 print:space-y-0">
+    <section class="print:break-inside-avoid">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Ground Rules (6)</h3>
-        <span class="text-sm font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">Always</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Welcome + Rules + Today We Do</h3>
+        <span class="text-sm font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">5 min</span>
       </div>
-      <div class="border-2 border-slate-200 rounded-xl p-5 bg-slate-50/60 print:p-2 print:break-inside-avoid">
-        <ol class="m-0 pl-5 space-y-2 text-sm text-slate-700 print:text-[10px] print:space-y-1">
-          <li>When we arrive, we greet the coaches and everyone else.</li>
-          <li>If we are late, we bring a healthy cake (banana bread) next time.</li>
-          <li>When we leave, we say goodbye to the coaches and everyone else.</li>
-          <li>We do not argue with coaches. We share feedback in the debrief at the end.</li>
-          <li>We do not go into the water alone. Ever.</li>
-          <li>The coaches coach. They are not here to push boards, but they might if they are nice.</li>
-        </ol>
+      <div id="section-intro" class="grid grid-cols-1 sm:grid-cols-2 gap-3 print:gap-1">
+        {[1, 2].map(() => (
+          <div class="border-2 border-slate-200 rounded-lg bg-white p-4 animate-pulse print:p-2 print:border">
+            <div class="h-3 w-28 bg-slate-200 rounded mb-2"></div>
+            <div class="h-3 w-11/12 bg-slate-100 rounded"></div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 print:gap-2">
+        <div class="border-2 border-cyan-200 rounded-xl p-5 bg-cyan-50/50 print:p-2">
+          <div class="text-xs font-bold uppercase tracking-widest text-cyan-800 mb-3 print:text-[9px] print:mb-1">Today We Do</div>
+          <ol class="m-0 pl-5 space-y-2 text-sm text-slate-700 print:text-[10px] print:space-y-1">
+            <li>Welcome together, hear the plan, and set the focus.</li>
+            <li>Theola runs a short playful opener so everybody joins in.</li>
+            <li>Warm up and stretch to get ready for paddling and standing.</li>
+            <li>Learn one simple surf idea on the sand.</li>
+            <li>Take that same idea into the water for focused practice.</li>
+            <li>Finish with a quick debrief, clean-up, and goodbye.</li>
+          </ol>
+        </div>
+        <div class="border-2 border-slate-200 rounded-xl p-5 bg-slate-50/70 print:p-2">
+          <div class="text-xs font-bold uppercase tracking-widest text-slate-700 mb-3 print:text-[9px] print:mb-1">Ground Rules</div>
+          <ol class="m-0 pl-5 space-y-2 text-sm text-slate-700 print:text-[10px] print:space-y-1">
+            <li>We arrive together, greet the coaches, and listen for the start.</li>
+            <li>We stay with the group on the sand and in the water.</li>
+            <li>We wait for coach instructions before entering the water.</li>
+            <li>We speak with respect and save feedback for the debrief.</li>
+            <li>We take care of our boards, the beach, and each other.</li>
+            <li>We finish properly: boards back, beach tidy, goodbye said.</li>
+          </ol>
+        </div>
       </div>
     </section>
 
-    <!-- SECTION 2: WARMUP + STRETCH -->
-    <section>
+    <section class="print:break-inside-avoid">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Theola Warmup + Stretch</h3>
-        <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~20-30 min</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-rose-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Theola Playful Opener</h3>
+        <span class="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">10 min</span>
       </div>
-      <div id="section-warmup-stretch" class="grid grid-cols-1 gap-3 print:gap-1">
+      <div id="section-icebreaker" class="grid grid-cols-1 gap-3 print:gap-1">
+        <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-2 print:border">
+          <div class="h-3 w-24 bg-rose-100 rounded mb-2"></div>
+          <div class="h-4 w-44 bg-slate-200 rounded mb-2"></div>
+          <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
+        </div>
+      </div>
+      <div id="section-icebreaker-note" class="mt-3 print:mt-1">
+        <div class="border-2 border-rose-200 rounded-lg bg-rose-50/70 p-4 animate-pulse print:p-2">
+          <div class="h-3 w-24 bg-rose-100 rounded mb-2"></div>
+          <div class="h-3 w-4/5 bg-rose-50 rounded"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="print:break-inside-avoid">
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Warmup + Stretch</h3>
+        <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">10 min</span>
+      </div>
+      <div id="section-warmup" class="grid grid-cols-1 gap-3 print:gap-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1, 2, 3, 4].map(() => (
+          {[1, 2, 3].map(() => (
             <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
               <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
-              <div class="h-3 w-3/4 bg-slate-100 rounded mb-2"></div>
-              <div class="h-3 w-20 bg-amber-100 rounded"></div>
+              <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
             </div>
           ))}
         </div>
@@ -63,82 +101,128 @@ import { Printer, RefreshCw } from "@lucide/astro";
       <div id="section-warmup-note" class="mt-3 print:mt-1">
         <div class="border-2 border-amber-200 rounded-lg bg-amber-50/70 p-4 animate-pulse print:p-2">
           <div class="h-3 w-24 bg-amber-100 rounded mb-2"></div>
-          <div class="h-3 w-3/4 bg-amber-50 rounded"></div>
+          <div class="h-3 w-4/5 bg-amber-50 rounded"></div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: BASICS -->
-    <section>
+    <section class="print:break-inside-avoid">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-blue-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Basics: Stand-Up Mechanics</h3>
-        <span class="text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~10-15 min</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-sky-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Theory on the Sand</h3>
+        <span class="text-sm font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">10 min</span>
       </div>
-      <div id="section-basics" class="grid grid-cols-1 gap-3 print:gap-1">
-        <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1, 2, 3, 4].map(() => (
-            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
-              <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
-              <div class="h-3 w-3/4 bg-slate-100 rounded mb-2"></div>
-              <div class="h-3 w-20 bg-blue-100 rounded"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div id="section-basics-note" class="mt-3 print:mt-1">
-        <div class="border-2 border-blue-200 rounded-lg bg-blue-50/70 p-4 animate-pulse print:p-2">
-          <div class="h-3 w-24 bg-blue-100 rounded mb-2"></div>
-          <div class="h-3 w-3/4 bg-blue-50 rounded"></div>
+      <div id="section-theory" class="grid grid-cols-1 gap-3 print:gap-1">
+        <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-2 print:border">
+          <div class="h-3 w-20 bg-sky-100 rounded mb-2"></div>
+          <div class="h-4 w-48 bg-slate-200 rounded mb-2"></div>
+          <div class="h-3 w-5/6 bg-slate-100 rounded mb-3"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[1, 2].map(() => (
+              <div class="h-16 rounded-lg bg-slate-100"></div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: WATER BLOCK -->
-    <section>
+    <section class="print:break-inside-avoid">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">4 | Paddle Out + Surf + Debrief</h3>
-        <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">~45-55 min (remaining time)</span>
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Water Block: One Focus</h3>
+        <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">20-60 min</span>
       </div>
       <div id="section-water-block" class="grid grid-cols-1 gap-3 print:gap-1">
-        <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1, 2, 3, 4].map(() => (
-            <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
-              <div class="h-3 w-28 bg-indigo-100 rounded mb-2"></div>
-              <div class="h-3 w-4/5 bg-slate-100 rounded"></div>
-            </div>
-          ))}
+        <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-2 print:border">
+          <div class="h-3 w-28 bg-indigo-100 rounded mb-2"></div>
+          <div class="h-4 w-52 bg-slate-200 rounded mb-3"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[1, 2, 3].map(() => (
+              <div class="h-20 rounded-lg bg-slate-100"></div>
+            ))}
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="print:break-inside-avoid">
+      <div class="flex items-center gap-3 mb-4 print:mb-1">
+        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-emerald-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">6 | Quick Debrief + Goodbye</h3>
+        <span class="text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">5 min</span>
+      </div>
+      <div id="section-closing" class="grid grid-cols-1 sm:grid-cols-2 gap-3 print:gap-1">
+        {[1, 2].map(() => (
+          <div class="border-2 border-slate-200 rounded-lg bg-white p-4 animate-pulse print:p-2 print:border">
+            <div class="h-3 w-28 bg-emerald-100 rounded mb-2"></div>
+            <div class="h-3 w-11/12 bg-slate-100 rounded"></div>
+          </div>
+        ))}
       </div>
     </section>
   </div>
 </div>
 
-<!-- ── Templates for AI-generated content ─────────────────────────── -->
-
 <template id="tpl-activity-row">
-  <div class="border-2 border-slate-200 rounded-lg p-4 flex items-center justify-between print:p-1.5 print:break-inside-avoid print:border">
-    <div class="flex items-center gap-3">
-      <div class="w-5 h-5 border-2 border-slate-300 rounded-sm shrink-0 print:w-3 print:h-3"></div>
+  <div class="border-2 border-slate-200 rounded-lg p-4 bg-white print:p-1.5 print:border">
+    <div class="flex items-start gap-3">
+      <div class="mt-1.5 h-3 w-3 rounded-full shrink-0" data-slot="marker"></div>
       <div>
         <div class="text-lg font-semibold text-slate-700 print:text-sm" data-slot="name"></div>
         <div class="text-sm text-slate-500 font-medium print:text-[10px]" data-slot="description"></div>
       </div>
     </div>
-    <div class="text-sm font-semibold px-3 py-1 rounded-md shrink-0 print:text-[10px] print:px-1.5 print:py-0.5" data-slot="badge"></div>
   </div>
 </template>
 
-<template id="tpl-coach-note">
-  <div class="border-2 rounded-lg p-4 print:p-2">
+<template id="tpl-single-card">
+  <div class="border-2 rounded-xl p-5 bg-white print:p-2">
+    <div class="text-xs font-bold uppercase tracking-widest mb-2 print:text-[9px]" data-slot="label"></div>
+    <div class="text-xl font-bold text-slate-800 mb-2 print:text-[12px]" data-slot="name"></div>
+    <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="description"></p>
+  </div>
+</template>
+
+<template id="tpl-note-card">
+  <div class="border-2 rounded-lg p-4 bg-white print:p-2">
     <div class="text-xs font-bold uppercase tracking-widest mb-2 print:text-[9px]" data-slot="label"></div>
     <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="text"></p>
   </div>
 </template>
 
-<template id="tpl-water-card">
-  <div class="border-2 border-slate-200 rounded-lg p-4 bg-white print:p-2 print:break-inside-avoid">
-    <div class="text-xs font-bold uppercase tracking-widest mb-2" data-slot="label"></div>
-    <p class="text-base text-slate-700 leading-snug m-0 print:text-[11px]" data-slot="text"></p>
+<template id="tpl-theory-card">
+  <div class="border-2 border-sky-200 rounded-xl p-5 bg-sky-50/40 print:p-2">
+    <div class="text-xs font-bold uppercase tracking-widest text-sky-800 mb-2 print:text-[9px]">Today’s Topic</div>
+    <div class="text-xl font-bold text-slate-900 mb-2 print:text-[12px]" data-slot="topic"></div>
+    <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="explain"></p>
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 print:mt-2 print:gap-1">
+      <div class="border border-sky-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-sky-800 mb-2 print:text-[9px]">Coach Demo</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="demoCue"></p>
+      </div>
+      <div class="border border-sky-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-sky-800 mb-2 print:text-[9px]">Check Question</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="checkQuestion"></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-water-focus-card">
+  <div class="border-2 border-indigo-200 rounded-xl p-5 bg-indigo-50/40 print:p-2">
+    <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">Today’s Water Focus</div>
+    <div class="text-xl font-bold text-slate-900 mb-3 print:text-[12px]" data-slot="focus"></div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 print:gap-1">
+      <div class="border border-indigo-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">Coach Cue</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="coachCue"></p>
+      </div>
+      <div class="border border-indigo-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">What Good Looks Like</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="successMarker"></p>
+      </div>
+      <div class="border border-indigo-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">Session Challenge</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="challenge"></p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -146,96 +230,98 @@ import { Printer, RefreshCw } from "@lucide/astro";
   interface ActivityItem {
     name: string;
     description: string;
-    duration?: string;
-    reps?: string;
   }
 
-  interface SurfExercisesData {
-    warmupStretch: {
+  interface SurfSessionData {
+    intro: {
+      sessionGoal: string;
+      structureNote: string;
+    };
+    icebreaker: {
+      name: string;
+      description: string;
+      coachNote: string;
+    };
+    warmup: {
       drills: ActivityItem[];
       coachNote: string;
     };
-    basics: {
-      drills: ActivityItem[];
-      jumpUps: { reps: string; cue: string };
-      coachCue: string;
+    theory: {
+      topic: string;
+      explain: string;
+      demoCue: string;
+      checkQuestion: string;
     };
     waterBlock: {
-      paddleFocus: string;
-      surfFocus: string;
+      focus: string;
+      coachCue: string;
+      successMarker: string;
       challenge: string;
+    };
+    closing: {
       debriefPrompt: string;
+      goodbyeCue: string;
     };
   }
 
-  const FALLBACK_DATA: SurfExercisesData = {
-    warmupStretch: {
+  const FALLBACK_DATA: SurfSessionData = {
+    intro: {
+      sessionGoal:
+        "Today we build confidence with calm habits, clear coaching, and one simple surf skill.",
+      structureNote:
+        "We start together on the sand, learn one idea, then take that same idea into the water.",
+    },
+    icebreaker: {
+      name: "Name & Wave Move",
+      description:
+        "In a circle, each surfer says their name and shows one funny surf move for the group to copy.",
+      coachNote:
+        "Theola sets the tone: smiles first, quick turns, and make sure every child is seen.",
+    },
+    warmup: {
       drills: [
         {
-          name: "Beach Jog Loop",
+          name: "Shoreline Jog",
           description:
-            "Jog together along the shoreline, then back to the group cone with relaxed breathing.",
-          duration: "4-5 min",
+            "Jog together on the sand, turn on coach call, and keep shoulders relaxed.",
         },
         {
-          name: "Dynamic Arm Swings",
+          name: "Arm Circles & Reaches",
           description:
-            "Do big arm circles, shoulder rolls, and cross-body swings to wake up paddling muscles.",
-          duration: "4-5 min",
+            "Open the shoulders, twist gently, and reach long to wake up paddling muscles.",
         },
         {
-          name: "Hip Opener Lunges",
+          name: "Lunge Twist Flow",
           description:
-            "Step into controlled lunges and rotate over the front leg on each side.",
-          duration: "4-5 min",
-        },
-        {
-          name: "Ankle Balance Holds",
-          description:
-            "Hold single-leg balance in soft sand and switch legs with steady posture.",
-          duration: "3-4 min",
+            "Step into controlled lunges, rotate over the front leg, and finish with ankle balance.",
         },
       ],
       coachNote:
-        "Theola leads this block: keep it playful, keep everyone moving, and finish with calm breathing.",
+        "Keep the tempo light and tidy; this block prepares bodies for surfing, not exhaustion.",
     },
-    basics: {
-      drills: [
-        {
-          name: "Pop-up Landing",
-          description:
-            "From prone, pop up and freeze in stance with eyes forward and knees bent.",
-          reps: "8x",
-        },
-        {
-          name: "Rail Reach Drill",
-          description:
-            "Practice hand placement and chest lift before every pop-up to lock clean sequencing.",
-          reps: "8x",
-        },
-        {
-          name: "Low Stance Hold",
-          description:
-            "Hold a low surf stance for control, then reset with balanced feet.",
-          reps: "3x 20s",
-        },
-      ],
-      jumpUps: {
-        reps: "20x each surfer",
-        cue: "Quality over speed: stable feet, soft knees, eyes down the line.",
-      },
-      coachCue:
-        "No shortcuts on mechanics: every rep starts with clean hand placement and finishes in a stable stance.",
+    theory: {
+      topic: "paddling body position",
+      explain:
+        "When your chest is lifted and your body is centered, the board glides straighter and catches waves earlier.",
+      demoCue:
+        "Show one bad paddle position and one good one, then let the kids spot the difference.",
+      checkQuestion:
+        "Where should your chest and eyes be when you paddle for a wave?",
     },
     waterBlock: {
-      paddleFocus:
-        "Paddle out together through the easiest channel and keep spacing between boards.",
-      surfFocus:
-        "On every wave, pop up early and look where you want to go, not at your feet.",
+      focus: "paddling body position",
+      coachCue:
+        "Long body, light chest lift, and eyes forward before every wave.",
+      successMarker:
+        "Good looks like a straight board, steady paddling, and an earlier, calmer takeoff.",
       challenge:
-        "Each surfer aims for 3 clean rides with controlled takeoff and balanced stance.",
+        "Each surfer finds 3 waves where they set their body position before trying to stand.",
+    },
+    closing: {
       debriefPrompt:
-        "What felt best today, and what is one thing you want to improve next session?",
+        "What helped you most today when you went from sand to water?",
+      goodbyeCue:
+        "Shake hands, thank the group, and carry boards back together.",
     },
   };
 
@@ -255,7 +341,8 @@ import { Printer, RefreshCw } from "@lucide/astro";
     return async () => {
       btn.disabled = true;
       const originalHtml = btn.innerHTML;
-      btn.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
+      btn.innerHTML =
+        '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
       try {
         await action();
       } finally {
@@ -277,10 +364,66 @@ import { Printer, RefreshCw } from "@lucide/astro";
     }
   }
 
+  function addClasses(el: Element | null, classes: string): void {
+    if (!el) return;
+    for (const cls of classes.split(" ")) {
+      if (cls) el.classList.add(cls);
+    }
+  }
+
+  function renderNoteCard(
+    label: string,
+    text: string,
+    wrapperClasses: string,
+    labelClasses: string,
+  ): DocumentFragment {
+    const frag = cloneTemplate("tpl-note-card");
+    fillSlots(frag, { label, text });
+    addClasses(frag.querySelector("div"), wrapperClasses);
+    addClasses(frag.querySelector('[data-slot="label"]'), labelClasses);
+    return frag;
+  }
+
+  function renderIntroBlock(container: HTMLElement, data: SurfSessionData["intro"]): void {
+    container.innerHTML = "";
+    container.appendChild(
+      renderNoteCard(
+        "Session Goal",
+        data.sessionGoal,
+        "border-cyan-200 bg-cyan-50/70",
+        "text-cyan-800",
+      ),
+    );
+    container.appendChild(
+      renderNoteCard(
+        "Structure Note",
+        data.structureNote,
+        "border-teal-200 bg-teal-50/70",
+        "text-teal-800",
+      ),
+    );
+  }
+
+  function renderSingleCard(
+    container: HTMLElement,
+    label: string,
+    name: string,
+    description: string,
+    wrapperClasses: string,
+    labelClasses: string,
+  ): void {
+    container.innerHTML = "";
+    const frag = cloneTemplate("tpl-single-card");
+    fillSlots(frag, { label, name, description });
+    addClasses(frag.querySelector("div"), wrapperClasses);
+    addClasses(frag.querySelector('[data-slot="label"]'), labelClasses);
+    container.appendChild(frag);
+  }
+
   function renderActivityList(
     container: HTMLElement,
     activities: ActivityItem[],
-    badgeClasses: string,
+    markerClasses: string,
   ): void {
     container.innerHTML = "";
     for (const activity of activities) {
@@ -288,129 +431,151 @@ import { Printer, RefreshCw } from "@lucide/astro";
       fillSlots(frag, {
         name: activity.name,
         description: activity.description,
-        badge: activity.duration || activity.reps || "",
       });
-      const badge = frag.querySelector('[data-slot="badge"]');
-      if (badge) {
-        for (const cls of badgeClasses.split(" ")) badge.classList.add(cls);
-      }
+      addClasses(frag.querySelector('[data-slot="marker"]'), markerClasses);
       container.appendChild(frag);
     }
   }
 
-  function renderCoachNote(
-    container: HTMLElement,
-    label: string,
-    text: string,
-    wrapperClasses: string,
-    labelClasses: string,
-  ): void {
+  function renderTheoryBlock(container: HTMLElement, data: SurfSessionData["theory"]): void {
     container.innerHTML = "";
-    const frag = cloneTemplate("tpl-coach-note");
-    fillSlots(frag, { label, text });
-    const wrapper = frag.querySelector("div");
-    const labelEl = frag.querySelector('[data-slot="label"]');
-    if (wrapper) {
-      for (const cls of wrapperClasses.split(" ")) wrapper.classList.add(cls);
-    }
-    if (labelEl) {
-      for (const cls of labelClasses.split(" ")) labelEl.classList.add(cls);
-    }
+    const frag = cloneTemplate("tpl-theory-card");
+    fillSlots(frag, {
+      topic: data.topic,
+      explain: data.explain,
+      demoCue: data.demoCue,
+      checkQuestion: data.checkQuestion,
+    });
     container.appendChild(frag);
   }
 
-  function renderWaterBlock(container: HTMLElement, data: SurfExercisesData["waterBlock"]): void {
+  function renderWaterBlock(container: HTMLElement, data: SurfSessionData["waterBlock"]): void {
     container.innerHTML = "";
-    const cards = [
-      { label: "Paddle Focus", text: data.paddleFocus, labelClasses: "text-cyan-700" },
-      { label: "Surf Focus", text: data.surfFocus, labelClasses: "text-indigo-700" },
-      { label: "Session Challenge", text: data.challenge, labelClasses: "text-teal-700" },
-      { label: "Debrief Prompt", text: data.debriefPrompt, labelClasses: "text-emerald-700" },
-    ];
+    const frag = cloneTemplate("tpl-water-focus-card");
+    fillSlots(frag, {
+      focus: data.focus,
+      coachCue: data.coachCue,
+      successMarker: data.successMarker,
+      challenge: data.challenge,
+    });
+    container.appendChild(frag);
+  }
 
-    for (const card of cards) {
-      const frag = cloneTemplate("tpl-water-card");
-      fillSlots(frag, { label: card.label, text: card.text });
-      const labelEl = frag.querySelector('[data-slot="label"]');
-      if (labelEl) {
-        for (const cls of card.labelClasses.split(" ")) labelEl.classList.add(cls);
-      }
-      container.appendChild(frag);
-    }
+  function renderClosingBlock(container: HTMLElement, data: SurfSessionData["closing"]): void {
+    container.innerHTML = "";
+    container.appendChild(
+      renderNoteCard(
+        "Debrief Prompt",
+        data.debriefPrompt,
+        "border-emerald-200 bg-emerald-50/70",
+        "text-emerald-800",
+      ),
+    );
+    container.appendChild(
+      renderNoteCard(
+        "Goodbye Cue",
+        data.goodbyeCue,
+        "border-green-200 bg-green-50/70",
+        "text-green-800",
+      ),
+    );
   }
 
   async function loadAll(): Promise<void> {
     const ids = {
-      warmupStretch: document.getElementById("section-warmup-stretch"),
+      intro: document.getElementById("section-intro"),
+      icebreaker: document.getElementById("section-icebreaker"),
+      icebreakerNote: document.getElementById("section-icebreaker-note"),
+      warmup: document.getElementById("section-warmup"),
       warmupNote: document.getElementById("section-warmup-note"),
-      basics: document.getElementById("section-basics"),
-      basicsNote: document.getElementById("section-basics-note"),
+      theory: document.getElementById("section-theory"),
       waterBlock: document.getElementById("section-water-block"),
+      closing: document.getElementById("section-closing"),
     };
 
-    let data: SurfExercisesData;
+    let data: SurfSessionData;
 
     try {
-      data = await fetchJSON<SurfExercisesData>("/api/generate-surf-exercises");
+      data = await fetchJSON<SurfSessionData>("/api/generate-surf-exercises");
     } catch (error) {
-      console.error("Failed to load surf exercises, using fallback:", error);
+      console.error("Failed to load surf session, using fallback:", error);
       data = FALLBACK_DATA;
     }
 
-    const warmupActivities = data.warmupStretch?.drills?.length
-      ? data.warmupStretch.drills
-      : FALLBACK_DATA.warmupStretch.drills;
-    const warmupNote = data.warmupStretch?.coachNote || FALLBACK_DATA.warmupStretch.coachNote;
+    const intro =
+      data.intro?.sessionGoal && data.intro?.structureNote
+        ? data.intro
+        : FALLBACK_DATA.intro;
+    const icebreaker =
+      data.icebreaker?.name &&
+      data.icebreaker?.description &&
+      data.icebreaker?.coachNote
+        ? data.icebreaker
+        : FALLBACK_DATA.icebreaker;
+    const warmup =
+      data.warmup?.drills?.length === 3 && data.warmup?.coachNote
+        ? data.warmup
+        : FALLBACK_DATA.warmup;
+    const theory =
+      data.theory?.topic &&
+      data.theory?.explain &&
+      data.theory?.demoCue &&
+      data.theory?.checkQuestion
+        ? data.theory
+        : FALLBACK_DATA.theory;
+    const waterBlock =
+      data.waterBlock?.focus &&
+      data.waterBlock?.coachCue &&
+      data.waterBlock?.successMarker &&
+      data.waterBlock?.challenge
+        ? data.waterBlock
+        : FALLBACK_DATA.waterBlock;
+    const closing =
+      data.closing?.debriefPrompt && data.closing?.goodbyeCue
+        ? data.closing
+        : FALLBACK_DATA.closing;
 
-    const basicsDrills = data.basics?.drills?.length ? data.basics.drills : FALLBACK_DATA.basics.drills;
-    const jumpUps = {
-      reps: "20x each surfer",
-      cue: data.basics?.jumpUps?.cue || FALLBACK_DATA.basics.jumpUps.cue,
-    };
-    const basicsActivities: ActivityItem[] = [
-      {
-        name: "Jump-Ups (Mandatory)",
-        description: jumpUps.cue,
-        reps: jumpUps.reps,
-      },
-      ...basicsDrills,
-    ];
-    const basicsNote = data.basics?.coachCue || FALLBACK_DATA.basics.coachCue;
-
-    const waterBlock = data.waterBlock?.paddleFocus && data.waterBlock?.surfFocus
-      ? data.waterBlock
-      : FALLBACK_DATA.waterBlock;
-
-    if (ids.warmupStretch) {
-      renderActivityList(ids.warmupStretch, warmupActivities, "text-amber-700 bg-amber-50");
+    if (ids.intro) renderIntroBlock(ids.intro, intro);
+    if (ids.icebreaker) {
+      renderSingleCard(
+        ids.icebreaker,
+        "Opener",
+        icebreaker.name,
+        icebreaker.description,
+        "border-rose-200 bg-rose-50/50",
+        "text-rose-800",
+      );
+    }
+    if (ids.icebreakerNote) {
+      ids.icebreakerNote.innerHTML = "";
+      ids.icebreakerNote.appendChild(
+        renderNoteCard(
+          "Coach Note",
+          icebreaker.coachNote,
+          "border-rose-200 bg-rose-50/70",
+          "text-rose-800",
+        ),
+      );
+    }
+    if (ids.warmup) {
+      renderActivityList(ids.warmup, warmup.drills, "bg-amber-500");
     }
     if (ids.warmupNote) {
-      renderCoachNote(
-        ids.warmupNote,
-        "Coach Note",
-        warmupNote,
-        "border-amber-200 bg-amber-50/70",
-        "text-amber-800",
+      ids.warmupNote.innerHTML = "";
+      ids.warmupNote.appendChild(
+        renderNoteCard(
+          "Coach Note",
+          warmup.coachNote,
+          "border-amber-200 bg-amber-50/70",
+          "text-amber-800",
+        ),
       );
     }
-    if (ids.basics) {
-      renderActivityList(ids.basics, basicsActivities, "text-blue-700 bg-blue-50");
-    }
-    if (ids.basicsNote) {
-      renderCoachNote(
-        ids.basicsNote,
-        "Coach Cue",
-        basicsNote,
-        "border-blue-200 bg-blue-50/70",
-        "text-blue-800",
-      );
-    }
-    if (ids.waterBlock) {
-      renderWaterBlock(ids.waterBlock, waterBlock);
-    }
+    if (ids.theory) renderTheoryBlock(ids.theory, theory);
+    if (ids.waterBlock) renderWaterBlock(ids.waterBlock, waterBlock);
+    if (ids.closing) renderClosingBlock(ids.closing, closing);
   }
 
-  // Set today's date
   const dateEl = document.getElementById("session-date");
   if (dateEl) {
     const d = new Date();
@@ -422,20 +587,21 @@ import { Printer, RefreshCw } from "@lucide/astro";
     });
   }
 
-  // Regenerate button
   const regenBtn = document.getElementById("regen-all-btn") as HTMLButtonElement;
   if (regenBtn) {
     regenBtn.disabled = true;
     regenBtn.addEventListener("click", withLoading(regenBtn, loadAll));
   }
 
-  // Auto-load on page load
   const generatedSections = [
-    document.getElementById("section-warmup-stretch"),
+    document.getElementById("section-intro"),
+    document.getElementById("section-icebreaker"),
+    document.getElementById("section-icebreaker-note"),
+    document.getElementById("section-warmup"),
     document.getElementById("section-warmup-note"),
-    document.getElementById("section-basics"),
-    document.getElementById("section-basics-note"),
+    document.getElementById("section-theory"),
     document.getElementById("section-water-block"),
+    document.getElementById("section-closing"),
   ];
 
   const shouldLoadAll = generatedSections.some((section) =>
@@ -450,14 +616,15 @@ import { Printer, RefreshCw } from "@lucide/astro";
     regenBtn.disabled = false;
   }
 
-  // Print button
   const printBtn = document.getElementById("print-btn");
   if (printBtn) {
     printBtn.addEventListener("click", () => {
       const header = document.querySelector("body > div > header") as HTMLElement;
       const footer = document.querySelector("body > div > footer") as HTMLElement;
       const main = document.querySelector("body > div > main") as HTMLElement;
-      const proseEls = document.querySelectorAll<HTMLElement>(".prose > *:not(.worksheet-container)");
+      const proseEls = document.querySelectorAll<HTMLElement>(
+        ".prose > *:not(.worksheet-container)",
+      );
 
       if (header) header.style.display = "none";
       if (footer) footer.style.display = "none";
