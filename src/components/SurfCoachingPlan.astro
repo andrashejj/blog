@@ -11,7 +11,14 @@ import { Printer, RefreshCw } from "@lucide/astro";
     <p class="text-slate-400 mt-1 text-sm print:text-[10px] print:mt-0.5">
       Date: <span id="session-date" class="font-semibold text-slate-600">___________</span>
     </p>
-    <div class="flex items-center justify-center gap-3 mt-4 print:hidden">
+    <div class="flex items-center justify-center gap-3 mt-4 print:hidden flex-wrap">
+      <div class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1.5">
+        <span class="text-xs font-semibold text-cyan-700" id="toggle-label-wavy">Wavy</span>
+        <button type="button" id="mode-toggle" role="switch" aria-checked="false" class="relative w-11 h-6 bg-cyan-500 rounded-full transition-colors cursor-pointer border-0 p-0">
+          <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform"></span>
+        </button>
+        <span class="text-xs font-semibold text-slate-400" id="toggle-label-flat">Flat Day</span>
+      </div>
       <button type="button" id="print-btn" class="text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer">
         <Printer size={16} />
         Print Session Plan
@@ -87,10 +94,12 @@ import { Printer, RefreshCw } from "@lucide/astro";
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Warmup + Stretch</h3>
         <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">10 min</span>
+        <span class="text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-full print:text-[8px] print:px-1">● mobility</span>
+        <span class="text-xs font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full print:text-[8px] print:px-1">● strength</span>
       </div>
       <div id="section-warmup" class="grid grid-cols-1 gap-3 print:gap-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1, 2, 3].map(() => (
+          {[1, 2, 3, 4].map(() => (
             <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
               <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
               <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
@@ -102,6 +111,17 @@ import { Printer, RefreshCw } from "@lucide/astro";
         <div class="border-2 border-amber-200 rounded-lg bg-amber-50/70 p-4 animate-pulse print:p-2">
           <div class="h-3 w-24 bg-amber-100 rounded mb-2"></div>
           <div class="h-3 w-4/5 bg-amber-50 rounded"></div>
+        </div>
+      </div>
+      <div class="mt-3 print:mt-1">
+        <div class="border border-slate-200 rounded-lg bg-slate-50/50 px-4 py-3 print:px-2 print:py-1.5">
+          <div class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5 print:text-[8px] print:mb-0.5">Coach Video References</div>
+          <div class="flex flex-wrap gap-3 text-xs text-slate-500 print:text-[8px] print:gap-1.5">
+            <a href="https://www.facebook.com/Rapturecamps/videos/1439071064290953/" target="_blank" rel="noopener noreferrer" class="hover:text-purple-700 underline print:no-underline">Rapture Camps — Flexibility</a>
+            <a href="https://www.tiktok.com/@redbullsurfing/video/7529540352924060950" target="_blank" rel="noopener noreferrer" class="hover:text-purple-700 underline print:no-underline">Red Bull — Mobility</a>
+            <a href="https://www.instagram.com/reel/C0325b5yTKS/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-700 underline print:no-underline">Instagram — Strength 1</a>
+            <a href="https://www.instagram.com/reel/DQcm4DsEhuA/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-700 underline print:no-underline">Instagram — Strength 2</a>
+          </div>
         </div>
       </div>
     </section>
@@ -127,7 +147,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
 
     <section class="print:break-inside-avoid">
       <div class="flex items-center gap-3 mb-4 print:mb-1">
-        <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Water Block: One Focus</h3>
+        <h3 id="water-block-heading" class="text-xl font-bold uppercase tracking-widest text-white bg-indigo-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">5 | Water Block: One Focus</h3>
         <span class="text-sm font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">20-60 min</span>
       </div>
       <div id="section-water-block" class="grid grid-cols-1 gap-3 print:gap-1">
@@ -226,10 +246,62 @@ import { Printer, RefreshCw } from "@lucide/astro";
   </div>
 </template>
 
+<template id="tpl-water-drills-card">
+  <div class="border-2 border-indigo-200 rounded-xl p-5 bg-indigo-50/40 print:p-2">
+    <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-3 print:text-[9px]">Flat Day Water Drills</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 print:gap-1" data-slot="drills-grid"></div>
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 print:mt-2 print:gap-1">
+      <div class="border border-indigo-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">Coach Note</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="coachNote"></p>
+      </div>
+      <div class="border border-indigo-200 rounded-lg bg-white p-4 print:p-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-indigo-800 mb-2 print:text-[9px]">Session Challenge</div>
+        <p class="text-sm text-slate-700 leading-snug m-0 print:text-[10px]" data-slot="sessionChallenge"></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-water-drill-item">
+  <div class="border border-indigo-200 rounded-lg bg-white p-3 print:p-1.5">
+    <div class="flex items-start gap-2">
+      <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded mt-0.5 shrink-0 print:text-[7px]" data-slot="category"></span>
+      <div>
+        <div class="text-sm font-semibold text-slate-700 print:text-[10px]" data-slot="name"></div>
+        <div class="text-xs text-slate-500 mt-0.5 print:text-[9px]" data-slot="description"></div>
+        <div class="text-[10px] text-amber-700 font-medium mt-1 print:text-[8px] hidden" data-slot="safetyNote"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
   interface ActivityItem {
     name: string;
     description: string;
+  }
+
+  interface WaterDrillItem {
+    name: string;
+    description: string;
+    category: string;
+    safetyNote?: string;
+  }
+
+  interface WavyWaterBlock {
+    mode: "wavy";
+    focus: string;
+    coachCue: string;
+    successMarker: string;
+    challenge: string;
+  }
+
+  interface FlatWaterBlock {
+    mode: "flat";
+    drills: WaterDrillItem[];
+    coachNote: string;
+    sessionChallenge: string;
   }
 
   interface SurfSessionData {
@@ -252,17 +324,14 @@ import { Printer, RefreshCw } from "@lucide/astro";
       demoCue: string;
       checkQuestion: string;
     };
-    waterBlock: {
-      focus: string;
-      coachCue: string;
-      successMarker: string;
-      challenge: string;
-    };
+    waterBlock: WavyWaterBlock | FlatWaterBlock;
     closing: {
       debriefPrompt: string;
       goodbyeCue: string;
     };
   }
+
+  let currentMode: "wavy" | "flat" = "wavy";
 
   const FALLBACK_DATA: SurfSessionData = {
     intro: {
@@ -281,19 +350,24 @@ import { Printer, RefreshCw } from "@lucide/astro";
     warmup: {
       drills: [
         {
-          name: "Shoreline Jog",
+          name: "Hip Circles",
           description:
-            "Jog together on the sand, turn on coach call, and keep shoulders relaxed.",
+            "Stand on one leg, draw big circles with the other knee to loosen hips — five each direction.",
         },
         {
-          name: "Arm Circles & Reaches",
+          name: "Cat-Cow Flow",
           description:
-            "Open the shoulders, twist gently, and reach long to wake up paddling muscles.",
+            "On all fours, arch the back up like a cat then drop the belly like a cow, slow and smooth.",
         },
         {
-          name: "Lunge Twist Flow",
+          name: "Pop-Up Push-Ups",
           description:
-            "Step into controlled lunges, rotate over the front leg, and finish with ankle balance.",
+            "Start flat on the sand, push up and spring to surf stance, then back down — five reps.",
+        },
+        {
+          name: "Superhero Hold",
+          description:
+            "Lie face down, lift arms and legs off the sand and hold for five seconds, then relax.",
         },
       ],
       coachNote:
@@ -309,6 +383,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
         "Where should your chest and eyes be when you paddle for a wave?",
     },
     waterBlock: {
+      mode: "wavy" as const,
       focus: "paddling body position",
       coachCue:
         "Long body, light chest lift, and eyes forward before every wave.",
@@ -323,6 +398,18 @@ import { Printer, RefreshCw } from "@lucide/astro";
       goodbyeCue:
         "Shake hands, thank the group, and carry boards back together.",
     },
+  };
+
+  const FALLBACK_FLAT_WATER_BLOCK: FlatWaterBlock = {
+    mode: "flat",
+    drills: [
+      { name: "Paddle Sprint Relay", description: "Teams of two, paddle to a marker and back, tag your partner.", category: "paddle" },
+      { name: "Board Spin", description: "Sitting on board, use hands to spin 360 degrees both directions.", category: "board-control" },
+      { name: "Seal Dive", description: "Push face and body underwater, pop back up smiling — repeat five times.", category: "water-confidence", safetyNote: "Waist-deep water only, coach in water." },
+      { name: "Shark Tag", description: "One 'shark' swims to tag others, tagged surfers join the shark team.", category: "swimming" },
+    ],
+    coachNote: "Focus on calm, controlled movements — flat days are perfect for practising skills without pressure.",
+    sessionChallenge: "Each surfer completes all four water drills and picks their favourite to show the group.",
   };
 
   async function fetchJSON<T>(url: string, timeoutMs = 35_000): Promise<T> {
@@ -424,17 +511,19 @@ import { Printer, RefreshCw } from "@lucide/astro";
     container: HTMLElement,
     activities: ActivityItem[],
     markerClasses: string,
+    perItemMarkers?: string[],
   ): void {
     container.innerHTML = "";
-    for (const activity of activities) {
+    activities.forEach((activity, index) => {
       const frag = cloneTemplate("tpl-activity-row");
       fillSlots(frag, {
         name: activity.name,
         description: activity.description,
       });
-      addClasses(frag.querySelector('[data-slot="marker"]'), markerClasses);
+      const marker = perItemMarkers?.[index] ?? markerClasses;
+      addClasses(frag.querySelector('[data-slot="marker"]'), marker);
       container.appendChild(frag);
-    }
+    });
   }
 
   function renderTheoryBlock(container: HTMLElement, data: SurfSessionData["theory"]): void {
@@ -449,7 +538,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
     container.appendChild(frag);
   }
 
-  function renderWaterBlock(container: HTMLElement, data: SurfSessionData["waterBlock"]): void {
+  function renderWavyWaterBlock(container: HTMLElement, data: WavyWaterBlock): void {
     container.innerHTML = "";
     const frag = cloneTemplate("tpl-water-focus-card");
     fillSlots(frag, {
@@ -459,6 +548,43 @@ import { Printer, RefreshCw } from "@lucide/astro";
       challenge: data.challenge,
     });
     container.appendChild(frag);
+  }
+
+  function renderFlatWaterBlock(container: HTMLElement, data: FlatWaterBlock): void {
+    container.innerHTML = "";
+    const frag = cloneTemplate("tpl-water-drills-card");
+    const grid = frag.querySelector('[data-slot="drills-grid"]');
+    if (grid) {
+      for (const drill of data.drills) {
+        const item = cloneTemplate("tpl-water-drill-item");
+        fillSlots(item, {
+          category: drill.category,
+          name: drill.name,
+          description: drill.description,
+        });
+        if (drill.safetyNote) {
+          const noteEl = item.querySelector('[data-slot="safetyNote"]');
+          if (noteEl) {
+            noteEl.textContent = drill.safetyNote;
+            noteEl.classList.remove("hidden");
+          }
+        }
+        grid.appendChild(item);
+      }
+    }
+    fillSlots(frag, {
+      coachNote: data.coachNote,
+      sessionChallenge: data.sessionChallenge,
+    });
+    container.appendChild(frag);
+  }
+
+  function renderWaterBlock(container: HTMLElement, data: SurfSessionData["waterBlock"]): void {
+    if (data.mode === "flat") {
+      renderFlatWaterBlock(container, data);
+    } else {
+      renderWavyWaterBlock(container, data);
+    }
   }
 
   function renderClosingBlock(container: HTMLElement, data: SurfSessionData["closing"]): void {
@@ -496,7 +622,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
     let data: SurfSessionData;
 
     try {
-      data = await fetchJSON<SurfSessionData>("/api/generate-surf-exercises");
+      data = await fetchJSON<SurfSessionData>(`/api/generate-surf-exercises?mode=${currentMode}`);
     } catch (error) {
       console.error("Failed to load surf session, using fallback:", error);
       data = FALLBACK_DATA;
@@ -513,7 +639,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
         ? data.icebreaker
         : FALLBACK_DATA.icebreaker;
     const warmup =
-      data.warmup?.drills?.length === 3 && data.warmup?.coachNote
+      data.warmup?.drills?.length === 4 && data.warmup?.coachNote
         ? data.warmup
         : FALLBACK_DATA.warmup;
     const theory =
@@ -523,13 +649,19 @@ import { Printer, RefreshCw } from "@lucide/astro";
       data.theory?.checkQuestion
         ? data.theory
         : FALLBACK_DATA.theory;
-    const waterBlock =
-      data.waterBlock?.focus &&
-      data.waterBlock?.coachCue &&
-      data.waterBlock?.successMarker &&
-      data.waterBlock?.challenge
-        ? data.waterBlock
-        : FALLBACK_DATA.waterBlock;
+    let waterBlock: SurfSessionData["waterBlock"];
+    const wb = data.waterBlock;
+    if (wb?.mode === "flat") {
+      waterBlock =
+        wb.drills?.length >= 1 && wb.coachNote && wb.sessionChallenge
+          ? wb
+          : FALLBACK_FLAT_WATER_BLOCK;
+    } else {
+      waterBlock =
+        wb?.mode === "wavy" && wb.focus && wb.coachCue && wb.successMarker && wb.challenge
+          ? wb
+          : FALLBACK_DATA.waterBlock;
+    }
     const closing =
       data.closing?.debriefPrompt && data.closing?.goodbyeCue
         ? data.closing
@@ -558,7 +690,12 @@ import { Printer, RefreshCw } from "@lucide/astro";
       );
     }
     if (ids.warmup) {
-      renderActivityList(ids.warmup, warmup.drills, "bg-amber-500");
+      renderActivityList(ids.warmup, warmup.drills, "bg-amber-500", [
+        "bg-purple-500",
+        "bg-purple-500",
+        "bg-orange-500",
+        "bg-orange-500",
+      ]);
     }
     if (ids.warmupNote) {
       ids.warmupNote.innerHTML = "";
@@ -573,6 +710,11 @@ import { Printer, RefreshCw } from "@lucide/astro";
     }
     if (ids.theory) renderTheoryBlock(ids.theory, theory);
     if (ids.waterBlock) renderWaterBlock(ids.waterBlock, waterBlock);
+    const waterHeading = document.getElementById("water-block-heading");
+    if (waterHeading) {
+      waterHeading.textContent =
+        currentMode === "flat" ? "5 | Water Drills: Flat Day" : "5 | Water Block: One Focus";
+    }
     if (ids.closing) renderClosingBlock(ids.closing, closing);
   }
 
@@ -591,6 +733,33 @@ import { Printer, RefreshCw } from "@lucide/astro";
   if (regenBtn) {
     regenBtn.disabled = true;
     regenBtn.addEventListener("click", withLoading(regenBtn, loadAll));
+  }
+
+  const modeToggle = document.getElementById("mode-toggle") as HTMLButtonElement;
+  const toggleLabelWavy = document.getElementById("toggle-label-wavy");
+  const toggleLabelFlat = document.getElementById("toggle-label-flat");
+  if (modeToggle) {
+    modeToggle.addEventListener("click", () => {
+      currentMode = currentMode === "wavy" ? "flat" : "wavy";
+      const thumb = modeToggle.querySelector("span") as HTMLElement;
+      if (currentMode === "flat") {
+        modeToggle.classList.replace("bg-cyan-500", "bg-amber-500");
+        thumb.style.transform = "translateX(1.25rem)";
+        modeToggle.setAttribute("aria-checked", "true");
+        if (toggleLabelFlat) toggleLabelFlat.classList.replace("text-slate-400", "text-amber-700");
+        if (toggleLabelWavy) toggleLabelWavy.classList.replace("text-cyan-700", "text-slate-400");
+      } else {
+        modeToggle.classList.replace("bg-amber-500", "bg-cyan-500");
+        thumb.style.transform = "translateX(0)";
+        modeToggle.setAttribute("aria-checked", "false");
+        if (toggleLabelWavy) toggleLabelWavy.classList.replace("text-slate-400", "text-cyan-700");
+        if (toggleLabelFlat) toggleLabelFlat.classList.replace("text-amber-700", "text-slate-400");
+      }
+      if (regenBtn) regenBtn.disabled = true;
+      loadAll().then(() => {
+        if (regenBtn) regenBtn.disabled = false;
+      });
+    });
   }
 
   const generatedSections = [
