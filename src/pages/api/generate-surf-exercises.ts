@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
+import { pickExercises } from "../../lib/surf-exercises";
 import { skillsSummary } from "../../lib/surf-skills";
 
 interface ActivityItem {
@@ -68,8 +69,7 @@ IMPORTANT:
   - Quick debrief + goodbye: 5 min
 - Content should feel professional, not silly, not random, and not overengineered.
 - The "icebreaker" block is led by Theola. It must be playful and social, and must NOT feel like conditioning.
-- The "warmup" block is movement prep only. It must NOT be another game.
-- Generate exactly 3 warmup drills.
+- Do NOT generate warmup drills. The warmup exercises are handled separately from a curated bank. Only generate a short warmup coachNote.
 - Theory must rotate around exactly ONE topic from this list:
   - safety and water awareness
   - lineup etiquette
@@ -95,13 +95,7 @@ Return ONLY valid JSON with no markdown formatting, matching this exact structur
     "coachNote": "One short coaching note"
   },
   "warmup": {
-    "drills": [
-      {
-        "name": "2-5 words",
-        "description": "One short sentence"
-      }
-    ],
-    "coachNote": "One short coaching note"
+    "coachNote": "One short coaching note for the warmup block"
   },
   "theory": {
     "topic": "Must be exactly one topic from the provided list",
@@ -138,19 +132,24 @@ const fallback: SurfSessionResponse = {
   warmup: {
     drills: [
       {
-        name: "Shoreline Jog",
+        name: "Hip Circles",
         description:
-          "Jog together on the sand, turn on coach call, and keep shoulders relaxed.",
+          "Stand on one leg, draw big circles with the other knee to loosen hips — five each direction.",
       },
       {
-        name: "Arm Circles & Reaches",
+        name: "Cat-Cow Flow",
         description:
-          "Open the shoulders, twist gently, and reach long to wake up paddling muscles.",
+          "On all fours, arch the back up like a cat then drop the belly like a cow, slow and smooth.",
       },
       {
-        name: "Lunge Twist Flow",
+        name: "Pop-Up Push-Ups",
         description:
-          "Step into controlled lunges, rotate over the front leg, and finish with ankle balance.",
+          "Start flat on the sand, push up and spring to surf stance, then back down — five reps.",
+      },
+      {
+        name: "Superhero Hold",
+        description:
+          "Lie face down, lift arms and legs off the sand and hold for five seconds, then relax.",
       },
     ],
     coachNote:
@@ -177,41 +176,13 @@ const fallback: SurfSessionResponse = {
   closing: {
     debriefPrompt:
       "What helped you most today when you went from sand to water?",
-    goodbyeCue:
-      "Shake hands, thank the group, and carry boards back together.",
+    goodbyeCue: "Shake hands, thank the group, and carry boards back together.",
   },
 };
 
 function pickText(value: string | undefined, fallbackValue: string): string {
   const trimmed = value?.trim();
   return trimmed ? trimmed : fallbackValue;
-}
-
-function normalizeDrill(
-  drill: Partial<ActivityItem> | undefined,
-  fallbackDrill: ActivityItem,
-): ActivityItem {
-  return {
-    name: pickText(drill?.name, fallbackDrill.name),
-    description: pickText(drill?.description, fallbackDrill.description),
-  };
-}
-
-function normalizeDrills(
-  drills: ActivityItem[] | undefined,
-  fallbackDrills: ActivityItem[],
-): ActivityItem[] {
-  if (!Array.isArray(drills) || drills.length < fallbackDrills.length) {
-    return fallbackDrills;
-  }
-
-  return fallbackDrills.map((fallbackDrill, index) => {
-    const drill = drills[index];
-    return normalizeDrill(
-      drill && typeof drill === "object" ? drill : undefined,
-      fallbackDrill,
-    );
-  });
 }
 
 function normalizeTopic(
@@ -251,11 +222,11 @@ export const GET = async () => {
       ),
     },
     warmup: {
-      drills: normalizeDrills(rawData.warmup?.drills, fallback.warmup.drills),
-      coachNote: pickText(
-        rawData.warmup?.coachNote,
-        fallback.warmup.coachNote,
-      ),
+      drills: [
+        ...pickExercises(2, "mobility"),
+        ...pickExercises(2, "strength"),
+      ].map((e) => ({ name: e.name, description: e.description })),
+      coachNote: pickText(rawData.warmup?.coachNote, fallback.warmup.coachNote),
     },
     theory: {
       topic,

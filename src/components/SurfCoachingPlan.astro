@@ -87,10 +87,12 @@ import { Printer, RefreshCw } from "@lucide/astro";
       <div class="flex items-center gap-3 mb-4 print:mb-1">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-amber-700 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">3 | Warmup + Stretch</h3>
         <span class="text-sm font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">10 min</span>
+        <span class="text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-full print:text-[8px] print:px-1">● mobility</span>
+        <span class="text-xs font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full print:text-[8px] print:px-1">● strength</span>
       </div>
       <div id="section-warmup" class="grid grid-cols-1 gap-3 print:gap-1">
         <div class="loading-skeleton space-y-3 print:space-y-1">
-          {[1, 2, 3].map(() => (
+          {[1, 2, 3, 4].map(() => (
             <div class="border-2 border-slate-200 rounded-lg p-4 animate-pulse print:p-1.5 print:border">
               <div class="h-4 w-40 bg-slate-200 rounded mb-2"></div>
               <div class="h-3 w-3/4 bg-slate-100 rounded"></div>
@@ -102,6 +104,17 @@ import { Printer, RefreshCw } from "@lucide/astro";
         <div class="border-2 border-amber-200 rounded-lg bg-amber-50/70 p-4 animate-pulse print:p-2">
           <div class="h-3 w-24 bg-amber-100 rounded mb-2"></div>
           <div class="h-3 w-4/5 bg-amber-50 rounded"></div>
+        </div>
+      </div>
+      <div class="mt-3 print:mt-1">
+        <div class="border border-slate-200 rounded-lg bg-slate-50/50 px-4 py-3 print:px-2 print:py-1.5">
+          <div class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-1.5 print:text-[8px] print:mb-0.5">Coach Video References</div>
+          <div class="flex flex-wrap gap-3 text-xs text-slate-500 print:text-[8px] print:gap-1.5">
+            <a href="https://www.facebook.com/Rapturecamps/videos/1439071064290953/" target="_blank" rel="noopener noreferrer" class="hover:text-purple-700 underline print:no-underline">Rapture Camps — Flexibility</a>
+            <a href="https://www.tiktok.com/@redbullsurfing/video/7529540352924060950" target="_blank" rel="noopener noreferrer" class="hover:text-purple-700 underline print:no-underline">Red Bull — Mobility</a>
+            <a href="https://www.instagram.com/reel/C0325b5yTKS/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-700 underline print:no-underline">Instagram — Strength 1</a>
+            <a href="https://www.instagram.com/reel/DQcm4DsEhuA/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-700 underline print:no-underline">Instagram — Strength 2</a>
+          </div>
         </div>
       </div>
     </section>
@@ -281,19 +294,24 @@ import { Printer, RefreshCw } from "@lucide/astro";
     warmup: {
       drills: [
         {
-          name: "Shoreline Jog",
+          name: "Hip Circles",
           description:
-            "Jog together on the sand, turn on coach call, and keep shoulders relaxed.",
+            "Stand on one leg, draw big circles with the other knee to loosen hips — five each direction.",
         },
         {
-          name: "Arm Circles & Reaches",
+          name: "Cat-Cow Flow",
           description:
-            "Open the shoulders, twist gently, and reach long to wake up paddling muscles.",
+            "On all fours, arch the back up like a cat then drop the belly like a cow, slow and smooth.",
         },
         {
-          name: "Lunge Twist Flow",
+          name: "Pop-Up Push-Ups",
           description:
-            "Step into controlled lunges, rotate over the front leg, and finish with ankle balance.",
+            "Start flat on the sand, push up and spring to surf stance, then back down — five reps.",
+        },
+        {
+          name: "Superhero Hold",
+          description:
+            "Lie face down, lift arms and legs off the sand and hold for five seconds, then relax.",
         },
       ],
       coachNote:
@@ -424,17 +442,19 @@ import { Printer, RefreshCw } from "@lucide/astro";
     container: HTMLElement,
     activities: ActivityItem[],
     markerClasses: string,
+    perItemMarkers?: string[],
   ): void {
     container.innerHTML = "";
-    for (const activity of activities) {
+    activities.forEach((activity, index) => {
       const frag = cloneTemplate("tpl-activity-row");
       fillSlots(frag, {
         name: activity.name,
         description: activity.description,
       });
-      addClasses(frag.querySelector('[data-slot="marker"]'), markerClasses);
+      const marker = perItemMarkers?.[index] ?? markerClasses;
+      addClasses(frag.querySelector('[data-slot="marker"]'), marker);
       container.appendChild(frag);
-    }
+    });
   }
 
   function renderTheoryBlock(container: HTMLElement, data: SurfSessionData["theory"]): void {
@@ -513,7 +533,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
         ? data.icebreaker
         : FALLBACK_DATA.icebreaker;
     const warmup =
-      data.warmup?.drills?.length === 3 && data.warmup?.coachNote
+      data.warmup?.drills?.length === 4 && data.warmup?.coachNote
         ? data.warmup
         : FALLBACK_DATA.warmup;
     const theory =
@@ -558,7 +578,12 @@ import { Printer, RefreshCw } from "@lucide/astro";
       );
     }
     if (ids.warmup) {
-      renderActivityList(ids.warmup, warmup.drills, "bg-amber-500");
+      renderActivityList(ids.warmup, warmup.drills, "bg-amber-500", [
+        "bg-purple-500",
+        "bg-purple-500",
+        "bg-orange-500",
+        "bg-orange-500",
+      ]);
     }
     if (ids.warmupNote) {
       ids.warmupNote.innerHTML = "";
