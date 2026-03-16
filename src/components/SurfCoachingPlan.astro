@@ -36,7 +36,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">1 | Welcome + Rules + Today We Do</h3>
         <span class="text-sm font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full print:text-[9px] print:px-1.5 print:py-0">5 min</span>
       </div>
-      <div id="section-intro" class="grid grid-cols-1 sm:grid-cols-2 gap-3 print:gap-1">
+      <div id="section-intro" class="grid grid-cols-1 gap-3 print:gap-1">
         {[1, 2].map(() => (
           <div class="border-2 border-slate-200 rounded-lg bg-white p-4 animate-pulse print:p-2 print:border">
             <div class="h-3 w-28 bg-slate-200 rounded mb-2"></div>
@@ -44,7 +44,7 @@ import { Printer, RefreshCw } from "@lucide/astro";
           </div>
         ))}
       </div>
-      <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 print:gap-2">
+      <div class="mt-4 grid grid-cols-1 gap-4 print:gap-2">
         <div class="border-2 border-cyan-200 rounded-xl p-5 bg-cyan-50/50 print:p-2">
           <div class="text-xs font-bold uppercase tracking-widest text-cyan-800 mb-3 print:text-[9px] print:mb-1">Today We Do</div>
           <ol class="m-0 pl-5 space-y-2 text-sm text-slate-700 print:text-[10px] print:space-y-1">
@@ -116,32 +116,32 @@ import { Printer, RefreshCw } from "@lucide/astro";
       <div class="mt-4 print:hidden">
         <div class="border border-slate-200 rounded-lg bg-slate-50/50 px-4 py-4">
           <div class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Coach Video References</div>
-          <ul class="m-0 pl-5 space-y-4 list-disc">
-            <li>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
               <div class="text-xs font-semibold text-purple-700 mb-1.5">Rapture Camps — Flexibility</div>
               <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:56.25%">
                 <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRapturecamps%2Fvideos%2F1439071064290953%2F&show_text=false&width=560" class="absolute inset-0 w-full h-full border-0 rounded-lg" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
               </div>
-            </li>
-            <li>
+            </div>
+            <div>
               <div class="text-xs font-semibold text-purple-700 mb-1.5">Red Bull — Mobility</div>
               <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:56.25%">
                 <iframe src="https://www.tiktok.com/embed/v2/7529540352924060950" class="absolute inset-0 w-full h-full border-0 rounded-lg" allow="encrypted-media" allowfullscreen></iframe>
               </div>
-            </li>
-            <li>
+            </div>
+            <div>
               <div class="text-xs font-semibold text-orange-700 mb-1.5">Instagram — Strength 1</div>
-              <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:100%">
+              <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:56.25%">
                 <iframe src="https://www.instagram.com/reel/C0325b5yTKS/embed/" class="absolute inset-0 w-full h-full border-0 rounded-lg" allow="encrypted-media" allowfullscreen></iframe>
               </div>
-            </li>
-            <li>
+            </div>
+            <div>
               <div class="text-xs font-semibold text-orange-700 mb-1.5">Instagram — Strength 2</div>
-              <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:100%">
+              <div class="relative w-full overflow-hidden rounded-lg" style="padding-bottom:56.25%">
                 <iframe src="https://www.instagram.com/reel/DQcm4DsEhuA/embed/" class="absolute inset-0 w-full h-full border-0 rounded-lg" allow="encrypted-media" allowfullscreen></iframe>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
