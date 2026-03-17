@@ -1,11 +1,11 @@
 export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
-
-interface WordsResponse {
-  words: string[];
-  hook: string;
-}
+import {
+  fallbackWords,
+  normalizeWordsData,
+  type WordsData,
+} from "../../lib/noah-worksheet";
 
 const PROMPT = `Generate a creative writing prompt for a 9-year-old boy. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
 
@@ -22,26 +22,7 @@ The "hook" must be a single sentence that is specific and vivid — NOT a generi
 - "The dog came home carrying a map in its mouth, and it was marked with a red X."
 Bad hooks (too vague): "Something strange was about to happen.", "It was a day unlike any other.", "Little did they know, everything was about to change."`;
 
-const fallback: WordsResponse = {
-  words: [
-    "thunder",
-    "lantern",
-    "clattering",
-    "midnight",
-    "jungle",
-    "whisper",
-    "copper",
-    "zigzag",
-    "backpack",
-    "splash",
-  ],
-  hook: "The old clock tower hadn't chimed in fifty years, but tonight, right at midnight, it struck thirteen times.",
-};
-
 export const GET = async () => {
-  const data = await generateJSON<WordsResponse>(PROMPT, fallback);
-  // Ensure we always have at least some words
-  if (!data.words?.length) data.words = fallback.words;
-  if (!data.hook) data.hook = fallback.hook;
-  return jsonResponse(data);
+  const data = await generateJSON<WordsData>(PROMPT, fallbackWords);
+  return jsonResponse(normalizeWordsData(data));
 };
