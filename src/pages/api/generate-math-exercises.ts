@@ -4,10 +4,10 @@ import type { APIRoute } from "astro";
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 import {
+  type MathData,
   buildMathPrompt,
   getMathConfigFromSearchParams,
   normalizeMathData,
-  type MathData,
 } from "../../lib/noah-worksheet";
 
 export const GET: APIRoute = async ({ request }) => {
