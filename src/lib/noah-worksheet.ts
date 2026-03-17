@@ -84,6 +84,16 @@ export const fallbackChallenges: ChallengesPromptData = {
     "Sit outside with your eyes closed for 2 minutes. Write down the 3 quietest sounds you heard.",
 };
 
+export const fallbackChallengeCards: ChallengesData = {
+  riddle: fallbackChallenges.riddle,
+  anagram: {
+    scrambled: "T N I E L S",
+    hint: fallbackChallenges.anagram.hint,
+  },
+  engineering: fallbackChallenges.engineering,
+  mindfulness: fallbackChallenges.mindfulness,
+};
+
 export const fallbackSketches: SketchesData = {
   exercises: [
     "Strokes and Lines Control",
@@ -551,6 +561,23 @@ export function normalizeChallengesData(
     },
     engineering: normalized.engineering,
     mindfulness: normalized.mindfulness,
+  };
+}
+
+export function normalizeChallengeCardsData(
+  data: Partial<ChallengesData> | null | undefined,
+): ChallengesData {
+  return {
+    riddle: normalizeText(data?.riddle, fallbackChallengeCards.riddle),
+    anagram: {
+      scrambled: normalizeText(
+        data?.anagram?.scrambled,
+        fallbackChallengeCards.anagram.scrambled,
+      ),
+      hint: normalizeText(data?.anagram?.hint, fallbackChallengeCards.anagram.hint),
+    },
+    engineering: normalizeText(data?.engineering, fallbackChallengeCards.engineering),
+    mindfulness: normalizeText(data?.mindfulness, fallbackChallengeCards.mindfulness),
   };
 }
 
