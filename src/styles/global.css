@@ -22,3 +22,25 @@
     line-height: 1.6;
   }
 }
+
+@layer components {
+  .prose iframe {
+    display: block;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .prose .article-embed-shell--portrait {
+    width: min(100%, 26rem);
+    aspect-ratio: auto;
+    overflow: visible;
+    margin-inline: auto;
+  }
+
+  .prose .article-embed-shell--portrait > iframe.article-embed-portrait,
+  .prose iframe.article-embed-portrait {
+    width: 100%;
+    max-width: 100%;
+    height: clamp(34rem, 78vh, 50rem);
+  }
+}

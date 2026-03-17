@@ -76,6 +76,44 @@ const filteredHeadings = headings.filter(
         >
           <Content components={components} />
         </article>
+        <script is:inline>
+          function normalizeArticleEmbeds() {
+            const article = document.querySelector(".prose");
+            if (!(article instanceof HTMLElement)) return;
+
+            const iframes = article.querySelectorAll("iframe");
+
+            for (const iframe of iframes) {
+              const src = iframe.getAttribute("src") || "";
+              const width = Number.parseFloat(iframe.getAttribute("width") || "");
+              const height = Number.parseFloat(iframe.getAttribute("height") || "");
+              const hasPortraitDimensions =
+                Number.isFinite(width) &&
+                Number.isFinite(height) &&
+                height > width * 1.1;
+              const looksLikePortraitEmbed =
+                hasPortraitDimensions ||
+                /instagram|tiktok|reel|shorts/i.test(src);
+
+              if (!looksLikePortraitEmbed) continue;
+
+              iframe.classList.add("article-embed-portrait");
+
+              const wrapper = iframe.closest(".aspect-video, [class*='aspect-video']");
+              if (wrapper instanceof HTMLElement) {
+                wrapper.classList.add("article-embed-shell", "article-embed-shell--portrait");
+              }
+            }
+          }
+
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", normalizeArticleEmbeds, {
+              once: true,
+            });
+          } else {
+            normalizeArticleEmbeds();
+          }
+        </script>
       </div>
     </article>
 

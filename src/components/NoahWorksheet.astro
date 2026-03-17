@@ -39,12 +39,42 @@ import { Printer, RefreshCw } from "@lucide/astro";
 
     <!-- SECTION 2: MATH & LOGIC -->
     <section class="print:break-before-page">
-      <div class="flex items-center justify-between mb-4 print:mb-1">
+      <div class="mb-4 flex flex-col gap-3 print:mb-1 md:flex-row md:items-center md:justify-between">
         <h3 class="text-xl font-bold uppercase tracking-widest text-white bg-slate-800 px-4 py-1.5 rounded inline-block m-0 print:text-[13px] print:px-2.5 print:py-0.5">2 | Math & Logic</h3>
-        <button type="button" id="regen-math-btn" class="text-sm font-semibold bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-blue-200 print:hidden">
-          <RefreshCw size={16} />
-          New Problems
-        </button>
+        <div class="flex flex-col gap-3 print:hidden md:items-end">
+          <div class="flex flex-wrap items-center gap-3 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2">
+            <label for="math-add-sub-max" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <span>+/- max</span>
+              <input
+                type="number"
+                id="math-add-sub-max"
+                value="200"
+                min="20"
+                max="999"
+                step="1"
+                inputmode="numeric"
+                class="w-20 rounded-md border border-blue-200 bg-white px-2 py-1 text-sm text-slate-900"
+              />
+            </label>
+            <label for="math-times-max" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <span>Times up to</span>
+              <input
+                type="number"
+                id="math-times-max"
+                value="5"
+                min="2"
+                max="12"
+                step="1"
+                inputmode="numeric"
+                class="w-16 rounded-md border border-blue-200 bg-white px-2 py-1 text-sm text-slate-900"
+              />
+            </label>
+          </div>
+          <button type="button" id="regen-math-btn" class="text-sm font-semibold bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer border border-blue-200">
+            <RefreshCw size={16} />
+            New Problems
+          </button>
+        </div>
       </div>
       <div id="section-math" class="grid grid-cols-1 gap-6 print:gap-2">
         <div class="loading-skeleton space-y-4">
@@ -199,10 +229,14 @@ import { Printer, RefreshCw } from "@lucide/astro";
     btn: HTMLButtonElement,
     containerId: string,
     action: () => Promise<void>,
+    extraDisabled: Array<HTMLInputElement | HTMLButtonElement> = [],
   ) {
     return async () => {
       const container = document.getElementById(containerId);
       btn.disabled = true;
+      extraDisabled.forEach((element) => {
+        element.disabled = true;
+      });
       const originalHtml = btn.innerHTML;
       btn.innerHTML =
         '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
@@ -212,6 +246,9 @@ import { Printer, RefreshCw } from "@lucide/astro";
         await action();
       } finally {
         btn.disabled = false;
+        extraDisabled.forEach((element) => {
+          element.disabled = false;
+        });
         btn.innerHTML = originalHtml;
         container?.classList.remove('opacity-50', 'pointer-events-none');
       }
@@ -238,6 +275,11 @@ import { Printer, RefreshCw } from "@lucide/astro";
     wordProblems: string[];
   }
 
+  interface MathConfig {
+    addSubMax: number;
+    timesMax: number;
+  }
+
   interface ChallengesData {
     riddle: string;
     anagram: { scrambled: string; hint: string };
@@ -252,6 +294,24 @@ import { Printer, RefreshCw } from "@lucide/astro";
   interface WordsData {
     words: string[];
     hook: string;
+  }
+
+  const defaultMathConfig: MathConfig = {
+    addSubMax: 200,
+    timesMax: 5,
+  };
+
+  function clampInt(
+    value: string | null | undefined,
+    min: number,
+    max: number,
+    fallback: number,
+  ): number {
+    const parsed = Number.parseInt(value ?? '', 10);
+    if (!Number.isFinite(parsed)) {
+      return fallback;
+    }
+    return Math.min(max, Math.max(min, parsed));
   }
 
   // -- Physical fallback + rendering -------------------------------------
@@ -306,14 +366,67 @@ import { Printer, RefreshCw } from "@lucide/astro";
   }
 
   // -- Math fallback + rendering -----------------------------------------
-  function sub(max: number, min = 0) {
-    const a = rand(Math.max(min + 1, 2), max);
-    const b = rand(min, a - 1);
+  function getMathConfig(): MathConfig {
+    const addSubInput = document.getElementById(
+      'math-add-sub-max',
+    ) as HTMLInputElement | null;
+    const timesInput = document.getElementById(
+      'math-times-max',
+    ) as HTMLInputElement | null;
+
+    return {
+      addSubMax: clampInt(addSubInput?.value, 20, 999, defaultMathConfig.addSubMax),
+      timesMax: clampInt(timesInput?.value, 2, 12, defaultMathConfig.timesMax),
+    };
+  }
+
+  function syncMathConfigInputs(): MathConfig {
+    const config = getMathConfig();
+    const addSubInput = document.getElementById(
+      'math-add-sub-max',
+    ) as HTMLInputElement | null;
+    const timesInput = document.getElementById(
+      'math-times-max',
+    ) as HTMLInputElement | null;
+
+    if (addSubInput) {
+      addSubInput.value = String(config.addSubMax);
+    }
+    if (timesInput) {
+      timesInput.value = String(config.timesMax);
+    }
+
+    return config;
+  }
+
+  function buildMathUrl(config: MathConfig): string {
+    const params = new URLSearchParams({
+      addSubMax: String(config.addSubMax),
+      timesMax: String(config.timesMax),
+    });
+    return `/api/generate-math-exercises?${params.toString()}`;
+  }
+
+  function addProblem(max: number): string {
+    const a = rand(0, max);
+    const b = rand(0, max - a);
+    return `${a} + ${b}`;
+  }
+
+  function subtractionProblem(max: number): string {
+    const a = rand(1, max);
+    const b = rand(0, a);
     return `${a} - ${b}`;
   }
 
-  function divProblem() {
-    const divisor = rand(2, 12);
+  function multiplicationProblem(max: number): string {
+    const a = rand(2, 12);
+    const b = rand(2, max);
+    return Math.random() < 0.5 ? `${a} x ${b}` : `${b} x ${a}`;
+  }
+
+  function divisionProblem(max: number): string {
+    const divisor = rand(2, max);
     const quotient = rand(2, 12);
     return `${divisor * quotient} / ${divisor}`;
   }
@@ -371,35 +484,71 @@ import { Printer, RefreshCw } from "@lucide/astro";
     return `A class has ${boxes} boxes of pencils with ${each} pencils in each box. ${used} pencils were used. How many pencils remain?`;
   }
 
-  function fallbackMathData(): MathData {
+  function fallbackMathData(config: MathConfig = defaultMathConfig): MathData {
     return {
-      additionSubtraction: [
-        `${rand(20, 99)} + ${rand(20, 99)}`,
-        `${rand(100, 499)} + ${rand(100, 499)}`,
-        `${rand(200, 799)} + ${rand(20, 199)}`,
-        `${rand(200, 899)} + ${rand(100, 399)}`,
-        sub(99, 10),
-        sub(299, 50),
-        sub(599, 100),
-        sub(999, 200),
-        `${rand(150, 699)} + ${rand(150, 699)}`,
-        sub(1000, 150),
-      ],
-      multiplication: Array.from(
-        { length: 8 },
-        () => `${rand(2, 12)} x ${rand(2, 12)}`,
+      additionSubtraction: Array.from({ length: 10 }, (_, index) =>
+        index < 5 ? addProblem(config.addSubMax) : subtractionProblem(config.addSubMax),
       ),
-      division: Array.from({ length: 8 }, () => divProblem()),
+      multiplication: Array.from({ length: 8 }, () =>
+        multiplicationProblem(config.timesMax),
+      ),
+      division: Array.from({ length: 8 }, () => divisionProblem(config.timesMax)),
       geometry: [geometryProblem(0), geometryProblem(1), geometryProblem(2)],
       patterns: [patternProblem(0), patternProblem(1), patternProblem(2)],
       wordProblems: [wordProblem(0), wordProblem(1), wordProblem(2), wordProblem(3)],
     };
   }
 
+  function isValidAddSub(value: string, config: MathConfig): boolean {
+    const match = value.match(/^\s*(\d+)\s*([+-])\s*(\d+)\s*$/);
+    if (!match) {
+      return false;
+    }
+
+    const left = Number.parseInt(match[1], 10);
+    const operator = match[2];
+    const right = Number.parseInt(match[3], 10);
+
+    if (left > config.addSubMax || right > config.addSubMax) {
+      return false;
+    }
+
+    const result = operator === '+' ? left + right : left - right;
+    return result >= 0 && result <= config.addSubMax;
+  }
+
+  function isValidMultiplication(value: string, config: MathConfig): boolean {
+    const match = value.match(/^\s*(\d+)\s*x\s*(\d+)\s*$/i);
+    if (!match) {
+      return false;
+    }
+
+    const left = Number.parseInt(match[1], 10);
+    const right = Number.parseInt(match[2], 10);
+    return Math.min(left, right) <= config.timesMax;
+  }
+
+  function isValidDivision(value: string, config: MathConfig): boolean {
+    const match = value.match(/^\s*(\d+)\s*\/\s*(\d+)\s*$/);
+    if (!match) {
+      return false;
+    }
+
+    const dividend = Number.parseInt(match[1], 10);
+    const divisor = Number.parseInt(match[2], 10);
+
+    if (divisor < 1 || divisor > config.timesMax) {
+      return false;
+    }
+
+    return dividend % divisor === 0;
+  }
+
   function normalizeMathList(
     list: unknown,
     count: number,
     fallbackList: string[],
+    isValid?: (value: string) => boolean,
   ): string[] {
     if (!Array.isArray(list) || list.length < count) {
       return fallbackList;
@@ -408,20 +557,32 @@ import { Printer, RefreshCw } from "@lucide/astro";
     return list.slice(0, count).map((item, index) => {
       if (typeof item !== 'string') return fallbackList[index];
       const value = item.trim();
-      return value || fallbackList[index];
+      if (!value) return fallbackList[index];
+      return isValid && !isValid(value) ? fallbackList[index] : value;
     });
   }
 
-  function normalizeMathData(data: Partial<MathData> | null | undefined): MathData {
-    const fallback = fallbackMathData();
+  function normalizeMathData(
+    data: Partial<MathData> | null | undefined,
+    config: MathConfig = defaultMathConfig,
+  ): MathData {
+    const fallback = fallbackMathData(config);
     return {
       additionSubtraction: normalizeMathList(
         data?.additionSubtraction,
         10,
         fallback.additionSubtraction,
+        (value) => isValidAddSub(value, config),
       ),
-      multiplication: normalizeMathList(data?.multiplication, 8, fallback.multiplication),
-      division: normalizeMathList(data?.division, 8, fallback.division),
+      multiplication: normalizeMathList(
+        data?.multiplication,
+        8,
+        fallback.multiplication,
+        (value) => isValidMultiplication(value, config),
+      ),
+      division: normalizeMathList(data?.division, 8, fallback.division, (value) =>
+        isValidDivision(value, config),
+      ),
       geometry: normalizeMathList(data?.geometry, 3, fallback.geometry),
       patterns: normalizeMathList(data?.patterns, 3, fallback.patterns),
       wordProblems: normalizeMathList(data?.wordProblems, 4, fallback.wordProblems),
@@ -666,15 +827,16 @@ import { Printer, RefreshCw } from "@lucide/astro";
   }
 
   async function loadMath(): Promise<void> {
+    const config = syncMathConfigInputs();
     let data: MathData;
     try {
-      data = await fetchJSON<MathData>('/api/generate-math-exercises', 12_000);
+      data = await fetchJSON<MathData>(buildMathUrl(config), 12_000);
     } catch {
-      data = fallbackMathData();
+      data = fallbackMathData(config);
     }
 
     const container = document.getElementById('section-math');
-    if (container) container.innerHTML = renderMath(normalizeMathData(data));
+    if (container) container.innerHTML = renderMath(normalizeMathData(data, config));
   }
 
   async function loadChallenges(): Promise<void> {
@@ -721,11 +883,21 @@ import { Printer, RefreshCw } from "@lucide/astro";
     'regen-physical-btn',
   ) as HTMLButtonElement;
   const mathBtn = document.getElementById('regen-math-btn') as HTMLButtonElement;
+  const mathAddSubInput = document.getElementById(
+    'math-add-sub-max',
+  ) as HTMLInputElement | null;
+  const mathTimesInput = document.getElementById(
+    'math-times-max',
+  ) as HTMLInputElement | null;
+  const mathInputs = [mathAddSubInput, mathTimesInput].filter(
+    Boolean,
+  ) as HTMLInputElement[];
   const challengesBtn = document.getElementById(
     'regen-challenges-btn',
   ) as HTMLButtonElement;
   const sketchBtn = document.getElementById('regen-sketch-btn') as HTMLButtonElement;
   const wordsBtn = document.getElementById('regen-words-btn') as HTMLButtonElement;
+  const reloadMath = withLoading(mathBtn, 'section-math', loadMath, mathInputs);
 
   if (physicalBtn) {
     physicalBtn.addEventListener(
@@ -734,7 +906,14 @@ import { Printer, RefreshCw } from "@lucide/astro";
     );
   }
   if (mathBtn) {
-    mathBtn.addEventListener('click', withLoading(mathBtn, 'section-math', loadMath));
+    syncMathConfigInputs();
+    mathBtn.addEventListener('click', reloadMath);
+    mathInputs.forEach((input) => {
+      input.addEventListener('change', reloadMath);
+      input.addEventListener('blur', () => {
+        syncMathConfigInputs();
+      });
+    });
   }
   if (challengesBtn) {
     challengesBtn.addEventListener(
