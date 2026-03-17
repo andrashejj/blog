@@ -2,12 +2,12 @@ import {
   buildMathUrl,
   clampInt,
   createMathFallback,
+  fallbackChallengeCards,
   defaultMathConfig,
-  fallbackChallenges,
   fallbackPhysical,
   fallbackSketches,
   fallbackWords,
-  normalizeChallengesData,
+  normalizeChallengeCardsData,
   normalizeMathData,
   normalizePhysicalData,
   normalizeSketchesData,
@@ -315,11 +315,14 @@ async function loadMath(): Promise<void> {
 async function loadChallenges(): Promise<void> {
   try {
     const data = await fetchJSON<ChallengesData>("/api/generate-challenges");
-    setHtml("section-challenges", renderChallenges(normalizeChallengesData(data)));
+    setHtml(
+      "section-challenges",
+      renderChallenges(normalizeChallengeCardsData(data)),
+    );
   } catch {
     setHtml(
       "section-challenges",
-      renderChallenges(normalizeChallengesData(fallbackChallenges)),
+      renderChallenges(normalizeChallengeCardsData(fallbackChallengeCards)),
     );
   }
 }
