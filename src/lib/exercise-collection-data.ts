@@ -236,4 +236,36 @@ export const exercises: ExerciseData[] = [
     surfRelevance:
       "Combines cardio fitness with pop-up mechanics under fatigue, simulating real surf conditions",
   },
+  {
+    name: "Hip Mobility Castle Builder",
+    categories: ["mobility"],
+    format: "group",
+    bodyFocus: "lower body",
+    duration: "8 min",
+    description:
+      "Start with 1 minute of slow 90-90 hip switches to perfect the movement. Then sit in a circle with legs in 90-90 position. Scoop handfuls of sand and use the hip rotation motion to move and deposit sand on the opposite side to build a castle. Coach shouts \"Pat your castle!\" — kids scoop sand from knee position, place it, and pat their castle down. Coach shouts \"Check the castle!\" — kids do a double action, checking their left partner's castle then their own castle on the right. Prettiest castle wins!",
+    variations: [
+      "Eyes closed scooping for a proprioception challenge",
+      "Race to build the tallest castle instead of prettiest",
+      "Winner chooses a partner to work with in the water during surf time",
+    ],
+    surfRelevance:
+      "Hip rotation through play — same movement pattern used in bottom turns and cutbacks on the wave",
+  },
+  {
+    name: "Duck Duck Goose — Animal Moves Edition",
+    categories: ["coordination", "cardio", "mobility"],
+    format: "group",
+    bodyFocus: "full body",
+    duration: "8 min",
+    description:
+      "Classic Duck Duck Goose with animal exercise twists! Sit in a circle. The \"It\" player walks around tapping heads saying their chosen animal movement. Instead of saying \"Goose\", they call out an animal exercise: \"Bunny!\", \"Frog!\", \"Cobra!\", \"Peeing Dog!\", \"Butterfly!\", or \"Owl!\". Everyone does the animal movement while the two players chase each other around the circle twice using those same animal moves. If tagged, the \"It\" person goes again and picks the next animal.",
+    variations: [
+      "Kids invent new animals and movements each round",
+      "Combine two animals in one round (e.g. Frog-Cobra combo)",
+      "Slow-motion round where both chasers must move in slow-mo",
+    ],
+    surfRelevance:
+      "Builds full-body mobility and coordination through play while keeping energy and group focus high between drills",
+  },
 ];
