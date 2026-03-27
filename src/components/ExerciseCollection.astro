@@ -13,13 +13,14 @@ const allFormats: Format[] = ["group", "individual", "pairs"];
 const allBodyFocus: BodyFocus[] = ["upper body", "lower body", "core", "full body"];
 ---
 
-<div class="exercise-collection not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
+<details class="exercise-collection not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact] group">
 
-  <!-- Header -->
-  <div class="px-6 py-8 border-b-2 border-slate-200 bg-gradient-to-r from-cyan-50 to-teal-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none">
+  <!-- Header / Summary (clickable to expand/collapse) -->
+  <summary class="px-6 py-8 border-b-2 border-slate-200 bg-gradient-to-r from-cyan-50 to-teal-50 rounded-t-xl text-center print:px-2 print:py-3 print:rounded-none cursor-pointer list-none [&::-webkit-details-marker]:hidden">
     <h2 class="text-3xl font-bold tracking-tight text-slate-900 m-0 print:text-xl">Surf Exercise Collection</h2>
     <p class="text-slate-500 mt-2 font-medium text-sm sm:text-base px-2 print:text-[10px] print:mt-1">
-      Tamarin Bay &bull; Kids Coaching (ages 7–9) &bull; 14 exercises
+      Tamarin Bay &bull; Kids Coaching (ages 6–9) &bull; <span id="exercise-total">{exercises.length}</span> exercises &bull;
+      <span class="text-cyan-600 font-semibold">click to expand</span>
     </p>
     <div class="flex items-center justify-center gap-3 mt-4 print:hidden">
       <button type="button" id="print-exercises-btn" class="text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-full transition-colors inline-flex items-center gap-2 cursor-pointer">
@@ -27,14 +28,14 @@ const allBodyFocus: BodyFocus[] = ["upper body", "lower body", "core", "full bod
         Print Collection
       </button>
     </div>
-  </div>
+  </summary>
 
   <!-- Filter bar -->
   <div id="filter-bar" class="px-6 py-5 border-b-2 border-slate-200 bg-slate-50/70 space-y-3 print:hidden">
     <div class="flex items-center justify-between mb-1">
       <span class="text-sm font-bold text-slate-700 uppercase tracking-wider">Filters</span>
       <div class="flex items-center gap-3">
-        <span id="exercise-count" class="text-sm text-slate-500 font-medium">Showing 12 of 12</span>
+        <span id="exercise-count" class="text-sm text-slate-500 font-medium">Showing {exercises.length} of {exercises.length}</span>
         <button type="button" id="clear-filters-btn" class="text-xs font-semibold text-slate-500 hover:text-slate-700 px-3 py-1 rounded-full border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer hidden">
           Clear all
         </button>
@@ -173,7 +174,7 @@ const allBodyFocus: BodyFocus[] = ["upper body", "lower body", "core", "full bod
       </div>
     ))}
   </div>
-</div>
+</details>
 
 <script>
   function initExerciseFilters() {
@@ -287,9 +288,26 @@ const allBodyFocus: BodyFocus[] = ["upper body", "lower body", "core", "full bod
     }
   }
 
+  function initDetailsToggle() {
+    const details = document.querySelector<HTMLDetailsElement>("details.exercise-collection");
+    if (!details) return;
+
+    // Open for print
+    window.addEventListener("beforeprint", () => details.open = true);
+
+    // Toggle hint text
+    const hint = details.querySelector<HTMLSpanElement>("summary .text-cyan-600");
+    if (hint) {
+      details.addEventListener("toggle", () => {
+        hint.textContent = details.open ? "click to collapse" : "click to expand";
+      });
+    }
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initExerciseFilters, { once: true });
+    document.addEventListener("DOMContentLoaded", () => { initExerciseFilters(); initDetailsToggle(); }, { once: true });
   } else {
     initExerciseFilters();
+    initDetailsToggle();
   }
 </script>
