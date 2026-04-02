@@ -1,0 +1,158 @@
+---
+title: "Why I'm Building an Uber for Construction (and Why It Started with a Cottage)"
+date: "2026-04-01"
+slug: "baubiber-uber-for-construction"
+summary: "The Balaton cottage renovation made one thing painfully clear: finding the right construction professional is broken. So I started building something to fix it — for both sides."
+coverImage: "/images/posts/balaton-cottage/vineyard-cottage-wide.jpeg"
+tags:
+  - product
+  - renovation
+  - startup
+  - personal
+  - construction
+  - baubiber
+---
+
+import ImageFloat from '../../src/components/mdx/ImageFloat.astro';
+import ImageGrid from '../../src/components/mdx/ImageGrid.astro';
+import CTA from '../../src/components/mdx/CTA.astro';
+
+If you read my [last post](/blog/balaton-cottage-renovation), you know I'm in the middle of turning a thatched-roof cottage above Lake Balaton into a year-round retreat. Beautiful property, strong vision, detailed mood boards, interactive floor plans — the whole package ready to go.
+
+And then I hit the wall.
+
+Not a structural wall. The other kind. The kind where you spend weeks trying to find the right architect, the right builder, the right *anyone* — and realize the entire process is fundamentally broken.
+
+## The search
+
+<ImageFloat src="/images/posts/balaton-cottage/kitchen-current.jpeg" alt="The current kitchen at the Balaton cottage — ready for a complete transformation, but finding someone to do it is another story" side="right" width="42%">
+
+It started innocently. I posted in a few Facebook groups. I asked friends. I asked friends of friends. I messaged architects whose portfolios I liked on Instagram. I filled out contact forms on websites that looked like they hadn't been updated since 2014.
+
+Most of my messages went completely unanswered. The ones that did respond often hadn't read what I sent — one architect quoted me for a full new build, another asked if I needed help with "office interiors." Someone offered to install a pool, which would be impressive given that the property is on a hillside vineyard.
+
+But here's the part that really stung: we actually did find architects. Twice. Both through personal recommendations — not cold outreach, not random internet searches, but someone-I-trust-vouching-for-them recommendations. The kind of referral that's supposed to be the gold standard.
+
+We worked with the first one. The quality was terrible. Went back to the drawing board, found a second through another recommendation. Same story. Poor output, misaligned expectations, and weeks of our time wasted each time.
+
+</ImageFloat>
+
+I'm not a difficult client. I came with a detailed brief, professional-quality photos, floor plans, mood boards, a clear budget range, and a timeline. If anything, I made it *too* easy. And even when the traditional recommendation system "worked" — even when someone personally vouched for a professional — the result was still disappointing. Twice.
+
+<Divider />
+
+## The realization
+
+Here's what hit me: this isn't a *me* problem. This is a *market* problem. And it's worse than I thought — because even the "solution" everyone tells you to use (ask someone you trust for a recommendation) doesn't actually solve it.
+
+<Callout type="info">
+  The construction industry is one of the last major sectors where finding, vetting, and hiring a professional still runs almost entirely on word-of-mouth, cold calls, and luck. And word-of-mouth? It doesn't scale, and it doesn't guarantee quality.
+</Callout>
+
+Think about how you book a ride. Open an app, see who's nearby, check their rating, tap a button. Think about how you find a restaurant. Search, read reviews, look at photos, make a reservation. Now think about how you find someone to renovate your kitchen. You ask your neighbor. You scroll through a Facebook group. You hope for the best. And even when you get a name from someone you trust — you have no way to verify whether that person is actually right for *your* project.
+
+The information asymmetry is staggering. As a homeowner, you have no idea what a fair price is, what a realistic timeline looks like, or whether the person you're hiring has ever done anything like your project before. And as a professional, you're drowning in tire-kickers and poorly scoped requests, spending hours on site visits that go nowhere, and competing on price because there's no way to compete on quality.
+
+Both sides are suffering. And both sides deserve better.
+
+## The other side of the table
+
+<ImageFloat src="/images/posts/balaton-cottage/master-bedroom-beams.jpeg" alt="The master bedroom with its exposed wooden beams — beautiful bones, but finding the right person to unlock its potential took longer than expected" side="left" width="42%">
+
+I started talking to contractors. Plumbers, electricians, architects, project managers — anyone who'd give me 20 minutes. And I heard the same story over and over:
+
+*"I get 50 messages a week. Maybe 5 are real projects. The rest are people who want a free quote and then ghost me."*
+
+*"I spend more time writing proposals than doing actual work."*
+
+*"By the time I've done a site visit, taken measurements, and written up a quote, the client has already gone with someone cheaper who'll cut corners."*
+
+The good professionals — the ones you *want* working on your home — are buried under noise. They don't need more leads. They need *better* leads. Projects that are well-documented, fairly budgeted, and ready to go.
+
+</ImageFloat>
+
+Sound familiar? I had exactly that for my Balaton cottage — a fully documented, well-budgeted, ready-to-go project — and I *still* couldn't connect with the right person efficiently.
+
+<Divider />
+
+## So I started building something
+
+I'm a developer. When I see a broken process, my instinct is to build a tool. So I did.
+
+It's called **Baubiber** — a play on "Bau" (German for construction) and "Biber" (beaver, nature's most relentless builder). It's a side project. Not a company, not a startup with a pitch deck and a funding round. Just something I'm building because the problem is real and I think technology can genuinely help.
+
+<figure className="my-8">
+  <div className="rounded-xl overflow-hidden shadow-lg">
+    <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
+      <iframe
+        src="https://www.youtube.com/embed/V2NUCV13xBc"
+        style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        title="Baubiber — product demo"
+      />
+    </div>
+  </div>
+  <figcaption className="text-center text-sm text-gray-500 dark:text-gray-400 mt-3">
+    A quick walkthrough of how Baubiber works — from photo to matched professional.
+  </figcaption>
+</figure>
+
+The idea is simple: **make it as easy to find a construction professional as it is to call an Uber.** But instead of matching drivers to riders, you're matching renovation projects to the right professionals — based on skills, location, availability, and past work.
+
+Here's how it works:
+
+You take photos of what needs fixing or renovating. The app uses AI to analyze the images — it identifies the type of work, estimates scope, and generates a structured project brief. No more writing vague descriptions or forgetting to mention that the ceiling is 4 meters high. The AI captures what matters.
+
+Then Baubiber matches your project to professionals who actually do that kind of work, in your area, and who are currently available. Not a list of 200 results you have to scroll through. A curated shortlist of people who are genuinely relevant.
+
+The professionals see rich, well-documented projects — photos, AI analysis, scope, budget range — and can decide in seconds whether it's worth their time. When they're interested, they submit a proper offer. You compare offers side by side. You pick the one that fits. Done.
+
+<Callout type="info" title="Both sides win">
+  Homeowners get matched with vetted professionals who've seen the full picture before making contact. Professionals get pre-qualified, well-documented leads instead of noise. The entire cycle — from "I have a problem" to "I have an offer" — shrinks from weeks to days.
+</Callout>
+
+## What makes this different
+
+There are platforms out there. MyHammer, Houzz, various local directories. I've used them. The fundamental issue is that most of them are just lead-generation tools — they blast your request to everyone and let the market sort it out. That's how you end up with the pool guy quoting on your interior renovation.
+
+<ImageFloat src="/images/posts/balaton-cottage/vineyard-balaton-view.jpeg" alt="The view from the cottage through the vineyard toward Lake Balaton — the kind of project that deserves the right professional" side="right" width="44%">
+
+Baubiber is different because the AI layer does the heavy lifting upfront. By the time a professional sees your project, it's already been analyzed, categorized, and matched. And by the time you see an offer, the professional has already reviewed detailed documentation of your project.
+
+It's not about *more* connections. It's about the *right* connection.
+
+The other thing I care about: **transparency**. The platform shows you what similar projects cost in your area. It shows professionals' past work. It gives both sides enough information to make a confident decision without the usual three weeks of back-and-forth.
+
+</ImageFloat>
+
+## Where it stands
+
+It's early. The app is live, people are using it, and the feedback has been surprisingly strong — especially from professionals who are tired of the current lead-gen model. A few contractors told me this is the first platform that actually respects their time. That felt good.
+
+I'm not trying to scale this into a unicorn. I'm trying to solve a problem I personally have, and it turns out a lot of other people have it too. Every time I mention it at a dinner party, someone says "oh god, I've been looking for a good electrician for months." Every. Single. Time.
+
+<Divider />
+
+## Full circle
+
+<ImageFloat src="/images/posts/balaton-cottage/terrace-pergola-side.jpeg" alt="The cottage terrace and pergola — project Hegylakó is one of the first real projects on Baubiber" side="left" width="44%">
+
+The irony isn't lost on me. I started building Baubiber because I couldn't find an architect for my Balaton cottage. The cottage renovation — project Hegylakó, as we call it — is now one of the first real projects on the platform. If this works the way I think it can, the next person standing on a hilltop with a vision and a bunch of mood boards won't have to go through what I went through.
+
+They'll take photos, let the AI do its thing, and have a shortlist of the right people by the time they finish their coffee.
+
+That's the dream, anyway. Right now it's a side project, a lot of late nights, and a growing conviction that this particular problem — connecting homeowners with the right construction professionals — is solvable with the right technology.
+
+</ImageFloat>
+
+<CTA title="Try Baubiber" linkText="Download the app" linkHref="https://baubiber.com/de/#download">
+
+Baubiber is live on [iOS](https://apps.apple.com/us/app/baubiber/id6755410809) and [Android](https://play.google.com/store/apps/details?id=com.baubiber.app). If you want to follow development and share feedback, join the [Baubiber Feedback Group](https://groups.google.com/g/baubiber-feedback). And if you're a construction professional curious about getting better leads — I especially want to hear from you.
+
+</CTA>
+
+---
+
+*Building something or renovating something? Let's compare war stories.* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
