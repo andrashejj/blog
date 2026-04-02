@@ -1,0 +1,28 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  side?: "left" | "right";
+  width?: string;
+}
+
+const { src, alt, side = "right", width = "45%" } = Astro.props;
+
+const floatClass = side === "left" ? "float-left mr-6 mb-4" : "float-right ml-6 mb-4";
+---
+
+<div class="not-prose overflow-hidden" style="clear: both;">
+  <figure class={`${floatClass} mt-1`} style={`width: ${width}; max-width: 380px;`}>
+    <img
+      src={src}
+      alt={alt}
+      class="w-full rounded-2xl border border-gray-200 shadow-md"
+      loading="lazy"
+    />
+    {alt && (
+      <figcaption class="mt-2 text-xs text-gray-400 italic text-center">{alt}</figcaption>
+    )}
+  </figure>
+  <slot />
+</div>
+<div style="clear: both;"></div>

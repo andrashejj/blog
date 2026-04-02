@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  linkText?: string;
+  linkHref?: string;
+}
+
+const { title, linkText, linkHref } = Astro.props;
+---
+
+<div class="not-prose my-10 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-6 md:p-8">
+  <h3 class="text-xl font-bold text-gray-800 mb-3">{title}</h3>
+  <div class="text-gray-600 leading-relaxed mb-4">
+    <slot />
+  </div>
+  {linkText && linkHref && (
+    <a
+      href={linkHref}
+      class="inline-block rounded-xl bg-gray-800 px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-700 hover:shadow-lg"
+    >
+      {linkText} &rarr;
+    </a>
+  )}
+</div>
