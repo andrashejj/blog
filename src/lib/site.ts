@@ -3,8 +3,8 @@ export const site = {
   title: "Andras Hejj",
   description:
     "Thoughts on engineering, product, and building things that matter.",
-  domain: "andrashejj.com",
-  url: "https://andrashejj.com",
+  domain: "www.andrashejj.com",
+  url: "https://www.andrashejj.com",
   author: "Andras Hejj",
   email: "hello@andrashejj.com",
   social: {

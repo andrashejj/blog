@@ -8,7 +8,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
 export default defineConfig({
-  site: "https://andrashejj.com",
+  site: "https://www.andrashejj.com",
   output: "static",
   adapter: vercel({
     webAnalytics: { enabled: true },
