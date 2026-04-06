@@ -21,10 +21,9 @@ export function buildSeo({
   const safeTitle = title ? `${title} | ${site.name}` : site.title;
   const safeDescription = description || site.description;
   const canonicalUrl = `${site.url}${path || ""}`;
-  const rawImage = image || "/images/posts/default-cover.svg";
-  const safeImage = rawImage.startsWith("http")
-    ? rawImage
-    : `${site.url}${rawImage}`;
+  const ogPath =
+    !path || path === "/" ? "/og/index.png" : `/og${path}.png`;
+  const safeImage = `${site.url}${ogPath}`;
 
   return {
     title: safeTitle,
