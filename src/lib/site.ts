@@ -18,4 +18,5 @@ export const staticPages = [
   { path: "/", priority: 1.0 },
   { path: "/blog", priority: 0.9 },
   { path: "/about", priority: 0.8 },
+  { path: "/subscribe", priority: 0.6 },
 ] as const;
