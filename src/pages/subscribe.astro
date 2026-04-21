@@ -1,0 +1,178 @@
+---
+import { Rss } from "@lucide/astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { site } from "../lib/site";
+
+const feedUrl = `${site.url}/rss.xml`;
+const feedlyUrl = `https://feedly.com/i/subscription/feed/${encodeURIComponent(feedUrl)}`;
+const inoreaderUrl = `https://www.inoreader.com/?add_feed=${encodeURIComponent(feedUrl)}`;
+const feedbinUrl = `https://feedbin.com/?subscribe=${encodeURIComponent(feedUrl)}`;
+const feedHref = `feed:${feedUrl}`;
+---
+
+<SiteLayout
+  title='Subscribe'
+  description={`Subscribe to ${site.name}'s RSS feed to get new posts in your reader of choice.`}
+  path='/subscribe'
+>
+  <section class='mx-auto max-w-[68ch]'>
+    <h1 class='text-4xl leading-tight tracking-[-0.03em]'>Subscribe</h1>
+    <p class='mt-3 text-muted'>
+      New posts land in your reader the moment they're published — no algorithm,
+      no inbox clutter, no account required.
+    </p>
+
+    <div class='mt-8 rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-soft md:p-8'>
+      <div class='flex items-start gap-4'>
+        <span
+          class='inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand'
+          aria-hidden='true'
+        >
+          <Rss size={24} />
+        </span>
+        <div class='min-w-0'>
+          <h2 class='text-2xl tracking-[-0.02em]'>RSS feed</h2>
+          <p class='mt-1 text-muted'>
+            Copy the URL below into any RSS reader.
+          </p>
+          <code
+            class='mt-3 block overflow-x-auto rounded-lg border border-[#dfe7f7] bg-[#eef2fb] px-3 py-2 text-sm text-[#26324d]'
+          >
+            {feedUrl}
+          </code>
+          <div class='mt-4 flex flex-wrap gap-3'>
+            <a
+              href='/rss.xml'
+              class='inline-flex items-center gap-2 rounded-full border-2 border-brand bg-brand px-4 py-2 font-bold text-white transition hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+            >
+              <Rss size={16} />
+              Open feed
+            </a>
+            <a
+              href={feedHref}
+              class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+            >
+              Open in default reader
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class='mt-10'>
+      <h2 class='text-2xl tracking-[-0.02em]'>One-click subscribe</h2>
+      <p class='mt-2 text-muted'>
+        Already using one of these? Jump straight in.
+      </p>
+      <ul class='mt-4 grid gap-3 sm:grid-cols-3'>
+        <li>
+          <a
+            href={feedlyUrl}
+            target='_blank'
+            rel='noreferrer'
+            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
+          >
+            Feedly
+          </a>
+        </li>
+        <li>
+          <a
+            href={inoreaderUrl}
+            target='_blank'
+            rel='noreferrer'
+            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
+          >
+            Inoreader
+          </a>
+        </li>
+        <li>
+          <a
+            href={feedbinUrl}
+            target='_blank'
+            rel='noreferrer'
+            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
+          >
+            Feedbin
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class='mt-10'>
+      <h2 class='text-2xl tracking-[-0.02em]'>New to RSS?</h2>
+      <p class='mt-2 text-muted'>
+        RSS is an open format that lets you follow blogs without giving anyone
+        your email or handing over an algorithm the keys to your attention. Pick
+        a reader, paste the feed URL, and you're done. A few good starting points:
+      </p>
+      <ul class='mt-3 list-disc space-y-1 pl-5 text-muted'>
+        <li>
+          <a
+            href='https://feedly.com'
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            Feedly
+          </a> — web and mobile, free tier.
+        </li>
+        <li>
+          <a
+            href='https://www.inoreader.com'
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            Inoreader
+          </a> — powerful filters and rules.
+        </li>
+        <li>
+          <a
+            href='https://netnewswire.com'
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            NetNewsWire
+          </a> — free, open source, Apple-only.
+        </li>
+      </ul>
+    </section>
+
+    <section class='mt-10'>
+      <h2 class='text-2xl tracking-[-0.02em]'>Other ways to follow</h2>
+      <ul class='mt-3 list-disc space-y-1 pl-5 text-muted'>
+        <li>
+          <a
+            href={site.social.x}
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            X / Twitter
+          </a>
+        </li>
+        <li>
+          <a
+            href={site.social.linkedin}
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li>
+          <a
+            href={site.social.github}
+            target='_blank'
+            rel='noreferrer'
+            class='text-brand-strong underline'
+          >
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </section>
+  </section>
+</SiteLayout>

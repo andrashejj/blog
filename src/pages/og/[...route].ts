@@ -18,6 +18,10 @@ pages["about"] = {
   title: "About",
   description: site.description,
 };
+pages["subscribe"] = {
+  title: "Subscribe",
+  description: `RSS feed for ${site.name}'s posts.`,
+};
 
 for (const post of posts) {
   pages[`blog/${post.data.slug}`] = {
