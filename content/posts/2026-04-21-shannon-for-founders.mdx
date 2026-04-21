@@ -13,56 +13,92 @@ tags:
   - craft
 ---
 
-Shannon's [*A Mathematical Theory of Communication*](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) (1948) is the paper that gave us the bit, entropy, and channel capacity. On the surface it's about telegraphs and telephones. Underneath it's a theory of what it even means to transmit something from one mind to another through a noisy medium — which is exactly what sales and fundraising are.
+I picked up Shannon's [*A Mathematical Theory of Communication*](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) again last week, on the train back from a round of investor meetings. I had told the same story five times in four days, watched it land well twice, sink without trace once, and get politely misunderstood the other two. By the time I sat down, I wasn't thinking about entropy in the abstract — I was trying to figure out what had actually happened inside those rooms.
 
-A few of the claims map almost too cleanly.
+The paper is from 1948. On the surface it's about telegraphs and telephones. Underneath, it's a theory of what it even means to move something from one mind to another through a noisy medium. Which, if you squint, is exactly what sales and fundraising are.
+
+A few of the claims map almost too cleanly. I want to walk through the ones I keep coming back to.
 
 ## Information is selection
 
-Shannon's opening move is to strip out meaning entirely: the engineering problem is that one message gets selected from a set the receiver was already entertaining, and information is how much that selection narrows the possibility space.
+Shannon's opening move is the thing everyone remembers but few people take seriously: he strips meaning out entirely. The engineering problem, he says, is that one message gets selected from a set the receiver was already considering, and *information* is how much that selection narrows the possibility space.
 
-For sales this is unforgiving. If a wealth-platform CIO hears "AI-powered financial intelligence" and files it under "another AI vendor," you've transmitted zero bits. You have to land inside a set they're actively considering — analyst-capacity problem, personalization at scale, compliant advice automation — and then narrow it.
+That framing is unforgiving for a founder.
 
-Your 30-second pitch ("personalized investment advice at scale, without hiring more analysts") does this well. Longer decks tend to drift back toward the high-probability strings that carry no information.
+If a wealth-platform CIO hears "AI-powered financial intelligence" and silently files it under *another AI vendor*, you have transmitted zero bits. The set they were entertaining didn't narrow. You didn't show up inside any of the buckets they actually care about — analyst-capacity problem, personalization at scale, compliant advice automation — so nothing got selected, and nothing got communicated.
+
+The 30-second version of our pitch ("personalized investment advice at scale, without hiring more analysts") works because it lands directly inside a bucket the buyer is already thinking in, and then narrows it. The 10-minute version tends to drift back toward the high-probability phrases that carry no information at all.
 
 ## Entropy is surprise-per-symbol
 
-A sentence like "we're AI-powered, building the future of finance" has near-zero entropy for a fintech investor because every pitch says it. A sentence like "10 signed LOIs representing 500K+ end-users, Liminal-backed, SIX as brokerage partner, SRO coverage across FX/commodities/digital assets" has high entropy — very few companies can emit that sequence.
+Shannon defines the entropy of a source as the average surprise of the next symbol. High entropy means the next thing out of your mouth was hard to predict. Low entropy means it could have come from almost anyone.
+
+"We're AI-powered, building the future of finance" has near-zero entropy for a fintech investor, because every pitch on their calendar says a version of the same thing. There's nothing to update on.
+
+"10 signed LOIs representing 500K+ end-users, Liminal-backed, SIX as brokerage partner, SRO coverage across FX, commodities, and digital assets" is high entropy. Very few companies on earth could emit that exact sequence. Every clause changes the posterior.
 
 <Callout type="info" title="Rule of thumb">
-  Every sentence in a pitch should be one that couldn't have been said by a random company in your category. If it could, it's carrying no information, just costing capacity.
+  Every sentence in a pitch should be one a random company in your category couldn't have said. If it could, it isn't carrying information — it's just costing capacity.
 </Callout>
+
+I now read my own decks with a highlighter, crossing out anything a generic competitor could say word-for-word. What's left is usually half the length and twice as useful.
 
 ## Efficient coding matches source statistics
 
-Morse gave "E" a dot and "Q" a long sequence because E is common. In a pitch, concepts the receiver already processes fluently (fiduciary duty, advice at scale, MiFID) deserve short codes — lean on them, don't re-explain. Rare, novel concepts (causal knowledge graph, temporal asset overlay, Mastra runtime) deserve the longer codes.
+Morse gave "E" a single dot and "Q" a long sequence because E is common in English. Good coding matches the length of each symbol to how often it appears.
 
-The common failure mode is the opposite: founders over-explain what the buyer already knows and under-explain the genuinely new thing. Swap the lengths.
+Pitches work the same way. Concepts the receiver already processes fluently — fiduciary duty, advice at scale, MiFID — deserve short codes. Lean on them. Don't re-explain. The listener's brain autocompletes and you spend nothing.
 
-## Redundancy fights noise, but has a budget
+Concepts that are genuinely new — causal knowledge graph, temporal asset overlay, Mastra runtime — deserve the longer codes. Spell them out, give the example, earn the bandwidth.
 
-Shannon calculates English at ~50% redundant — which is what lets you still read a text with typos. Sales and fundraising channels are spectacularly noisy: the buyer is distracted, half-remembers the last call, has three other vendors in their head.
+The common failure mode is the exact inversion: founders over-explain what the buyer already knows (the *why now* for AI in finance, the regulatory tailwind, the market size) and under-explain the genuinely new thing (the specific architectural claim that makes the company different). Swap the lengths.
 
-Redundancy across touchpoints (cold email → deck → meeting → follow-up, each carrying the same core message in a different encoding) is exactly right. Redundancy within a single message — saying the same thing three ways in one paragraph — burns capacity the receiver could have spent on a second point.
+## Redundancy fights noise — but it has a budget
 
-The craft is knowing which redundancy you're in.
+Shannon calculates English at roughly 50% redundant. Which is why you can still read a sentence riddlled with tyops. Redundancy buys you error correction.
+
+Sales and fundraising channels are spectacularly noisy. The buyer is distracted, half-remembers the last call, has three competitors loitering in the back of their head, and will probably re-tell your pitch to a partner in their own words tomorrow morning.
+
+That means you want redundancy *across* touchpoints: cold email → deck → meeting → follow-up, each carrying the same core message in a different encoding. A good founder story survives any one of those channels dropping out.
+
+What you don't want is redundancy *within* a single message — saying the same thing three different ways inside one paragraph. That burns capacity the receiver could have spent on a second point. A lot of decks are full of this: the traction slide says the same number in a bar chart, a logo wall, and a sentence, when it could have used the extra surface area to land the *next* bit.
+
+The craft is knowing which redundancy you're currently in.
 
 ## Channel capacity is real, and smaller than you think
 
-A 30-minute investor meeting has a capacity of maybe two or three bits that survive to the partner meeting: [category], [one differentiator], [one proof point]. Shannon's coding theorem says that below capacity you can get arbitrarily high fidelity; above it, no amount of cleverness rescues you.
+This is the one that hurt when I first internalized it.
 
-So the decision is which two or three bits you ship. Motif's current set — [B2B2C wealth intelligence], [causal graph, not RAG/sentiment], [traction + regulated path] — is a good set. Resist the urge to add a fourth.
+A 30-minute investor meeting has a capacity of maybe two or three bits that actually survive to the partner meeting: `[what category are they in]`, `[one differentiator]`, `[one proof point]`. That's it. Everything else is either reinforcing those three or leaking out the sides.
 
-## Equivocation is what to fix next
+Shannon's coding theorem says that below capacity you can get arbitrarily high fidelity — you can, in principle, land your message perfectly. Above capacity, no amount of cleverness rescues you. You can't talk faster around the limit.
 
-After a pitch, the receiver has residual uncertainty about what you actually are — Shannon calls this H_y(x). The second meeting's agenda should be whatever the equivocation was after the first, not a re-transmission of what already got through.
+So the real decision is which three bits you ship. For Motif right now, the set is `[B2B2C wealth intelligence]`, `[causal graph, not RAG/sentiment]`, `[traction plus a regulated path]`. It's a good set. The temptation every single meeting is to add a fourth. Resist it. The fourth bit doesn't get transmitted — it dislodges one of the first three.
 
-This is why a good investor-FAQ doc is so leveraged: it drives down equivocation for the items you know come up.
+## Equivocation tells you what to fix next
+
+After a pitch, the receiver has residual uncertainty about what you actually are. Shannon calls this *equivocation* — `H_y(x)`, the conditional entropy of the source given what was received.
+
+That residual is diagnostic. It tells you exactly where the channel failed.
+
+The second meeting's agenda should be whatever the equivocation was after the first — not a re-transmission of what already got through. This sounds obvious and is almost never done. Founders tend to re-run the deck with slightly different adjectives, hoping volume will do what clarity didn't.
+
+It's also why a good investor-FAQ doc is so absurdly leveraged. You write it once, and it drives down equivocation on the handful of questions you *know* come up on every call. The marginal cost is a weekend. The marginal return is every conversation afterward starting one step closer to yes.
 
 <Divider />
 
 ## The semantic content is "irrelevant"
 
-Shannon's most provocative move is the claim that the semantic content is irrelevant to the engineering problem. That's uncomfortable for a craft-minded builder, because meaning is the whole point of the thing you're making.
+Shannon's most provocative line is the one that sits awkwardly on the first page: the semantic aspects of communication are irrelevant to the engineering problem.
 
-But the right reading is: the meaning can be completely intact inside you and still not arrive. Sales and fundraise are not about having a good thing; they're the transmission layer for the good thing. Treating them as an engineering problem — sources, channels, capacity, noise, coding — is, ironically, the most respectful thing you can do to the underlying work.
+That's uncomfortable for anyone who cares about their craft, because meaning is the whole point of the thing you're building. You didn't spend two years on the product so it could be reduced to three bits over a rosé.
+
+But the right reading isn't nihilistic. It's this: the meaning can be completely intact inside you, fully formed and true, and still not arrive. Sales and fundraising are not about having a good thing. They're the transmission layer for the good thing.
+
+Treating that layer as an engineering problem — sources, channels, capacity, noise, coding — is, paradoxically, the most respectful thing you can do to the underlying work. It's the difference between hoping your message gets through and designing for it.
+
+Shannon didn't tell us what to say. He told us how much of it the wire can carry. The rest is on us.
+
+---
+
+*Want to chat?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
