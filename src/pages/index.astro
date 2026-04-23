@@ -26,47 +26,68 @@ const today = new Date().toLocaleDateString("en-GB", {
     <div class='rule-horizontal mt-3'></div>
     <div class='rule-horizontal mt-[3px]'></div>
 
-    <div class='grid gap-8 py-8 md:grid-cols-[1.2fr_auto_1fr] md:items-end md:gap-10 md:py-10'>
+    <div class='grid gap-10 py-10 md:grid-cols-[1.35fr_minmax(0,0.9fr)] md:items-center md:gap-14 md:py-12'>
       <div>
         <p class='eyebrow mb-3'>Field notes from the studio</p>
         <h1
           class='font-display leading-[0.92] tracking-[-0.035em] text-ink'
-          style='font-size: clamp(3.2rem, 9vw, 6.6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+          style='font-size: clamp(2.8rem, 8vw, 6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
         >
           Hi, I'm <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;'>Andras</span>.
         </h1>
-        <p class='mt-4 max-w-[48ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
+        <p class='mt-5 max-w-[50ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
           <span class='font-display italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Founder</span>,
           software engineer, husband, dad. Writing on the practice of building —
           and the quieter art of showing up.
         </p>
-      </div>
-
-      <div class='hidden self-stretch md:block' aria-hidden='true'>
-        <div class='mx-3 h-full w-px bg-rule'></div>
-      </div>
-
-      <aside class='md:text-right'>
-        <div class='eyebrow mb-2'>Currently</div>
-        <ul class='space-y-2 font-display text-[1.05rem] leading-snug text-ink-soft'>
-          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
-            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>made in</span>
-            <span class='italic' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Budapest</span>
-          </li>
-          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
-            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>grown in</span>
-            <span class='italic' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Switzerland</span>
-          </li>
-          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
-            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>living in</span>
-            <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Mauritius</span>
-          </li>
-        </ul>
-        <div class='mt-5 flex gap-2 md:justify-end'>
+        <div class='mt-7 flex flex-wrap gap-2'>
           <a href='/blog' class='stamp no-rule text-terracotta transition hover:bg-terracotta hover:text-paper'>Read the archive →</a>
           <a href='/about' class='stamp no-rule text-pine transition hover:bg-pine hover:text-paper'>About</a>
         </div>
-      </aside>
+      </div>
+
+      <!-- Editorial portrait: framed photo with caption strip -->
+      <figure class='relative mx-auto w-full max-w-[360px] md:mx-0 md:justify-self-end'>
+        <div class='relative border border-ink bg-surface p-2 shadow-[10px_10px_0_0_rgba(27,23,19,0.08)]'>
+          <div class='relative aspect-[4/5] overflow-hidden border border-rule'>
+            <img
+              src='/images/posts/andras.png'
+              alt='Portrait of Andras'
+              loading='eager'
+              width='360'
+              height='450'
+              class='h-full w-full object-cover'
+              style='filter: contrast(1.04) saturate(0.88) sepia(0.1);'
+            />
+            <span
+              class='pointer-events-none absolute inset-0 mix-blend-multiply'
+              style='background-image: var(--grain); opacity: 0.4;'
+              aria-hidden='true'
+            ></span>
+            <span class='pointer-events-none absolute left-2 top-2 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-paper mix-blend-difference'>
+              Plate №01
+            </span>
+          </div>
+        </div>
+
+        <figcaption class='mt-4 space-y-1.5 text-ink-soft'>
+          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+            <span aria-hidden='true'>💕</span>
+            <span class='text-muted'>Made with heart in</span>
+            <span class='italic text-ink' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Budapest</span>
+          </p>
+          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+            <span aria-hidden='true'>🌳</span>
+            <span class='text-muted'>Grown up in</span>
+            <span class='italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Switzerland</span>
+          </p>
+          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+            <span aria-hidden='true'>🏄</span>
+            <span class='text-muted'>Surfing in</span>
+            <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Mauritius</span>
+          </p>
+        </figcaption>
+      </figure>
     </div>
     <div class='rule-horizontal'></div>
   </section>
