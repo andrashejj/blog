@@ -1,24 +1,282 @@
 ---
-import { render } from "astro:content";
-
 import SiteLayout from "../layouts/SiteLayout.astro";
-import { getPageBySlug } from "../lib/content";
+import { site } from "../lib/site";
 
-const aboutPage = await getPageBySlug("about");
+const ventures = [
+  {
+    name: "NBK Labs",
+    tagline: "Earlier chapter. Building from zero, learning by shipping.",
+    accent: "from-[#0b69ff] to-[#6aa6ff]",
+    glyph: "N",
+  },
+  {
+    name: "Motif Labs",
+    tagline: "Current focus. Crafting products that feel inevitable.",
+    accent: "from-[#7c5cff] to-[#b592ff]",
+    glyph: "M",
+  },
+];
 
-if (!aboutPage) {
-  throw new Error("Missing content/pages/about.mdx");
-}
+const topics = [
+  { label: "Engineering & product", color: "bg-[#eaf1ff] text-[#0852c9]" },
+  { label: "Startups & company building", color: "bg-[#f1ecff] text-[#5a3fd6]" },
+  { label: "Family, focus & life", color: "bg-[#fff0e6] text-[#b5541f]" },
+];
 
-const { Content } = await render(aboutPage);
+const places = [
+  { emoji: "💕", label: "Made in", place: "Budapest" },
+  { emoji: "🌳", label: "Grown in", place: "Switzerland" },
+  { emoji: "🏄", label: "Living in", place: "Mauritius" },
+];
+
+const socials = [
+  {
+    label: "X",
+    handle: "@andrashejj",
+    href: site.social.x,
+    icon: "x",
+  },
+  {
+    label: "GitHub",
+    handle: "andrashejj",
+    href: site.social.github,
+    icon: "github",
+  },
+  {
+    label: "LinkedIn",
+    handle: "andras hejj",
+    href: site.social.linkedin,
+    icon: "linkedin",
+  },
+];
 ---
 
-<SiteLayout title='About' path='/about'>
-  <article class='rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f8fbff] p-6 shadow-soft md:p-9'>
-    <div
-      class='prose prose-slate max-w-none prose-headings:tracking-[-0.02em] prose-a:text-brand-strong prose-a:underline prose-code:before:content-none prose-code:after:content-none'
-    >
-      <Content />
-    </div>
-  </article>
+<SiteLayout title='About' path='/about' description='Founder, software engineer, husband, and dad — building from Mauritius.'>
+  <div class='space-y-10 md:space-y-14'>
+    <!-- HERO -->
+    <section class='reveal relative overflow-hidden rounded-[26px] border border-border bg-white shadow-soft'>
+      <!-- decorative background -->
+      <div class='pointer-events-none absolute inset-0 -z-0'>
+        <div class='absolute -right-24 -top-24 h-[360px] w-[360px] rounded-full bg-gradient-to-br from-[#e9f0ff] to-[#f5ecff] blur-2xl'></div>
+        <div class='absolute -left-20 -bottom-24 h-[280px] w-[280px] rounded-full bg-gradient-to-tr from-[#fff0e6] to-[#e9f0ff] blur-2xl'></div>
+      </div>
+
+      <div class='relative grid gap-8 p-6 md:grid-cols-[220px_1fr] md:items-center md:gap-10 md:p-12'>
+        <div class='relative mx-auto md:mx-0'>
+          <div class='absolute -inset-2 rounded-[28px] bg-gradient-to-br from-brand/30 to-[#b592ff]/30 blur-xl'></div>
+          <img
+            src='/images/posts/andras.png'
+            alt='Portrait of Andras Hejj'
+            width='220'
+            height='220'
+            loading='eager'
+            class='relative h-[180px] w-[180px] rounded-[24px] border-4 border-white object-cover shadow-[0_20px_40px_rgba(15,23,42,0.18)] md:h-[220px] md:w-[220px]'
+          />
+          <span class='absolute -bottom-3 -right-3 inline-flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-white text-xl shadow-card'>👋</span>
+        </div>
+
+        <div class='min-w-0'>
+          <p class='mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur'>
+            <span class='inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse'></span>
+            About
+          </p>
+          <h1 class='text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-[-0.03em]'>
+            Hi, I'm <span class='bg-gradient-to-r from-brand to-[#7c5cff] bg-clip-text text-transparent'>Andras</span>.
+          </h1>
+          <p class='mt-3 max-w-[52ch] text-lg text-muted md:text-xl'>
+            Founder, software engineer, husband, and dad — building quietly, shipping consistently, and trying to show up fully in every part of it.
+          </p>
+
+          <!-- location chips -->
+          <div class='mt-5 flex flex-wrap gap-2'>
+            {places.map((p) => (
+              <span class='inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-3 py-1.5 text-sm backdrop-blur'>
+                <span aria-hidden='true'>{p.emoji}</span>
+                <span class='text-muted'>{p.label}</span>
+                <span class='font-semibold text-text'>{p.place}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I'M BUILDING -->
+    <section class='reveal' style='animation-delay:80ms'>
+      <div class='mb-5 flex items-end justify-between gap-4'>
+        <div>
+          <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Work</p>
+          <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>What I'm building</h2>
+        </div>
+        <p class='hidden max-w-[32ch] text-sm text-muted md:block'>~20 years of building products and companies — from bigger orgs to my own ventures.</p>
+      </div>
+
+      <div class='grid gap-4 md:grid-cols-2'>
+        {ventures.map((v) => (
+          <div class='group relative overflow-hidden rounded-[20px] border border-border bg-white p-6 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-soft'>
+            <div class={`pointer-events-none absolute inset-x-0 -top-24 h-48 bg-gradient-to-br ${v.accent} opacity-10 blur-2xl transition-opacity duration-300 group-hover:opacity-20`}></div>
+            <div class='relative flex items-start gap-4'>
+              <div class={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${v.accent} text-lg font-extrabold text-white shadow-card`}>
+                {v.glyph}
+              </div>
+              <div class='min-w-0'>
+                <h3 class='text-xl font-bold tracking-[-0.01em]'>{v.name}</h3>
+                <p class='mt-1 text-muted'>{v.tagline}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- philosophy quote -->
+      <figure class='mt-6 rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-card md:p-8'>
+        <svg aria-hidden='true' class='mb-3 h-6 w-6 text-brand/60' viewBox='0 0 24 24' fill='currentColor'>
+          <path d='M7.17 4A5.17 5.17 0 0 0 2 9.17V20h8V10H5.5a3.67 3.67 0 0 1 3.67-3.67V4ZM19.17 4A5.17 5.17 0 0 0 14 9.17V20h8V10h-4.5a3.67 3.67 0 0 1 3.67-3.67V4Z'/>
+        </svg>
+        <blockquote class='text-lg leading-relaxed tracking-[-0.01em] text-text md:text-xl'>
+          Along the way, I learned that <span class='font-semibold'>showing up fully</span> and giving yourself consistently matters most — in work and in life.
+        </blockquote>
+      </figure>
+    </section>
+
+    <!-- LIFE OUTSIDE WORK -->
+    <section class='reveal' style='animation-delay:160ms'>
+      <div class='relative overflow-hidden rounded-[26px] border border-border bg-gradient-to-br from-[#fff6ee] via-white to-[#eaf4ff] p-6 shadow-soft md:p-10'>
+        <div class='pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ffd9b8]/50 blur-3xl'></div>
+        <div class='pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#c9dcff]/60 blur-3xl'></div>
+
+        <div class='relative grid gap-6 md:grid-cols-[1fr_auto] md:items-center md:gap-10'>
+          <div>
+            <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Life</p>
+            <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>Outside work</h2>
+            <p class='mt-4 max-w-[58ch] text-lg text-muted'>
+              Mauritius is home right now. It's where I slow down, stay close to nature, and keep my focus on what really matters:
+              <span class='font-semibold text-text'> family</span>.
+            </p>
+            <p class='mt-3 max-w-[58ch] text-muted'>
+              Being a husband and dad has shaped how I approach everything — from building products to running companies to day-to-day decisions.
+            </p>
+          </div>
+          <div class='hidden md:grid grid-cols-2 gap-2 text-center'>
+            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
+              <div class='text-2xl'>🏄</div>
+              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Surf</div>
+            </div>
+            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
+              <div class='text-2xl'>👨‍👩‍👧</div>
+              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Family</div>
+            </div>
+            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
+              <div class='text-2xl'>🌴</div>
+              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Nature</div>
+            </div>
+            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
+              <div class='text-2xl'>📚</div>
+              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Reading</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I WRITE ABOUT -->
+    <section class='reveal' style='animation-delay:240ms'>
+      <div class='mb-5'>
+        <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Blog</p>
+        <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>What I write about</h2>
+        <p class='mt-2 max-w-[60ch] text-muted'>Some posts are technical, some personal, and some somewhere in between.</p>
+      </div>
+      <div class='flex flex-wrap gap-2'>
+        {topics.map((t) => (
+          <span class={`inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold ${t.color}`}>
+            {t.label}
+          </span>
+        ))}
+      </div>
+      <div class='mt-5'>
+        <a
+          href='/blog'
+          class='inline-flex items-center gap-2 rounded-full border-2 border-brand bg-white px-5 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+        >
+          Browse the blog
+          <svg aria-hidden='true' class='h-4 w-4' viewBox='0 0 20 20' fill='currentColor'>
+            <path fill-rule='evenodd' d='M7.22 4.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L11.94 10 7.22 5.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- FIND ME -->
+    <section class='reveal' style='animation-delay:320ms'>
+      <div class='relative overflow-hidden rounded-[26px] border border-border bg-gradient-to-br from-[#0b1020] to-[#1a2347] p-6 text-white shadow-soft md:p-10'>
+        <div class='pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-brand/25 blur-3xl'></div>
+        <div class='pointer-events-none absolute -left-20 -bottom-24 h-64 w-64 rounded-full bg-[#7c5cff]/30 blur-3xl'></div>
+
+        <div class='relative grid gap-6 md:grid-cols-[1fr_auto] md:items-end'>
+          <div>
+            <p class='text-xs font-semibold uppercase tracking-[0.14em] text-white/60'>Say hi</p>
+            <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>Find me</h2>
+            <p class='mt-2 max-w-[50ch] text-white/70'>If anything here sparks curiosity, we should connect.</p>
+          </div>
+        </div>
+
+        <div class='relative mt-6 grid gap-3 md:grid-cols-3'>
+          {socials.map((s) => (
+            <a
+              href={s.href}
+              target='_blank'
+              rel='noreferrer'
+              class='group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/10'
+            >
+              <span class='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 transition group-hover:bg-white/20'>
+                {s.icon === "x" && (
+                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                    <path d='M18.244 2H21.5l-7.56 8.63L22.5 22h-6.93l-5.43-6.77L3.9 22H.64l8.09-9.24L.5 2h7.1l4.91 6.17L18.244 2Zm-1.22 18h1.86L7.06 4H5.1l11.92 16Z'/>
+                  </svg>
+                )}
+                {s.icon === "github" && (
+                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                    <path d='M12 .5C5.73.5.5 5.74.5 12.02c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.97-3.2.7-3.88-1.54-3.88-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .98-.31 3.2 1.18a11.14 11.14 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.26 5.69.41.35.77 1.05.77 2.11 0 1.52-.01 2.75-.01 3.12 0 .31.21.68.8.56C20.22 21.4 23.5 17.1 23.5 12.02 23.5 5.74 18.27.5 12 .5Z'/>
+                  </svg>
+                )}
+                {s.icon === "linkedin" && (
+                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                    <path d='M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.28 2.38 4.28 5.48v6.26ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.78C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.78 24h20.44c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0Z'/>
+                  </svg>
+                )}
+              </span>
+              <div class='min-w-0 flex-1'>
+                <div class='text-sm text-white/60'>{s.label}</div>
+                <div class='truncate font-semibold'>{s.handle}</div>
+              </div>
+              <svg aria-hidden='true' class='h-4 w-4 text-white/40 transition group-hover:translate-x-0.5 group-hover:text-white' viewBox='0 0 20 20' fill='currentColor'>
+                <path fill-rule='evenodd' d='M7.22 4.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L11.94 10 7.22 5.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' />
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
 </SiteLayout>
+
+<style>
+  .reveal {
+    animation: reveal 0.6s ease-out both;
+  }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      animation: none;
+    }
+  }
+</style>
