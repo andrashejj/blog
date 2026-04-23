@@ -2,25 +2,48 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { site } from "../lib/site";
 
-const ventures = [
+const current = {
+  name: "Motif",
+  tagline: "Crafting products that feel inevitable.",
+  href: "https://www.chatwithmotif.com/",
+  glyph: "M",
+};
+
+const earlier = [
   {
     name: "NBK Labs",
-    tagline: "Earlier chapter. Building from zero, learning by shipping.",
-    accent: "from-[#0b69ff] to-[#6aa6ff]",
+    tagline: "Building from zero, learning by shipping.",
+    href: "https://nbklabs.com/",
     glyph: "N",
+    status: "Earlier chapter",
   },
   {
-    name: "Motif Labs",
-    tagline: "Current focus. Crafting products that feel inevitable.",
-    accent: "from-[#7c5cff] to-[#b592ff]",
-    glyph: "M",
+    name: "Baubiber",
+    tagline: "Uber for construction.",
+    href: "https://baubiber.com/en/",
+    glyph: "B",
+    status: "Outside hours",
+  },
+  {
+    name: "Flipp",
+    tagline: "A side build.",
+    href: "https://www.flippapp.ai/",
+    glyph: "F",
+    status: "Outside hours",
+  },
+  {
+    name: "Duckies",
+    tagline: "Tamarin surf club. Waves over work.",
+    href: "https://duckies-eight.vercel.app/",
+    glyph: "D",
+    status: "Outside hours",
   },
 ];
 
 const topics = [
-  { label: "Engineering & product", color: "bg-[#eaf1ff] text-[#0852c9]" },
-  { label: "Startups & company building", color: "bg-[#f1ecff] text-[#5a3fd6]" },
-  { label: "Family, focus & life", color: "bg-[#fff0e6] text-[#b5541f]" },
+  { label: "Engineering & product" },
+  { label: "Startups & company building" },
+  { label: "Family, focus & life" },
 ];
 
 const places = [
@@ -30,253 +53,348 @@ const places = [
 ];
 
 const socials = [
-  {
-    label: "X",
-    handle: "@andrashejj",
-    href: site.social.x,
-    icon: "x",
-  },
-  {
-    label: "GitHub",
-    handle: "andrashejj",
-    href: site.social.github,
-    icon: "github",
-  },
-  {
-    label: "LinkedIn",
-    handle: "andras hejj",
-    href: site.social.linkedin,
-    icon: "linkedin",
-  },
+  { label: "X", handle: "@andrashejj", href: site.social.x, icon: "x" },
+  { label: "GitHub", handle: "andrashejj", href: site.social.github, icon: "github" },
+  { label: "LinkedIn", handle: "andras hejj", href: site.social.linkedin, icon: "linkedin" },
 ];
 ---
 
-<SiteLayout title='About' path='/about' description='Founder, software engineer, husband, and dad — building from Mauritius.'>
-  <div class='space-y-10 md:space-y-14'>
-    <!-- HERO -->
-    <section class='reveal relative overflow-hidden rounded-[26px] border border-border bg-white shadow-soft'>
-      <!-- decorative background -->
-      <div class='pointer-events-none absolute inset-0 -z-0'>
-        <div class='absolute -right-24 -top-24 h-[360px] w-[360px] rounded-full bg-gradient-to-br from-[#e9f0ff] to-[#f5ecff] blur-2xl'></div>
-        <div class='absolute -left-20 -bottom-24 h-[280px] w-[280px] rounded-full bg-gradient-to-tr from-[#fff0e6] to-[#e9f0ff] blur-2xl'></div>
-      </div>
+<SiteLayout
+  title='About'
+  path='/about'
+  description='Founder, software engineer, husband, and dad — building from Mauritius.'
+>
+  <!-- Masthead -->
+  <section class='reveal reveal-2'>
+    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      <span>Colophon · About</span>
+      <span>A short biography</span>
+    </div>
+    <div class='rule-horizontal mt-3'></div>
+    <div class='rule-horizontal mt-[3px]'></div>
+  </section>
 
-      <div class='relative grid gap-8 p-6 md:grid-cols-[220px_1fr] md:items-center md:gap-10 md:p-12'>
-        <div class='relative mx-auto md:mx-0'>
-          <div class='absolute -inset-2 rounded-[28px] bg-gradient-to-br from-brand/30 to-[#b592ff]/30 blur-xl'></div>
+  <div class='mt-10 space-y-20'>
+    <!-- HERO -->
+    <section class='reveal reveal-3 grid gap-10 md:grid-cols-[220px_1fr] md:items-start'>
+      <div class='relative mx-auto md:mx-0'>
+        <div class='absolute -inset-3 rounded-full bg-terracotta/15 blur-2xl'></div>
+        <div class='relative aspect-square w-[180px] overflow-hidden border border-rule bg-surface md:w-[220px]'>
           <img
             src='/images/posts/andras.png'
             alt='Portrait of Andras Hejj'
             width='220'
             height='220'
             loading='eager'
-            class='relative h-[180px] w-[180px] rounded-[24px] border-4 border-white object-cover shadow-[0_20px_40px_rgba(15,23,42,0.18)] md:h-[220px] md:w-[220px]'
+            class='h-full w-full object-cover'
+            style='filter: contrast(1.05) saturate(0.9) sepia(0.08);'
           />
-          <span class='absolute -bottom-3 -right-3 inline-flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-white text-xl shadow-card'>👋</span>
+          <span
+            class='pointer-events-none absolute inset-0 mix-blend-multiply'
+            style='background-image: var(--grain); opacity: 0.38;'
+            aria-hidden='true'
+          ></span>
         </div>
+        <span class='stamp absolute -bottom-3 left-1/2 -translate-x-1/2 border-ink bg-paper text-ink md:left-auto md:right-3 md:translate-x-0'>
+          Est. Budapest
+        </span>
+      </div>
 
-        <div class='min-w-0'>
-          <p class='mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur'>
-            <span class='inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse'></span>
-            About
-          </p>
-          <h1 class='text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[1.05] tracking-[-0.03em]'>
-            Hi, I'm <span class='bg-gradient-to-r from-brand to-[#7c5cff] bg-clip-text text-transparent'>Andras</span>.
-          </h1>
-          <p class='mt-3 max-w-[52ch] text-lg text-muted md:text-xl'>
-            Founder, software engineer, husband, and dad — building quietly, shipping consistently, and trying to show up fully in every part of it.
-          </p>
+      <div class='min-w-0'>
+        <p class='eyebrow mb-3'>The short version</p>
+        <h1
+          class='font-display leading-[1] tracking-[-0.03em] text-ink'
+          style='font-size: clamp(2.4rem, 6vw, 4.4rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Hi, I'm
+          <span
+            class='italic text-terracotta'
+            style='font-variation-settings: "SOFT" 100, "WONK" 1;'
+          >Andras</span>.
+        </h1>
+        <p class='mt-5 max-w-[54ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
+          First and foremost a
+          <span class='font-display italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>founder</span>
+          — serial entrepreneur, tech geek, hands-on builder. A little
+          on the spectrum, and probably the better for it.
+        </p>
+        <p class='mt-3 max-w-[54ch] text-ink-soft'>
+          Two decades of products and companies, working with people around the
+          globe to <span class='font-medium text-ink'>make a dent</span>. Hands-on
+          CTO and senior engineer across several startups on the
+          <span class='italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>cutting edge</span>
+          — always shipping what I said I would.
+        </p>
+        <p class='mt-3 max-w-[54ch] text-ink-soft'>
+          Husband and dad — and trying to show up fully in every part of it.
+        </p>
 
-          <!-- location chips -->
-          <div class='mt-5 flex flex-wrap gap-2'>
-            {places.map((p) => (
-              <span class='inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-3 py-1.5 text-sm backdrop-blur'>
+        <ul class='mt-6 grid gap-y-2 font-display text-[1.05rem] leading-snug text-ink-soft md:grid-cols-[auto_1fr] md:gap-x-4'>
+          {places.map((p) => (
+            <>
+              <li class='font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted self-center'>{p.label}</li>
+              <li class='flex items-baseline gap-2'>
                 <span aria-hidden='true'>{p.emoji}</span>
-                <span class='text-muted'>{p.label}</span>
-                <span class='font-semibold text-text'>{p.place}</span>
-              </span>
+                <span class='italic' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>{p.place}</span>
+              </li>
+            </>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <div class='rule-horizontal'></div>
+
+    <!-- WORK -->
+    <section class='reveal reveal-4'>
+      <div class='mb-6 flex items-end justify-between gap-4'>
+        <div>
+          <p class='eyebrow'>Section I · Work</p>
+          <h2
+            class='mt-2 font-display tracking-[-0.02em] text-ink'
+            style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+          >
+            What I'm <span class='italic text-pine'>building</span>
+          </h2>
+        </div>
+        <p class='hidden max-w-[30ch] text-sm text-muted md:block'>
+          Two decades across CTO, senior engineer & founder seats —
+          usually somewhere near the edge.
+        </p>
+      </div>
+
+      <!-- a small ledger of the work, quietly stated -->
+      <dl class='mb-8 grid gap-px overflow-hidden border border-rule bg-rule sm:grid-cols-4'>
+        {[
+          { k: "Role", v: "CTO · Sr. Eng · Founder" },
+          { k: "Ventures", v: "Several" },
+          { k: "Depth", v: "Hands-on, to prod" },
+          { k: "Track", v: "Delivered as promised" },
+        ].map((item) => (
+          <div class='bg-surface px-4 py-3'>
+            <dt class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>{item.k}</dt>
+            <dd class='mt-1 font-display text-[1.02rem] text-ink' style='font-variation-settings: "SOFT" 60, "WONK" 1;'>{item.v}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <!-- CURRENT VENTURE — featured -->
+      <a
+        href={current.href}
+        target='_blank'
+        rel='noreferrer'
+        class='no-rule group relative block border border-terracotta bg-surface p-6 transition duration-300 hover:-translate-y-0.5 md:p-8'
+      >
+        <span class='stamp absolute right-4 top-4 border-terracotta bg-paper text-terracotta'>
+          <span class='inline-block h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse' aria-hidden='true'></span>
+          Current venture
+        </span>
+        <div class='flex items-start gap-5'>
+          <div
+            class='flex h-14 w-14 shrink-0 items-center justify-center border border-terracotta font-display text-2xl text-terracotta'
+            style='font-variation-settings: "SOFT" 100, "WONK" 1;'
+          >
+            {current.glyph}
+          </div>
+          <div class='min-w-0 flex-1 pr-28'>
+            <h3
+              class='font-display text-2xl tracking-[-0.015em] text-ink transition group-hover:text-terracotta-strong'
+              style='font-variation-settings: "SOFT" 80, "WONK" 1;'
+            >
+              {current.name}
+              <span class='ml-1 inline-block transition group-hover:translate-x-1'>↗</span>
+            </h3>
+            <p class='mt-2 text-ink-soft'>{current.tagline}</p>
+          </div>
+        </div>
+      </a>
+
+      <!-- EARLIER & OUTSIDE — ledger -->
+      <div class='mt-10'>
+        <div class='mb-3 flex items-baseline justify-between'>
+          <p class='eyebrow'>Earlier chapters &amp; outside hours</p>
+          <span class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>
+            №{String(earlier.length).padStart(2, "0")}
+          </span>
+        </div>
+        <ul class='border-t border-rule'>
+          {earlier.map((v) => (
+            <li>
+              <a
+                href={v.href}
+                target='_blank'
+                rel='noreferrer'
+                class='no-rule group grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-rule px-1 py-4 transition hover:bg-surface md:gap-6 md:px-3'
+              >
+                <span
+                  class='flex h-11 w-11 items-center justify-center border border-rule bg-paper font-display text-lg text-ink transition group-hover:border-ink'
+                  style='font-variation-settings: "SOFT" 100, "WONK" 1;'
+                >
+                  {v.glyph}
+                </span>
+                <div class='min-w-0'>
+                  <div class='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
+                    <h4
+                      class='font-display text-lg text-ink transition group-hover:text-terracotta-strong'
+                      style='font-variation-settings: "SOFT" 60, "WONK" 1;'
+                    >
+                      {v.name}
+                    </h4>
+                    <span class='font-mono text-[0.6rem] uppercase tracking-[0.22em] text-muted'>
+                      {v.status}
+                    </span>
+                  </div>
+                  <p class='text-[0.95rem] text-ink-soft'>{v.tagline}</p>
+                </div>
+                <span class='font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted transition group-hover:text-terracotta'>
+                  Visit <span aria-hidden='true' class='inline-block transition group-hover:translate-x-0.5'>↗</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- philosophy quote -->
+      <figure class='mt-10 border-l-2 border-terracotta pl-6'>
+        <blockquote
+          class='font-display text-[1.35rem] leading-relaxed italic tracking-[-0.01em] text-ink md:text-[1.55rem]'
+          style='font-variation-settings: "SOFT" 80, "WONK" 1;'
+        >
+          Along the way, I learned that <span class='mark-draw px-1 not-italic font-medium'>showing up fully</span>
+          and giving yourself consistently matters most — in work and in life.
+        </blockquote>
+      </figure>
+    </section>
+
+    <div class='rule-horizontal'></div>
+
+    <!-- LIFE -->
+    <section class='reveal reveal-5 grid gap-10 md:grid-cols-[1fr_auto]'>
+      <div>
+        <p class='eyebrow'>Section II · Life</p>
+        <h2
+          class='mt-2 font-display tracking-[-0.02em] text-ink'
+          style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Outside <span class='italic text-ochre'>work</span>
+        </h2>
+        <p class='mt-5 max-w-[58ch] text-lg leading-relaxed text-ink-soft'>
+          Mauritius is home right now. It's where I slow down, stay close to
+          nature, and keep my focus on what really matters:
+          <span class='font-semibold text-ink'> family</span>.
+        </p>
+        <p class='mt-3 max-w-[58ch] text-ink-soft'>
+          Being a husband and dad has shaped how I approach everything — from
+          building products to running companies to day-to-day decisions.
+        </p>
+      </div>
+      <div class='grid grid-cols-2 gap-3 self-start text-center md:gap-2'>
+        {[
+          { e: "🏄", l: "Surf" },
+          { e: "👨‍👩‍👧", l: "Family" },
+          { e: "🌴", l: "Nature" },
+          { e: "📚", l: "Reading" },
+        ].map((t) => (
+          <div class='border border-rule bg-surface px-4 py-3'>
+            <div class='text-2xl'>{t.e}</div>
+            <div class='mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>{t.l}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class='rule-horizontal'></div>
+
+    <!-- BLOG TOPICS -->
+    <section class='reveal reveal-6'>
+      <p class='eyebrow'>Section III · The Blog</p>
+      <h2
+        class='mt-2 font-display tracking-[-0.02em] text-ink'
+        style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        What I <span class='italic text-terracotta'>write</span> about
+      </h2>
+      <p class='mt-3 max-w-[60ch] text-ink-soft'>
+        Some posts are technical, some personal, and some somewhere in between.
+      </p>
+      <div class='mt-6 flex flex-wrap gap-3'>
+        {topics.map((t) => (
+          <span class='stamp border-ink text-ink'>{t.label}</span>
+        ))}
+      </div>
+      <div class='mt-8'>
+        <a
+          href='/blog'
+          class='no-rule inline-flex items-center gap-2 border-b-2 border-terracotta pb-1 font-mono text-[0.78rem] uppercase tracking-[0.22em] text-terracotta transition hover:gap-3 hover:text-terracotta-strong'
+        >
+          Browse the archive <span aria-hidden='true'>→</span>
+        </a>
+      </div>
+    </section>
+
+    <div class='rule-horizontal'></div>
+
+    <!-- COLOPHON / FIND ME -->
+    <section class='reveal reveal-6'>
+      <div class='relative overflow-hidden border border-ink bg-ocean text-paper'>
+        <span
+          class='pointer-events-none absolute inset-0 mix-blend-screen'
+          style='background-image: var(--grain); opacity: 0.35;'
+          aria-hidden='true'
+        ></span>
+        <div class='pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-terracotta/30 blur-3xl'></div>
+        <div class='pointer-events-none absolute -left-20 -bottom-24 h-64 w-64 rounded-full bg-ochre/25 blur-3xl'></div>
+
+        <div class='relative p-8 md:p-12'>
+          <p class='font-mono text-[0.68rem] uppercase tracking-[0.28em] text-paper/60'>Colophon · Say hi</p>
+          <h2
+            class='mt-2 font-display tracking-[-0.02em] text-paper'
+            style='font-size: clamp(1.8rem, 4vw, 2.8rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+          >
+            Find <span class='italic text-ochre'>me</span>.
+          </h2>
+          <p class='mt-2 max-w-[50ch] text-paper/70'>
+            If anything here sparks curiosity, we should connect.
+          </p>
+
+          <div class='mt-8 grid gap-3 md:grid-cols-3'>
+            {socials.map((s) => (
+              <a
+                href={s.href}
+                target='_blank'
+                rel='noreferrer'
+                class='no-rule group flex items-center gap-3 border border-paper/20 p-4 transition hover:-translate-y-0.5 hover:border-paper/60 hover:bg-paper/5'
+              >
+                <span class='flex h-10 w-10 shrink-0 items-center justify-center border border-paper/20 bg-paper/5 transition group-hover:border-paper/50 group-hover:bg-paper/10'>
+                  {s.icon === "x" && (
+                    <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                      <path d='M18.244 2H21.5l-7.56 8.63L22.5 22h-6.93l-5.43-6.77L3.9 22H.64l8.09-9.24L.5 2h7.1l4.91 6.17L18.244 2Zm-1.22 18h1.86L7.06 4H5.1l11.92 16Z'/>
+                    </svg>
+                  )}
+                  {s.icon === "github" && (
+                    <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                      <path d='M12 .5C5.73.5.5 5.74.5 12.02c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.97-3.2.7-3.88-1.54-3.88-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .98-.31 3.2 1.18a11.14 11.14 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.26 5.69.41.35.77 1.05.77 2.11 0 1.52-.01 2.75-.01 3.12 0 .31.21.68.8.56C20.22 21.4 23.5 17.1 23.5 12.02 23.5 5.74 18.27.5 12 .5Z'/>
+                    </svg>
+                  )}
+                  {s.icon === "linkedin" && (
+                    <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                      <path d='M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.28 2.38 4.28 5.48v6.26ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.78C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.78 24h20.44c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0Z'/>
+                    </svg>
+                  )}
+                </span>
+                <div class='min-w-0 flex-1'>
+                  <div class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-paper/50'>{s.label}</div>
+                  <div class='truncate font-display text-[1.05rem] text-paper' style='font-variation-settings: "SOFT" 60, "WONK" 1;'>{s.handle}</div>
+                </div>
+                <svg aria-hidden='true' class='h-4 w-4 text-paper/40 transition group-hover:translate-x-0.5 group-hover:text-paper' viewBox='0 0 20 20' fill='currentColor'>
+                  <path fill-rule='evenodd' d='M7.22 4.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L11.94 10 7.22 5.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' />
+                </svg>
+              </a>
             ))}
           </div>
         </div>
       </div>
     </section>
-
-    <!-- WHAT I'M BUILDING -->
-    <section class='reveal' style='animation-delay:80ms'>
-      <div class='mb-5 flex items-end justify-between gap-4'>
-        <div>
-          <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Work</p>
-          <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>What I'm building</h2>
-        </div>
-        <p class='hidden max-w-[32ch] text-sm text-muted md:block'>~20 years of building products and companies — from bigger orgs to my own ventures.</p>
-      </div>
-
-      <div class='grid gap-4 md:grid-cols-2'>
-        {ventures.map((v) => (
-          <div class='group relative overflow-hidden rounded-[20px] border border-border bg-white p-6 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-soft'>
-            <div class={`pointer-events-none absolute inset-x-0 -top-24 h-48 bg-gradient-to-br ${v.accent} opacity-10 blur-2xl transition-opacity duration-300 group-hover:opacity-20`}></div>
-            <div class='relative flex items-start gap-4'>
-              <div class={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${v.accent} text-lg font-extrabold text-white shadow-card`}>
-                {v.glyph}
-              </div>
-              <div class='min-w-0'>
-                <h3 class='text-xl font-bold tracking-[-0.01em]'>{v.name}</h3>
-                <p class='mt-1 text-muted'>{v.tagline}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <!-- philosophy quote -->
-      <figure class='mt-6 rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-card md:p-8'>
-        <svg aria-hidden='true' class='mb-3 h-6 w-6 text-brand/60' viewBox='0 0 24 24' fill='currentColor'>
-          <path d='M7.17 4A5.17 5.17 0 0 0 2 9.17V20h8V10H5.5a3.67 3.67 0 0 1 3.67-3.67V4ZM19.17 4A5.17 5.17 0 0 0 14 9.17V20h8V10h-4.5a3.67 3.67 0 0 1 3.67-3.67V4Z'/>
-        </svg>
-        <blockquote class='text-lg leading-relaxed tracking-[-0.01em] text-text md:text-xl'>
-          Along the way, I learned that <span class='font-semibold'>showing up fully</span> and giving yourself consistently matters most — in work and in life.
-        </blockquote>
-      </figure>
-    </section>
-
-    <!-- LIFE OUTSIDE WORK -->
-    <section class='reveal' style='animation-delay:160ms'>
-      <div class='relative overflow-hidden rounded-[26px] border border-border bg-gradient-to-br from-[#fff6ee] via-white to-[#eaf4ff] p-6 shadow-soft md:p-10'>
-        <div class='pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ffd9b8]/50 blur-3xl'></div>
-        <div class='pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#c9dcff]/60 blur-3xl'></div>
-
-        <div class='relative grid gap-6 md:grid-cols-[1fr_auto] md:items-center md:gap-10'>
-          <div>
-            <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Life</p>
-            <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>Outside work</h2>
-            <p class='mt-4 max-w-[58ch] text-lg text-muted'>
-              Mauritius is home right now. It's where I slow down, stay close to nature, and keep my focus on what really matters:
-              <span class='font-semibold text-text'> family</span>.
-            </p>
-            <p class='mt-3 max-w-[58ch] text-muted'>
-              Being a husband and dad has shaped how I approach everything — from building products to running companies to day-to-day decisions.
-            </p>
-          </div>
-          <div class='hidden md:grid grid-cols-2 gap-2 text-center'>
-            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
-              <div class='text-2xl'>🏄</div>
-              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Surf</div>
-            </div>
-            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
-              <div class='text-2xl'>👨‍👩‍👧</div>
-              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Family</div>
-            </div>
-            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
-              <div class='text-2xl'>🌴</div>
-              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Nature</div>
-            </div>
-            <div class='rounded-2xl border border-border bg-white/70 px-4 py-3 backdrop-blur'>
-              <div class='text-2xl'>📚</div>
-              <div class='mt-1 text-xs font-semibold uppercase tracking-wider text-muted'>Reading</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHAT I WRITE ABOUT -->
-    <section class='reveal' style='animation-delay:240ms'>
-      <div class='mb-5'>
-        <p class='text-xs font-semibold uppercase tracking-[0.14em] text-muted'>Blog</p>
-        <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>What I write about</h2>
-        <p class='mt-2 max-w-[60ch] text-muted'>Some posts are technical, some personal, and some somewhere in between.</p>
-      </div>
-      <div class='flex flex-wrap gap-2'>
-        {topics.map((t) => (
-          <span class={`inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold ${t.color}`}>
-            {t.label}
-          </span>
-        ))}
-      </div>
-      <div class='mt-5'>
-        <a
-          href='/blog'
-          class='inline-flex items-center gap-2 rounded-full border-2 border-brand bg-white px-5 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
-        >
-          Browse the blog
-          <svg aria-hidden='true' class='h-4 w-4' viewBox='0 0 20 20' fill='currentColor'>
-            <path fill-rule='evenodd' d='M7.22 4.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L11.94 10 7.22 5.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' />
-          </svg>
-        </a>
-      </div>
-    </section>
-
-    <!-- FIND ME -->
-    <section class='reveal' style='animation-delay:320ms'>
-      <div class='relative overflow-hidden rounded-[26px] border border-border bg-gradient-to-br from-[#0b1020] to-[#1a2347] p-6 text-white shadow-soft md:p-10'>
-        <div class='pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-brand/25 blur-3xl'></div>
-        <div class='pointer-events-none absolute -left-20 -bottom-24 h-64 w-64 rounded-full bg-[#7c5cff]/30 blur-3xl'></div>
-
-        <div class='relative grid gap-6 md:grid-cols-[1fr_auto] md:items-end'>
-          <div>
-            <p class='text-xs font-semibold uppercase tracking-[0.14em] text-white/60'>Say hi</p>
-            <h2 class='mt-1 text-2xl font-bold tracking-[-0.02em] md:text-3xl'>Find me</h2>
-            <p class='mt-2 max-w-[50ch] text-white/70'>If anything here sparks curiosity, we should connect.</p>
-          </div>
-        </div>
-
-        <div class='relative mt-6 grid gap-3 md:grid-cols-3'>
-          {socials.map((s) => (
-            <a
-              href={s.href}
-              target='_blank'
-              rel='noreferrer'
-              class='group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/10'
-            >
-              <span class='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 transition group-hover:bg-white/20'>
-                {s.icon === "x" && (
-                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-                    <path d='M18.244 2H21.5l-7.56 8.63L22.5 22h-6.93l-5.43-6.77L3.9 22H.64l8.09-9.24L.5 2h7.1l4.91 6.17L18.244 2Zm-1.22 18h1.86L7.06 4H5.1l11.92 16Z'/>
-                  </svg>
-                )}
-                {s.icon === "github" && (
-                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-                    <path d='M12 .5C5.73.5.5 5.74.5 12.02c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.97-3.2.7-3.88-1.54-3.88-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .98-.31 3.2 1.18a11.14 11.14 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.26 5.69.41.35.77 1.05.77 2.11 0 1.52-.01 2.75-.01 3.12 0 .31.21.68.8.56C20.22 21.4 23.5 17.1 23.5 12.02 23.5 5.74 18.27.5 12 .5Z'/>
-                  </svg>
-                )}
-                {s.icon === "linkedin" && (
-                  <svg class='h-5 w-5' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-                    <path d='M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.28 2.38 4.28 5.48v6.26ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.78C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.78 24h20.44c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0Z'/>
-                  </svg>
-                )}
-              </span>
-              <div class='min-w-0 flex-1'>
-                <div class='text-sm text-white/60'>{s.label}</div>
-                <div class='truncate font-semibold'>{s.handle}</div>
-              </div>
-              <svg aria-hidden='true' class='h-4 w-4 text-white/40 transition group-hover:translate-x-0.5 group-hover:text-white' viewBox='0 0 20 20' fill='currentColor'>
-                <path fill-rule='evenodd' d='M7.22 4.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L11.94 10 7.22 5.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' />
-              </svg>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
   </div>
 </SiteLayout>
-
-<style>
-  .reveal {
-    animation: reveal 0.6s ease-out both;
-  }
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      animation: none;
-    }
-  }
-</style>

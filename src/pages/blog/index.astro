@@ -4,15 +4,39 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getAllPostMeta } from "../../lib/content";
 
 const posts = await getAllPostMeta();
+const total = String(posts.length).padStart(3, "0");
 ---
 
 <SiteLayout title='Blog' path='/blog'>
-  <section class='mb-8'>
-    <h1 class='text-4xl leading-tight tracking-[-0.03em]'>Blog</h1>
-    <p class='mt-2 text-muted'>A chronologically organized archive of articles.</p>
+  <section class='reveal reveal-2 relative'>
+    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      <span>Section · The Archive</span>
+      <span>№{total} dispatches</span>
+    </div>
+    <div class='rule-horizontal mt-3'></div>
+    <div class='rule-horizontal mt-[3px]'></div>
+
+    <div class='py-8'>
+      <p class='eyebrow mb-3'>Writings &amp; field notes</p>
+      <h1
+        class='font-display leading-[0.95] tracking-[-0.03em] text-ink'
+        style='font-size: clamp(2.6rem, 7vw, 5rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        The <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>archive</span>.
+      </h1>
+      <p class='mt-4 max-w-[58ch] text-lg leading-relaxed text-ink-soft'>
+        A chronological ledger of articles. Some technical, some personal, some
+        somewhere in between.
+      </p>
+    </div>
+    <div class='rule-horizontal'></div>
   </section>
 
-  <section class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5'>
-    {posts.map((post) => <PostCard post={post} />)}
+  <section class='reveal reveal-3 mt-12 grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'>
+    {posts.map((post, i) => (
+      <div class={`reveal reveal-${Math.min(6, (i % 5) + 2)}`}>
+        <PostCard post={post} />
+      </div>
+    ))}
   </section>
 </SiteLayout>

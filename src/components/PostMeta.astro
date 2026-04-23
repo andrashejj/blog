@@ -8,18 +8,18 @@ interface Props {
 const { post } = Astro.props;
 
 const date = new Date(`${post.date}T00:00:00.000Z`).toLocaleDateString(
-  "en-US",
+  "en-GB",
   {
     year: "numeric",
-    month: "long",
-    day: "numeric",
+    month: "short",
+    day: "2-digit",
     timeZone: "UTC",
   },
 );
 ---
 
-<p class='flex items-center gap-2 text-sm text-muted'>
+<p class='flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted'>
   <span>{date}</span>
-  <span aria-hidden='true'>•</span>
+  <span aria-hidden='true' class='text-terracotta'>✦</span>
   <span>{post.readingTimeText}</span>
 </p>

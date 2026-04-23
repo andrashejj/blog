@@ -15,42 +15,54 @@ const feedHref = `feed:${feedUrl}`;
   description={`Subscribe to ${site.name}'s RSS feed to get new posts in your reader of choice.`}
   path='/subscribe'
 >
-  <section class='mx-auto max-w-[68ch]'>
-    <h1 class='text-4xl leading-tight tracking-[-0.03em]'>Subscribe</h1>
-    <p class='mt-3 text-muted'>
-      New posts land in your reader the moment they're published — no algorithm,
-      no inbox clutter, no account required.
-    </p>
+  <section class='reveal reveal-2 mx-auto max-w-[68ch]'>
+    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      <span>Section · Subscribe</span>
+      <span>RSS · No Algorithm</span>
+    </div>
+    <div class='rule-horizontal mt-3'></div>
+    <div class='rule-horizontal mt-[3px]'></div>
 
-    <div class='mt-8 rounded-[20px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-soft md:p-8'>
-      <div class='flex items-start gap-4'>
+    <div class='py-8'>
+      <p class='eyebrow mb-3'>Receive the dispatches</p>
+      <h1
+        class='font-display leading-[0.95] tracking-[-0.03em] text-ink'
+        style='font-size: clamp(2.4rem, 6vw, 4.4rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        <span class='italic text-terracotta'>Subscribe</span>.
+      </h1>
+      <p class='mt-4 text-lg text-ink-soft'>
+        New posts land in your reader the moment they're published — no algorithm,
+        no inbox clutter, no account required.
+      </p>
+    </div>
+
+    <div class='reveal reveal-3 relative border border-rule bg-surface p-6 md:p-8'>
+      <div class='flex items-start gap-5'>
         <span
-          class='inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand'
+          class='inline-flex h-12 w-12 shrink-0 items-center justify-center border border-terracotta text-terracotta'
           aria-hidden='true'
         >
-          <Rss size={24} />
+          <Rss size={22} />
         </span>
-        <div class='min-w-0'>
-          <h2 class='text-2xl tracking-[-0.02em]'>RSS feed</h2>
-          <p class='mt-1 text-muted'>
-            Copy the URL below into any RSS reader.
-          </p>
-          <code
-            class='mt-3 block overflow-x-auto rounded-lg border border-[#dfe7f7] bg-[#eef2fb] px-3 py-2 text-sm text-[#26324d]'
-          >
+        <div class='min-w-0 flex-1'>
+          <h2 class='font-display text-2xl tracking-[-0.015em]' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+            RSS feed
+          </h2>
+          <p class='mt-1 text-ink-soft'>Copy the URL below into any RSS reader.</p>
+          <code class='mt-3 block overflow-x-auto border border-rule bg-paper-deep/60 px-3 py-2 font-mono text-sm text-ink'>
             {feedUrl}
           </code>
-          <div class='mt-4 flex flex-wrap gap-3'>
+          <div class='mt-5 flex flex-wrap gap-3'>
             <a
               href='/rss.xml'
-              class='inline-flex items-center gap-2 rounded-full border-2 border-brand bg-brand px-4 py-2 font-bold text-white transition hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+              class='no-rule inline-flex items-center gap-2 border border-terracotta bg-terracotta px-4 py-2 font-mono text-[0.75rem] uppercase tracking-[0.2em] text-paper transition hover:bg-terracotta-strong'
             >
-              <Rss size={16} />
-              Open feed
+              <Rss size={14} /> Open feed
             </a>
             <a
               href={feedHref}
-              class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
+              class='no-rule inline-flex items-center justify-center border border-terracotta px-4 py-2 font-mono text-[0.75rem] uppercase tracking-[0.2em] text-terracotta transition hover:bg-terracotta hover:text-paper'
             >
               Open in default reader
             </a>
@@ -59,119 +71,64 @@ const feedHref = `feed:${feedUrl}`;
       </div>
     </div>
 
-    <section class='mt-10'>
-      <h2 class='text-2xl tracking-[-0.02em]'>One-click subscribe</h2>
-      <p class='mt-2 text-muted'>
-        Already using one of these? Jump straight in.
-      </p>
-      <ul class='mt-4 grid gap-3 sm:grid-cols-3'>
-        <li>
-          <a
-            href={feedlyUrl}
-            target='_blank'
-            rel='noreferrer'
-            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
-          >
-            Feedly
-          </a>
-        </li>
-        <li>
-          <a
-            href={inoreaderUrl}
-            target='_blank'
-            rel='noreferrer'
-            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
-          >
-            Inoreader
-          </a>
-        </li>
-        <li>
-          <a
-            href={feedbinUrl}
-            target='_blank'
-            rel='noreferrer'
-            class='block rounded-xl border border-border bg-white px-4 py-3 text-center font-semibold transition hover:-translate-y-px hover:border-brand hover:text-brand hover:shadow-soft'
-          >
-            Feedbin
-          </a>
-        </li>
+    <section class='reveal reveal-4 mt-14'>
+      <p class='eyebrow'>One-click subscribe</p>
+      <h2 class='mt-2 font-display text-2xl tracking-[-0.015em]' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+        Already using one?
+      </h2>
+      <ul class='mt-5 grid gap-3 sm:grid-cols-3'>
+        {[
+          { href: feedlyUrl, label: "Feedly" },
+          { href: inoreaderUrl, label: "Inoreader" },
+          { href: feedbinUrl, label: "Feedbin" },
+        ].map((r) => (
+          <li>
+            <a
+              href={r.href}
+              target='_blank'
+              rel='noreferrer'
+              class='no-rule block border border-rule bg-surface px-4 py-3 text-center font-display text-lg transition hover:-translate-y-px hover:border-terracotta hover:text-terracotta'
+              style='font-variation-settings: "SOFT" 80, "WONK" 1;'
+            >
+              {r.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
 
-    <section class='mt-10'>
-      <h2 class='text-2xl tracking-[-0.02em]'>New to RSS?</h2>
-      <p class='mt-2 text-muted'>
+    <section class='reveal reveal-5 mt-14'>
+      <p class='eyebrow'>New to RSS?</p>
+      <h2 class='mt-2 font-display text-2xl tracking-[-0.015em]' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+        A short primer
+      </h2>
+      <p class='mt-3 text-ink-soft'>
         RSS is an open format that lets you follow blogs without giving anyone
-        your email or handing over an algorithm the keys to your attention. Pick
-        a reader, paste the feed URL, and you're done. A few good starting points:
+        your email or handing an algorithm the keys to your attention. Pick a
+        reader, paste the feed URL, and you're done.
       </p>
-      <ul class='mt-3 list-disc space-y-1 pl-5 text-muted'>
+      <ul class='mt-4 space-y-2 text-ink-soft'>
         <li>
-          <a
-            href='https://feedly.com'
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            Feedly
-          </a> — web and mobile, free tier.
+          <a href='https://feedly.com' target='_blank' rel='noreferrer' class='text-terracotta-strong'>Feedly</a>
+          — web and mobile, free tier.
         </li>
         <li>
-          <a
-            href='https://www.inoreader.com'
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            Inoreader
-          </a> — powerful filters and rules.
+          <a href='https://www.inoreader.com' target='_blank' rel='noreferrer' class='text-terracotta-strong'>Inoreader</a>
+          — powerful filters and rules.
         </li>
         <li>
-          <a
-            href='https://netnewswire.com'
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            NetNewsWire
-          </a> — free, open source, Apple-only.
+          <a href='https://netnewswire.com' target='_blank' rel='noreferrer' class='text-terracotta-strong'>NetNewsWire</a>
+          — free, open source, Apple-only.
         </li>
       </ul>
     </section>
 
-    <section class='mt-10'>
-      <h2 class='text-2xl tracking-[-0.02em]'>Other ways to follow</h2>
-      <ul class='mt-3 list-disc space-y-1 pl-5 text-muted'>
-        <li>
-          <a
-            href={site.social.x}
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            X / Twitter
-          </a>
-        </li>
-        <li>
-          <a
-            href={site.social.linkedin}
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            LinkedIn
-          </a>
-        </li>
-        <li>
-          <a
-            href={site.social.github}
-            target='_blank'
-            rel='noreferrer'
-            class='text-brand-strong underline'
-          >
-            GitHub
-          </a>
-        </li>
+    <section class='reveal reveal-6 mt-14'>
+      <p class='eyebrow'>Other ways to follow</p>
+      <ul class='mt-4 space-y-2 text-ink-soft'>
+        <li><a href={site.social.x} target='_blank' rel='noreferrer' class='text-terracotta-strong'>X / Twitter</a></li>
+        <li><a href={site.social.linkedin} target='_blank' rel='noreferrer' class='text-terracotta-strong'>LinkedIn</a></li>
+        <li><a href={site.social.github} target='_blank' rel='noreferrer' class='text-terracotta-strong'>GitHub</a></li>
       </ul>
     </section>
   </section>
