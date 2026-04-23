@@ -4,49 +4,154 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import { getAllPostMeta } from "../lib/content";
 
 const posts = await getAllPostMeta();
+const featured = posts[0];
+const rest = posts.slice(1, 7);
+
+const issueNumber = String(posts.length).padStart(3, "0");
+const today = new Date().toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
 ---
 
 <SiteLayout path='/'>
-  <section class='mb-10 rounded-[22px] border border-border bg-gradient-to-br from-white to-[#f6f9ff] p-6 shadow-soft md:grid md:grid-cols-[120px_1fr] md:items-center md:gap-5 md:p-10'>
-    <img
-      src='/images/posts/andras.png'
-      alt='Portrait of Andras'
-      class='mb-3 h-[120px] w-[120px] rounded-full border-3 border-white shadow-[0_10px_24px_rgba(15,23,42,0.16)] md:mb-0'
-      width='120'
-      height='120'
-      loading='eager'
-    />
-    <div class='min-w-0'>
-      <h1 class='text-[clamp(1.9rem,4.2vw,3.2rem)] leading-[1.15] tracking-[-0.03em]'>Hi, I’m Andras</h1>
-      <p class='max-w-[68ch] text-muted'>Founder, software engineer, husband, dad.</p>
-      <p class='max-w-[68ch] text-muted'>
-        Made with 💕 in Budapest, 🌳 up in Switzerland, enjoying 🏄‍♂️ in Mauritius!
-      </p>
-      <div class='mt-4 flex flex-wrap gap-3'>
-        <a
-          href='/blog'
-          class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
-        >
-          Browse posts
-        </a>
-        <a
-          href='/about'
-          class='inline-flex items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 font-bold text-brand transition hover:-translate-y-px hover:bg-brand hover:text-white hover:shadow-[0_4px_12px_rgba(11,105,255,0.25)]'
-        >
-          Read intro
-        </a>
-      </div>
+  <!-- Masthead: newspaper-style nameplate -->
+  <section class='reveal reveal-2 relative'>
+    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      <span>Vol. I · Issue №{issueNumber}</span>
+      <span class='hidden sm:inline'>{today}</span>
+      <span>Est. MMXX</span>
     </div>
+    <div class='rule-horizontal mt-3'></div>
+    <div class='rule-horizontal mt-[3px]'></div>
+
+    <div class='grid gap-8 py-8 md:grid-cols-[1.2fr_auto_1fr] md:items-end md:gap-10 md:py-10'>
+      <div>
+        <p class='eyebrow mb-3'>Field notes from the studio</p>
+        <h1
+          class='font-display leading-[0.92] tracking-[-0.035em] text-ink'
+          style='font-size: clamp(3.2rem, 9vw, 6.6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Hi, I'm <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;'>Andras</span>.
+        </h1>
+        <p class='mt-4 max-w-[48ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
+          <span class='font-display italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Founder</span>,
+          software engineer, husband, dad. Writing on the practice of building —
+          and the quieter art of showing up.
+        </p>
+      </div>
+
+      <div class='hidden self-stretch md:block' aria-hidden='true'>
+        <div class='mx-3 h-full w-px bg-rule'></div>
+      </div>
+
+      <aside class='md:text-right'>
+        <div class='eyebrow mb-2'>Currently</div>
+        <ul class='space-y-2 font-display text-[1.05rem] leading-snug text-ink-soft'>
+          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
+            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>made in</span>
+            <span class='italic' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Budapest</span>
+          </li>
+          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
+            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>grown in</span>
+            <span class='italic' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Switzerland</span>
+          </li>
+          <li class='md:justify-end flex items-center gap-2 md:flex-row-reverse'>
+            <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>living in</span>
+            <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Mauritius</span>
+          </li>
+        </ul>
+        <div class='mt-5 flex gap-2 md:justify-end'>
+          <a href='/blog' class='stamp no-rule text-terracotta transition hover:bg-terracotta hover:text-paper'>Read the archive →</a>
+          <a href='/about' class='stamp no-rule text-pine transition hover:bg-pine hover:text-paper'>About</a>
+        </div>
+      </aside>
+    </div>
+    <div class='rule-horizontal'></div>
   </section>
 
-  <section>
-    <div class='mb-4 flex items-baseline justify-between'>
-      <h2 class='text-2xl tracking-[-0.02em]'>Latest posts</h2>
-      <a href='/blog' class='text-brand'>All posts</a>
+  <!-- Featured article: broadsheet lede -->
+  {featured && (
+    <section class='reveal reveal-3 mt-14'>
+      <div class='mb-4 flex items-center gap-3'>
+        <span class='stamp border-terracotta text-terracotta'>Lede</span>
+        <span class='font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted'>
+          Today's featured dispatch
+        </span>
+      </div>
+
+      <a
+        href={featured.routePath}
+        class='no-rule group grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-10'
+      >
+        <div class='relative overflow-hidden border border-rule bg-surface'>
+          <div class='aspect-[4/3] overflow-hidden'>
+            <img
+              src={featured.coverImage}
+              alt={featured.title}
+              loading='eager'
+              onerror="this.onerror=null;this.src='/images/posts/default-cover.svg';"
+              class='h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]'
+              style='filter: contrast(1.02) saturate(0.92);'
+            />
+          </div>
+          <span class='pointer-events-none absolute inset-0 mix-blend-multiply' style='background-image: var(--grain); opacity: 0.35;'></span>
+        </div>
+
+        <div class='flex flex-col justify-center'>
+          <p class='eyebrow'>№{issueNumber} · The Dispatch</p>
+          <h2
+            class='mt-3 font-display leading-[1.02] tracking-[-0.025em] text-ink'
+            style='font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+          >
+            {featured.title}
+          </h2>
+          <p class='mt-4 max-w-[54ch] text-lg leading-relaxed text-ink-soft'>
+            {featured.summary}
+          </p>
+          <div class='mt-5 flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted'>
+            <span>{new Date(`${featured.date}T00:00:00Z`).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span>
+            <span aria-hidden='true'>✦</span>
+            <span>{featured.readingTimeText}</span>
+          </div>
+          <span class='mt-6 inline-flex w-fit items-center gap-2 border-b-2 border-terracotta pb-1 font-mono text-[0.75rem] uppercase tracking-[0.2em] text-terracotta transition group-hover:gap-3'>
+            Read the lede
+            <span aria-hidden='true'>→</span>
+          </span>
+        </div>
+      </a>
+    </section>
+  )}
+
+  <!-- Archive strip -->
+  <section class='reveal reveal-4 mt-20'>
+    <div class='mb-6 flex items-end justify-between gap-4'>
+      <div>
+        <p class='eyebrow'>Section II</p>
+        <h2
+          class='mt-1 font-display tracking-[-0.02em] text-ink'
+          style='font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          From the <span class='italic text-pine'>archive</span>
+        </h2>
+      </div>
+      <a
+        href='/blog'
+        class='no-rule font-mono text-[0.72rem] uppercase tracking-[0.22em] text-terracotta hover:text-terracotta-strong'
+      >
+        All posts →
+      </a>
     </div>
 
-    <div class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-5'>
-      {posts.slice(0, 6).map((post) => <PostCard post={post} />)}
+    <div class='rule-horizontal mb-6'></div>
+
+    <div class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'>
+      {rest.map((post, i) => (
+        <div class={`reveal reveal-${Math.min(5, i + 2)}`}>
+          <PostCard post={post} />
+        </div>
+      ))}
     </div>
   </section>
 </SiteLayout>
