@@ -30,6 +30,14 @@ for (const post of posts) {
   };
 }
 
+// Newsprint palette — mirrors the tokens in src/styles/global.css so the share
+// card feels cut from the same paper as the site. The atmospheric layer (radial
+// glows + grain) is pre-rendered into public/og-templates/paper.png via
+// scripts/generate-og-background.mjs; astro-og-canvas only needs to overlay the
+// title, description, and masthead avatar on top.
+const ink: [number, number, number] = [27, 23, 19];
+const muted: [number, number, number] = [111, 95, 79];
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
   pages,
@@ -37,36 +45,34 @@ export const { getStaticPaths, GET } = await OGImageRoute({
     title: page.title,
     description: page.description,
     fonts: [
-      "./public/fonts/Inter-SemiBold.ttf",
-      "./public/fonts/Inter-Regular.ttf",
+      "./public/fonts/Fraunces-SemiBold.ttf",
+      "./public/fonts/Fraunces-Regular.ttf",
+      "./public/fonts/Fraunces-Italic.ttf",
     ],
     font: {
       title: {
-        families: ["Inter"],
+        families: ["Fraunces"],
         weight: "SemiBold",
-        size: 64,
-        color: [255, 255, 255],
+        size: 82,
+        lineHeight: 1.08,
+        color: ink,
       },
       description: {
-        families: ["Inter"],
+        families: ["Fraunces"],
         weight: "Normal",
-        size: 32,
-        color: [200, 210, 230],
+        size: 34,
+        lineHeight: 1.4,
+        color: muted,
       },
     },
-    bgGradient: [
-      [30, 58, 138],
-      [147, 197, 253],
-    ],
-    border: {
-      color: [37, 99, 235],
-      width: 8,
-      side: "block-end",
+    bgImage: {
+      path: "./public/og-templates/paper.png",
+      fit: "cover",
     },
     logo: {
-      path: "./public/images/posts/andras.png",
-      size: [80],
+      path: "./public/og-templates/avatar.png",
+      size: [128, 128],
     },
-    padding: 60,
+    padding: 72,
   }),
 });
