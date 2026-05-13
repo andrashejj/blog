@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Sunset Duckies Cup · Judge Scorecard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/assets/sunset-duckies/_shared.css" />
+  <style>
+    .score-table th, .score-table td { text-align: center; padding: 6px 4px; }
+    .score-table .surfer { text-align: left; padding-left: 8px; min-width: 130px; }
+    .score-table .tick { width: 36px; height: 28px; }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: 6px; border: 1px solid var(--ink); }
+    .sw-red { background: #c1432a; }
+    .sw-yel { background: #e3b73b; }
+    .sw-blu { background: #2c5da0; }
+    .sw-grn { background: #2e6b3f; }
+  </style>
+</head>
+<body>
+  <div class="masthead">
+    <span class="mono">Sunset Duckies Cup · №001</span>
+    <span class="title">Judge <em>Scorecard</em></span>
+    <span class="mono">One per heat, per judge</span>
+  </div>
+
+  <div class="print-hint">Bias toward yes · when in doubt, tick the box · best 2 waves count · max 10 ticks per surfer</div>
+
+  <h1>Score the <em>heat</em> 🏄</h1>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0;">
+    <div class="field" style="grid-template-columns: 1fr; gap: 4px; border: 0;"><label>Heat #</label><div class="line"></div></div>
+    <div class="field" style="grid-template-columns: 1fr; gap: 4px; border: 0;"><label>Division 🐤/🦆</label><div class="line"></div></div>
+    <div class="field" style="grid-template-columns: 1fr; gap: 4px; border: 0;"><label>Judge name</label><div class="line"></div></div>
+  </div>
+
+  <h2>Criteria · tick one box per criterion per wave</h2>
+  <p>
+    🏊 <strong>Paddle &amp; commit</strong> · 🚀 <strong>Pop-up</strong> · 🧘 <strong>Stance</strong> · 🌊 <strong>Ride</strong> · 🎉 <strong>Stoke</strong>
+  </p>
+
+  <h2>Heat scoring</h2>
+  <table class="score-table">
+    <thead>
+      <tr>
+        <th rowspan="2" class="surfer">Surfer</th>
+        <th colspan="5">Wave 1</th>
+        <th colspan="5">Wave 2</th>
+        <th rowspan="2">Wave 3<br><span class="mono" style="font-size: 0.55rem;">opt</span></th>
+        <th rowspan="2">Total<br>ticks</th>
+      </tr>
+      <tr>
+        <th>🏊</th><th>🚀</th><th>🧘</th><th>🌊</th><th>🎉</th>
+        <th>🏊</th><th>🚀</th><th>🧘</th><th>🌊</th><th>🎉</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="surfer"><span class="swatch sw-red"></span> Red</td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td></td><td></td>
+      </tr>
+      <tr>
+        <td class="surfer"><span class="swatch sw-yel"></span> Yellow</td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td></td><td></td>
+      </tr>
+      <tr>
+        <td class="surfer"><span class="swatch sw-blu"></span> Blue</td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td></td><td></td>
+      </tr>
+      <tr>
+        <td class="surfer"><span class="swatch sw-grn"></span> Green</td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td><td class="tick"></td>
+        <td></td><td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Tiebreakers · circle the shaka 🤙</h2>
+  <p>1. Total waves attempted. &nbsp; 2. Judges' <em>wave of the heat</em> shaka — circle the rashie colour: &nbsp;
+    <span class="swatch sw-red"></span> Red &nbsp;
+    <span class="swatch sw-yel"></span> Yellow &nbsp;
+    <span class="swatch sw-blu"></span> Blue &nbsp;
+    <span class="swatch sw-grn"></span> Green
+  </p>
+
+  <h2>Side-award notes</h2>
+  <p>Anyone deserving a Sunset Stoke · Paddle Power · Best Wipeout · Style Duckling · Best Comeback · Best Cheer Squad?</p>
+  <div class="field"><label>Notes</label><div class="line" style="min-height: 3.5em;"></div></div>
+
+  <footer class="colophon">
+    Hand to head judge after the heat · runners take to MC
+  </footer>
+</body>
+</html>

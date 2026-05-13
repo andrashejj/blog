@@ -13,9 +13,62 @@ const today = new Date().toLocaleDateString("en-GB", {
   month: "long",
   year: "numeric",
 });
+
+const duckiesDate = new Date("2026-05-30T14:00:00+04:00");
+const now = new Date();
+const duckiesDaysLeft = Math.max(
+  0,
+  Math.ceil((duckiesDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)),
+);
+const showDuckiesBanner =
+  now.getTime() <= duckiesDate.getTime() + 1000 * 60 * 60 * 24;
 ---
 
 <SiteLayout path='/'>
+  {showDuckiesBanner && (
+    <a
+      href='/sunset-duckies'
+      class='reveal reveal-1 no-rule group relative mb-10 block overflow-hidden border border-ink bg-ocean text-paper transition duration-300 hover:-translate-y-0.5'
+    >
+      <span
+        class='pointer-events-none absolute inset-0 mix-blend-screen'
+        style='background-image: var(--grain); opacity: 0.35;'
+        aria-hidden='true'
+      ></span>
+      <div class='pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-terracotta/35 blur-3xl'></div>
+      <div class='pointer-events-none absolute -left-16 -bottom-16 h-56 w-56 rounded-full bg-ochre/25 blur-3xl'></div>
+
+      <div class='relative grid gap-4 p-5 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-6 md:p-6'>
+        <div class='flex items-center gap-3'>
+          <span class='stamp border-ochre bg-paper text-terracotta'>
+            <span class='inline-block h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse' aria-hidden='true'></span>
+            Special edition
+          </span>
+          <span class='hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-paper/55 sm:inline'>
+            Sat 30 May · Tamarin Bay
+          </span>
+        </div>
+
+        <div class='min-w-0'>
+          <p class='font-display text-[1.35rem] leading-tight text-paper md:text-[1.55rem]' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>
+            <span aria-hidden='true'>🦆</span>
+            The first ever
+            <span class='italic text-ochre' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Sunset Duckies Cup</span>
+            — heats of 4, BBQ on the sand, parent heat at sunset.
+          </p>
+          <p class='mt-1 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-paper/65'>
+            {duckiesDaysLeft} days till heat one · entry 20 USD · every duckling leaves stoked
+          </p>
+        </div>
+
+        <span class='inline-flex w-fit items-center gap-2 self-start border-b-2 border-ochre pb-1 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-ochre transition group-hover:gap-3 md:self-center'>
+          The brief
+          <span aria-hidden='true'>→</span>
+        </span>
+      </div>
+    </a>
+  )}
+
   <!-- Masthead: newspaper-style nameplate -->
   <section class='reveal reveal-2 relative'>
     <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>

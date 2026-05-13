@@ -1,0 +1,194 @@
+/* Sunset Duckies — shared print styles for downloadable templates */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,50..100,0..1;1,9..144,400..900,50..100,0..1&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+:root {
+  --paper: #f1e6cf;
+  --paper-deep: #e8d9b8;
+  --ink: #1b1713;
+  --ink-soft: #3b332b;
+  --muted: #6f5f4f;
+  --rule: #c8b694;
+  --terracotta: #bf4024;
+  --pine: #0e4140;
+  --ochre: #c4892d;
+  --ocean: #1a2940;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Fraunces", "Iowan Old Style", "Palatino", serif;
+  font-optical-sizing: auto;
+  line-height: 1.55;
+}
+
+body {
+  padding: 40px 48px 60px;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--ink);
+  border-bottom: 3px double var(--ink);
+  padding: 14px 0 12px;
+  margin-bottom: 28px;
+}
+
+.masthead .title {
+  font-size: 1.65rem;
+  font-weight: 600;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  letter-spacing: -0.015em;
+}
+
+.masthead .title em {
+  color: var(--terracotta);
+  font-style: italic;
+}
+
+h1, h2, h3 {
+  font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+h1 em { color: var(--terracotta); font-style: italic; }
+
+h2 {
+  font-size: 1.45rem;
+  margin: 32px 0 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+
+h3 { font-size: 1.1rem; margin: 18px 0 4px; }
+
+p, li { color: var(--ink-soft); }
+
+.lede { font-size: 1.1rem; max-width: 62ch; color: var(--ink); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th, td {
+  border: 1px solid var(--rule);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+th {
+  background: var(--paper-deep);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0;
+}
+
+.field label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field .line {
+  border-bottom: 1px solid var(--ink);
+  min-height: 1.4em;
+}
+
+.checkbox {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--ink);
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+
+.stamp {
+  display: inline-block;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tag-terracotta { color: var(--terracotta); }
+.tag-pine       { color: var(--pine); }
+.tag-ocean      { color: var(--ocean); }
+.tag-ochre      { color: var(--ochre); }
+
+.print-hint {
+  border: 1px dashed var(--rule);
+  padding: 10px 14px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: rgba(255,255,255,0.4);
+  margin-bottom: 18px;
+}
+
+footer.colophon {
+  margin-top: 40px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media print {
+  body {
+    padding: 18mm;
+    max-width: none;
+    background: white;
+  }
+  .print-hint { display: none; }
+}

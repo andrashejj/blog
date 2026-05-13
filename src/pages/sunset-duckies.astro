@@ -1,0 +1,544 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const eventDate = new Date("2026-05-30T14:00:00+04:00");
+const today = new Date();
+const daysUntil = Math.max(
+  0,
+  Math.ceil((eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)),
+);
+
+const schedule = [
+  { time: "14:00", what: "Welcome & warm-up on the sand", emoji: "🌅" },
+  { time: "14:15", what: "Duckling heats kick off", emoji: "🐤" },
+  { time: "~15:00", what: "Duck heats", emoji: "🦆" },
+  { time: "15:45", what: "Break — BBQ, hot chocolate, free surf", emoji: "🔥" },
+  { time: "16:30", what: "Final heats", emoji: "🏁" },
+  {
+    time: "17:00",
+    what: "Parent heat — watch your parents try 😂",
+    emoji: "🫧",
+  },
+  { time: "17:30", what: "Awards ceremony", emoji: "🏆" },
+  { time: "18:00", what: "Wrap", emoji: "👋" },
+];
+
+const judgingCriteria = [
+  {
+    emoji: "🏊",
+    label: "Paddle & commit",
+    body: "Go for the wave, don't pull back.",
+  },
+  { emoji: "🚀", label: "Pop-up", body: "Get to your feet, clean and quick." },
+  { emoji: "🧘", label: "Stance", body: "Knees bent, eyes forward, centred." },
+  { emoji: "🌊", label: "Ride", body: "Stay standing, ride it in." },
+  { emoji: "🎉", label: "Stoke", body: "Finish with a smile. Claim it." },
+];
+
+const crowns = [
+  {
+    emoji: "🐤",
+    title: "Duckling King",
+    subtitle: "Top boy · Duckling division",
+  },
+  {
+    emoji: "🐤",
+    title: "Duckling Queen",
+    subtitle: "Top girl · Duckling division",
+  },
+  { emoji: "🦆", title: "Duck King", subtitle: "Top boy · Duck division" },
+  { emoji: "🦆", title: "Duck Queen", subtitle: "Top girl · Duck division" },
+];
+
+const sideAwards = [
+  {
+    emoji: "🌅",
+    title: "Sunset Stoke",
+    body: "Biggest celebration of the day.",
+  },
+  {
+    emoji: "💪",
+    title: "Paddle Power",
+    body: "Never stopped going for waves.",
+  },
+  { emoji: "💦", title: "Best Wipeout", body: "Fell hardest, smiled hardest." },
+  {
+    emoji: "✨",
+    title: "Style Duckling",
+    body: "That one moment of perfect balance.",
+  },
+  {
+    emoji: "🔄",
+    title: "Best Comeback",
+    body: "Fell off, jumped right back on.",
+  },
+  {
+    emoji: "📣",
+    title: "Best Cheer Squad",
+    body: "Cheered loudest for everyone else.",
+  },
+];
+
+const parentCategories = [
+  "Biggest Wipeout",
+  "Loudest Claim",
+  "Most Determined Paddle",
+  "Best Dad Stance",
+  "Best Mom Stance",
+];
+
+const downloads = [
+  {
+    glyph: "①",
+    title: "Run of Show",
+    subtitle: "Printable timetable",
+    body: "The full afternoon at a glance — heats, breaks, awards. Pin it to the volunteer tent.",
+    href: "/assets/sunset-duckies/timetable.html",
+    accent: "terracotta",
+    format: "HTML · Print to PDF",
+  },
+  {
+    glyph: "②",
+    title: "Registration Form",
+    subtitle: "For parents to fill in",
+    body: "Surfer info, level, t-shirt size, allergies, parent contacts, photo upload note.",
+    href: "/assets/sunset-duckies/registration.html",
+    accent: "pine",
+    format: "HTML · Print or screenshot",
+  },
+  {
+    glyph: "③",
+    title: "Liability Waiver",
+    subtitle: "Signed on the day",
+    body: "Standard waiver and photo consent. Stays on file at the registration desk.",
+    href: "/assets/sunset-duckies/waiver.html",
+    accent: "ocean",
+    format: "HTML · Print to PDF",
+  },
+  {
+    glyph: "④",
+    title: "Judge Scorecard",
+    subtitle: "Heat-of-4 scoring sheet",
+    body: "Five-tick system per wave. One sheet per heat, per judge. Bias toward yes.",
+    href: "/assets/sunset-duckies/scorecard.html",
+    accent: "ochre",
+    format: "HTML · Print to PDF",
+  },
+  {
+    glyph: "⑤",
+    title: "Parent WhatsApp Blast",
+    subtitle: "Copy-paste template",
+    body: "The pre-event message. Drop it in the group chat — done.",
+    href: "/assets/sunset-duckies/parent-message.html",
+    accent: "terracotta",
+    format: "HTML · Plain text inside",
+  },
+  {
+    glyph: "⑥",
+    title: "Volunteer Roster",
+    subtitle: "Who owns what",
+    body: "Roles and owners — head coach, judges, BBQ, marshals, MC, photo, prizes.",
+    href: "/assets/sunset-duckies/volunteer-roster.html",
+    accent: "pine",
+    format: "HTML · Print to PDF",
+  },
+];
+
+const accentMap: Record<string, { border: string; text: string; bg: string }> =
+  {
+    terracotta: {
+      border: "border-terracotta",
+      text: "text-terracotta",
+      bg: "bg-terracotta",
+    },
+    pine: { border: "border-pine", text: "text-pine", bg: "bg-pine" },
+    ocean: { border: "border-ocean", text: "text-ocean", bg: "bg-ocean" },
+    ochre: { border: "border-ochre", text: "text-ochre", bg: "bg-ochre" },
+  };
+---
+
+<SiteLayout
+  title='Sunset Duckies Cup — 30 May 2026'
+  path='/sunset-duckies'
+  description="The first ever Sunset Duckies Cup. Tamarin Bay, Saturday 30 May 2026. Heats of 4, ten minutes each, BBQ on the beach, every duckling leaves stoked."
+>
+  <!-- Masthead -->
+  <section class='reveal reveal-2'>
+    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      <span>Special Edition · Event Brief</span>
+      <span class='hidden sm:inline'>Tamarin Bay · Mauritius</span>
+      <span>№001 · Inaugural</span>
+    </div>
+    <div class='rule-horizontal mt-3'></div>
+    <div class='rule-horizontal mt-[3px]'></div>
+  </section>
+
+  <!-- HERO -->
+  <section class='reveal reveal-3 relative mt-10'>
+    <div class='grid gap-10 md:grid-cols-[1.4fr_minmax(0,1fr)] md:items-center md:gap-14'>
+      <div>
+        <p class='eyebrow mb-3'>
+          🦆 The first ever
+        </p>
+        <h1
+          class='font-display leading-[0.92] tracking-[-0.035em] text-ink'
+          style='font-size: clamp(2.8rem, 8vw, 6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Sunset
+          <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;'>Duckies</span>
+          Cup.
+        </h1>
+        <p class='mt-5 max-w-[52ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
+          A whole afternoon of <span class='font-display italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>tiny humans on tiny boards</span>,
+          heats of four, ten minutes each, judges with checklists, BBQ on the sand,
+          and a parent heat at the end because — main character energy, only fair.
+        </p>
+
+        <!-- vitals strip -->
+        <dl class='mt-7 grid gap-px overflow-hidden border border-rule bg-rule sm:grid-cols-4'>
+          <div class='bg-surface px-4 py-3'>
+            <dt class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>Date</dt>
+            <dd class='mt-1 font-display text-[1.05rem] text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>Sat 30 May</dd>
+          </div>
+          <div class='bg-surface px-4 py-3'>
+            <dt class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>Time</dt>
+            <dd class='mt-1 font-display text-[1.05rem] text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>14:00 – 18:00</dd>
+          </div>
+          <div class='bg-surface px-4 py-3'>
+            <dt class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>Spot</dt>
+            <dd class='mt-1 font-display text-[1.05rem] text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>Tamarin Bay</dd>
+          </div>
+          <div class='bg-surface px-4 py-3'>
+            <dt class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>Entry</dt>
+            <dd class='mt-1 font-display text-[1.05rem] text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>20 USD · 1000 MUR</dd>
+          </div>
+        </dl>
+
+        <div class='mt-7 flex flex-wrap gap-2'>
+          <a href='#how-to-sign-up' class='stamp no-rule text-terracotta transition hover:bg-terracotta hover:text-paper'>
+            Sign up →
+          </a>
+          <a href='#downloads' class='stamp no-rule text-pine transition hover:bg-pine hover:text-paper'>
+            Grab the templates ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- Countdown / poster -->
+      <aside class='relative mx-auto w-full max-w-[380px] md:mx-0 md:justify-self-end'>
+        <div class='relative border border-ink bg-ocean p-6 text-paper shadow-[10px_10px_0_0_rgba(27,23,19,0.18)]'>
+          <span
+            class='pointer-events-none absolute inset-0 mix-blend-screen'
+            style='background-image: var(--grain); opacity: 0.35;'
+            aria-hidden='true'
+          ></span>
+          <div class='pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-terracotta/40 blur-3xl'></div>
+          <div class='pointer-events-none absolute -bottom-14 -left-10 h-44 w-44 rounded-full bg-ochre/30 blur-3xl'></div>
+
+          <div class='relative'>
+            <p class='font-mono text-[0.62rem] uppercase tracking-[0.28em] text-paper/60'>Countdown</p>
+            <p class='mt-2 font-display leading-none text-paper' style='font-size: 5.5rem; font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'>
+              {daysUntil}
+            </p>
+            <p class='mt-1 font-display text-[1.4rem] italic text-ochre' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>
+              days till heat one
+            </p>
+
+            <div class='mt-6 grid grid-cols-2 gap-3 text-center'>
+              <div class='border border-paper/25 px-3 py-3'>
+                <div class='text-2xl' aria-hidden='true'>🐤</div>
+                <div class='mt-1 font-mono text-[0.6rem] uppercase tracking-[0.22em] text-paper/55'>Duckling</div>
+                <div class='font-display italic text-paper/95' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>push-in heats</div>
+              </div>
+              <div class='border border-paper/25 px-3 py-3'>
+                <div class='text-2xl' aria-hidden='true'>🦆</div>
+                <div class='mt-1 font-mono text-[0.6rem] uppercase tracking-[0.22em] text-paper/55'>Duck</div>
+                <div class='font-display italic text-paper/95' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>self-paddled</div>
+              </div>
+            </div>
+
+            <p class='mt-6 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-paper/55'>
+              Heats of 4 · 10 min · positive-only judging
+            </p>
+          </div>
+        </div>
+        <span class='stamp absolute -top-3 -left-3 border-terracotta bg-paper text-terracotta'>
+          <span class='inline-block h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse' aria-hidden='true'></span>
+          First ever
+        </span>
+      </aside>
+    </div>
+    <div class='rule-horizontal mt-12'></div>
+  </section>
+
+  <!-- WHICH DUCK -->
+  <section class='reveal reveal-4 mt-16'>
+    <div class='mb-6'>
+      <p class='eyebrow'>Section I</p>
+      <h2
+        class='mt-2 font-display tracking-[-0.02em] text-ink'
+        style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        Which <span class='italic text-terracotta'>duck</span> are you?
+      </h2>
+      <p class='mt-3 max-w-[60ch] text-ink-soft'>
+        Two divisions, both with crowns. If you're not sure, you're a Duckling. No ranking, no shame — just where the fun starts.
+      </p>
+    </div>
+
+    <div class='grid gap-6 md:grid-cols-2'>
+      <div class='relative border border-rule bg-surface p-6 md:p-8'>
+        <div class='absolute -top-4 left-6 bg-paper px-3 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-muted'>Division A</div>
+        <div class='text-5xl' aria-hidden='true'>🐤</div>
+        <h3 class='mt-3 font-display text-2xl text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>Duckling</h3>
+        <p class='mt-2 text-ink-soft'>A coach pushes you into the wave. You pop up. You ride. Whitewater hero arc.</p>
+        <ul class='mt-4 space-y-1.5 font-mono text-[0.78rem] uppercase tracking-[0.18em] text-muted'>
+          <li>↳ Can't paddle yet — that's the whole point</li>
+          <li>↳ Working on the pop-up</li>
+          <li>↳ Coach in the water with you</li>
+        </ul>
+      </div>
+
+      <div class='relative border border-rule bg-surface p-6 md:p-8'>
+        <div class='absolute -top-4 left-6 bg-paper px-3 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-muted'>Division B</div>
+        <div class='text-5xl' aria-hidden='true'>🦆</div>
+        <h3 class='mt-3 font-display text-2xl text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>Duck</h3>
+        <p class='mt-2 text-ink-soft'>You paddle yourself in. You stand. You start to turn. Locked in, no notes.</p>
+        <ul class='mt-4 space-y-1.5 font-mono text-[0.78rem] uppercase tracking-[0.18em] text-muted'>
+          <li>↳ Self-paddled waves on the inside</li>
+          <li>↳ Stands consistently</li>
+          <li>↳ Beginning to angle the board</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class='reveal reveal-5 mt-20'>
+    <div class='mb-6'>
+      <p class='eyebrow'>Section II</p>
+      <h2
+        class='mt-2 font-display tracking-[-0.02em] text-ink'
+        style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        The <span class='italic text-pine'>run of show</span>
+      </h2>
+      <p class='mt-3 max-w-[60ch] text-ink-soft'>
+        Four hours, two divisions, BBQ running throughout. The mid-event break matters — little kids need food, dry clothes, and unstructured play in the middle.
+      </p>
+    </div>
+
+    <ol class='border-t border-rule'>
+      {schedule.map((row) => (
+        <li class='grid grid-cols-[auto_auto_1fr] items-baseline gap-4 border-b border-rule px-1 py-4 md:gap-6 md:px-3'>
+          <span class='font-mono text-[0.85rem] tracking-[0.08em] text-terracotta tabular-nums'>{row.time}</span>
+          <span class='text-xl' aria-hidden='true'>{row.emoji}</span>
+          <span class='font-display text-[1.08rem] text-ink' style='font-variation-settings: "SOFT" 60, "WONK" 1;'>
+            {row.what}
+          </span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- JUDGING -->
+  <section class='reveal reveal-6 mt-20'>
+    <div class='mb-6 flex items-end justify-between gap-4'>
+      <div>
+        <p class='eyebrow'>Section III</p>
+        <h2
+          class='mt-2 font-display tracking-[-0.02em] text-ink'
+          style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          How the <span class='italic text-terracotta'>judges</span> score
+        </h2>
+      </div>
+      <span class='stamp border-pine text-pine hidden sm:inline-flex'>Bias toward yes ✓</span>
+    </div>
+    <p class='max-w-[64ch] text-ink-soft'>
+      Five tick boxes per wave. No tricks needed — just the fundamentals we coach every week. Best 2 waves count. Max 10 ticks per surfer.
+    </p>
+
+    <div class='mt-6 grid gap-4 md:grid-cols-5'>
+      {judgingCriteria.map((c, i) => (
+        <div class='relative border border-rule bg-surface p-5'>
+          <span class='absolute -top-2 left-3 bg-paper px-2 font-mono text-[0.6rem] uppercase tracking-[0.22em] text-muted'>
+            №0{i + 1}
+          </span>
+          <div class='text-3xl' aria-hidden='true'>{c.emoji}</div>
+          <h3 class='mt-2 font-display text-lg text-ink' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>{c.label}</h3>
+          <p class='mt-1 text-[0.93rem] text-ink-soft'>{c.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class='mt-6 border-l-2 border-pine pl-4 text-ink-soft italic'>
+      Tiebreaker 1 — total waves attempted. Tiebreaker 2 — judges' "wave of the heat" shaka. 🤙
+    </div>
+  </section>
+
+  <!-- PRIZES -->
+  <section class='reveal reveal-6 mt-20'>
+    <div class='mb-6'>
+      <p class='eyebrow'>Section IV</p>
+      <h2
+        class='mt-2 font-display tracking-[-0.02em] text-ink'
+        style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        The <span class='italic text-ochre'>prizes</span> 🏆
+      </h2>
+      <p class='mt-3 max-w-[60ch] text-ink-soft'>
+        Four crowns, six side awards. Every duckling has a shot at something — and every single one goes home with a personalised finisher certificate.
+      </p>
+    </div>
+
+    <!-- Crowns -->
+    <p class='eyebrow mb-3'>The four crowns</p>
+    <div class='grid gap-3 md:grid-cols-4'>
+      {crowns.map((c) => (
+        <div class='relative overflow-hidden border border-ink bg-paper p-5 text-center'>
+          <div class='absolute -top-4 -right-4 h-20 w-20 rounded-full bg-terracotta/15 blur-2xl'></div>
+          <div class='relative text-4xl' aria-hidden='true'>{c.emoji}</div>
+          <h3 class='relative mt-2 font-display text-xl text-ink' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>
+            {c.title}
+          </h3>
+          <p class='relative mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>{c.subtitle}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Side awards -->
+    <p class='eyebrow mb-3 mt-10'>Six side awards · every duckling has a shot</p>
+    <div class='grid gap-3 md:grid-cols-3'>
+      {sideAwards.map((a) => (
+        <div class='flex gap-4 border border-rule bg-surface p-4'>
+          <span class='text-2xl' aria-hidden='true'>{a.emoji}</span>
+          <div>
+            <h3 class='font-display text-[1.05rem] text-ink' style='font-variation-settings: "SOFT" 60, "WONK" 1;'>{a.title}</h3>
+            <p class='mt-0.5 text-[0.92rem] text-ink-soft'>{a.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- PARENT HEAT -->
+  <section class='reveal reveal-6 mt-20'>
+    <div class='relative overflow-hidden border border-ink bg-ocean text-paper'>
+      <span
+        class='pointer-events-none absolute inset-0 mix-blend-screen'
+        style='background-image: var(--grain); opacity: 0.35;'
+        aria-hidden='true'
+      ></span>
+      <div class='pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-terracotta/30 blur-3xl'></div>
+      <div class='pointer-events-none absolute -left-20 -bottom-24 h-64 w-64 rounded-full bg-ochre/25 blur-3xl'></div>
+
+      <div class='relative p-8 md:p-12'>
+        <p class='font-mono text-[0.68rem] uppercase tracking-[0.28em] text-paper/60'>The closing act</p>
+        <h2
+          class='mt-2 font-display tracking-[-0.02em] text-paper'
+          style='font-size: clamp(1.8rem, 4vw, 2.8rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Parent <span class='italic text-ochre'>heat</span> 🦆
+        </h2>
+        <p class='mt-3 max-w-[58ch] text-paper/80'>
+          Four parents going in. Same rules, same scoring — pure spectacle. <em>Kids vote the side awards by cheer volume.</em> Loudest wins. Music up. Dignity, optional.
+        </p>
+
+        <div class='mt-6 flex flex-wrap gap-2'>
+          {parentCategories.map((cat) => (
+            <span class='stamp border-paper/40 text-paper/90'>{cat}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section id='downloads' class='reveal reveal-6 mt-20'>
+    <div class='mb-6 flex items-end justify-between gap-4'>
+      <div>
+        <p class='eyebrow'>Section V · Vault</p>
+        <h2
+          class='mt-2 font-display tracking-[-0.02em] text-ink'
+          style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+        >
+          Grab the <span class='italic text-pine'>templates</span>
+        </h2>
+      </div>
+      <span class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>
+        №{String(downloads.length).padStart(2, "0")} files
+      </span>
+    </div>
+    <p class='max-w-[64ch] text-ink-soft'>
+      Everything a parent, judge, or volunteer needs. Open, print, fill in. (Open the file → ⌘P → Save as PDF if you want it portable.)
+    </p>
+
+    <div class='mt-8 grid gap-4 md:grid-cols-2'>
+      {downloads.map((d) => {
+        const a = accentMap[d.accent];
+        return (
+          <a
+            href={d.href}
+            target='_blank'
+            rel='noreferrer'
+            class={`no-rule group relative block border ${a.border} bg-surface p-5 transition duration-300 hover:-translate-y-0.5 md:p-6`}
+          >
+            <div class='flex items-start gap-4'>
+              <div class={`flex h-14 w-14 shrink-0 items-center justify-center border ${a.border} font-display text-2xl ${a.text}`}>
+                {d.glyph}
+              </div>
+              <div class='min-w-0 flex-1'>
+                <p class='font-mono text-[0.62rem] uppercase tracking-[0.22em] text-muted'>{d.subtitle}</p>
+                <h3 class={`mt-1 font-display text-xl text-ink transition group-hover:${a.text}`} style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
+                  {d.title} <span class='ml-1 inline-block transition group-hover:translate-x-1'>↗</span>
+                </h3>
+                <p class='mt-1 text-[0.95rem] text-ink-soft'>{d.body}</p>
+                <p class='mt-3 font-mono text-[0.6rem] uppercase tracking-[0.22em] text-muted'>{d.format}</p>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- SIGN UP -->
+  <section id='how-to-sign-up' class='reveal reveal-6 mt-20'>
+    <div class='border border-rule bg-surface p-8 md:p-10'>
+      <p class='eyebrow'>The final word</p>
+      <h2
+        class='mt-2 font-display tracking-[-0.02em] text-ink'
+        style='font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
+      >
+        How to <span class='italic text-terracotta'>sign up</span>
+      </h2>
+      <p class='mt-4 max-w-[60ch] text-ink-soft'>
+        Registration goes out on the parents' WhatsApp. Fill it in, pay the entry, drop off the head-and-shoulders photo for the heat billboard. Then on the day —
+        <span class='font-medium text-ink'>13:30 drop-off</span> for check-in and rashie collection.
+        <span class='font-medium text-ink'> 14:00 sharp</span>, we surf.
+      </p>
+
+      <ul class='mt-5 max-w-[60ch] space-y-1.5 text-ink-soft'>
+        <li class='before:mr-2 before:font-mono before:text-terracotta before:content-["▸"]'>This is <em>not</em> a drop-off — parents stay the full afternoon. You're surfing too 😉</li>
+        <li class='before:mr-2 before:font-mono before:text-terracotta before:content-["▸"]'>Bring your own board if you have one — we have spares for those who don't.</li>
+        <li class='before:mr-2 before:font-mono before:text-terracotta before:content-["▸"]'>We provide: water for kids, hot chocolate at the break, BBQ for the family, prizes, certificate.</li>
+        <li class='before:mr-2 before:font-mono before:text-terracotta before:content-["▸"]'>Bring: own rashie, sunscreen, towel, warm layer for after, drinks for grown-ups.</li>
+        <li class='before:mr-2 before:font-mono before:text-terracotta before:content-["▸"]'>Cheers welcome. Beach-coaching, not so much. 🫶</li>
+      </ul>
+
+      <div class='mt-7 flex flex-wrap gap-3'>
+        <a href='/assets/sunset-duckies/registration.html' class='stamp no-rule text-terracotta transition hover:bg-terracotta hover:text-paper'>
+          Open the registration form →
+        </a>
+        <a href='/assets/sunset-duckies/parent-message.html' class='stamp no-rule text-pine transition hover:bg-pine hover:text-paper'>
+          The WhatsApp template →
+        </a>
+      </div>
+    </div>
+
+    <p class='mt-8 text-center font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
+      Stoked to see you all · Andras & the Sunset Duckies team
+    </p>
+  </section>
+</SiteLayout>
