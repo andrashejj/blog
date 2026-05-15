@@ -2,7 +2,7 @@
 title: "Knowledge is power, or..?"
 date: "2026-02-13"
 slug: "knowledge-is-power-or"
-summary: "Why structured, time-aware knowledge is becoming core infrastructure for modern product building."
+summary: "How I use a personal knowledge graph, and why every fact in it needs a timestamp."
 coverImage: "/images/posts/knowledge-is-power-or-cover.png"
 tags:
   - product
@@ -10,67 +10,48 @@ tags:
   - knowledge
 ---
 
-Lately I think about knowledge in a very practical way.
+I've been thinking about knowledge in a practical way lately. Less "look how smart this is", more "how do I not drown while building products right now?"
 
-Not academic. Not "look how smart this is." More like: how do I not drown while building products right now?
+Everything moves too fast. New tools every week, new frameworks, new channels, new opinions, new noise.
 
-Everything is moving too fast. New tools every week, new frameworks, new channels, new opinions, new noise.
+The old loop used to work for me: ship feature, check metrics, repeat. That loop isn't enough anymore. The hard part isn't writing code. It's deciding what deserves to be built.
 
-The old loop used to work for me: ship feature, check metrics, repeat.
-Now that loop is not enough.
+Who's the actual user? What problem are they really trying to solve? What have they already tried? What are they afraid of? What does "solved" look like for them?
 
-The hard part is not writing code. The hard part is deciding what deserves to be built.
+I stopped thinking in lists and started thinking in connections. A personal knowledge graph sounds fancy, but for me it just means connecting what I learn to what I decide.
 
-Who is the actual user?
-What problem are they really trying to solve?
-What have they already tried?
-What are they afraid of?
-What does "solved" look like for them?
-
-That is why I stopped thinking in lists and started thinking in connections.
-
-A personal knowledge graph sounds fancy, but for me it just means this: connect what I learn to what I decide.
-
-I use Obsidian very simply: small notes, links between ideas, post-call reflections, failed experiments, and surprises.
+I use Obsidian very simply: small notes, links between ideas, post-call reflections, failed experiments, surprises.
 
 - notes about users (their words, not my interpretation)
 - notes about problems (real vs assumed)
 - notes about solutions (what worked, what flopped, what surprised me)
 - notes about decisions (why I picked A over B)
 
-If I do not build my own memory system, everything becomes random:
-random bookmarks, random chat threads, random AI output, random half-memory.
+Without my own memory system, everything becomes random: random bookmarks, random chat threads, random AI output, random half-memory.
 
-I use AI every day and I genuinely love it.
+I use AI every day and I love it. But AI doesn't replace understanding your user, it amplifies what you already have. Shallow understanding gets you amplified noise. Strong understanding gets you amplified leverage.
 
-But AI does not replace understanding your user.
-It amplifies what you already have.
-
-If your understanding is shallow, AI amplifies noise.
-If your understanding is strong, AI amplifies leverage.
-
-So what has actually helped me?
+What's actually helped me:
 
 - continuous learning about users
-- writing notes even when they are messy
+- writing notes even when they're messy
 - linking insights to product decisions
 - creating content from what I learned
 
-When I write a post, record a short video, or share weekly lessons, it is not "content strategy" first.
-It is consolidation. It is memory.
+When I write a post, record a short video, or share weekly lessons, the first purpose is consolidation. Memory. The content strategy part comes second.
 
-And yes, this can feel overwhelming.
+And yes, this gets overwhelming.
 
-If you feel lost while building, you are not alone. Most founders and product builders I know feel this, they just do not always say it out loud.
+If you feel lost while building, you're not alone. Most founders and product builders I know feel this. They just don't say it out loud.
 
 <div className="my-6 space-y-2">
   <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
     <span className="text-gray-400">—</span>
-    <span>I do not really know if users want this.</span>
+    <span>I don't really know if users want this.</span>
   </div>
   <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
     <span className="text-gray-400">—</span>
-    <span>I am not sure we are solving the right problem.</span>
+    <span>I'm not sure we're solving the right problem.</span>
   </div>
   <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
     <span className="text-gray-400">—</span>
@@ -78,18 +59,15 @@ If you feel lost while building, you are not alone. Most founders and product bu
   </div>
 </div>
 
-That is also why community matters more now than before.
+Community matters more now than it used to. Talking to other builders calibrates me faster than sitting alone with assumptions. Sharing unfinished thoughts helps. Asking "basic" questions helps. Hearing "I don't know" from smart people helps.
 
-Talking to other builders helps me calibrate faster than sitting alone with assumptions. Sharing unfinished thoughts helps. Asking "basic" questions helps. Hearing "I do not know" from smart people helps.
-
-I do not need to know everything about my market.
-I need a better map than last week.
+I don't need to know everything about my market. I need a better map than last week.
 
 <Divider />
 
-## Deep-Dive: Knowledge Graphs, Triplets, and Why Time Matters
+## Deep-dive: knowledge graphs, triplets, and why time matters
 
-At the core, a knowledge graph is entities connected by relationships. The basic unit is a triplet:
+A knowledge graph is entities connected by relationships. The basic unit is a triplet:
 
 <div className="my-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg font-mono text-sm">
   (subject, predicate, object)
@@ -102,25 +80,25 @@ At the core, a knowledge graph is entities connected by relationships. The basic
   - `(Decision-123, was-driven-by, user-feedback)`
 </Callout>
 
-When these triplets are linked, you get a graph. Not a folder. Not a static list.
+Link triplets together and you get a graph. Not a folder. Not a static list.
 
-### The Problem With Static Facts
+### The problem with static facts
 
-Most notes are static, but product truth is temporal:
+Most notes are static. Product truth isn't.
 
 - we targeted enterprise, then pivoted to SMB in Q3
 - a pricing model worked until we hit a certain scale
 - competitor X mattered a lot, now competitor Y does
 
-If time is missing, your notes slowly become wrong while still looking organized.
+Drop the time dimension and your notes slowly become wrong while still looking organised.
 
 <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 my-6 border-l-4 border-amber-500 italic text-lg text-gray-700 dark:text-gray-200">
   A fact without a timestamp is a rumor waiting to mislead you.
 </div>
 
-### Temporal Knowledge Graphs
+### Temporal knowledge graphs
 
-A temporal fact is a triplet with time:
+A temporal fact is a triplet with time attached:
 
 ```text
 (subject, predicate, object, valid_from, valid_to)
@@ -132,9 +110,9 @@ or:
 (subject, relation, object, timestamp)
 ```
 
-That lets you ask what was true then, what is true now, and exactly when it changed.
+That lets you ask what was true then, what's true now, and exactly when it changed.
 
-### Interactive Graph Example
+### Interactive graph example
 
 <div className="aspect-video w-full overflow-hidden rounded-[14px] border border-border bg-[#0b1220] shadow-[0_12px_30px_rgba(22,24,29,0.12)]">
   <iframe
@@ -147,24 +125,24 @@ That lets you ask what was true then, what is true now, and exactly when it chan
   />
 </div>
 
-### Types of Facts
+### Types of facts
 
-- Atemporal: always true
-- Static: true from a point in time and then stable
-- Dynamic: changes over time
+- atemporal: always true
+- static: true from a point in time and then stable
+- dynamic: changes over time
 
-In product work, most important facts are dynamic. That is exactly why they become stale so quickly.
+In product work, most facts that matter are dynamic. That's exactly why they go stale so fast.
 
-### Why Agents Are Interesting Here
+### Why agents are interesting here
 
-Temporal knowledge graph research suggests single-pass retrieval breaks easily. Agentic flows do better by:
+Research on temporal knowledge graphs suggests single-pass retrieval breaks easily. Agentic flows do better by:
 
 1. breaking a question into sub-queries
 2. retrieving with temporal constraints
 3. checking whether facts are still valid
 4. iterating when context is missing
 
-That is close to how real product debugging works anyway: probe, compare, update your model, repeat.
+That's close to how real product debugging works anyway. Probe, compare, update your model, repeat.
 
 Typical temporal operators:
 
@@ -174,10 +152,10 @@ Typical temporal operators:
 - `Search_after(query, t)`
 - `Search_between(query, t1, t2)`
 
-### Practical Personal Setup
+### Practical personal setup
 
-<Callout type="default" title="You do not need a full system">
-  You do not need to build a full temporal graph system to benefit:
+<Callout type="default" title="You don't need a full system">
+  You don't need to build a full temporal graph system to get value from this.
 </Callout>
 
 <div className="my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -195,7 +173,7 @@ Typical temporal operators:
   </div>
 </div>
 
-### Obsidian Workflow
+### Obsidian workflow
 
 My setup is simple:
 
@@ -205,7 +183,7 @@ My setup is simple:
 - links between notes
 - dates on decisions
 
-Once a week, I clean duplicates, archive stale notes, and add missing links. Over time, that becomes a usable personal graph instead of a pile of disconnected notes.
+Once a week I clean duplicates, archive stale notes, and add missing links. Over time, that turns into a usable personal graph instead of a pile of disconnected notes.
 
 <Divider />
 
@@ -215,13 +193,4 @@ Once a week, I clean duplicates, archive stale notes, and add missing links. Ove
 - [TKG-Thinker paper](https://arxiv.org/html/2602.05818v2)
 - [Obsidian](https://obsidian.md/)
 
-For me, structured knowledge plus time-awareness is not theory. It is a way to stay sane while building.
-
-<div className="my-10 p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl text-white text-center">
-  <p className="text-xl md:text-2xl font-light leading-relaxed">
-    Build your map while you build the product.
-  </p>
-  <p className="text-lg text-gray-400 mt-4">
-    You will need both.
-  </p>
-</div>
+Structured notes plus timestamps are what keep me sane while building. The product changes weekly. The map needs to keep up.
