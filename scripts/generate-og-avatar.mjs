@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import CanvasKitInit from "canvaskit-wasm/bin/full/canvaskit.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SRC = join(__dirname, "..", "public", "images", "posts", "andras.png");
+const SRC = join(__dirname, "..", "public", "images", "posts", "andras.jpg");
 const OUT = join(__dirname, "..", "public", "og-templates", "avatar.png");
 
 const SIZE = 256; // 2x the display size so the OG scaler gets crisp pixels.
