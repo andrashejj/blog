@@ -1,0 +1,67 @@
+---
+title: "Gaussian splatting in Baubiber, and the slightly absurd state of 3D worlds"
+date: "2026-05-20"
+slug: "gaussian-splatting-in-baubiber"
+summary: "I shipped Gaussian splats into Baubiber so a contractor in Pécs can walk around a kitchen in Tamarindo from a browser tab. A few notes on what the tech is, where the world-model people are heading, and how early everything still is."
+coverImage: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?auto=format&fit=crop&fm=jpg&q=80&w=1600&h=900"
+draft: false
+tags:
+  - baubiber
+  - graphics
+  - 3d
+  - gaussian-splatting
+  - world-models
+  - product
+---
+
+A few weeks ago I shipped a feature into [Baubiber](/blog/baubiber-uber-for-construction) that I keep playing with even when nobody's asking me to. You scan a room with your phone, and the contractor on the other side of the marketplace can walk around inside it in a browser tab. It isn't a 360 photo or a Matterport tour with floating arrow-pucks; it's a walkable cloud of a few million coloured blobs that, from the right angle, looks like a kitchen.
+
+The technique is called Gaussian splatting. The paper that made it run in real time is from 2023, which in this corner of the world is geological. The idea, roughly: instead of representing a 3D scene as triangles and textures, you represent it as something like a million little fuzzy ellipsoids floating in space, each with a position, colour, opacity, and a stretched shape, which you then sort back-to-front and paint onto the screen. There's no mesh and no proper "object" anywhere. The counter is just a few thousand blobs that happen to align when you look from where I was standing.
+
+It is, by any sane standard, an absurd way to do graphics. It also happens to work better than anything else for the actual problem I have: a contractor in Pécs needs to see a kitchen in Tamarindo without flying there, and a photograph isn't enough.
+
+A video walkthrough doesn't quite get there either, because video gives the contractor what I happened to see, whereas a splat gives them what they would have seen if they'd been standing where I was and then taken three steps to the right and crouched. It's a different shape of artifact altogether.
+
+## Why this fits the construction problem
+
+Construction is a perception problem in disguise. The homeowner is standing in the kitchen, the architect is in another city, and the plumber is somewhere in their van between two other jobs, and all three of them need to see the same room accurately enough to make a decision. The current chain for getting there is approximately:
+
+1. Homeowner takes 14 photos, 6 of which are blurry, none of which show the corner with the boiler.
+2. Architect asks for "one more shot of the X". Three days pass.
+3. Plumber visits the site, takes their own photos, quotes anyway, charges for the visit.
+
+You can crank the photo count and the messaging frequency forever and you'll still be losing information in the compression, because the room is volumetric and the medium isn't. A walkable splat closes that gap badly, but well enough that a contractor can confidently bid on a job without first driving an hour each way to see it. That's the whole thesis, and the rest of this is housekeeping.
+
+## How bad the splats actually are
+
+The splats are quite bad, in ways that I find genuinely interesting once you start poking at them.
+
+Walk three steps outside the centre of a captured room and the geometry starts softening, with corners that quietly lie to you about where they actually are. Reflective surfaces (mirrors, glossy floors, anything chrome) confuse the model entirely, which is why one of my demo kitchens has a phantom second oven floating somewhere off to the side, where the toaster's reflection used to live. Specular highlights smear across the screen as you move your head, the ceiling sags by a centimetre or two if I didn't scan it carefully enough, and the resulting files run to several gigabytes for a serious room, which is fine on a laptop and painful at a building site with two bars of signal.
+
+I love them anyway, because the bad bits are bad in a direction that gets better every six months. Every new paper either compresses the splats, generates them from fewer photos, or learns to patch the holes the current ones leave behind. The trajectory is the whole point.
+
+## The world-model branch
+
+The version of this that gets the most attention right now is the one where you don't even bother capturing the room. World Labs in particular has been showing demos where you hand the model a single still image and it invents the rest of the scene, including the geometry behind the camera. A few worth poking at:
+
+- [World Labs' demo wall](https://www.worldlabs.ai/blog), Fei-Fei Li's outfit. Single image in, walkable scene out.
+- [Marble](https://www.worldlabs.ai/blog/introducing-marble), their product, where you generate and edit scenes from a prompt or photo.
+- [Luma AI's Interactive Scenes](https://lumalabs.ai/interactive-scenes), if you prefer the captured-from-reality flavour.
+
+These are very early. Marble produces a room you can wander around in for maybe ten metres before the model starts inventing increasingly committed staircases. The demos are short, soft at the edges, and break in funny ways. They're also good enough that I spent a Sunday afternoon inside an invented Tuscan terrace and forgot I was sitting at a kitchen table in Switzerland.
+
+For Baubiber, the world-model branch isn't useful yet, because what I need is the real kitchen rather than a merely plausible one. But if you squint at where this is heading, you can see a near-future where the homeowner takes a single photo of a corner, the system produces a walkable approximation of the whole room with the contractor's confidence interval baked into the rendering, and that becomes enough to bid against. We're not there yet, but we will be soon enough.
+
+## What I tell people who ask
+
+There are basically two things I find myself saying whenever this comes up at dinner.
+
+The first is that if you've never walked around inside a splat, you should go and do it this week, because the first time your body registers that you are inside a place you have never physically been is properly strange, and it quietly changes how you look at photographs for a few days afterwards.
+
+The second is that you shouldn't wait for any of this to be polished before doing something with it. The interesting use cases get built now, while the tech is still bad enough that nobody is sure what it's actually for. Baubiber is one of those use cases, and there will be a dozen more in fields I haven't thought about yet, built by people who got their hands on the SDK in 2026 and decided to ship something inside a three-metre cube before the cube was anywhere close to reliable.
+
+The splats are bad, and I'm still shipping them.
+
+---
+
+*Want to talk gaussian splatting, construction, or both?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
