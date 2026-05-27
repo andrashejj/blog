@@ -14,7 +14,7 @@ I've been thinking about knowledge in a practical way lately. Less "look how sma
 
 Everything moves too fast. New tools every week, new frameworks, new channels, new opinions, new noise.
 
-The old loop used to work for me: ship feature, check metrics, repeat. That loop isn't enough anymore. The hard part isn't writing code. It's deciding what deserves to be built.
+The old loop used to work for me: ship feature, check metrics, repeat. That loop isn't enough anymore. Writing the code was never the bottleneck. Figuring out what's actually worth building is the hard part now.
 
 Who's the actual user? What problem are they really trying to solve? What have they already tried? What are they afraid of? What does "solved" look like for them?
 
@@ -29,7 +29,7 @@ I use Obsidian very simply: small notes, links between ideas, post-call reflecti
 
 Without my own memory system, everything becomes random: random bookmarks, random chat threads, random AI output, random half-memory.
 
-I use AI every day and I love it. But AI doesn't replace understanding your user, it amplifies what you already have. Shallow understanding gets you amplified noise. Strong understanding gets you amplified signal.
+I use AI every day and I love it. But AI doesn't replace understanding your user, it amplifies whatever you bring to it. Bring a shallow understanding and you get amplified noise. Bring a real one and you get signal worth having.
 
 What's actually helped me:
 
@@ -80,7 +80,7 @@ A knowledge graph is entities connected by relationships. The basic unit is a tr
   - `(Decision-123, was-driven-by, user-feedback)`
 </Callout>
 
-Link triplets together and you get a graph. Not a folder. Not a static list.
+Link triplets together and you get a graph, not a folder of disconnected notes.
 
 ### The problem with static facts
 
@@ -93,7 +93,7 @@ Most notes are static. Product truth isn't.
 Drop the time dimension and your notes slowly become wrong while still looking organised.
 
 <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 my-6 border-l-4 border-amber-500 italic text-lg text-gray-700 dark:text-gray-200">
-  A fact without a timestamp is a rumor waiting to mislead you.
+  A fact with no date attached quietly goes stale, and you keep trusting it long after it stopped being true.
 </div>
 
 ### Temporal knowledge graphs
@@ -133,7 +133,7 @@ That lets you ask what was true then, what's true now, and exactly when it chang
 
 In product work, most facts that matter are dynamic. That's exactly why they go stale so fast.
 
-### Why agents are interesting here
+### Why single-pass retrieval breaks
 
 Research on temporal knowledge graphs suggests single-pass retrieval breaks easily. Agentic flows do better by:
 
