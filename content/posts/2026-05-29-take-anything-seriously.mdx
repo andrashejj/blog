@@ -17,13 +17,24 @@ At no point did a person sit with the problem long enough to be uncomfortable.
 
 Every artifact in that chain looks finished. Clean spec, passing build, green pipeline. And every one of them is slop: fluent, confident, plausible output that no human thought through. It reads like work. It has the shape of work. The thinking that used to live inside it is gone, and the surface is smooth enough that you don't notice.
 
+<ImageFloat src="/images/posts/slop-paper-stacks.jpg" alt="Output nobody will ever read, in the volume only a machine produces." side="right">
+
 Code is the least of it. The same thing is happening to design docs, incident write-ups, performance reviews, strategy decks, the all-hands email, the post you read this morning over coffee. Any of it can now be generated in seconds, at length, in a confident house style, by someone who didn't think about it, for a reader who won't either.
+
+</ImageFloat>
 
 We spent a decade stripping friction out of software work, and then agents took the rest. Here's what we forgot: the friction was doing something. Writing the spec by hand was slow because you kept hitting things about the problem you didn't understand yet, and you couldn't finish the sentence until you had. Reading the diff line by line was slow because understanding takes time, and at the end of it you understood. The slowness wasn't sitting next to the work. It *was* the work.
 
 Take the effort away and the understanding leaves with it, quietly, because the thing still ships on time and still looks right. Confidence holds steady. Comprehension drops to zero. Nobody feels it in the moment, which is the whole danger.
 
 You feel it later. The spec looked fine, the PR was green, it worked in the demo, everyone moved on. Weeks pass. Then production breaks, and you go to debug it, and you find nobody on the team actually understands the code. You didn't write it. The person whose name is on it didn't really write it either. So you do the natural thing now: you ask an agent to debug it. The agent understands the system no better than you do, so it guesses, adds code, changes things, and now there's more code nobody understands stacked on top of the bug. The harder you push, the deeper it gets.
+
+<figure className="not-prose my-8">
+  <video className="w-full rounded-2xl border border-gray-200 shadow-md" autoPlay loop muted playsInline>
+    <source src="/videos/slop-code-scroll.mp4" type="video/mp4" />
+  </video>
+  <figcaption className="mt-2 text-xs text-gray-400 italic text-center">More of it, generated in seconds, scrolling past faster than anyone will read it.</figcaption>
+</figure>
 
 I watched a team go through exactly this recently. More than ten engineers, the better part of a week, throwing agents at a production failure they couldn't pin down, every fix spawning two new questions. They got out by going manual: agents off, reading the code by hand, reconstructing line by line what it actually did. The way out of the hole was the work they'd skipped in order to dig it.
 
