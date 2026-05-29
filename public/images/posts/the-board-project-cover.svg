@@ -1,31 +1,34 @@
-<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, 'Times New Roman', 'Iowan Old Style', serif">
   <defs>
-    <linearGradient id="boardBg" x1="120" y1="70" x2="1520" y2="860" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#67E8F9"/>
-      <stop offset="0.55" stop-color="#2563EB"/>
-      <stop offset="1" stop-color="#111827"/>
-    </linearGradient>
+    <radialGradient id="plate" cx="50%" cy="40%" r="78%">
+      <stop offset="0" stop-color="#fbf4e2"/>
+      <stop offset="0.62" stop-color="#f1e6cf"/>
+      <stop offset="1" stop-color="#e6d6b3"/>
+    </radialGradient>
   </defs>
-  <rect width="1600" height="900" fill="url(#boardBg)"/>
-  <rect x="120" y="120" width="1360" height="660" rx="34" fill="#0F172A" fill-opacity="0.78"/>
-  <rect x="180" y="180" width="760" height="540" rx="24" fill="#E0F2FE"/>
-  <rect x="980" y="180" width="440" height="540" rx="24" fill="#111827"/>
-  <path d="M560 240C646 300 734 450 734 450C734 450 646 600 560 660C474 600 386 450 386 450C386 450 474 300 560 240Z" fill="#BAE6FD" stroke="#0369A1" stroke-width="12"/>
-  <path d="M560 264C631 316 706 450 706 450C706 450 631 584 560 636C489 584 414 450 414 450C414 450 489 316 560 264Z" stroke="#0EA5E9" stroke-width="8" stroke-dasharray="14 14"/>
-  <line x1="230" y1="250" x2="890" y2="250" stroke="#7DD3FC" stroke-opacity="0.5"/>
-  <line x1="230" y1="650" x2="890" y2="650" stroke="#7DD3FC" stroke-opacity="0.5"/>
-  <line x1="230" y1="450" x2="890" y2="450" stroke="#0284C7" stroke-opacity="0.6"/>
-  <line x1="560" y1="210" x2="560" y2="690" stroke="#0284C7" stroke-opacity="0.6"/>
-  <rect x="1035" y="240" width="330" height="96" rx="18" fill="#1F2937"/>
-  <rect x="1082" y="274" width="86" height="28" rx="10" fill="#22D3EE"/>
-  <rect x="1190" y="274" width="126" height="28" rx="10" fill="#E0F2FE"/>
-  <rect x="1035" y="364" width="330" height="96" rx="18" fill="#1F2937"/>
-  <rect x="1082" y="398" width="86" height="28" rx="10" fill="#22C55E"/>
-  <rect x="1190" y="398" width="126" height="28" rx="10" fill="#DCFCE7"/>
-  <rect x="1035" y="488" width="330" height="96" rx="18" fill="#1F2937"/>
-  <rect x="1082" y="522" width="86" height="28" rx="10" fill="#F59E0B"/>
-  <rect x="1190" y="522" width="126" height="28" rx="10" fill="#FEF3C7"/>
-  <path d="M1115 272L1134 292L1167 258" stroke="#082F49" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M1115 396L1134 416L1167 382" stroke="#052E16" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M1115 520L1134 540L1167 506" stroke="#451A03" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="1600" height="900" fill="url(#plate)"/>
+
+  <g stroke="#d9c9a6" stroke-width="1.5" opacity="0.55">
+    <line x1="468" y1="186" x2="468" y2="724"/>
+    <line x1="1132" y1="186" x2="1132" y2="724"/>
+  </g>
+
+  <g stroke="#c8b694" stroke-width="2">
+    <line x1="-40" y1="150" x2="1640" y2="150" stroke-dasharray="7 5"/>
+    <line x1="-40" y1="160" x2="1640" y2="160" stroke-dasharray="7 5" opacity="0.5"/>
+  </g>
+  <text x="800" y="118" text-anchor="middle" font-size="25" letter-spacing="9" fill="#6f5f4f">ANDRAS HEJJ &#183; FIELD NOTES</text>
+
+  <g transform="rotate(-20 800 444)">
+    <path d="M800 256 C826 322 848 392 846 448 C844 524 824 602 800 640 C776 602 756 524 754 448 C752 392 774 322 800 256 Z" fill="#fbf4e2" stroke="#1b1713" stroke-width="5"/>
+    <line x1="800" y1="264" x2="800" y2="632" stroke="#1b1713" stroke-width="2.5"/>
+    <path d="M772 372 Q800 382 828 372" fill="none" stroke="#1b1713" stroke-width="2" opacity="0.35"/>
+    <path d="M768 520 Q800 530 832 520" fill="none" stroke="#1b1713" stroke-width="2" opacity="0.35"/>
+    <path d="M790 610 L810 610 C808 642 800 662 788 672 C788 648 786 626 786 612 Z" fill="#bf4024"/>
+  </g>
+
+  <line x1="-40" y1="748" x2="1640" y2="748" stroke="#c8b694" stroke-width="2"/>
+  <text x="256" y="794" text-anchor="start" font-size="22" letter-spacing="5" fill="#6f5f4f">THE BOARD PROJECT</text>
+  <text x="1344" y="800" text-anchor="end" font-style="italic" font-size="42" fill="#bf4024">&#8470;&#8201;09</text>
 </svg>
