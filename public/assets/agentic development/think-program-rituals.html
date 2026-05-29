@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THINK Program · Rituals + Guides · MCO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #161512;
+    --ink-soft: #4d4a44;
+    --ink-faint: #847e74;
+    --paper: #faf6ee;
+    --paper-2: #f2ecdf;
+    --paper-3: #ece4d1;
+    --rule: #d8d0bd;
+    --rule-soft: #e6dfca;
+    --accent: #a64b22;
+    --accent-deep: #6e2f10;
+    --accent-faint: #f9edde;
+    --accent-soft: #f1dccb;
+    --code-bg: #efe7d3;
+    --layer-1: #f9edde;
+    --layer-2: #f1dccb;
+    --layer-3: #e8c8ad;
+    --layer-4: #d99670;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Newsreader', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    font-variation-settings: 'opsz' 18;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0;
+    font-variation-settings: 'opsz' 60;
+  }
+  p { margin: 0 0 1rem; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  /* COVER */
+  .cover {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 6rem 3rem;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  }
+  .cover::before, .cover::after {
+    content: ""; position: absolute; left: 6rem; right: 6rem; height: 1px; background: var(--ink);
+  }
+  .cover::before { top: 1.5rem; }
+  .cover::after { bottom: 1.5rem; }
+  .cover .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.75rem;
+  }
+  .cover h1 {
+    font-size: clamp(2.5rem, 6vw, 5.2rem);
+    line-height: 0.94;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    font-variation-settings: 'opsz' 144, 'SOFT' 10, 'WONK' 1;
+    max-width: 18ch;
+    margin-bottom: 1.25rem;
+  }
+  .cover h1 em {
+    color: var(--accent-deep);
+    font-variation-settings: 'opsz' 144, 'SOFT' 80, 'WONK' 1;
+  }
+  .cover .subtitle {
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    color: var(--ink-soft);
+    max-width: 55ch;
+    margin: 0 0 2rem;
+    font-variation-settings: 'opsz' 30;
+  }
+  .cover .meta {
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--ink);
+  }
+  .cover .meta-label {
+    display: block;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-bottom: 0.3rem;
+  }
+
+  /* CONTENT */
+  main { max-width: 1040px; margin: 0 auto; padding: 4rem 5rem; }
+  section { margin-bottom: 4.5rem; }
+  section:last-child { margin-bottom: 0; }
+
+  section h2 {
+    font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+    letter-spacing: -0.018em;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: baseline; gap: 1rem;
+  }
+  section h2 .h-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  section h3 {
+    font-size: 1.15rem;
+    margin: 1.75rem 0 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    color: var(--ink);
+  }
+
+  /* Summary card */
+  .summary {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 2rem 2.25rem;
+    margin: 0 0 3rem;
+    position: relative;
+  }
+  .summary::before {
+    content: "Executive summary";
+    position: absolute;
+    top: -0.6rem; left: 1.75rem;
+    background: var(--paper);
+    padding: 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .summary dl {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 0;
+    margin: 0;
+  }
+  .summary dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0.65rem 1rem 0.65rem 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .summary dd {
+    margin: 0;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 0.95rem;
+  }
+  .summary dt:first-of-type, .summary dd:first-of-type { border-top: none; padding-top: 0; }
+
+  /* Vertical sub-lists inside summary dd */
+  .summary .kv-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .summary .kv-list li {
+    padding-left: 1.1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .summary .kv-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+    font-size: 0.7rem;
+    line-height: 1.55;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.92rem; }
+  th { font-weight: 600; text-align: left; padding: 0.6rem 1rem 0.6rem 0; border-bottom: 2px solid var(--ink); }
+  td { padding: 0.6rem 1rem 0.6rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: 1px solid var(--ink); }
+  td:last-child, th:last-child { padding-right: 0; }
+
+  /* Lists */
+  ul, ol { margin: 0.75rem 0 1.25rem; padding-left: 1.4rem; }
+  li { margin: 0.35rem 0; }
+  ul li::marker { color: var(--accent); }
+  ol li::marker { color: var(--accent); font-family: var(--font-mono); font-size: 0.85em; }
+
+  /* Pull quotes */
+  .quote {
+    background: var(--paper);
+    border: 1px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    padding: 1.25rem 1.75rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 40;
+  }
+
+  /* Mermaid */
+  .mermaid {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 2rem 1rem;
+    margin: 1.75rem 0;
+    text-align: center;
+  }
+
+  /* ====== HERO: AI Core + ADLC = Operating Model ====== */
+  .hero-equation {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    margin: 2rem 0 1rem;
+  }
+  .hero-equation .op {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--accent);
+    align-self: center;
+    line-height: 1;
+    font-variation-settings: 'opsz' 100;
+  }
+  .hero-box {
+    padding: 1.5rem 1.25rem;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .hero-box.have { background: var(--paper-3); border-color: var(--rule); }
+  .hero-box.add { background: var(--accent-faint); border-color: var(--accent); border-width: 2px; }
+  .hero-box.result { background: var(--accent); color: var(--paper); border-color: var(--accent-deep); }
+  .hero-box .pill {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .hero-box.add .pill { color: var(--accent-deep); }
+  .hero-box.result .pill { color: var(--accent-soft); }
+  .hero-box h4 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.6rem;
+    line-height: 1.15;
+  }
+  .hero-box ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  .hero-box ul li { margin: 0.2rem 0; }
+  .hero-box.result ul li::marker { color: var(--paper); }
+  .hero-box.result strong { color: var(--paper); }
+  .hero-caption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 1rem;
+  }
+
+  /* ====== 4-VERB CYCLE ====== */
+  .four-up {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1.25rem 0 1rem;
+  }
+  .four-up .item {
+    border-top: 2px solid var(--ink);
+    padding-top: 0.75rem;
+  }
+  .four-up .item .label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .four-up .item h4 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+    color: var(--ink);
+    font-variation-settings: 'opsz' 36;
+  }
+  .four-up .item p {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* 3-up */
+  .three-up {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .three-up .item {
+    border-top: 2px solid var(--accent);
+    padding-top: 0.85rem;
+  }
+  .three-up .item h4 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin: 0 0 0.4rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .three-up .item p {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* ====== DEFENSE IN DEPTH: stacked layers ====== */
+  .defense {
+    margin: 1.5rem 0 2rem;
+    border: 1px solid var(--rule);
+  }
+  .defense .layer {
+    display: grid;
+    grid-template-columns: 9rem 1fr 8rem;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.1rem 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .defense .layer:last-child { border-bottom: none; }
+  .defense .layer.l1 { background: var(--layer-1); }
+  .defense .layer.l2 { background: var(--layer-2); }
+  .defense .layer.l3 { background: var(--layer-3); }
+  .defense .layer.l4 { background: var(--layer-4); }
+  .defense .layer-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .defense .layer.l4 .layer-label { color: var(--ink); }
+  .defense .layer h4 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 0 0 0.15rem;
+    color: var(--ink);
+  }
+  .defense .layer p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .defense .layer .frequency {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    text-align: right;
+    letter-spacing: 0.05em;
+  }
+  .defense-caption {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: -1rem 0 1.5rem;
+    text-align: center;
+  }
+
+  /* ====== SDLC PHASES: 3 horizontal columns ====== */
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+  }
+  .phases .phase {
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+    padding: 1.25rem 1.25rem 1.5rem;
+    position: relative;
+  }
+  .phases .phase .ph-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .phases .phase h4 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .phases .phase .owner {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--accent-deep);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .phases .phase ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .phases .phase ol li { margin: 0.35rem 0; }
+  .phase-flow {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin: -0.5rem 0 1.5rem;
+  }
+  .phase-flow .arrow { color: var(--accent); }
+
+  /* ====== TEAM CONSTELLATION ====== */
+  .constellation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+  }
+  .const-item {
+    border: 1px solid var(--rule);
+    padding: 1.25rem 1.25rem 1.4rem;
+    position: relative;
+  }
+  .const-item.primary { background: var(--accent-faint); border-color: var(--accent); }
+  .const-item.platform { background: var(--paper-2); border-color: var(--rule); }
+  .const-item.tooling { background: var(--paper-3); border-color: var(--rule); }
+  .const-item.customer { background: var(--paper-2); border-color: var(--rule); }
+  .const-item.spike { background: var(--accent-faint); border-color: var(--accent); }
+  .const-item.optimize { background: var(--paper-3); border-color: var(--rule); }
+
+  /* 3-up grid for module team types */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .modules-grid .const-item { padding: 1.2rem; }
+  .modules-grid .const-item h4 { font-size: 1.15rem; }
+  .module-note {
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin-bottom: 2.25rem;
+    border-left: 2px solid var(--accent);
+    padding-left: 0.85rem;
+  }
+  .const-item .ci-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .const-item h4 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .const-item p {
+    margin: 0 0 0.35rem;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+  .const-item .ci-count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ====== DECISION LIST ====== */
+  .decisions { list-style: none; padding: 0; counter-reset: d; margin: 1rem 0; }
+  .decisions li {
+    counter-increment: d;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--rule);
+    margin: 0;
+    align-items: baseline;
+  }
+  .decisions li:last-child { border-bottom: 1px solid var(--ink); }
+  .decisions li::before {
+    content: counter(d, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .decisions li::marker { content: none; }
+  .decisions .reason {
+    display: block;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 0.15rem;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 5rem 0 3rem;
+    max-width: 4rem;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 5rem;
+    padding: 2.5rem 5rem;
+    border-top: 1px solid var(--rule);
+    background: var(--paper-2);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .cover { padding: 3rem 2rem; }
+    .cover::before, .cover::after { left: 2rem; right: 2rem; }
+    main { padding: 3rem 2rem; }
+    footer { padding: 2rem; }
+    .summary dl { grid-template-columns: 1fr; }
+    .summary dt { padding-bottom: 0.2rem; }
+    .summary dd { padding-top: 0; padding-bottom: 0.85rem; border-top: none; }
+    .three-up, .four-up, .modules-grid { grid-template-columns: 1fr; }
+    .hero-equation { grid-template-columns: 1fr; }
+    .hero-equation .op { font-size: 2rem; }
+    .defense .layer { grid-template-columns: 1fr; gap: 0.25rem; padding: 1rem; }
+    .defense .layer .frequency { text-align: left; }
+    .phases { grid-template-columns: 1fr; }
+    .constellation { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { font-size: 10pt; background: white; color: black; }
+    .cover { min-height: auto; page-break-after: always; }
+    section { page-break-inside: avoid; }
+    .mermaid, table, .quote, .defense, .phases, .constellation, .hero-equation { page-break-inside: avoid; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="cover">
+  <div class="eyebrow">THINK Program · Rituals + Guides · v0.1 · May 2026</div>
+  <h1>Rituals &amp; <em>Guides</em></h1>
+  <p class="subtitle">How the THINK program runs day to day. Checklists, formats, and rationale for three rituals: Daily Thinkup, Red Team Session, Branching Strategy.</p>
+  <div class="meta">
+    <div>
+      <span class="meta-label">Prepared by</span>
+      Andras [last name], Engineering Director
+    </div>
+    <div>
+      <span class="meta-label">Status</span>
+      Working reference
+    </div>
+    <div>
+      <span class="meta-label">Companion to</span>
+      THINK Program proposal
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ INTRO ============ -->
+<section>
+  <h2><span class="h-num">§0</span>How to use this doc</h2>
+  <p>Reference for the three rituals of the THINK program. Each section gives the purpose, the format, the checklists (before / during / after), the rationale, and what NOT to do.</p>
+  <p>Companion to the THINK Program proposal. For program context, scope, and team structure, see the proposal.</p>
+</section>
+
+<!-- ============ §1 DAILY THINKUP ============ -->
+<section>
+  <h2><span class="h-num">§1</span>Daily Thinkup · the extended standup</h2>
+
+  <h3>Purpose</h3>
+  <p>Quick sync, agent status check, and pattern spotting across the team. The "extended" part: each engineer's update includes their agent status (what's running, what's blocked, what needs review). The "think" part: the Architect spots cross-PR or cross-engineer patterns, not just collects status.</p>
+
+  <h3>Format</h3>
+  <ul>
+    <li><strong>Duration</strong>: 15–20 minutes, hard cap</li>
+    <li><strong>Mode</strong>: async-first (written posts in a dedicated channel) by default; sync only when needed</li>
+    <li><strong>Cadence</strong>: every working day</li>
+    <li><strong>Participants</strong>: full scrum team (3–4 people including Architect, Integration Engineer(s), SME)</li>
+  </ul>
+
+  <h3>Per-engineer update format</h3>
+  <ul>
+    <li><strong>Shipped yesterday</strong>: PR links, brief outcome</li>
+    <li><strong>Doing today</strong>: 1–2 lines</li>
+    <li><strong>Blockers / needs review</strong>: explicit asks, with links</li>
+    <li><strong>Agent status</strong>: what's running, what's blocked, what needs human review</li>
+  </ul>
+
+  <h3>Architect's job in standup</h3>
+  <p>Watch for patterns: two engineers solving the same problem in parallel, drift from L1 intent, duplicated agent prompts that suggest a shared utility. Note them and route them to dedicated review sessions, don't solve them in standup.</p>
+
+  <h3>Before standup · checklist</h3>
+  <ul>
+    <li>☐ Posted your async update (if async)</li>
+    <li>☐ Linked any PRs awaiting review</li>
+    <li>☐ Listed any agents currently running with a one-line description</li>
+    <li>☐ Flagged blockers explicitly</li>
+  </ul>
+
+  <h3>During standup · checklist</h3>
+  <ul>
+    <li>☐ Each engineer gives their update (≤2 min each)</li>
+    <li>☐ Architect captures patterns silently or in a side note</li>
+    <li>☐ Blockers acknowledged and routed (not solved here)</li>
+    <li>☐ End on time</li>
+  </ul>
+
+  <h3>What NOT to do</h3>
+  <ul>
+    <li>Don't problem-solve. Pattern: someone says they're blocked. Response: "Let's discuss after standup." Not: "Have you tried X?"</li>
+    <li>Don't skip agent status. If an agent is running unattended, the team needs to know.</li>
+    <li>Don't run over 20 min. If it's running long, the format is broken. Fix it in retro.</li>
+    <li>Don't use standup for design discussions or red team prep. Those have their own sessions.</li>
+  </ul>
+
+  <h3>Why</h3>
+  <p>The standup is the cheapest place to spot drift. When agents write code in parallel across the team, you need a daily sync point that catches divergence before it lands in DEV. The agent-status section is what makes standup work for the agentic SDLC.</p>
+</section>
+
+<!-- ============ §2 RED TEAM SESSION ============ -->
+<section>
+  <h2><span class="h-num">§2</span>Red Team Session</h2>
+
+  <h3>Purpose</h3>
+  <p>System-level review. PR-by-PR review catches local issues; red team catches what they miss: architecture drift, cross-system risks, regulator-visible issues, blast-radius assumptions that look fine in isolation but compound at scale.</p>
+
+  <h3>Cadence</h3>
+  <p><strong>Monthly half-day session (~4 hours)</strong>. On-demand additional sessions for high-risk work (regulator filings, customer-facing launches, multi-team migrations).</p>
+
+  <h3>Panel composition</h3>
+  <ul>
+    <li><strong>Chair</strong>: Engineering Director</li>
+    <li><strong>Panelists (5–6 total)</strong>: 2–3 Architect Engineers from different modules; 1 Forward Deployed Engineer; Engineering Catalysts lead (Founding Engineer); optionally the SME on the work being reviewed</li>
+    <li><strong>Note-taker</strong>: assigned per session, rotates</li>
+  </ul>
+
+  <h3>Pre-read</h3>
+  <ul>
+    <li>L0 (intent) document</li>
+    <li>L1 (system design) document</li>
+    <li><strong>NOT code</strong>. The session is about intent and design. Code review happens in PRs.</li>
+  </ul>
+
+  <h3>Default opening question</h3>
+  <div class="quote">"If this system fails in production six months from now, what is the most likely cause, and would we be able to detect it?"</div>
+
+  <h3>Sample follow-up questions</h3>
+  <ul>
+    <li>What's the worst path through this system?</li>
+    <li>What assumptions are baked in that we don't notice?</li>
+    <li>Where would a malicious user push hardest?</li>
+    <li>Where would a regulator's auditor look first?</li>
+    <li>What happens at 10x current load? At 100x?</li>
+    <li>What's the rollback story?</li>
+  </ul>
+
+  <h3>Before session · checklist</h3>
+  <ul>
+    <li>☐ L0 + L1 docs circulated at least 48h ahead</li>
+    <li>☐ Panel invited and confirmed</li>
+    <li>☐ Note-taker assigned</li>
+    <li>☐ Session goal stated in the invite</li>
+    <li>☐ Owning Architect prepared to walk through L0 + L1</li>
+  </ul>
+
+  <h3>During session · checklist</h3>
+  <ul>
+    <li>☐ Owning Architect walks the panel through L0 + L1 (15 min)</li>
+    <li>☐ Chair opens with the default question</li>
+    <li>☐ Panel surfaces concerns; chair ensures every panelist contributes</li>
+    <li>☐ Concerns ranked: high / medium / low</li>
+    <li>☐ Each concern gets an owner and closure date (target 30 days)</li>
+  </ul>
+
+  <h3>After session · checklist</h3>
+  <ul>
+    <li>☐ Findings document published within 48h</li>
+    <li>☐ Each owner has accepted</li>
+    <li>☐ Tracking system updated</li>
+    <li>☐ Follow-up scheduled at 30 days to verify closure</li>
+  </ul>
+
+  <h3>When to tag a PR for ad-hoc red team</h3>
+  <ul>
+    <li>Touches shared components (high blast radius)</li>
+    <li>Crosses module boundaries</li>
+    <li>Touches regulated data</li>
+    <li>Architect requests it</li>
+    <li>Random sampling each sprint (1–2 PRs per module)</li>
+  </ul>
+
+  <h3>Why</h3>
+  <p>System-level failures kill banks, and PR review at 100 LOC granularity won't catch them. The monthly half-day is cheap insurance against the issues that show up in regulator audits and post-mortems.</p>
+</section>
+
+<!-- ============ §3 BRANCHING STRATEGY ============ -->
+<section>
+  <h2><span class="h-num">§3</span>Branching Strategy · when, what, why</h2>
+
+  <h3>The flow</h3>
+  <pre class="mermaid">
+flowchart LR
+    SB1["Story branch"] -->|"PR ≤100 LOC<br/>team review &lt;4h"| FB["Feature / epic branch"]
+    SB2["Story branch"] --> FB
+    SB3["Story branch"] --> FB
+    FB -->|"≤5 features/sprint/team"| DEV["DEV<br/>always production-ready"]
+    DEV -->|"shadow → canary → full"| PROD["Production"]
+  </pre>
+
+  <h3>The rules</h3>
+  <ol>
+    <li><strong>DEV is always production-ready.</strong> Broken DEV stops the line.</li>
+    <li><strong>PRs into feature branches are ≤100 LOC and reviewed in-team within 4 working hours.</strong></li>
+    <li><strong>Max 5 feature-sized PRs into DEV per team per 2-week sprint.</strong></li>
+    <li><strong>Story branches hold single concerns.</strong> One story, one branch, one PR.</li>
+    <li><strong>Architect approval needed for exceptions.</strong> No silent rule-bending.</li>
+    <li><strong>Any PR can be tagged for red team review</strong> on demand or via random sampling each sprint.</li>
+  </ol>
+
+  <h3>When to use what · decision tree</h3>
+  <ul>
+    <li><strong>Single small change (≤100 LOC, single concern)</strong>: story branch → feature branch (or directly to DEV if trivial and pre-approved)</li>
+    <li><strong>Multi-step feature</strong>: many story branches → feature branch → DEV (when feature complete)</li>
+    <li><strong>Hotfix</strong>: story branch → feature branch with expedited review path</li>
+    <li><strong>Refactor that touches shared components</strong>: opt-in to red team review first, then standard branching</li>
+    <li><strong>Spike / exploratory</strong>: story branch on a throwaway feature branch; nothing into DEV until the Spike team explicitly graduates the work</li>
+  </ul>
+
+  <h3>Why · rationale for each rule</h3>
+  <ul>
+    <li><strong>DEV always green</strong>: enables continuous delivery and catches regressions immediately. Otherwise DEV silently rots and PROD pushes become risky events.</li>
+    <li><strong>≤100 LOC PRs</strong>: keeps review depth high. Big PRs get rubber-stamped; small PRs get real review, from both agents and humans.</li>
+    <li><strong>≤5 features per sprint per team</strong>: prevents PR queue blowup, forces focused work, keeps DEV's blast radius bounded.</li>
+    <li><strong>Story branches</strong>: clean history, atomic units of work, easy to revert, easy to review.</li>
+    <li><strong>Architect approval for exceptions</strong>: rules without enforcement become suggestions. The Architect is the enforcement layer.</li>
+    <li><strong>Red team can tag PRs</strong>: keeps the discipline honest. If something feels off, anyone can pull it into deeper review.</li>
+  </ul>
+
+  <h3>PR author · checklist</h3>
+  <ul>
+    <li>☐ PR is ≤100 LOC</li>
+    <li>☐ Single concern, not bundled</li>
+    <li>☐ Tests included</li>
+    <li>☐ Link to L1 in PR description (so reviewer can check against intent)</li>
+    <li>☐ Observability included where relevant (no obs plan means no L1 approval, so this should already be covered)</li>
+    <li>☐ Self-review done (read your own diff before requesting review)</li>
+    <li>☐ If agent-generated: <strong>you understand it</strong>. "The agent wrote it" is not a defense.</li>
+  </ul>
+
+  <h3>PR reviewer · checklist</h3>
+  <ul>
+    <li>☐ Code matches L1 intent (not just internally consistent)</li>
+    <li>☐ Edge cases considered</li>
+    <li>☐ No copy-paste from other parts of codebase (cross-team drift check)</li>
+    <li>☐ Approve or specific feedback within 4 working hours</li>
+    <li>☐ If concerned: tag for red team rather than block indefinitely</li>
+  </ul>
+
+  <h3>DEV stays green · the discipline</h3>
+  <ul>
+    <li>Broken DEV stops the line for all teams using that DEV branch</li>
+    <li>Whoever broke it owns the fix, top priority</li>
+    <li>Other PRs blocked until DEV is green</li>
+    <li>Pattern of repeated breaks → red team review of the underlying area</li>
+  </ul>
+</section>
+
+<!-- ============ §4 REFERENCES ============ -->
+<section>
+  <h2><span class="h-num">§4</span>References</h2>
+  <ul>
+    <li><strong>THINK Program proposal</strong>: <code>agentic-sdlc-mco.html</code></li>
+    <li><strong>DevOps team transformation</strong>: <code>devops-team-transformation.html</code></li>
+    <li><strong>Founding Engineer · Engineering Catalysts</strong> (job spec): <code>engineering-catalyst-jobspec.html</code></li>
+    <li><strong>Principal Engineer · Engineering Catalysts</strong> (job spec): <code>engineering-catalyst-principal-jobspec.html</code></li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  THINK Program · Rituals + Guides · v0.1 · Working reference
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: 'Newsreader, Georgia, serif',
+      fontSize: '15px',
+      primaryColor: '#f9edde',
+      primaryTextColor: '#161512',
+      primaryBorderColor: '#a64b22',
+      lineColor: '#4d4a44',
+      secondaryColor: '#ece4d1',
+      tertiaryColor: '#faf6ee',
+      background: '#f2ecdf',
+      mainBkg: '#f9edde',
+      secondBkg: '#f2ecdf',
+      nodeBorder: '#a64b22',
+      titleColor: '#161512',
+      edgeLabelBackground: '#faf6ee',
+      taskBkgColor: '#a64b22',
+      taskTextColor: '#faf6ee',
+      taskTextOutsideColor: '#161512',
+      sectionBkgColor: '#f9edde',
+      altSectionBkgColor: '#f2ecdf',
+      gridColor: '#d8d0bd'
+    },
+    flowchart: { curve: 'basis', padding: 16, nodeSpacing: 50, rankSpacing: 60, useMaxWidth: true },
+    gantt: { barHeight: 24, barGap: 4, topPadding: 40, fontSize: 12, sectionFontSize: 13 }
+  });
+</script>
+
+</body>
+</html>

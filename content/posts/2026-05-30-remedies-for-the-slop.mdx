@@ -1,0 +1,67 @@
+---
+title: "Remedies for the Slop"
+date: "2026-05-30"
+slug: "remedies-for-the-slop"
+summary: "The last post was the diagnosis. This is what to do about AI slop, as one person, as a team, and as a company. None of it is banning the tools."
+coverImage: "/images/posts/remedies-for-the-slop-cover.jpg"
+tags:
+  - engineering
+  - ai
+  - agents
+  - leadership
+---
+
+My [last post](/blog/take-anything-seriously) was a rant about AI slop, and a confession that an agent wrote it. This is the part where I stop complaining and say what actually helps.
+
+One principle holds it together at every scale: someone has to keep doing the thinking the machine can't be trusted to do, and since that stopped happening by accident, you have to arrange for it on purpose. Not by banning the tools. The speed is real and I'm not giving it up. By deciding, deliberately, where a human stays in the loop, and making that part non-negotiable.
+
+## What one person can do
+
+<ImageFloat src="/images/posts/remedies-blacksmith.jpg" alt="One person, accountable for the thing they make, able to explain every part of it." side="right">
+
+Start with the one that sounds obvious and almost nobody honours: own what you ship. "The agent wrote it" is not a defense. If your name is on the PR, you're accountable for every line as if you'd typed it, because the model won't be the one paged at 3am. Owning it means you can explain it, all of it, to someone who asks a hard question. If you can't, you're not done, no matter how green the checks are.
+
+</ImageFloat>
+
+That changes how you work with the agent. Reviewing a finished two-thousand-line diff is where understanding goes to die: you skim, it looks right, you approve. So stay in the loop while the work happens instead of after it. Pair with the agent. Say what you want, watch what it does, stop it when it drifts, and keep the change small enough that you can still hold the whole thing in your head. A hundred lines you understand beats two thousand you don't, every time.
+
+And when something breaks, fight the reflex to throw another agent at it. That's how the hole gets deeper. Read the code. By hand. The slow way is sometimes the only way, and the engineers who can still do it are quietly becoming the most valuable people on every team.
+
+<figure className="not-prose my-8">
+  <video className="w-full rounded-2xl border border-gray-200 shadow-md" autoPlay loop muted playsInline>
+    <source src="/videos/remedies-forge.mp4" type="video/mp4" />
+  </video>
+  <figcaption className="mt-2 text-xs text-gray-400 italic text-center">The slow way: something made by hand, by someone who understands every blow.</figcaption>
+</figure>
+
+## What a team can do
+
+One person being disciplined doesn't survive contact with a team that isn't. Thinking has to be built into how the team works, not left to individual virtue.
+
+The thing that helps most is red teaming. Pick someone whose job, for that session, is to assume the system is already broken and go find out how. Not a code review, a standing question:
+
+<Quote>
+If this fails in production six months from now, what's the most likely cause, and would we even notice?
+</Quote>
+
+An agent will never ask you that. It will generate the system, the tests, and a confident paragraph on why it's fine. Whether it's actually fine is a human call, and red teaming is where you make it.
+
+Review against intent, not just correctness. Code that's internally consistent and does the wrong thing sails through every automated check and fails the only one that matters. Someone has to hold the real goal in their head and check the work against it, not just confirm the tests are green.
+
+Keep the units small and the trunk clean. Small PRs aren't a style preference anymore, they're what keeps a human able to review at all. Keep the main branch releasable, so a break stops the line and gets fixed before it compounds. And make room for review that isn't about any single change, because most of the failures that take a system down don't live in one PR. They live in the gaps between them, in the duplicated abstraction and the slow drift from what you meant to build. No line-by-line review catches that, because it isn't on any line.
+
+## What a company can do
+
+At company scale, no single team is the problem. What bites you is that you can't see across all of them at once, and the volume is now enormous.
+
+Traceability stops being paperwork and starts being survival. Every change should trace back to the intent behind it, so that when something breaks, or an auditor asks, or a customer does, you can reconstruct why a thing exists and who decided it should. With humans writing every line, this was implicit. With agents producing most of it, you make it explicit or you lose the thread entirely.
+
+Build in layers, because no single check is enough when the output is this fluent and this voluminous. Evals that block a merge on regression. Observability required before anything ships, not bolted on after. Progressive delivery, so a change meets real traffic in shadow, then a slice of users, before it meets everyone. Each layer is cheap insurance against the kind of failure that no longer announces itself.
+
+Then the slower structural work. Concentrate the hardest thinking on your most senior people instead of spreading it thin across everyone with an agent and a keyboard; the tool rewards judgment, and judgment is unevenly distributed. Rebuild the path for juniors, who used to learn the craft by writing production code and can't anymore, around the parts that still need a human: review, planning, design, and the discipline of understanding a system before changing it. And measure the right thing. If your dashboard celebrates output volume, you're measuring the disease. Count the defects that escape to production, the time it takes to actually understand an incident, the share of shipped code someone can explain. Those only move the right way when thinking is happening.
+
+The thread through all of it, from one engineer reading a diff by hand to a company rebuilding how it trains people, is the same. The machine can produce the work. It can't be accountable for it, and it can't be trusted to have understood it. That part is still yours, at every scale, and the teams that decide where to put it on purpose will quietly pull away from the ones still counting how much they shipped.
+
+---
+
+*Want to chat?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)

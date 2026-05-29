@@ -1,17 +1,49 @@
-<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, 'Times New Roman', 'Iowan Old Style', serif">
   <defs>
-    <linearGradient id="gd" x1="90" y1="90" x2="1520" y2="860" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#93C5FD"/>
-      <stop offset="1" stop-color="#1E3A8A"/>
-    </linearGradient>
+    <radialGradient id="plate" cx="50%" cy="40%" r="78%">
+      <stop offset="0" stop-color="#fbf4e2"/>
+      <stop offset="0.62" stop-color="#f1e6cf"/>
+      <stop offset="1" stop-color="#e6d6b3"/>
+    </radialGradient>
   </defs>
-  <rect width="1600" height="900" fill="url(#gd)"/>
-  <rect x="140" y="140" width="1320" height="620" rx="34" fill="white" fill-opacity="0.14"/>
-  <rect x="220" y="250" width="440" height="260" rx="22" fill="#DBEAFE" fill-opacity="0.86"/>
-  <rect x="700" y="250" width="680" height="70" rx="16" fill="#BFDBFE" fill-opacity="0.9"/>
-  <rect x="700" y="350" width="560" height="56" rx="14" fill="#93C5FD" fill-opacity="0.85"/>
-  <rect x="700" y="430" width="470" height="56" rx="14" fill="#60A5FA" fill-opacity="0.82"/>
-  <rect x="700" y="530" width="310" height="90" rx="16" fill="#2563EB" fill-opacity="0.85"/>
-  <circle cx="340" cy="380" r="64" fill="#60A5FA"/>
-  <path d="M298 382L328 412L382 352" stroke="white" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect width="1600" height="900" fill="url(#plate)"/>
+
+  <!-- framing column rules (newspaper structure) -->
+  <g stroke="#d9c9a6" stroke-width="1.5" opacity="0.55">
+    <line x1="468" y1="186" x2="468" y2="724"/>
+    <line x1="1132" y1="186" x2="1132" y2="724"/>
+  </g>
+
+  <!-- top masthead double dashed rule -->
+  <g stroke="#c8b694" stroke-width="2">
+    <line x1="-40" y1="150" x2="1640" y2="150" stroke-dasharray="7 5"/>
+    <line x1="-40" y1="160" x2="1640" y2="160" stroke-dasharray="7 5" opacity="0.5"/>
+  </g>
+  <text x="800" y="118" text-anchor="middle" font-size="25" letter-spacing="9" fill="#6f5f4f">ANDRAS HEJJ &#183; FIELD NOTES</text>
+
+  <!-- emblem: fountain-pen nib -->
+  <g>
+    <path d="M768 300 L832 300 L826 276 L774 276 Z" fill="#1b1713"/>
+    <path d="M745 320 Q800 302 855 320 C866 420 833 512 800 576 C767 512 734 420 745 320 Z" fill="#fbf4e2" stroke="#1b1713" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M752 350 Q800 339 848 350" fill="none" stroke="#1b1713" stroke-width="3"/>
+    <g stroke="#1b1713" stroke-width="2" opacity="0.32">
+      <line x1="760" y1="388" x2="788" y2="372"/>
+      <line x1="762" y1="416" x2="790" y2="400"/>
+      <line x1="766" y1="444" x2="792" y2="430"/>
+      <line x1="772" y1="472" x2="795" y2="460"/>
+    </g>
+    <circle cx="800" cy="372" r="15" fill="#f1e6cf" stroke="#1b1713" stroke-width="3"/>
+    <line x1="800" y1="388" x2="800" y2="568" stroke="#bf4024" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <!-- flourish underline -->
+  <path d="M624 640 C704 624 762 624 800 632 C838 640 896 640 976 624" fill="none" stroke="#bf4024" stroke-width="4" stroke-linecap="round"/>
+  <line x1="624" y1="632" x2="624" y2="650" stroke="#bf4024" stroke-width="4" stroke-linecap="round"/>
+  <line x1="976" y1="616" x2="976" y2="634" stroke="#bf4024" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- bottom rule + colophon -->
+  <line x1="-40" y1="748" x2="1640" y2="748" stroke="#c8b694" stroke-width="2"/>
+  <text x="256" y="794" text-anchor="start" font-size="22" letter-spacing="5" fill="#6f5f4f">FIELD NOTES</text>
+  <text x="1344" y="800" text-anchor="end" font-style="italic" font-size="42" fill="#bf4024">&#8470;&#8201;00</text>
 </svg>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founding Engineer · Engineering Catalysts · MCO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink-deep: #141210;
+    --ink: #1c1814;
+    --ink-soft: #2a241e;
+    --paper: #f0e8d4;
+    --paper-soft: #d4cdb8;
+    --paper-muted: #8a8275;
+    --amber: #e8a44c;
+    --amber-deep: #c87f29;
+    --rust: #b85a1f;
+    --line: rgba(240, 232, 212, 0.12);
+    --line-strong: rgba(240, 232, 212, 0.22);
+  }
+
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 17px;
+  }
+
+  body {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-weight: 400;
+    background: var(--ink-deep);
+    color: var(--paper);
+    line-height: 1.65;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-image:
+      radial-gradient(ellipse 1200px 800px at 20% -10%, rgba(232, 164, 76, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 1000px 800px at 90% 80%, rgba(184, 90, 31, 0.045) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.45;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4.5rem 3rem 6rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    margin-bottom: 5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2.8rem, 8vw, 6.2rem);
+    line-height: 0.97;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero h1 .slash {
+    color: var(--amber);
+    font-style: italic;
+    display: inline-block;
+    transform: translateY(-0.05em) scale(1.15);
+    margin: 0 0.15em;
+    transform-origin: center;
+  }
+
+  .hero h1 .second-half {
+    font-style: italic;
+    color: var(--paper-soft);
+  }
+
+  .hero-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--paper-muted);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+
+  .hero-meta strong {
+    color: var(--paper-soft);
+    font-weight: 500;
+  }
+
+  /* ===================== AT A GLANCE ===================== */
+  .glance {
+    margin-bottom: 6rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.4s forwards;
+  }
+
+  .glance dl {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) 4fr;
+    column-gap: 3rem;
+    row-gap: 0;
+    font-size: 0.95rem;
+  }
+
+  .glance dt {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    padding: 0.9rem 0 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .glance dd {
+    border-top: 1px solid var(--line);
+    padding: 0.9rem 0;
+    color: var(--paper);
+  }
+
+  /* ===================== SECTIONS ===================== */
+  .body-section {
+    margin-bottom: 5.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.5s forwards;
+  }
+  .body-section:nth-of-type(n+3) { animation-delay: 0.55s; }
+  .body-section:nth-of-type(n+5) { animation-delay: 0.6s; }
+  .body-section:nth-of-type(n+7) { animation-delay: 0.65s; }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+    display: block;
+  }
+
+  .body-section > h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 4.2vw, 3.1rem);
+    line-height: 1.05;
+    letter-spacing: -0.012em;
+    color: var(--paper);
+    margin-bottom: 2.25rem;
+  }
+
+  .body-section > h2 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .body-section p {
+    font-size: 1.075rem;
+    line-height: 1.72;
+    margin-bottom: 1.5rem;
+    max-width: 72ch;
+  }
+
+  .body-section p strong {
+    color: var(--paper);
+    font-weight: 600;
+  }
+
+  .body-section p em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  /* ===================== POSTURES ===================== */
+  .posture {
+    border-left: 2px solid var(--amber);
+    padding: 1.6rem 0 1.6rem 2rem;
+    margin: 1.8rem 0;
+    background: linear-gradient(90deg, rgba(232, 164, 76, 0.045) 0%, transparent 50%);
+    position: relative;
+  }
+
+  .posture-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.6rem;
+  }
+
+  .posture-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1.7rem;
+    color: var(--paper);
+    margin-bottom: 0.85rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .posture p {
+    font-size: 1.025rem;
+    margin-bottom: 0;
+    line-height: 1.7;
+    color: var(--paper);
+  }
+
+  /* ===================== NOT LIST ===================== */
+  .not-list {
+    list-style: none;
+    display: grid;
+    gap: 1.4rem;
+    max-width: 78ch;
+  }
+
+  .not-list li {
+    padding-left: 3.2rem;
+    position: relative;
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .not-list li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    top: -0.45rem;
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.6rem;
+    color: var(--rust);
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .not-list li strong {
+    font-weight: 600;
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.92rem;
+    letter-spacing: 0.005em;
+  }
+
+  /* ===================== PILLARS ===================== */
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 820px) {
+    .pillars { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .pillar {
+    padding: 2rem 1.6rem 1.8rem;
+    background: rgba(240, 232, 212, 0.025);
+    border: 1px solid var(--line);
+    position: relative;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .pillar:hover {
+    border-color: var(--line-strong);
+    background: rgba(240, 232, 212, 0.04);
+  }
+
+  .pillar-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+    margin-bottom: 0.85rem;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  .pillar-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1.45rem;
+    color: var(--paper);
+    margin-bottom: 1.1rem;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+  }
+
+  .pillar p {
+    font-size: 0.96rem;
+    line-height: 1.62;
+    margin-bottom: 0;
+    color: var(--paper-soft);
+  }
+
+  .pillar p strong {
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  /* ===================== LIST BLOCK ===================== */
+  .list-block {
+    list-style: none;
+    display: grid;
+    gap: 0.95rem;
+    max-width: 78ch;
+  }
+
+  .list-block li {
+    padding-left: 1.85rem;
+    position: relative;
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .list-block li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    color: var(--amber);
+    font-size: 0.85rem;
+  }
+
+  /* ===================== SPECS (MUST HAVE) ===================== */
+  .specs {
+    display: grid;
+    gap: 0;
+    max-width: 92ch;
+  }
+
+  .spec {
+    display: grid;
+    grid-template-columns: minmax(180px, 220px) 1fr;
+    gap: 2.5rem;
+    padding: 1.4rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .spec:last-child { border-bottom: 1px solid var(--line); }
+
+  .spec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    padding-top: 0.18rem;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+
+  .spec-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--paper);
+  }
+
+  /* ===================== NICE TO HAVE ===================== */
+  .nice-list {
+    list-style: none;
+    columns: 2;
+    column-gap: 3.5rem;
+    max-width: 78ch;
+  }
+
+  @media (max-width: 700px) {
+    .nice-list { columns: 1; }
+  }
+
+  .nice-list li {
+    padding-left: 1.3rem;
+    position: relative;
+    font-size: 0.97rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+    color: var(--paper-soft);
+    break-inside: avoid;
+  }
+
+  .nice-list li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    top: -0.45rem;
+    color: var(--amber);
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  /* ===================== TIMELINE ===================== */
+  .timeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    position: relative;
+  }
+
+  @media (min-width: 820px) {
+    .timeline {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0.85rem;
+      left: 6%;
+      right: 6%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--amber) 15%, var(--amber) 85%, transparent);
+      opacity: 0.5;
+      z-index: 0;
+    }
+  }
+
+  .milestone {
+    position: relative;
+    z-index: 1;
+  }
+
+  .milestone-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-deep);
+    background: var(--amber);
+    padding: 0.4rem 1rem;
+    display: inline-block;
+    margin-bottom: 1.3rem;
+    font-weight: 500;
+  }
+
+  .milestone-body {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--paper-soft);
+  }
+
+  .milestone-body strong {
+    color: var(--paper);
+    font-weight: 500;
+    background: linear-gradient(180deg, transparent 65%, rgba(232, 164, 76, 0.28) 65%);
+    padding: 0 2px;
+  }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.13em;
+    color: var(--paper-muted);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .apply {
+    color: var(--amber);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  footer .apply:hover { color: var(--paper); }
+
+  /* ===================== PRINT ===================== */
+  @media print {
+    body { background: white; color: #1a1814; }
+    body::before { display: none; }
+    main { padding: 1.2cm; max-width: none; animation: none; }
+    .hero, .body-section, .glance { opacity: 1 !important; animation: none !important; }
+    .hero { border-color: #ccc; }
+    .hero h1 .slash, .body-section h2 em, .body-section p em { color: #b85a1f; }
+    .hero h1 .second-half { color: #5c5852; }
+    .hero-eyebrow, .section-num, .pillar-num, .posture-label, .spec-label, .hero-meta {
+      color: #b85a1f;
+    }
+    .glance dt, .glance dd { border-color: #ddd; }
+    .pillar { border-color: #ddd; background: #fafafa; box-shadow: none; }
+    .posture { background: #faf6ee; border-color: #b85a1f; }
+    .milestone-tag { background: #b85a1f; color: white; }
+    .timeline::before { background: #b85a1f; }
+    .not-list li::before { color: #b85a1f; }
+    .spec { border-color: #ddd; }
+    .milestone-body strong { background: linear-gradient(180deg, transparent 65%, rgba(184, 90, 31, 0.28) 65%); }
+    footer { border-color: #ddd; color: #888; }
+  }
+
+  /* ===================== MOBILE ===================== */
+  @media (max-width: 740px) {
+    html { font-size: 16px; }
+    main { padding: 2.5rem 1.5rem 4rem; }
+    .hero { margin-bottom: 3rem; padding-bottom: 2rem; }
+    .hero-eyebrow { margin-bottom: 1.5rem; }
+    .hero h1 { font-size: 2.6rem; }
+    .glance { margin-bottom: 4rem; }
+    .glance dl { grid-template-columns: 1fr; }
+    .glance dt { padding-bottom: 0.2rem; }
+    .glance dd { border-top: none; padding-top: 0; padding-bottom: 1.2rem; }
+    .body-section { margin-bottom: 4rem; }
+    .body-section > h2 { font-size: 2.1rem; margin-bottom: 1.5rem; }
+    .posture { padding: 1.25rem 1.25rem 1.25rem 1.4rem; }
+    .spec { grid-template-columns: 1fr; gap: 0.6rem; }
+    .not-list li { padding-left: 2.6rem; }
+    .not-list li::before { font-size: 2rem; top: -0.35rem; }
+    footer { flex-direction: column; gap: 0.6rem; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="hero-eyebrow">Hiring · MCO Engineering</div>
+    <h1>Founding Engineer<span class="slash">·</span><span class="second-half">Engineering Catalysts</span></h1>
+    <div class="hero-meta">New hire · Director-level · Reports to <strong>Engineering Director</strong> · Hands-on platform lead</div>
+  </header>
+
+  <!-- ===================== AT A GLANCE ===================== -->
+  <section class="glance">
+    <dl>
+      <dt>Title</dt>
+      <dd>Founding Engineer · Engineering Catalysts</dd>
+      <dt>Reports to</dt>
+      <dd>Engineering Director</dd>
+      <dt>Direct reports</dt>
+      <dd>5–7 (the existing DevOps team, re-skilled, plus Principal Engineer new hires)</dd>
+      <dt>Partners with</dt>
+      <dd>AI Core (separate team), scrum module Architects, Forward Deployed Engineers, Operations</dd>
+    </dl>
+  </section>
+
+  <!-- ===================== §01 THE ROLE ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 01</span>
+    <h2>The role</h2>
+
+    <p>Founding engineer for MCO's internal platform team. You own the developer platform engineers work in, the testing platform code runs through, and the docker image that gets promoted up to production. Director-level. Hands-on. Manages 5–7 ICs.</p>
+
+    <p>You came up in tech product startups. You wrote the first eval suite, set up the first CI, ran the first incident postmortem. You've personally built a DevOps stack end-to-end, not just led a team that did.</p>
+
+    <p>You partner closely with the separate <strong>AI Core</strong> team on integrating their agentic tooling (APS, Implementation Agent, evals) into the developer and testing platforms. You don't own their work; they do.</p>
+
+    <p>Three postures.</p>
+
+    <div class="posture">
+      <div class="posture-label">Posture 01 · with the team</div>
+      <div class="posture-title">Hands-on lead</div>
+      <p>You inherit the existing DevOps team (5–7 engineers) and hire Principal Engineer backfill. Line-manage by doing the work alongside them. The team doesn't currently run in scrum. They will, within 90 days, because you'll have taught them.</p>
+    </div>
+
+    <div class="posture">
+      <div class="posture-label">Posture 02 · with the platform</div>
+      <div class="posture-title">Builder</div>
+      <p>You build and evolve the developer platform, the testing platform, and the deployable docker image. CI/CD, k8s, observability, IDE integration, container hygiene. Up to and including DEV. Operations runs PROD; you stay 3rd-level.</p>
+    </div>
+
+    <div class="posture">
+      <div class="posture-label">Posture 03 · with the strategic work</div>
+      <div class="posture-title">SHIP IT and k8s for prod</div>
+      <p>SHIP IT (dockerization) and k8s/containers for prod are the headline projects. You drive them under your own leadership; the team delivers; you ship.</p>
+    </div>
+  </section>
+
+  <!-- ===================== §02 NOT ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 02</span>
+    <h2>This role is <em>not</em></h2>
+    <ul class="not-list">
+      <li><strong>Not Operations.</strong> Build up to DEV, hand over for PROD, sit as 3rd-level support.</li>
+      <li><strong>Not an embedded coaching role.</strong> The team is 100% focused on the platform; it is not 50% embedded in scrum teams.</li>
+      <li><strong>Not a governance function.</strong> Red team, certification, methods are run by the Engineering Director and Architects. You support them with tooling when useful, but you don't own them.</li>
+      <li><strong>Not a corporate platform leader.</strong> We're not looking for someone who came up in a 1000-engineer org and specialized in one slice of it for a decade. We want someone who has personally done every job on this team at some point in their career.</li>
+      <li><strong>Not a PMO.</strong> No status reports for a living.</li>
+      <li><strong>Not a delegate-only manager.</strong> Half your time is hands-on engineering. If you stop coding, you stop being qualified for this role.</li>
+      <li><strong>Not a delivery manager.</strong> Delivery is owned by scrum teams.</li>
+      <li><strong>Not an architect for the monolith.</strong> Architecture sits with scrum team Architects and the Engineering Director.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== §03 PILLARS ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 03</span>
+    <h2>Mandate</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-num">01</span>
+        <div class="pillar-title">Developer platform</div>
+        <p>Local and cloud dev environments, IDE setup, agent tooling integration. The daily-driver toolchain engineers work in.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">02</span>
+        <div class="pillar-title">Testing platform</div>
+        <p>CI, eval harness, test environments through DEV. The pipeline up to and including DEV is the team's; PROD is Operations.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">03</span>
+        <div class="pillar-title">The deployable artifact</div>
+        <p>A docker image built once and promoted up the chain (DEV → STAGE → PROD) without modification. k8s orchestration, container hygiene, repeatable deploys.</p>
+      </div>
+    </div>
+    <p style="margin-top: 1.5rem; font-style: italic; opacity: 0.85;">Operations runs PROD. AI Core remains a separate team and owns the agentic tooling layer; you integrate it into the developer and testing platforms.</p>
+  </section>
+
+  <!-- ===================== §04 RESPONSIBILITIES ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 04</span>
+    <h2>Key responsibilities</h2>
+    <ul class="list-block">
+      <li>Lead the existing DevOps team's refocus into Engineering Catalysts</li>
+      <li>Line-manage 5–7 ICs: 1:1s, performance, growth, hiring (incl. Principal Engineer new hires)</li>
+      <li>Introduce scrum to the team; by 90 days, the team runs in scrum</li>
+      <li>Build the developer platform: dev environments, IDE setup, agent tooling integration</li>
+      <li>Build the testing platform: CI, eval harness, test environments through DEV</li>
+      <li>Own the deployable artifact: docker image, k8s orchestration, repeatable deploys</li>
+      <li>Drive SHIP IT (dockerization) and k8s for prod</li>
+      <li>Partner with AI Core on integrating their agentic tooling</li>
+      <li>3rd-level support on platform escalations</li>
+    </ul>
+  </section>
+
+  <!-- ===================== §05 MUST HAVE ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 05</span>
+    <h2>Must-have</h2>
+    <div class="specs">
+      <div class="spec">
+        <div class="spec-label">Startup DNA</div>
+        <div class="spec-body">Came up through tech product startups where you were one of fewer than ~20 engineers. Bonus if you were employee #1–10.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Jack of all trades</div>
+        <div class="spec-body">You've written backend services, set up CI, debugged a Kubernetes networking issue, written docs, run a workshop, and presented to a board, in the same year, without thinking it was unusual.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">DevOps, hands-on</div>
+        <div class="spec-body">Personally built and run a production DevOps stack end-to-end. Not "led the team that did"; actually did.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">10+ years engineering</div>
+        <div class="spec-body">Significant time in production operations. Not architecture-only.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Agentic, daily</div>
+        <div class="spec-body">Currently using and shipping with agentic coding tools. Daily work, not a curiosity.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Agile, introduced</div>
+        <div class="spec-body">Has introduced agile practices to a team that wasn't using them. Not "implemented scrum at a 200-engineer org through a consulting engagement"; actually got a small team running sprints that stuck.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Small-team lead</div>
+        <div class="spec-body">Has led a small engineering team (3–8) as a hands-on tech lead or hybrid manager.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">In front of a room</div>
+        <div class="spec-body">Comfortable teaching, running workshops, giving honest feedback.</div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Mixed work over meetings</div>
+        <div class="spec-body">Pair with a junior in the morning, debug at lunch, present to a regulator's auditor in the afternoon. If that sounds like a great week, this is your job.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== §06 NICE TO HAVE ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 06</span>
+    <h2>Nice-to-have</h2>
+    <ul class="nice-list">
+      <li>Founded a company or were on a small founding team</li>
+      <li>Open source maintenance, side projects, or personal infrastructure that proves the "builds things in their own time" instinct</li>
+      <li>Banking or regulated industry experience; familiarity with Swiss banks</li>
+      <li>DACH market experience, German or French language</li>
+      <li>Conference speaking, open source, or published technical writing</li>
+    </ul>
+  </section>
+
+  <!-- ===================== §07 SUCCESS ===================== -->
+  <section class="body-section">
+    <span class="section-num">§ 07</span>
+    <h2>What success <em>looks like</em></h2>
+    <div class="timeline">
+      <div class="milestone">
+        <div class="milestone-tag">30 days</div>
+        <div class="milestone-body">Met every scrum team, the existing DevOps team, and the AI Core team. Shipped at least one concrete platform improvement (CI fix, observability default, eval template). Refocus plan locked. Team's first sprint underway. SHIP IT and k8s/containers project plans drafted.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-tag">90 days</div>
+        <div class="milestone-body">Refocus complete: Engineering Catalysts running as a focused platform team. <strong>Team running in scrum.</strong> AI Core partnership rhythm established. SHIP IT and k8s/containers projects moving with clear milestones. Engineering Director and Architects supported with red team / certification tooling.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-tag">End of Phase 1 (6 months)</div>
+        <div class="milestone-body">Platform measurably better (build times, dev environment reliability, deploy frequency DEV → STAGE). SHIP IT and k8s/containers in production. Phase 2 plan drafted with the Engineering Director.</div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>MCO Engineering · Hiring</span>
+    <span>v0.11 · May 2026</span>
+  </footer>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+---
+title: "How Do You Take Anything Seriously Anymore?"
+date: "2026-05-29"
+slug: "take-anything-seriously"
+summary: "Software is drowning in fluent, confident output that no one actually thought through. A rant about AI slop, with a confession I'd rather not make."
+coverImage: "/images/posts/take-anything-seriously-cover.jpg"
+tags:
+  - engineering
+  - ai
+  - agents
+  - writing
+---
+
+Watch a feature move through a team now. The product owner describes it to an agent and gets a spec back, seventy pages of it, and pastes it into the ticket. Nobody writes seventy pages by hand. Nobody reads seventy pages, full stop. The engineer hands that spec to a coding agent and gets a pull request. QA points an agent at the same ticket and gets a test suite. A reviewer skims two thousand lines, sees green checks, approves. The feature ships.
+
+At no point did a person sit with the problem long enough to be uncomfortable.
+
+Every artifact in that chain looks finished. Clean spec, passing build, green pipeline. And every one of them is slop: fluent, confident, plausible output that no human thought through. It reads like work. It has the shape of work. The thinking that used to live inside it is gone, and the surface is smooth enough that you don't notice.
+
+<ImageFloat src="/images/posts/slop-paper-stacks.jpg" alt="Output nobody will ever read, in the volume only a machine produces." side="right">
+
+Code is the least of it. The same thing is happening to design docs, incident write-ups, performance reviews, strategy decks, the all-hands email, the post you read this morning over coffee. Any of it can now be generated in seconds, at length, in a confident house style, by someone who didn't think about it, for a reader who won't either.
+
+</ImageFloat>
+
+We spent a decade stripping friction out of software work, and then agents took the rest. Here's what we forgot: the friction was doing something. Writing the spec by hand was slow because you kept hitting things about the problem you didn't understand yet, and you couldn't finish the sentence until you had. Reading the diff line by line was slow because understanding takes time, and at the end of it you understood. The slowness wasn't sitting next to the work. It *was* the work.
+
+Take the effort away and the understanding leaves with it, quietly, because the thing still ships on time and still looks right. Confidence holds steady. Comprehension drops to zero. Nobody feels it in the moment, which is the whole danger.
+
+You feel it later. The spec looked fine, the PR was green, it worked in the demo, everyone moved on. Weeks pass. Then production breaks, and you go to debug it, and you find nobody on the team actually understands the code. You didn't write it. The person whose name is on it didn't really write it either. So you do the natural thing now: you ask an agent to debug it. The agent understands the system no better than you do, so it guesses, adds code, changes things, and now there's more code nobody understands stacked on top of the bug. The harder you push, the deeper it gets.
+
+<figure className="not-prose my-8">
+  <video className="w-full rounded-2xl border border-gray-200 shadow-md" autoPlay loop muted playsInline>
+    <source src="/videos/slop-code-scroll.mp4" type="video/mp4" />
+  </video>
+  <figcaption className="mt-2 text-xs text-gray-400 italic text-center">More of it, generated in seconds, scrolling past faster than anyone will read it.</figcaption>
+</figure>
+
+I watched a team go through exactly this recently. More than ten engineers, the better part of a week, throwing agents at a production failure they couldn't pin down, every fix spawning two new questions. They got out by going manual: agents off, reading the code by hand, reconstructing line by line what it actually did. The way out of the hole was the work they'd skipped in order to dig it.
+
+<Divider />
+
+## A confession
+
+Here's the part that should bother you more than it does. I didn't write this.
+
+I had the thoughts. The team is real, the seventy-page spec is real, the week of flailing is real. But the words you've been reading, the ones you've maybe been nodding along to, came out of an agent. I described what I wanted and it produced them. The outrage is generated. The rhythm, the turns of phrase, the little rhetorical traps, all machine. You've been reading a fluent, confident critique of fluent, confident machine output, written by the thing it's complaining about.
+
+And you couldn't tell. That's the actual problem, the one underneath all the others. Fluency used to be a signal that a person had sat down and thought. It was expensive, so it meant something. Now it's free, so it means nothing, and that includes the parts of this post that happen to be true. I can't prove to you which sentences came from a real thought and which are just the machine being smooth. After a while I'm not sure I can tell either.
+
+So how do you take anything seriously now? The spec, the article, the analysis, the carefully worded post explaining why everything is fine: any of it might be slop, and the good slop is indistinguishable from the real thing right up until it fails in production or falls apart under one hard question. We used to trust a well-made thing a little more than a sloppy one. That instinct is dead. Polish stopped being evidence of anything.
+
+I don't think the answer is to throw the tools out, and I use them every day, obviously. The answer is to put the thinking back on purpose, at every level, because it stopped happening by accident. What that looks like for one person, for a team, and for a company is [the next post](/blog/remedies-for-the-slop). This one was just the part where I admit there's a problem, and that I can't even prove to you I mean it.
+
+---
+
+*Want to chat?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
