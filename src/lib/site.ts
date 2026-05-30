@@ -6,13 +6,23 @@ export const site = {
   domain: "www.andrashejj.com",
   url: "https://www.andrashejj.com",
   author: "Andras Hejj",
-  email: "hello@andrashejj.com",
+  email: "andras@hejj.xyz",
   social: {
     x: "https://x.com/andrashejj",
     github: "https://github.com/andrashejj",
     linkedin: "https://www.linkedin.com/in/andras-hejj-70a18764/",
   },
 } as const;
+
+// Multi-part projects. A post's `series` frontmatter points at one of these
+// ids, which lets the archive group and filter related dispatches together.
+export const seriesRegistry: Record<string, { label: string }> = {
+  "balaton-cottage": { label: "Balaton Cottage" },
+  "sunset-duckies": { label: "Sunset Duckies" },
+  baubiber: { label: "Baubiber" },
+  "ai-slop": { label: "AI Slop" },
+  "founder-notes": { label: "Founder Notes" },
+};
 
 export const staticPages = [
   { path: "/", priority: 1.0 },

@@ -1,5 +1,6 @@
 ---
 import type { PostMeta } from "../lib/content";
+import { seriesRegistry } from "../lib/site";
 import PostMetaView from "./PostMeta.astro";
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const series = post.series ? seriesRegistry[post.series] : undefined;
 ---
 
 <article class='group flex h-full flex-col'>
@@ -35,6 +37,14 @@ const { post } = Astro.props;
   </a>
 
   <div class='mt-4 flex flex-1 flex-col'>
+    {series && (
+      <a
+        href={`/blog?series=${post.series}`}
+        class='no-rule mb-2 inline-flex w-fit items-center gap-1.5 border border-rule px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-terracotta transition hover:border-terracotta hover:text-terracotta-strong'
+      >
+        <span aria-hidden='true'>◆</span> {series.label}
+      </a>
+    )}
     <PostMetaView post={post} />
     <h2
       class='mt-2 font-display leading-[1.08] tracking-[-0.02em] text-ink'

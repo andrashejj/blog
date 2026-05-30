@@ -2,9 +2,20 @@
 import PostCard from "../../components/PostCard.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getAllPostMeta } from "../../lib/content";
+import { seriesRegistry } from "../../lib/site";
 
 const posts = await getAllPostMeta();
 const total = String(posts.length).padStart(3, "0");
+
+// Build the filter bar from whatever series actually appear in the archive,
+// keeping registry order. Each chip filters the grid client-side.
+const presentSeries = Object.entries(seriesRegistry)
+  .filter(([id]) => posts.some((post) => post.series === id))
+  .map(([id, meta]) => ({
+    id,
+    label: meta.label,
+    count: posts.filter((post) => post.series === id).length,
+  }));
 ---
 
 <SiteLayout title='Blog' path='/blog'>
@@ -32,11 +43,101 @@ const total = String(posts.length).padStart(3, "0");
     <div class='rule-horizontal'></div>
   </section>
 
-  <section class='reveal reveal-3 mt-12 grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'>
+  {presentSeries.length > 0 && (
+    <section class='reveal reveal-3 mt-8' data-series-filter>
+      <div class='flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.22em]'>
+        <span class='text-muted'>Series ·</span>
+        <button
+          type='button'
+          data-filter='all'
+          class='series-chip is-active no-rule border border-rule px-3 py-1.5 text-ink transition'
+        >
+          All <span class='text-muted'>({posts.length})</span>
+        </button>
+        {presentSeries.map((s) => (
+          <button
+            type='button'
+            data-filter={s.id}
+            class='series-chip no-rule border border-rule px-3 py-1.5 text-ink-soft transition'
+          >
+            {s.label} <span class='text-muted'>({s.count})</span>
+          </button>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section
+    class='reveal reveal-3 mt-12 grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'
+    data-post-grid
+  >
     {posts.map((post, i) => (
-      <div class={`reveal reveal-${Math.min(6, (i % 5) + 2)}`}>
+      <div
+        class={`reveal reveal-${Math.min(6, (i % 5) + 2)}`}
+        data-series={post.series ?? ""}
+      >
         <PostCard post={post} />
       </div>
     ))}
   </section>
+
+  <p
+    class='mt-12 hidden font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted'
+    data-empty-state
+  >
+    No dispatches in this series yet.
+  </p>
+
+  <style>
+    .series-chip.is-active {
+      background: var(--color-ink, #1b1713);
+      color: var(--color-paper, #f7f1e4);
+      border-color: var(--color-ink, #1b1713);
+    }
+    .series-chip:not(.is-active):hover {
+      border-color: var(--color-terracotta, #b6532e);
+      color: var(--color-terracotta-strong, #99431f);
+    }
+  </style>
+
+  <script is:inline>
+    (() => {
+      const root = document.querySelector("[data-series-filter]");
+      const grid = document.querySelector("[data-post-grid]");
+      if (!root || !grid) return;
+
+      const chips = Array.from(root.querySelectorAll(".series-chip"));
+      const cards = Array.from(grid.querySelectorAll("[data-series]"));
+      const empty = document.querySelector("[data-empty-state]");
+
+      function apply(filter) {
+        let shown = 0;
+        for (const card of cards) {
+          const match = filter === "all" || card.dataset.series === filter;
+          card.hidden = !match;
+          if (match) shown++;
+        }
+        for (const chip of chips) {
+          chip.classList.toggle("is-active", chip.dataset.filter === filter);
+        }
+        if (empty) empty.hidden = shown !== 0;
+      }
+
+      for (const chip of chips) {
+        chip.addEventListener("click", () => {
+          const filter = chip.dataset.filter || "all";
+          apply(filter);
+          const url = new URL(window.location.href);
+          if (filter === "all") url.searchParams.delete("series");
+          else url.searchParams.set("series", filter);
+          history.replaceState(null, "", url);
+        });
+      }
+
+      const initial = new URL(window.location.href).searchParams.get("series");
+      if (initial && chips.some((c) => c.dataset.filter === initial)) {
+        apply(initial);
+      }
+    })();
+  </script>
 </SiteLayout>

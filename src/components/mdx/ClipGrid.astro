@@ -1,0 +1,104 @@
+---
+interface Props {
+  srcs: string[];
+  caption?: string;
+}
+
+const { srcs, caption } = Astro.props;
+---
+
+<div class="not-prose my-8">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+    {srcs.map((src) => (
+      <video
+        class="sd-clip w-full aspect-[9/16] object-cover rounded-xl border border-gray-200 shadow-md bg-gray-100 cursor-zoom-in"
+        data-src={src}
+        muted
+        loop
+        playsinline
+        preload="metadata"
+      >
+        <source src={src} type="video/mp4" />
+      </video>
+    ))}
+  </div>
+  {caption && (
+    <p class="mt-2 text-xs text-gray-400 italic text-center">{caption}</p>
+  )}
+</div>
+
+<script is:inline>
+  (() => {
+    if (window.__sdClipInit) return;
+    window.__sdClipInit = true;
+
+    const init = () => {
+      // Fullscreen lightbox, built once and reused.
+      const overlay = document.createElement("div");
+      overlay.style.cssText =
+        "position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:3vmin;cursor:zoom-out;";
+      const big = document.createElement("video");
+      big.loop = true;
+      big.controls = true;
+      big.setAttribute("playsinline", "");
+      big.style.cssText =
+        "max-width:100%;max-height:92vh;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.55);cursor:auto;";
+      overlay.appendChild(big);
+      document.body.appendChild(overlay);
+
+      const close = () => {
+        overlay.style.display = "none";
+        big.pause();
+        big.removeAttribute("src");
+        big.load();
+      };
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) close();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close();
+      });
+
+      const clips = Array.prototype.slice.call(document.querySelectorAll(".sd-clip"));
+
+      clips.forEach((v) => {
+        v.addEventListener("click", () => {
+          const s = v.getAttribute("data-src");
+          if (!s) return;
+          big.src = s;
+          big.currentTime = 0;
+          overlay.style.display = "flex";
+          const p = big.play();
+          if (p && p.catch) p.catch(() => {});
+        });
+      });
+
+      // Only play clips that are on (or near) screen, to keep things light.
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((en) => {
+              const v = en.target;
+              if (en.isIntersecting) {
+                const p = v.play();
+                if (p && p.catch) p.catch(() => {});
+              } else {
+                v.pause();
+              }
+            });
+          },
+          { rootMargin: "300px 0px", threshold: 0.1 },
+        );
+        clips.forEach((v) => io.observe(v));
+      } else {
+        clips.forEach((v) => {
+          const p = v.play();
+          if (p && p.catch) p.catch(() => {});
+        });
+      }
+    };
+
+    if (document.readyState !== "loading") init();
+    else document.addEventListener("DOMContentLoaded", init);
+  })();
+</script>

@@ -14,6 +14,7 @@ const posts = defineCollection({
     coverImage: z.string().min(1),
     draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
+    series: z.string().optional(),
     updated: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)

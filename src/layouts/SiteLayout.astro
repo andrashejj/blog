@@ -107,5 +107,88 @@ const year = new Date().getFullYear();
         </div>
       </footer>
     </div>
+
+    <!-- Image lightbox -->
+    <div
+      id='lightbox'
+      class='fixed inset-0 z-50 hidden items-center justify-center'
+      aria-hidden='true'
+    >
+      <div class='lightbox-backdrop absolute inset-0 bg-ink/90' data-lightbox-close></div>
+      <span
+        class='pointer-events-none absolute inset-0 mix-blend-soft-light'
+        style='background-image: var(--grain); opacity: 0.4;'
+        aria-hidden='true'
+      ></span>
+      <button
+        type='button'
+        class='no-rule absolute right-5 top-5 z-10 flex h-10 w-10 items-center justify-center border border-paper/30 font-mono text-lg text-paper transition hover:border-terracotta hover:text-terracotta'
+        aria-label='Close image'
+        data-lightbox-close
+      >×</button>
+      <figure class='lightbox-figure relative z-0 m-0 flex max-h-[92dvh] max-w-[94vw] flex-col items-center gap-3'>
+        <img id='lightbox-img' src='' alt='' class='max-h-[84dvh] max-w-[94vw] object-contain shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]' />
+        <figcaption
+          id='lightbox-caption'
+          class='max-w-[68ch] text-center font-mono text-[0.72rem] uppercase tracking-[0.22em] text-paper/70'
+        ></figcaption>
+      </figure>
+    </div>
+
+    <style>
+      #lightbox.is-open { display: flex; }
+      body.lightbox-locked { overflow: hidden; }
+      main figure img, main p img { cursor: zoom-in; }
+      .lightbox-figure { animation: lightbox-pop 0.22s ease-out; }
+      .lightbox-backdrop { animation: lightbox-fade 0.22s ease-out; }
+      @keyframes lightbox-fade { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes lightbox-pop {
+        from { opacity: 0; transform: scale(0.97); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lightbox-figure, .lightbox-backdrop { animation: none; }
+      }
+    </style>
+
+    <script is:inline>
+      (() => {
+        const box = document.getElementById("lightbox");
+        const img = document.getElementById("lightbox-img");
+        const caption = document.getElementById("lightbox-caption");
+        if (!box || !img || !caption) return;
+
+        function open(source) {
+          img.src = source.currentSrc || source.src;
+          img.alt = source.alt || "";
+          const text = source.alt || source.closest("figure")?.querySelector("figcaption")?.textContent || "";
+          caption.textContent = text.trim();
+          caption.style.display = caption.textContent ? "" : "none";
+          box.classList.add("is-open");
+          box.setAttribute("aria-hidden", "false");
+          document.body.classList.add("lightbox-locked");
+        }
+
+        function close() {
+          box.classList.remove("is-open");
+          box.setAttribute("aria-hidden", "true");
+          document.body.classList.remove("lightbox-locked");
+          img.src = "";
+        }
+
+        // Any content image inside <main> that isn't itself a link target.
+        document.querySelectorAll("main img").forEach((el) => {
+          if (el.closest("a")) return;
+          el.addEventListener("click", () => open(el));
+        });
+
+        box.addEventListener("click", (e) => {
+          if (e.target.hasAttribute("data-lightbox-close")) close();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && box.classList.contains("is-open")) close();
+        });
+      })();
+    </script>
   </body>
 </html>
