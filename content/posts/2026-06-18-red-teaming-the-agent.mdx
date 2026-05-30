@@ -1,9 +1,9 @@
 ---
-title: "Red Teaming the Agent"
+title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "An agent will generate the system, the tests, and a confident paragraph on why it's safe. Red teaming is the part where someone goes looking for the lie. Here's how to actually run it."
-coverImage: "/images/posts/red-teaming-the-agent-cover.jpg"
+summary: "An agent can generate the system, the tests, and a confident paragraph explaining why it is safe. Red teaming is the part where one named person goes looking for the lie."
+coverImage: "/images/posts/red-teaming-the-agent-cover.svg"
 draft: true
 tags:
   - engineering
@@ -12,47 +12,53 @@ tags:
   - security
 ---
 
-I mentioned red teaming in passing in the [slop posts](/blog/remedies-for-the-slop) and then moved on, which was a mistake, because it's the single most useful thing a team can do once agents are writing most of the code. So here's the longer version.
+I mentioned red teaming in passing in the [slop posts](/blog/remedies-for-the-slop) and then moved on. That was a mistake.
 
-Red teaming is assigning someone the job of assuming the system is already broken and going to find out how. Not reviewing the diff. Not checking the tests pass. Starting from the premise that it fails, and working backwards to the reason. The framing matters because it changes what you look for. A reviewer asks "is this correct?" and the answer is usually yes, because the agent is good at correct-looking code. A red teamer asks "how does this hurt me?" and that question has answers the agent never surfaces.
+Once agents are writing a meaningful share of the code, red teaming is one of the few practices that still puts a human in the part of the loop where judgment matters. Not a reviewer asking whether the diff looks reasonable. Not a test suite confirming the cases the agent already imagined. One named person whose job is to assume the system is already broken and go looking for the break.
+
+The framing matters. A reviewer asks, "is this correct?" and the answer is often yes, because agent-written code is very good at looking correct. A red teamer asks, "how does this hurt us?" That question finds different things.
 
 ## Why agents make this worse, not better
 
-The old failure mode was a tired human making a mistake. You caught those with review, because another human reading carefully would notice the off-by-one or the missing null check. The new failure mode is different. The agent doesn't make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
+The old failure mode was a tired human making a mistake. You caught those with review, at least some of the time, because another human reading carefully might notice the off-by-one or the missing null check.
 
-That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim, it's plausible, you approve. The agent has effectively written both the answer and the argument for why you shouldn't check it.
+The new failure mode is different. The agent does not make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
+
+That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim. It is plausible. You approve. The agent has effectively written both the answer and the argument for why you should stop checking.
 
 <Quote>
 If this fails in production six months from now, what's the most likely cause, and would we even notice?
 </Quote>
 
-An agent will never ask you that. Ask it yourself, out loud, about every system it builds for you.
+An agent will not ask you that in any useful way. Ask it yourself, out loud, about every system it builds for you.
 
 ## What a red teamer actually does
 
 Start adversarial and specific. Pick the change, then attack it on three fronts: the inputs, the absences, and the intent.
 
-Inputs first. The agent tested the cases it imagined, so your job is the cases it didn't: the empty list, the unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly bad at the boundary and weirdly good at the middle, so spend your time at the edges.
+Inputs first. The agent tested the cases it imagined, so your job is the cases it did not: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly good at the middle and weirdly careless at the edge. Spend your time there.
 
-Then the thing it didn't build. Read what the change is missing, not just what it added. The rate limit nobody put on the new endpoint, the idempotency key missing from the payment call, the timeout absent from the outbound request that will one day hang and take the pool with it. Absences don't show up in a diff, and you can't review a line that isn't there, so you have to hold the whole shape of the system in your head and notice the gap.
+Then the thing it did not build. Read what the change is missing, not just what it added. The rate limit nobody put on the new endpoint. The idempotency key missing from the payment call. The timeout absent from the outbound request that will one day hang and take the pool with it. Absences do not show up in a diff. You cannot review a line that is not there, so someone has to hold the shape of the system in their head and notice the gap.
 
-Last, intent against behavior. Code that's internally consistent and does the wrong thing passes every automated check and fails the only one that matters. The agent optimized for what you said; the red teamer checks against what you meant. No tool does this part, because the goal lives in a human's head and nowhere in the repository.
+Last, intent against behavior. Code that is internally consistent and does the wrong thing passes every automated check and fails the only one that matters. The agent optimized for what you said. The red teamer checks against what you meant. No tool does this part well, because the real goal usually lives in a human's head and nowhere in the repository.
 
 ## Running it so it sticks
 
-The mistake is making red teaming a vibe. "We should think adversarially" is not a process, it's a poster. Make it concrete or it evaporates the first sprint someone's behind.
+The mistake is making red teaming a vibe. "We should think adversarially" is not a process. It is a poster. Make it concrete or it evaporates the first sprint someone is behind.
 
-Rotate the role. One person per change, named, whose job for that session is to break it. Not the author. Adversarial review of your own work is theater, because you'll defend the choices you already made. Rotating it also spreads the skill, which matters, because thinking like an attacker is learnable and most engineers have never been asked to.
+Rotate the role. One person per risky change, named, whose job for that session is to break it. Not the author. Adversarial review of your own work is theatre, because you will defend the choices you already made. Rotating it also spreads the skill, which matters because thinking like an attacker is learnable and most engineers have never been asked to.
 
-Time-box it and write it down. Twenty focused minutes with the question "how does this fail" beats an hour of polite line-by-line. The output is a short list of "here's what I'd attack and here's whether we're covered," attached to the PR. When the list says "we're not covered, and we've decided that's fine for now," that's a real decision someone made on purpose, which is the whole point.
+Time-box it and write it down. Twenty focused minutes with the question "how does this fail?" beats an hour of polite line-by-line review. The output is a short list attached to the PR: here is what I attacked, here is what I found, here is what we are choosing to accept. When the list says "we are not covered, and we have decided that is fine for now," that is a real decision someone made on purpose. That is the whole point.
 
-And keep the surface small enough to attack at all. This is the unglamorous prerequisite. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here: they're what lets a human stay in the loop at all.
+Keep the surface small enough to attack at all. This is the unglamorous prerequisite. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here. They are what let a human stay in the loop at all.
 
 ## The part that's actually yours
 
-The machine produces the work, the tests, and the confidence. It cannot be the one going looking for the lie, because it doesn't know it's lying, and it has no stake in being wrong. Red teaming is where a human decides, deliberately, that "it looks fine" is not the same as "it is fine," and goes to find out which.
+The machine produces the work, the tests, and the confidence. It cannot be the one going looking for the lie, because it does not know it is lying, and it has no stake in being wrong. Red teaming is where a human decides, deliberately, that "it looks fine" is not the same as "it is fine," and goes to find out which.
 
-That decision doesn't happen by accident anymore. It used to, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone. So you arrange for the noticing on purpose, you give it to a named person, and you make it non-negotiable. The teams that do will keep shipping fast and stop shipping disasters. The ones that don't will find out the hard way, in production, six months from now, with nobody who can explain why.
+That decision does not happen by accident anymore. It used to, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone. So you arrange for the noticing on purpose. You give it to a named person. You make it non-negotiable.
+
+The teams that do this will still ship fast. They will just stop confusing speed with safety. The teams that do not will find out the hard way, in production, six months from now, with nobody who can explain why.
 
 ---
 
