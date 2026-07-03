@@ -178,7 +178,7 @@ export async function renderOG(params: RenderOGParams): Promise<Buffer> {
   const canvas = surface.getCanvas();
 
   // Paper background (radial glows + grain baked in).
-  const paperImg = CK.MakeImageFromEncoded(paper as Uint8Array);
+  const paperImg = CK.MakeImageFromEncoded(new Uint8Array(paper));
   if (paperImg) {
     canvas.drawImageRect(
       paperImg,
@@ -276,7 +276,7 @@ export async function renderOG(params: RenderOGParams): Promise<Buffer> {
   // ── Byline footer ──────────────────────────────────────────────────────
   drawSolidRule(CK, canvas, gutter, WIDTH - gutter, 522, ruleColor, 0.7, 1);
 
-  const avImg = CK.MakeImageFromEncoded(avatar as Uint8Array);
+  const avImg = CK.MakeImageFromEncoded(new Uint8Array(avatar));
   if (avImg) {
     const size = 64;
     canvas.drawImageRect(
