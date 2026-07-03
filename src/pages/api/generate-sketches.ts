@@ -2,9 +2,9 @@ export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 import {
+  type SketchesData,
   fallbackSketches,
   normalizeSketchesData,
-  type SketchesData,
 } from "../../lib/noah-worksheet";
 
 const PROMPT = `Generate 6 drawing exercises for a 9-year-old boy's daily sketch practice. Return ONLY valid JSON with no markdown formatting, matching this exact structure:

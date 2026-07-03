@@ -574,10 +574,19 @@ export function normalizeChallengeCardsData(
         data?.anagram?.scrambled,
         fallbackChallengeCards.anagram.scrambled,
       ),
-      hint: normalizeText(data?.anagram?.hint, fallbackChallengeCards.anagram.hint),
+      hint: normalizeText(
+        data?.anagram?.hint,
+        fallbackChallengeCards.anagram.hint,
+      ),
     },
-    engineering: normalizeText(data?.engineering, fallbackChallengeCards.engineering),
-    mindfulness: normalizeText(data?.mindfulness, fallbackChallengeCards.mindfulness),
+    engineering: normalizeText(
+      data?.engineering,
+      fallbackChallengeCards.engineering,
+    ),
+    mindfulness: normalizeText(
+      data?.mindfulness,
+      fallbackChallengeCards.mindfulness,
+    ),
   };
 }
 

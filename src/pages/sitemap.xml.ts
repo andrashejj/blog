@@ -1,6 +1,6 @@
 import { getAllPostMeta } from "../lib/content";
-import { site, staticPages } from "../lib/site";
 import type { PostMeta } from "../lib/content";
+import { site, staticPages } from "../lib/site";
 
 function buildSitemapXml(
   entries: Array<{ url: string; priority: number; lastmod: string }>,

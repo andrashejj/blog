@@ -1,16 +1,31 @@
 ---
 import { Printer } from "@lucide/astro";
 import {
-  exercises,
+  BODY_FOCUS_COLORS,
   CATEGORY_COLORS,
   FORMAT_COLORS,
-  BODY_FOCUS_COLORS,
+  exercises,
 } from "../lib/exercise-collection-data";
-import type { Category, Format, BodyFocus } from "../lib/exercise-collection-data";
+import type {
+  BodyFocus,
+  Category,
+  Format,
+} from "../lib/exercise-collection-data";
 
-const allCategories: Category[] = ["strength", "mobility", "balance", "coordination", "cardio"];
+const allCategories: Category[] = [
+  "strength",
+  "mobility",
+  "balance",
+  "coordination",
+  "cardio",
+];
 const allFormats: Format[] = ["group", "individual", "pairs"];
-const allBodyFocus: BodyFocus[] = ["upper body", "lower body", "core", "full body"];
+const allBodyFocus: BodyFocus[] = [
+  "upper body",
+  "lower body",
+  "core",
+  "full body",
+];
 ---
 
 <details class="exercise-collection not-prose my-12 bg-white text-slate-800 border-2 border-slate-300 rounded-xl shadow-sm font-sans print:border-0 print:shadow-none print:rounded-none print:m-0 print:p-0 print:text-[11px] print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact] group">
