@@ -2,9 +2,9 @@
 title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "An agent can generate the system, the tests, and a confident paragraph explaining why it is safe. Red teaming is the part where one named person goes looking for the lie."
+summary: "An agent can generate the system, the tests, and a confident paragraph explaining why it's safe. Red teaming is the part where one named person goes looking for the lie."
 coverImage: "/images/posts/red-teaming-the-agent-cover.svg"
-draft: true
+draft: false
 tags:
   - engineering
   - ai
@@ -14,52 +14,52 @@ tags:
 
 I mentioned red teaming in passing in the [slop posts](/blog/remedies-for-the-slop) and then moved on. That was a mistake.
 
-Once agents are writing a meaningful share of the code, red teaming is one of the few practices that still puts a human in the part of the loop where judgment matters. Not a reviewer asking whether the diff looks reasonable. Not a test suite confirming the cases the agent already imagined. One named person whose job is to assume the system is already broken and go looking for the break.
+Once agents are writing a meaningful share of the code, red teaming is one of the few practices that still puts a human in the part of the loop where judgment matters: one named person whose job is to assume the system is already broken and go looking for the break.
 
-The framing matters. A reviewer asks, "is this correct?" and the answer is often yes, because agent-written code is very good at looking correct. A red teamer asks, "how does this hurt us?" That question finds different things.
+The framing matters. A reviewer asks "is this correct?" and the answer is often yes, because agent-written code is very good at looking correct. A red teamer asks "how does this hurt us?" That question finds different things.
 
 ## Why agents make this worse, not better
 
 The old failure mode was a tired human making a mistake. You caught those with review, at least some of the time, because another human reading carefully might notice the off-by-one or the missing null check.
 
-The new failure mode is different. The agent does not make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
+The new failure mode is different. The agent doesn't make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
 
-That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim. It is plausible. You approve. The agent has effectively written both the answer and the argument for why you should stop checking.
+That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim, it's plausible, you approve. The agent has effectively written both the answer and the argument for why you should stop checking.
 
 <Quote>
 If this fails in production six months from now, what's the most likely cause, and would we even notice?
 </Quote>
 
-An agent will not ask you that in any useful way. Ask it yourself, out loud, about every system it builds for you.
+An agent won't ask you that in any useful way. Ask it yourself, out loud, about every system it builds for you.
 
 ## What a red teamer actually does
 
 Start adversarial and specific. Pick the change, then attack it on three fronts: the inputs, the absences, and the intent.
 
-Inputs first. The agent tested the cases it imagined, so your job is the cases it did not: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly good at the middle and weirdly careless at the edge. Spend your time there.
+Inputs first. The agent tested the cases it imagined, so your job is the cases it didn't: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly good at the middle and weirdly careless at the edge. Spend your time there.
 
-Then the thing it did not build. Read what the change is missing, not just what it added. The rate limit nobody put on the new endpoint. The idempotency key missing from the payment call. The timeout absent from the outbound request that will one day hang and take the pool with it. Absences do not show up in a diff. You cannot review a line that is not there, so someone has to hold the shape of the system in their head and notice the gap.
+Then the thing it didn't build. Read what the change is missing, not just what it added. The rate limit nobody put on the new endpoint. The idempotency key missing from the payment call. The timeout absent from the outbound request that will one day hang and take the pool with it. Absences don't show up in a diff. You can't review a line that isn't there, so someone has to hold the shape of the system in their head and notice the gap.
 
-Last, intent against behavior. Code that is internally consistent and does the wrong thing passes every automated check and fails the only one that matters. The agent optimized for what you said. The red teamer checks against what you meant. No tool does this part well, because the real goal usually lives in a human's head and nowhere in the repository.
+Last, intent against behavior. Code that's internally consistent and does the wrong thing passes every automated check. The agent optimized for what you said; the red teamer checks against what you meant. No tool does this part well, because the real goal usually lives in a human's head and nowhere in the repository.
 
 ## Running it so it sticks
 
-The mistake is making red teaming a vibe. "We should think adversarially" is not a process. It is a poster. Make it concrete or it evaporates the first sprint someone is behind.
+The mistake is treating red teaming as a mindset. "We should think adversarially" isn't a process, and it evaporates the first sprint someone's behind. Make it concrete.
 
-Rotate the role. One person per risky change, named, whose job for that session is to break it. Not the author. Adversarial review of your own work is theatre, because you will defend the choices you already made. Rotating it also spreads the skill, which matters because thinking like an attacker is learnable and most engineers have never been asked to.
+Rotate the role. One person per risky change, named, whose job for that session is to break it. Not the author: adversarial review of your own work is theatre, because you'll defend the choices you already made. Rotating it also spreads the skill, which matters because thinking like an attacker is learnable and most engineers have never been asked to.
 
-Time-box it and write it down. Twenty focused minutes with the question "how does this fail?" beats an hour of polite line-by-line review. The output is a short list attached to the PR: here is what I attacked, here is what I found, here is what we are choosing to accept. When the list says "we are not covered, and we have decided that is fine for now," that is a real decision someone made on purpose. That is the whole point.
+Time-box it and write it down. Twenty focused minutes with the question "how does this fail?" beats an hour of polite line-by-line review. The output is a short list attached to the PR: what I attacked, what I found, what we're choosing to accept. When the list says "we aren't covered, and we've decided that's fine for now," that's a real decision someone made on purpose.
 
-Keep the surface small enough to attack at all. This is the unglamorous prerequisite. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here. They are what let a human stay in the loop at all.
+Keep the surface small enough to attack at all. This is the unglamorous prerequisite. You can't red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here; they're what let a human stay in the loop at all.
 
 ## The part that's actually yours
 
-The machine produces the work, the tests, and the confidence. It cannot be the one going looking for the lie, because it does not know it is lying, and it has no stake in being wrong. Red teaming is where a human decides, deliberately, that "it looks fine" is not the same as "it is fine," and goes to find out which.
+The machine produces the work, the tests, and the confidence. It can't be the one looking for the lie, because it doesn't know it's lying, and it has no stake in being wrong. Red teaming is where a human decides that "it looks fine" and "it is fine" are different claims, and goes to find out which one is true.
 
-That decision does not happen by accident anymore. It used to, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone. So you arrange for the noticing on purpose. You give it to a named person. You make it non-negotiable.
+That used to happen by accident, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone, so you arrange for the noticing on purpose: give it to a named person, and make it part of how risky changes ship.
 
-The teams that do this will still ship fast. They will just stop confusing speed with safety. The teams that do not will find out the hard way, in production, six months from now, with nobody who can explain why.
+Teams that do this still ship fast. They just stop confusing speed with safety.
 
 ---
 
-*Want to chat?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
+*Want to chat?* [X](https://x.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)

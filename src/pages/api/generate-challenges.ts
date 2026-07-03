@@ -2,9 +2,9 @@ export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 import {
+  type ChallengesPromptData,
   fallbackChallenges,
   normalizeChallengesData,
-  type ChallengesPromptData,
 } from "../../lib/noah-worksheet";
 
 const PROMPT = `Generate 4 challenges for a 9-year-old boy's daily worksheet. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
@@ -20,6 +20,9 @@ const PROMPT = `Generate 4 challenges for a 9-year-old boy's daily worksheet. Re
 }`;
 
 export const GET = async () => {
-  const data = await generateJSON<ChallengesPromptData>(PROMPT, fallbackChallenges);
+  const data = await generateJSON<ChallengesPromptData>(
+    PROMPT,
+    fallbackChallenges,
+  );
   return jsonResponse(normalizeChallengesData(data));
 };

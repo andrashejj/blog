@@ -8,7 +8,8 @@ interface Props {
 
 const { src, alt, side = "right", width = "45%" } = Astro.props;
 
-const floatClass = side === "left" ? "float-left mr-6 mb-4" : "float-right ml-6 mb-4";
+const floatClass =
+  side === "left" ? "float-left mr-6 mb-4" : "float-right ml-6 mb-4";
 ---
 
 <div class="not-prose overflow-hidden" style="clear: both;">

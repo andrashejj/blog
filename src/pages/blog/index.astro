@@ -50,6 +50,7 @@ const presentSeries = Object.entries(seriesRegistry)
         <button
           type='button'
           data-filter='all'
+          aria-pressed='true'
           class='series-chip is-active no-rule border border-rule px-3 py-1.5 text-ink transition'
         >
           All <span class='text-muted'>({posts.length})</span>
@@ -58,6 +59,7 @@ const presentSeries = Object.entries(seriesRegistry)
           <button
             type='button'
             data-filter={s.id}
+            aria-pressed='false'
             class='series-chip no-rule border border-rule px-3 py-1.5 text-ink-soft transition'
           >
             {s.label} <span class='text-muted'>({s.count})</span>
@@ -82,8 +84,9 @@ const presentSeries = Object.entries(seriesRegistry)
   </section>
 
   <p
-    class='mt-12 hidden font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted'
+    class='mt-12 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted'
     data-empty-state
+    hidden
   >
     No dispatches in this series yet.
   </p>
@@ -118,7 +121,9 @@ const presentSeries = Object.entries(seriesRegistry)
           if (match) shown++;
         }
         for (const chip of chips) {
-          chip.classList.toggle("is-active", chip.dataset.filter === filter);
+          const active = chip.dataset.filter === filter;
+          chip.classList.toggle("is-active", active);
+          chip.setAttribute("aria-pressed", String(active));
         }
         if (empty) empty.hidden = shown !== 0;
       }

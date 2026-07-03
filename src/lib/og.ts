@@ -6,6 +6,7 @@
 
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
+import type { Canvas, CanvasKit, FontMgr, Paragraph } from "canvaskit-wasm";
 
 const require = createRequire(import.meta.url);
 
@@ -19,10 +20,6 @@ const inkSoft: RGBA = [60 / 255, 49 / 255, 38 / 255, 1];
 const muted: RGBA = [111 / 255, 95 / 255, 79 / 255, 1];
 const ruleColor: RGBA = [200 / 255, 182 / 255, 148 / 255, 1];
 const terracotta: RGBA = [191 / 255, 64 / 255, 36 / 255, 1];
-
-type CanvasKit = any;
-type Paragraph = any;
-type Canvas = any;
 
 let ckPromise: Promise<CanvasKit> | null = null;
 async function getCanvasKit(): Promise<CanvasKit> {
@@ -38,7 +35,7 @@ async function getCanvasKit(): Promise<CanvasKit> {
   return ckPromise;
 }
 
-let mgrPromise: Promise<any> | null = null;
+let mgrPromise: Promise<FontMgr> | null = null;
 async function getFontMgr() {
   if (!mgrPromise) {
     mgrPromise = (async () => {
@@ -49,22 +46,26 @@ async function getFontMgr() {
         "./public/fonts/Fraunces-Italic.ttf",
       ];
       const datas = await Promise.all(files.map((f) => readFile(f)));
-      return CK.FontMgr.FromData(...datas.map((d) => d.buffer));
+      const mgr = CK.FontMgr.FromData(
+        ...datas.map((d) => d.buffer as ArrayBuffer),
+      );
+      if (!mgr) throw new Error("Failed to load OG fonts");
+      return mgr;
     })();
   }
   return mgrPromise;
 }
 
-let paperBytes: Uint8Array | null = null;
-async function getPaperBytes(): Promise<Uint8Array> {
+let paperBytes: Buffer | null = null;
+async function getPaperBytes(): Promise<Buffer> {
   if (!paperBytes) {
     paperBytes = await readFile("./public/og-templates/paper.png");
   }
   return paperBytes;
 }
 
-let avatarBytes: Uint8Array | null = null;
-async function getAvatarBytes(): Promise<Uint8Array> {
+let avatarBytes: Buffer | null = null;
+async function getAvatarBytes(): Promise<Buffer> {
   if (!avatarBytes) {
     avatarBytes = await readFile("./public/og-templates/avatar.png");
   }
@@ -85,7 +86,7 @@ interface TextOpts {
 
 function buildParagraph(
   CK: CanvasKit,
-  fontMgr: any,
+  fontMgr: FontMgr,
   opts: TextOpts,
 ): Paragraph {
   const alignMap = {
@@ -173,10 +174,11 @@ export async function renderOG(params: RenderOGParams): Promise<Buffer> {
   const avatar = await getAvatarBytes();
 
   const surface = CK.MakeSurface(WIDTH, HEIGHT);
+  if (!surface) throw new Error("Failed to create OG canvas surface");
   const canvas = surface.getCanvas();
 
   // Paper background (radial glows + grain baked in).
-  const paperImg = CK.MakeImageFromEncoded(paper);
+  const paperImg = CK.MakeImageFromEncoded(new Uint8Array(paper));
   if (paperImg) {
     canvas.drawImageRect(
       paperImg,
@@ -274,7 +276,7 @@ export async function renderOG(params: RenderOGParams): Promise<Buffer> {
   // ── Byline footer ──────────────────────────────────────────────────────
   drawSolidRule(CK, canvas, gutter, WIDTH - gutter, 522, ruleColor, 0.7, 1);
 
-  const avImg = CK.MakeImageFromEncoded(avatar);
+  const avImg = CK.MakeImageFromEncoded(new Uint8Array(avatar));
   if (avImg) {
     const size = 64;
     canvas.drawImageRect(
@@ -323,6 +325,7 @@ export async function renderOG(params: RenderOGParams): Promise<Buffer> {
   const image = surface.makeImageSnapshot();
   const bytes = image.encodeToBytes(CK.ImageFormat.PNG, 100);
   surface.dispose();
+  if (!bytes) throw new Error("Failed to encode OG image");
   return Buffer.from(bytes);
 }
 

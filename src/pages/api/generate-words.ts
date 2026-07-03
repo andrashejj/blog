@@ -2,9 +2,9 @@ export const prerender = false;
 
 import { generateJSON, jsonResponse } from "../../lib/gemini";
 import {
+  type WordsData,
   fallbackWords,
   normalizeWordsData,
-  type WordsData,
 } from "../../lib/noah-worksheet";
 
 const PROMPT = `Generate a creative writing prompt for a 9-year-old boy. Return ONLY valid JSON with no markdown formatting, matching this exact structure:
