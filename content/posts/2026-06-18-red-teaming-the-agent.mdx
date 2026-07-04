@@ -2,9 +2,10 @@
 title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "An agent can generate the system, the tests, and a confident paragraph explaining why it's safe. Red teaming is the part where one named person goes looking for the lie."
+summary: "An agent will write the system, the tests, and a confident paragraph explaining why it's safe. Red teaming is the part where one named person assumes it's lying and goes to find the lie. Here's what that actually looks like on a real diff."
 coverImage: "/images/posts/red-teaming-the-agent-cover.svg"
 draft: false
+series: "ai-slop"
 tags:
   - engineering
   - ai
@@ -12,53 +13,61 @@ tags:
   - security
 ---
 
-I mentioned red teaming in passing in the [slop posts](/blog/remedies-for-the-slop) and then moved on. That was a mistake.
+I gave red teaming one paragraph in the [remedies post](/blog/remedies-for-the-slop) and moved on. It deserved more, because once agents write a real share of the code it's one of the few practices that still keeps a human in the part of the loop where judgment lives: one named person who assumes the system is already broken and goes looking for the break.
 
-Once agents are writing a meaningful share of the code, red teaming is one of the few practices that still puts a human in the part of the loop where judgment matters: one named person whose job is to assume the system is already broken and go looking for the break.
+A reviewer asks "is this correct?" and usually answers yes, because agent-written code is very good at looking correct. A red teamer asks "how does this hurt us?" That question finds different things, and the rest of this post is about the things it finds.
 
-The framing matters. A reviewer asks "is this correct?" and the answer is often yes, because agent-written code is very good at looking correct. A red teamer asks "how does this hurt us?" That question finds different things.
+## Why the agent makes this harder
 
-## Why agents make this worse, not better
+The old failure mode was a tired human making a mistake, and another human reading carefully might catch the off-by-one or the missing null check. Review worked, some of the time, because both sides were fallible in the same human ways.
 
-The old failure mode was a tired human making a mistake. You caught those with review, at least some of the time, because another human reading carefully might notice the off-by-one or the missing null check.
+The new failure mode doesn't look like a mistake. The agent produces confident code at volume, wrapped in tests that pass and a commit message explaining why the approach is sound. The fluency is the whole problem. When the code reads right and ships with its own justification attached, the natural response is to believe it: you skim, it's plausible, you approve. The agent has written both the answer and the argument for why you can stop checking.
 
-The new failure mode is different. The agent doesn't make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
+And here's the part that catches people. The tests pass *because* they avoid the dangerous case, not despite it. An agent writes the test it can imagine passing, which is the same shape as the code it just wrote. The test and the bug agree with each other. Green doesn't mean safe; it means the code is consistent with a test that shares its blind spot.
 
-That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim, it's plausible, you approve. The agent has effectively written both the answer and the argument for why you should stop checking.
+## A worked example
+
+Abstract advice about "thinking adversarially" evaporates the first sprint someone's behind, so let me make it concrete. Say the agent adds a Stripe webhook handler. The PR is eighty lines, the tests are green, the commit message says "Handle payment confirmation webhook." Here's roughly what it wrote:
 
 <Quote>
-If this fails in production six months from now, what's the most likely cause, and would we even notice?
+POST /webhooks/stripe → parse the JSON body, read event.type, and on `payment_intent.created` look up the order by metadata.order_id and set status = paid. Returns 200.
 </Quote>
 
-An agent won't ask you that in any useful way. Ask it yourself, out loud, about every system it builds for you.
+A reviewer reads that and sees a clean handler with a passing test. A red teamer reads it for twenty minutes and finds three separate ways it hurts you.
 
-## What a red teamer actually does
+First, it never verifies the signature. Stripe signs every webhook with a secret and expects you to check the `Stripe-Signature` header before trusting a byte of the body. This handler doesn't, which means anyone who learns the URL can POST a fake `order_id` and mark any order paid. The reason the agent skipped it is worth sitting with: the test constructs its own fake event object and calls the handler directly, so the test never needed a valid signature, so nothing in the loop ever demanded one. The missing check and the passing test are the same fact.
 
-Start adversarial and specific. Pick the change, then attack it on three fronts: the inputs, the absences, and the intent.
+Second, it fires on the wrong event. `payment_intent.created` means Stripe *started* a payment, not that money moved. The event you want is `payment_intent.succeeded`. The handler is internally consistent and does exactly what the code says; it just confirms payments that haven't happened. No automated check catches this, because "wrong event name, right structure" is invisible to a type system and to a test written by the same author who picked the wrong event.
 
-Inputs first. The agent tested the cases it imagined, so your job is the cases it didn't: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly good at the middle and weirdly careless at the edge. Spend your time there.
+Third, it isn't idempotent. Stripe retries webhooks, sometimes for days, until it gets a 200. Nothing here records that an event was already processed, so a retried `succeeded` re-runs the fulfilment: a second shipment, a second license, a second email. The happy path the agent built runs fine exactly once, which is exactly how often the test runs it.
 
-Then the thing it didn't build. Read what the change is missing, not just what it added. The rate limit nobody put on the new endpoint. The idempotency key missing from the payment call. The timeout absent from the outbound request that will one day hang and take the pool with it. Absences don't show up in a diff. You can't review a line that isn't there, so someone has to hold the shape of the system in their head and notice the gap.
+None of these are exotic. They're the inputs the agent didn't imagine, the checks it didn't add, and the gap between what you said and what you meant. That's the whole job, and the example maps onto the three fronts you attack on every change.
 
-Last, intent against behavior. Code that's internally consistent and does the wrong thing passes every automated check. The agent optimized for what you said; the red teamer checks against what you meant. No tool does this part well, because the real goal usually lives in a human's head and nowhere in the repository.
+## The three fronts
+
+Inputs it didn't imagine. The agent tested the cases it thought of, so your time goes to the ones it didn't: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are strong in the middle of the input space and careless at the edges. Live at the edges.
+
+The thing it didn't build. Read the change for what's absent, not just what's present. The rate limit nobody put on the new endpoint. The signature check missing from the webhook. The timeout absent from the outbound call that will one day hang and take the connection pool with it. Absences don't appear in a diff; you can't review a line that isn't there, so someone has to hold the shape of the whole system in their head and notice the missing piece. This is the front tools are worst at and the one that takes systems down.
+
+Intent against behavior. Code that's consistent and does the wrong thing passes everything. The agent optimized for what you typed; the red teamer checks against what you meant, which usually lives in a human's head and nowhere in the repository. The `created`-versus-`succeeded` bug is this front in one line.
 
 ## Running it so it sticks
 
-The mistake is treating red teaming as a mindset. "We should think adversarially" isn't a process, and it evaporates the first sprint someone's behind. Make it concrete.
+Rotate the role. One person per risky change, named, whose only job for that session is to break it. Never the author, because adversarial review of your own work is theatre: you'll defend the choices you already made. Rotating it also spreads the skill, and thinking like an attacker is learnable by people who've never once been asked to.
 
-Rotate the role. One person per risky change, named, whose job for that session is to break it. Not the author: adversarial review of your own work is theatre, because you'll defend the choices you already made. Rotating it also spreads the skill, which matters because thinking like an attacker is learnable and most engineers have never been asked to.
+Time-box it and write it down. Twenty focused minutes on "how does this fail?" beats an hour of polite line-by-line reading. The output is a short note on the PR, and it's worth keeping in a fixed shape: what I attacked, what I found, what we're choosing to accept. For the webhook that note reads: *attacked signature, event type, retries. Found no signature verification (blocking), wrong event, no idempotency. Accepting nothing, all three get fixed before merge.* When a note instead says "we aren't covered here and we've decided that's fine for now," that's a real decision a named person made on purpose, and you can find it again when it bites.
 
-Time-box it and write it down. Twenty focused minutes with the question "how does this fail?" beats an hour of polite line-by-line review. The output is a short list attached to the PR: what I attacked, what I found, what we're choosing to accept. When the list says "we aren't covered, and we've decided that's fine for now," that's a real decision someone made on purpose.
+Keep the surface small enough to attack at all. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is the exact failure you were trying to prevent. Small PRs earn their keep here more than anywhere else: they're the thing that lets a human stay in the loop.
 
-Keep the surface small enough to attack at all. This is the unglamorous prerequisite. You can't red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here; they're what let a human stay in the loop at all.
+## It isn't a security review
 
-## The part that's actually yours
+Half the webhook findings were security bugs and one wasn't, and that's the point. Red teaming isn't a pass with a scanner or a checklist of the OWASP top ten, though it'll surface plenty of those. It's broader and it's cheaper: one person asking how a specific change fails under an adversary, where the adversary might be a real attacker, a retrying client, a clock, or just reality declining to match the happy path. The wrong-event bug had no attacker and would still have refunded money to people who never paid. A scanner finds none of that. A person holding the goal in their head finds all of it.
 
-The machine produces the work, the tests, and the confidence. It can't be the one looking for the lie, because it doesn't know it's lying, and it has no stake in being wrong. Red teaming is where a human decides that "it looks fine" and "it is fine" are different claims, and goes to find out which one is true.
+## The part that's yours
 
-That used to happen by accident, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone, so you arrange for the noticing on purpose: give it to a named person, and make it part of how risky changes ship.
+The machine produces the work, the tests, and the confidence. It can't be the one looking for the lie, because it doesn't know it's lying and has no stake in being wrong. Red teaming is where a human decides that "it looks fine" and "it is fine" are different claims and goes to find out which is true.
 
-Teams that do this still ship fast. They just stop confusing speed with safety.
+That used to happen a little by accident, in the friction of writing code by hand and noticing things along the way. The friction is gone, so you arrange the noticing on purpose: give it to a named person, time-box it, write down what they found, and make it part of how risky changes ship. Teams that do this still move fast. They've just stopped confusing speed with safety.
 
 ---
 
