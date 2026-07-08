@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
@@ -10,6 +11,7 @@ import remarkGfm from "remark-gfm";
 export default defineConfig({
   site: "https://www.andrashejj.com",
   output: "static",
+  compressHTML: true,
   adapter: vercel({
     webAnalytics: { enabled: true },
     maxDuration: 30,
@@ -19,10 +21,12 @@ export default defineConfig({
   },
   integrations: [mdx(), sitemap()],
   markdown: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: "append" }],
-    ],
+    processor: unified({
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [
+        rehypeSlug,
+        [rehypeAutolinkHeadings, { behavior: "append" }],
+      ],
+    }),
   },
 });

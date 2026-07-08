@@ -1,6 +1,13 @@
 packages:
   - .
 
+allowBuilds:
+  '@biomejs/biome': true
+  esbuild: true
+  protobufjs: true
+  puppeteer: true
+  sharp: true
+
 ignoredBuiltDependencies:
   - puppeteer
 
