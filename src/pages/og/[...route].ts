@@ -1,5 +1,5 @@
+import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
 import { renderOG } from "../../lib/og";
 import { site } from "../../lib/site";
 
@@ -11,7 +11,10 @@ interface PageEntry {
 }
 
 async function collectPages(): Promise<PageEntry[]> {
-  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const posts = await getCollection(
+    "posts",
+    ({ data }: CollectionEntry<"posts">) => !data.draft,
+  );
 
   const pages: PageEntry[] = [
     {
@@ -67,7 +70,7 @@ export const GET: APIRoute = async ({ props }) => {
     description: page.description,
     kicker: page.kicker,
   });
-  return new Response(bytes, {
+  return new Response(new Uint8Array(bytes), {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control": "public, max-age=31536000, immutable",

@@ -2,9 +2,10 @@
 title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "Agent-written code often arrives with tests and a confident explanation. Red teaming is where one named person tries to prove it wrong."
-coverImage: "/images/posts/red-teaming-the-agent-cover.svg"
-draft: true
+summary: "I recently stared at a PR so large my laptop struggled to render the diff. The code looked clean, the tests existed, and still nobody could reasonably review it."
+coverImage: "/images/posts/red-teaming-the-agent-cover.png"
+draft: false
+series: "ai-slop"
 tags:
   - engineering
   - ai
@@ -12,54 +13,119 @@ tags:
   - security
 ---
 
-I mentioned red teaming in passing in the [slop posts](/blog/remedies-for-the-slop) and moved on too quickly.
+Recently I saw a couple of devs deliver a huuuuge PR. And when I say huuuuge, I mean GitHub started behaving like I had asked it to render a Pixar movie in the browser. Roughly 200k changed lines.
 
-Once agents are writing large chunks of the code, ordinary review gets weaker. The diff is bigger. The tests look neat. The commit message explains itself. Red teaming gives one person a different job: assume the system is already broken and go find where.
+Can you imagine reviewing that?
 
-The question changes the reading. "Is this correct?" makes you check the shape of the solution. "How does this hurt us?" makes you look for the missing rate limit, the duplicate request, the stale permission, the timeout nobody added.
+I tried. My 8-core Mac tried. The diff opened, paused, thought about its life choices, and then began coughing up chunks of files in no particular hurry. Somewhere around the point where I was scrolling through generated-looking tests for code I had not read, my review turned into one question:
 
-## Why agents make this worse, not better
+Can the person who gave me this PR explain wtf is going on here?
 
-The old failure mode was a tired human making a mistake. You caught those with review, at least some of the time, because another human reading carefully might notice the off-by-one or the missing null check.
+If the answer is no, the review is theatre. It doesn't matter that the tests are green. It doesn't matter that the code is formatted. A change that large has already escaped the part of the process where a human can hold it in their head.
 
-The new failure mode is different. The agent does not make tired mistakes. It makes confident ones, at volume, wrapped in tests that pass and a commit message that explains why the approach is sound.
+For changes like that, I want a different kind of review comment. Not "looks good." More like: I tried duplicate submits, bad permissions, retries, timeouts, weird inputs, and missing product rules. Here's what broke. Here's what I still don't understand.
 
-That fluency is the problem. When the code looks right, reads right, and ships with its own justification attached, the natural human response is to believe it. You skim. It is plausible. You approve.
+<figure className="not-prose my-8">
+  <a href="https://gunshowcomic.com/648">
+    <img src="https://gunshowcomic.com/comics/20130109.png" alt="KC Green's Question Hound sitting in a burning room and saying this is fine." className="mx-auto w-full max-w-2xl border border-stone-300" loading="lazy" />
+  </a>
+  <figcaption className="mt-2 text-center text-sm italic text-stone-500">Sometimes green CI is just Question Hound with a coffee mug. Comic: <a href="https://gunshowcomic.com/648">On Fire</a> by KC Green.</figcaption>
+</figure>
+
+## Clean code can hide an unreadable change
+
+The old failure mode was a tired human making a mistake. Another tired human might catch it. Review worked, some of the time, because both people were operating in the same messy human way. You could see the scar tissue in the code. A weird variable name. A half-finished abstraction. A branch that smelled like someone changed their mind at 11pm.
+
+The new failure mode arrives pre-tidied. Names, formatting, tests, commit message, the little paragraph explaining why the approach is sound. The agent gives you the code and the alibi in the same box.
+
+So you skim. Of course you skim. The PR is too large, the tests are green, the commit message sounds reasonable, and nobody wants to be the person blocking "velocity" because their laptop is hot and their stomach feels weird.
+
+But sometimes the tests pass because they share the same blind spot as the code. The agent writes the case it can imagine passing. Then it writes the implementation that passes that case.
+
+This is the QA engineer walks into a bar joke in expensive clothing. He orders a beer. Orders zero beers. Orders 99,999,999,999 beers. Orders a lizard. Orders -1 beers. Orders gibberish. Everything looks covered. Then the first real customer walks in and asks where the bathroom is, and the bar catches fire.
+
+The test suite proved the bar could handle weird beer orders. It did not prove the bar could run as a bar.
+
+Someone squints at the order of operations and calls this TDD. Or, because we apparently need a new term every time a loop gets worse, agentic test-driven development. Huiiii. Real TDD lets the test put pressure on the design. This is the implementation writing its own alibi. The bug and the test shake hands and walk into your main branch together.
+
+<figure className="not-prose my-8">
+  <a href="https://xkcd.com/1695/">
+    <img src="https://imgs.xkcd.com/comics/code_quality_2.png" alt="xkcd Code Quality 2 comic comparing unreadable code to a burning bus." className="mx-auto w-full max-w-2xl border border-stone-300 bg-white" loading="lazy" />
+  </a>
+  <figcaption className="mt-2 text-center text-sm italic text-stone-500">Old bad code had the courtesy to look like a burning bus. The agent version can park the same bus inside tidy abstractions. Comic: <a href="https://xkcd.com/1695/">xkcd Code Quality 2</a>, CC BY-NC 2.5.</figcaption>
+</figure>
+
+## The example from my own blog
+
+In this blog, there is a post called [Noah's Daily Exercises](/blog/noahs-daily-exercises). The goal is practical: generate exercises for Noah and Lara using an LLM. Maths, quizzes, drawings, creative writing, little physical challenges, all the stuff that makes a morning worksheet feel less like a photocopy from 1998.
+
+The app only exists because I did this manually for a long time. I used to draw these worksheets by hand before school. Lovely when I had time and coffee. Less lovely when I had neither and still needed maths problems, a drawing prompt, and something vaguely educational that didn't bore everyone to death.
+
+So yes, using an LLM here makes my life easier. This sounds great BUT, as this little app grows inside the blog, a few product problems start popping up. One of them is not a code bug at all.
+
+Imagine I ask an agent to add a "make today's worksheet" button. The PR is small. The UI renders. The API calls return data. The tests check that the sections appear. Nice little change. Exactly the kind of thing I would approve too quickly if I were tired.
+
+Here's roughly what it does:
 
 <Quote>
-If this fails in production six months from now, what's the most likely cause, and would we even notice?
+Click the button -> call the math, words, physical exercise, sketch, and challenge generators, then render the returned sections. Any refresh asks for a new sheet. Store nothing.
 </Quote>
 
-An agent will not ask you that in any useful way. Ask it yourself, out loud, about every system it builds for you.
+The button works. That is the trap.
 
-## What a red teamer actually does
+First, I just created a reroll machine. The promise was "today's worksheet." The implementation says "keep refreshing until the maths looks easy and the physical exercise isn't the one you hate." No attacker required. A kid with a browser and a perfectly rational interest in doing less work is enough.
 
-Start adversarial and specific. Pick the change, then attack it on three fronts: the inputs, the absences, and the intent.
+Second, the difficulty rules are vibes. Age nine. Times tables to five. Safe bodyweight exercises. Short hints. No equipment. All of that sits in prompts and helper code and the general intent of the thing. If the generator returns long division, twenty burpees, or a writing prompt that needs an adult parked beside him for forty minutes, the JSON can still be perfect. Perfectly wrong, but perfect.
 
-Inputs first. The agent tested the cases it imagined, so your job is the cases it did not: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are weirdly good at the middle and weirdly careless at the edge. Spend your time there.
+Third, the sections don't live in separate universes. Maths, words, physical work, sketches, and challenges might each look fine alone. A real morning doesn't work like that. Ten hard maths problems plus a demanding writing hook plus a physical block after surf practice is a bad worksheet. The agent built five tidy boxes. I need one kid's morning.
 
-Then read what it did not build. The rate limit nobody put on the new endpoint. The idempotency key missing from the payment call. The timeout absent from the outbound request that will one day hang and take the pool with it. Absences do not show up in a diff. You cannot review a line that is not there.
+None of this shows up as a syntax error. None of it looks dramatic in a diff. The code works. The product behavior is wrong.
 
-Last, intent against behavior. Code that is internally consistent and does the wrong thing passes every automated check and fails the only one that matters. The agent optimized for what you said. The red teamer checks against what you meant. No tool does this part well, because the real goal usually lives in a human's head and nowhere in the repository.
+## My red-team pass is three annoying questions
 
-## Running it so it sticks
+When I red team an agent change, I don't start with "is this elegant?" I start with three more irritating questions.
 
-The mistake is making red teaming a vibe. "We should think adversarially" is a poster, not a process. Make it concrete or it evaporates the first sprint someone is behind.
+What did it not imagine?
 
-Rotate the role. One person per risky change, named, whose job for that session is to break it. Not the author. Adversarial review of your own work is theatre, because you will defend the choices you already made. Rotating it also spreads the skill, which matters because thinking like an attacker is learnable and most engineers have never been asked to.
+The empty list. The Unicode name. The kid who refreshes twice. The parent who opens the worksheet after a hard surf session and gets a monster set of exercises. Agents are pretty good in the middle of the input space. They get weirdly casual at the edges. I try to live there for twenty minutes.
 
-Time-box it and write it down. Twenty focused minutes with the question "how does this fail?" beats an hour of polite line-by-line review. The output is a short list attached to the PR: what I attacked, what I found, what we are accepting. "We are not covered, and we have decided that is fine for now" is a real decision. Silent exposure is not.
+What did it not build?
 
-Keep the surface small enough to attack at all. This is the unglamorous prerequisite. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is exactly the failure you were trying to prevent. Small PRs earn their keep here. They are what let a human stay in the loop at all.
+The daily lock. The difficulty cap as an actual rule, not a wish in a prompt. The parent review step. The timeout. The boring guardrail nobody added because the happy path was already green. Missing things don't appear in a diff. You can't comment on the line that isn't there.
 
-## The part that's actually yours
+What did I mean but fail to say?
 
-The machine produces the work, the tests, and the confidence. It cannot be the one going looking for the lie, because it does not know it is lying, and it has no stake in being wrong. Red teaming is where a human decides, deliberately, that "it looks fine" is not the same as "it is fine," and goes to find out which.
+This one hurts because it's usually my fault. I said "generate today's worksheet." I meant "generate one age-appropriate worksheet that a parent can commit to for the day." The agent optimised for the words. The red teamer has to recover the meaning.
 
-That decision does not happen by accident anymore. It used to, a little, in the friction of writing code by hand and noticing things along the way. That friction is gone. So you arrange for the noticing on purpose. You give it to a named person. You make it non-negotiable.
+## Concrete takeaway: your red team checklist
 
-The teams that do this will still ship fast. They will just stop confusing speed with safety.
+Under a risky PR, I want a comment like this:
+
+<Quote>
+I attacked: duplicate submits, retries, bad permissions, weird inputs, missing product rules, and whole-flow behavior.
+
+I found: unlimited worksheet rerolls, difficulty rules living only in prompts, and no check for total load across maths, writing, and physical work.
+
+I still don't understand: whether "today's worksheet" means one committed sheet per day or infinite generation until the kid likes the result.
+</Quote>
+
+If you can't write that comment, you probably didn't red team it. You skimmed it. Which is fine for a CSS tweak. It is not fine for a change where the blast radius is bigger than your attention span.
+
+My checklist looks like this:
+
+- [ ] Explain the change in one sentence without rereading the PR description.
+- [ ] Run the duplicate-click, refresh, retry, and come-back-tomorrow paths.
+- [ ] Write down what the tests proved.
+- [ ] Write down what the tests avoided proving.
+- [ ] Find every rule that only exists in a prompt, comment, ticket, or someone's head.
+- [ ] Try one bored-user path, one angry-customer path, one retrying-client path, and one bad-clock path.
+- [ ] Check that production failure would show up before a human complains.
+- [ ] Write down the risk being accepted because fixing it now is not worth it.
+
+Red teaming is allowed to end with "ship it." I don't want every reviewer cosplaying as a corporate risk committee. In this case it's my blog, so yes, I have to red team myself, which is a bit schizophrenic. But if I decide the worksheet can reroll forever for now, or the difficulty cap can stay in the prompt for another week, I want that written down in normal language.
+
+The scanner won't find "this teaches Noah to refresh until the worksheet is easy." The agent won't feel embarrassed that it generated the tests and the bug from the same blind spot. Somebody still has to look at the thing and say: I don't buy it yet.
 
 ---
 
-*Want to chat?* [Twitter](https://twitter.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
+*Want to chat?* [X](https://x.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)

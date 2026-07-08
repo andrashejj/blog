@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "deploy": "vercel deploy",
     "check": "biome check .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "thumbs": "node scripts/make-board-thumbs.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "4.3.13",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "puppeteer": "^24.37.5",
+    "sharp": "^0.35.3",
     "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d"

@@ -1,9 +1,15 @@
 import {
+  type ChallengesData,
+  type MathConfig,
+  type MathData,
+  type PhysicalData,
+  type SketchesData,
+  type WordsData,
   buildMathUrl,
   clampInt,
   createMathFallback,
-  fallbackChallengeCards,
   defaultMathConfig,
+  fallbackChallengeCards,
   fallbackPhysical,
   fallbackSketches,
   fallbackWords,
@@ -12,12 +18,6 @@ import {
   normalizePhysicalData,
   normalizeSketchesData,
   normalizeWordsData,
-  type ChallengesData,
-  type MathConfig,
-  type MathData,
-  type PhysicalData,
-  type SketchesData,
-  type WordsData,
 } from "./noah-worksheet";
 
 const answerLine =
@@ -71,9 +71,9 @@ function withLoading(
     const originalHtml = button.innerHTML;
 
     button.disabled = true;
-    extraDisabled.forEach((element) => {
+    for (const element of extraDisabled) {
       element.disabled = true;
-    });
+    }
     button.innerHTML =
       '<span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span> Loading...';
     container?.classList.add("opacity-50", "pointer-events-none");
@@ -82,9 +82,9 @@ function withLoading(
       await action();
     } finally {
       button.disabled = false;
-      extraDisabled.forEach((element) => {
+      for (const element of extraDisabled) {
         element.disabled = false;
-      });
+      }
       button.innerHTML = originalHtml;
       container?.classList.remove("opacity-50", "pointer-events-none");
     }
@@ -294,10 +294,15 @@ function setHtml(id: string, html: string): void {
 
 async function loadPhysical(): Promise<void> {
   try {
-    const data = await fetchJSON<PhysicalData>("/api/generate-physical-exercises");
+    const data = await fetchJSON<PhysicalData>(
+      "/api/generate-physical-exercises",
+    );
     setHtml("section-physical", renderPhysical(normalizePhysicalData(data)));
   } catch {
-    setHtml("section-physical", renderPhysical(normalizePhysicalData(fallbackPhysical)));
+    setHtml(
+      "section-physical",
+      renderPhysical(normalizePhysicalData(fallbackPhysical)),
+    );
   }
 }
 
@@ -332,7 +337,10 @@ async function loadSketches(): Promise<void> {
     const data = await fetchJSON<SketchesData>("/api/generate-sketches");
     setHtml("section-sketches", renderSketches(normalizeSketchesData(data)));
   } catch {
-    setHtml("section-sketches", renderSketches(normalizeSketchesData(fallbackSketches)));
+    setHtml(
+      "section-sketches",
+      renderSketches(normalizeSketchesData(fallbackSketches)),
+    );
   }
 }
 
@@ -374,9 +382,15 @@ function initPrintButton(): void {
   }
 
   printButton.addEventListener("click", () => {
-    const header = document.querySelector("body > div > header") as HTMLElement | null;
-    const footer = document.querySelector("body > div > footer") as HTMLElement | null;
-    const main = document.querySelector("body > div > main") as HTMLElement | null;
+    const header = document.querySelector(
+      "body > div > header",
+    ) as HTMLElement | null;
+    const footer = document.querySelector(
+      "body > div > footer",
+    ) as HTMLElement | null;
+    const main = document.querySelector(
+      "body > div > main",
+    ) as HTMLElement | null;
     const proseElements = document.querySelectorAll<HTMLElement>(
       ".prose > *:not(.worksheet-container)",
     );
@@ -389,9 +403,9 @@ function initPrintButton(): void {
       main.style.padding = "0";
       main.style.margin = "0";
     }
-    proseElements.forEach((element) => {
+    for (const element of proseElements) {
       element.style.display = "none";
-    });
+    }
     document.body.style.background = "white";
 
     let restored = false;
@@ -409,9 +423,9 @@ function initPrintButton(): void {
         main.style.padding = "";
         main.style.margin = "";
       }
-      proseElements.forEach((element) => {
+      for (const element of proseElements) {
         element.style.display = "";
-      });
+      }
       document.body.style.background = "";
     };
 
@@ -457,13 +471,18 @@ export function initNoahWorksheet(): void {
   }
 
   if (mathButton) {
-    const reloadMath = withLoading(mathButton, "section-math", loadMath, mathInputs);
+    const reloadMath = withLoading(
+      mathButton,
+      "section-math",
+      loadMath,
+      mathInputs,
+    );
     syncMathConfigInputs();
     mathButton.addEventListener("click", reloadMath);
-    mathInputs.forEach((input) => {
+    for (const input of mathInputs) {
       input.addEventListener("change", reloadMath);
       input.addEventListener("blur", syncMathConfigInputs);
-    });
+    }
   }
 
   if (challengesButton) {
@@ -517,13 +536,13 @@ export function initNoahWorksheet(): void {
   }
 
   if (loads.length > 0) {
-    buttons.forEach((button) => {
+    for (const button of buttons) {
       button.disabled = true;
-    });
+    }
     Promise.allSettled(loads).then(() => {
-      buttons.forEach((button) => {
+      for (const button of buttons) {
         button.disabled = false;
-      });
+      }
     });
   }
 

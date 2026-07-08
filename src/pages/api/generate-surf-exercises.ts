@@ -287,7 +287,7 @@ function normalizeTopicFrom<T extends readonly string[]>(
 function buildCommonFields(
   // biome-ignore lint/suspicious/noExplicitAny: raw AI response
   raw: any,
-  fb: typeof wavyFallback,
+  fb: Pick<typeof wavyFallback, "intro" | "icebreaker" | "warmup" | "closing">,
 ) {
   return {
     intro: fb.intro,

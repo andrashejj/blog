@@ -43,22 +43,11 @@ When I write a post, record a short video, or share what I learned that week, th
 
 And yes, this gets overwhelming.
 
-If you feel lost while building, you're not alone. Most founders and product builders I know feel this. They just don't say it out loud.
+The questions pile up in a very specific way:
 
-<div className="my-6 space-y-2">
-  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
-    <span className="text-gray-400">?</span>
-    <span>I don't really know if users want this.</span>
-  </div>
-  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
-    <span className="text-gray-400">?</span>
-    <span>I'm not sure we're solving the right problem.</span>
-  </div>
-  <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
-    <span className="text-gray-400">?</span>
-    <span>Everyone else seems to know their market better.</span>
-  </div>
-</div>
+- I don't really know if users want this.
+- I'm not sure we're solving the right problem.
+- Everyone else seems to know their market better.
 
 Talking to other builders helps because they catch the stale parts of my map. They ask the dumb question I stopped asking. They remember that the thing I treat as obvious was only true for one customer segment in March.
 
@@ -70,9 +59,9 @@ I don't need a perfect map. I need one that tells me which notes are old.
 
 A knowledge graph is entities connected by relationships. The basic unit is a triplet:
 
-<div className="my-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg font-mono text-sm">
-  (subject, predicate, object)
-</div>
+```text
+(subject, predicate, object)
+```
 
 <Callout type="info" title="Triplet examples">
   - `(User-segment-A, struggles-with, onboarding-flow)`
@@ -93,9 +82,9 @@ Most notes are static. Product truth isn't.
 
 Drop the time dimension and your notes slowly become wrong while still looking organised.
 
-<div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 my-6 border-l-4 border-amber-500 italic text-lg text-gray-700 dark:text-gray-200">
-  A fact with no date attached quietly goes stale, and you keep trusting it long after it stopped being true.
-</div>
+<Quote>
+A fact with no date attached quietly goes stale, and you keep trusting it long after it stopped being true.
+</Quote>
 
 ### Temporal knowledge graphs
 
@@ -159,20 +148,10 @@ Typical temporal operators:
   You don't need to build a full temporal graph system to get value from this.
 </Callout>
 
-<div className="my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
-    <div className="font-semibold">1. Track when things change</div>
-  </div>
-  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
-    <div className="font-semibold">2. Link facts to context</div>
-  </div>
-  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
-    <div className="font-semibold">3. Invalidate stale notes</div>
-  </div>
-  <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800">
-    <div className="font-semibold">4. Connect notes instead of collecting</div>
-  </div>
-</div>
+- [ ] Track when things change.
+- [ ] Link facts to the call, test, customer, or decision that created them.
+- [ ] Invalidate stale notes instead of letting them sit there looking wise.
+- [ ] Connect notes instead of collecting them.
 
 ### Obsidian workflow
 
