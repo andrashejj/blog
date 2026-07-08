@@ -2,7 +2,7 @@
 title: "Interviews in the Age of AI: Build Together"
 date: "2026-01-13"
 slug: "interview-project-update"
-summary: "Why modern technical interviews should evolve from solo coding tests into collaborative product and architecture sessions."
+summary: "I don't want candidates performing memory under a timer. I want to build with them and see how they think when the problem changes."
 coverImage: "/images/posts/interview-project-update-cover.svg"
 series: "founder-notes"
 tags:
@@ -12,31 +12,37 @@ tags:
   - interview
 ---
 
-I started with a small interview challenge and turned it into a public project:
+I got tired of interviews where both people leave with almost no idea what just happened.
+
+The candidate solves a puzzle under a timer. The interviewer watches for clues. Everyone pretends this is close enough to engineering. Then the person joins the team and the real job is nothing like that. The real job has docs, search, Slack, annoying requirements, unclear product language, existing code, and a teammate asking whether the thing can ship by Thursday.
+
+So I started with a small interview challenge and turned it into a public project:
 
 - Source code: [GitHub repository](https://github.com/andrashejj/interview)
 - Live demo: [interview-eight-rosy.vercel.app](https://interview-eight-rosy.vercel.app/)
 
-I don't really care about the stack here. What bugs me is that interviews still test for a world that no longer exists.
+The stack is incidental. The format is the point.
+
+I don't want candidates performing memory under pressure. I want to build with them and see what happens when the problem moves.
 
 <Divider />
 
 ## What the classic format misses
 
-For years, technical interviews looked like this:
+The classic format is lonely on purpose:
 
 - no internet
 - no docs
 - no helper tools
 - one person, one editor, one timer
 
-I never loved it. It rewards memory and composure under pressure, and tells you almost nothing about how someone actually works on a team.
+I never loved it. It rewards memory and composure under pressure. Those are useful traits, but they're not the job.
 
-In real life we use docs, search, AI tools, and each other. Interviews should reflect that.
+The job is noticing ambiguity, asking the slightly uncomfortable question, making a reversible decision, and leaving code behind that another person can pick up without swearing at you.
 
 ## Build something together first
 
-Start with a shared build. For example, a T3-based address book:
+Start with a shared build. An address book is enough:
 
 - fetch data
 - search
@@ -44,7 +50,7 @@ Start with a shared build. For example, a T3-based address book:
 - sort
 - render responsive cards
 
-Then do the part that matters, together:
+Then change the brief while you're both looking at the code:
 
 1. Live code a new requirement
 2. Write a mini spec on the fly
@@ -52,35 +58,26 @@ Then do the part that matters, together:
 4. Sketch algorithm choices
 5. Decide what to postpone and why
 
-<div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 my-6 border-l-4 border-amber-500 italic text-lg text-gray-700 dark:text-gray-200">
-  The kind of engineering I want to see in an interview has very little to do with who remembers API trivia, and a lot to do with the things that are harder to fake:
-</div>
+<Quote>
+The useful signal starts when the requirement is slightly annoying.
+</Quote>
 
 - who asks sharp questions
 - who can structure ambiguity
 - who collaborates under constraints
 - who can make safe, reversible decisions quickly
 
-## The skill AI actually changes
+## What AI changes
 
-AI can produce code fast. What it can't do is own accountability, production risk, or product judgment. So the skill that matters more now is thinking clearly with other people, under real constraints.
+AI makes code cheap. It does not make judgment cheap. I want to see the candidate notice the missing failure mode, push back on a vague requirement, and split the work into something we could ship without making the next person hate us.
 
-In an interview I pay attention to this:
+In an interview I pay attention to the things agents don't fix:
 
-<div className="my-6 space-y-2">
-  {[
-    { icon: "🎯", text: "Can we turn an idea into a clear spec?" },
-    { icon: "🛡️", text: "Can we split work into safe increments?" },
-    { icon: "🔍", text: "Can we identify failure modes early?" },
-    { icon: "📢", text: "Can we explain trade-offs to non-engineers?" },
-    { icon: "🔄", text: "Can we adapt when assumptions break?" },
-  ].map((item, i) => (
-    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/30">
-      <span className="text-xl">{item.icon}</span>
-      <span>{item.text}</span>
-    </div>
-  ))}
-</div>
+- [ ] Turn a fuzzy idea into a spec small enough to build.
+- [ ] Split the work into increments that won't trap the next developer.
+- [ ] Name failure modes before the demo breaks.
+- [ ] Explain a technical trade-off without hiding inside jargon.
+- [ ] Change direction when an assumption dies.
 
 ## One small project, many directions
 
@@ -99,14 +96,14 @@ From the same address book, I can explore with a candidate:
 - observability (logs, traces, metrics, alerting)
 - team collaboration (specs, RFCs, code review style, rollout planning)
 
-That's why I like this format. We can build, discuss, challenge assumptions, and see how someone thinks while the situation changes.
+That's why I like this format. The code is useful, but the conversation around the code is the test.
 
 <Divider />
 
-## The interview I want to have
+## The interview
 
-Give me a real problem. Let's build version one together. Then ask: "where do we take this next, and why?"
+Give me a real problem. Build version one together. Then ask: "where do we take this next, and why?"
 
 I learn more from that conversation than from any perfect kata.
 
-These days I trust engineers who can think, ship, and keep evolving systems alongside other people.
+Give me the engineer who can think, ship, and change their mind before the mistake hardens into architecture.

@@ -17,9 +17,9 @@ tags:
 
 A few weeks ago I shipped a feature into [Baubiber](/blog/baubiber-uber-for-construction) that I keep playing with even when nobody's asking me to. You scan a room with your phone, and the contractor on the other side of the marketplace can walk around inside it in a browser tab. It isn't a 360 photo or a Matterport tour with floating arrow-pucks; it's a walkable cloud of a few million coloured blobs that, from the right angle, looks like a kitchen.
 
-The technique is called Gaussian splatting. The paper that made it run in real time is from 2023, which in this corner of the world is geological. The idea, roughly: instead of representing a 3D scene as triangles and textures, you represent it as something like a million little fuzzy ellipsoids floating in space, each with a position, colour, opacity, and a stretched shape, which you then sort back-to-front and paint onto the screen. There's no mesh and no proper "object" anywhere. The counter is just a few thousand blobs that happen to align when you look from where I was standing.
+The technique is called Gaussian splatting. The paper that made it run in real time is from 2023, which in this corner of the world is geological. The idea, roughly: instead of representing a 3D scene as triangles and textures, you represent it as something like a million little fuzzy ellipsoids floating in space, each with a position, colour, opacity, and a stretched shape, which you then sort back-to-front and paint onto the screen. A counter is not a modeled object in this setup. It is a few thousand blobs that happen to align when you look from where I was standing.
 
-It is, by any sane standard, an absurd way to do graphics. It also happens to work better than anything else for the actual problem I have: a contractor in Pécs needs to see a kitchen in Tamarindo without flying there, and a photograph isn't enough.
+It is, by any sane standard, an absurd way to do graphics. It also happens to solve the job in front of me: a contractor in Pécs needs to see a kitchen in Tamarindo without flying there, and a photograph isn't enough.
 
 A video walkthrough doesn't quite get there either, because video gives the contractor what I happened to see, whereas a splat gives them what they would have seen if they'd been standing where I was and then taken three steps to the right and crouched. It's a different shape of artifact altogether.
 
@@ -31,15 +31,15 @@ Construction is a perception problem in disguise. The homeowner is standing in t
 2. Architect asks for "one more shot of the X". Three days pass.
 3. Plumber visits the site, takes their own photos, quotes anyway, charges for the visit.
 
-You can crank the photo count and the messaging frequency forever and you'll still be losing information in the compression, because the room is volumetric and the medium isn't. A walkable splat closes that gap badly, but well enough that a contractor can confidently bid on a job without first driving an hour each way to see it. That's the whole thesis, and the rest of this is housekeeping.
+You can crank the photo count and the messaging frequency forever and you'll still be losing information in the compression, because the room is volumetric and the medium isn't. A walkable splat closes that gap badly, but well enough that a contractor can bid without first driving an hour each way to see the site.
 
 ## How bad the splats actually are
 
-The splats are quite bad, in ways that I find genuinely interesting once you start poking at them.
+The splats are quite bad, in ways that get more interesting once you start poking at them.
 
 Walk three steps outside the centre of a captured room and the geometry starts softening, with corners that quietly lie to you about where they actually are. Reflective surfaces (mirrors, glossy floors, anything chrome) confuse the model entirely, which is why one of my demo kitchens has a phantom second oven floating somewhere off to the side, where the toaster's reflection used to live. Specular highlights smear across the screen as you move your head, the ceiling sags by a centimetre or two if I didn't scan it carefully enough, and the resulting files run to several gigabytes for a serious room, which is fine on a laptop and painful at a building site with two bars of signal.
 
-I love them anyway, because the bad bits are bad in a direction that gets better every six months. Every new paper either compresses the splats, generates them from fewer photos, or learns to patch the holes the current ones leave behind. The trajectory is the whole point.
+I love them anyway, because the bad bits are the kind that papers are already chewing through. Every new release either compresses the splats, generates them from fewer photos, or patches the holes the current ones leave behind. The room keeps getting lighter to send and easier to trust.
 
 ## The world-model branch
 

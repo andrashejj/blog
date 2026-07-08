@@ -8,18 +8,22 @@ tags:
   - software-development
 ---
 
-I keep coming back to the same two things in frontend interviews:
+I have asked enough frontend interview questions to know when the room has gone fake.
 
-- CSS fundamentals
-- React pair coding ([challenge template](https://codesandbox.io/s/coding-challenge-template-7gkem1))
+The candidate gives the textbook answer. I nod. We both know nothing useful has happened yet.
 
-Not because I want trivia answers. I want to see how people think out loud and debug in real time.
+The useful part starts when they explain what they would actually do on a real codebase, with a real teammate waiting for the fix. So I keep coming back to two things:
+
+- CSS fundamentals, because CSS exposes whether someone understands the browser or only memorised utility classes.
+- React pair coding, using this [challenge template](https://codesandbox.io/s/coding-challenge-template-7gkem1), because implementation choices get much clearer when we're looking at the same screen.
+
+I don't want trivia answers. I want to see someone think out loud, notice a constraint, debug without panicking, and explain the trade-off like a person.
 
 ## CSS and layout questions
 
-How do you explain CSS specificity to a teammate who is stuck?
+How would you explain CSS specificity to a teammate who is stuck and annoyed?
 
-Which units do you actually use in production, and why?
+Which units do you actually use in production, and what do you avoid unless there is a good reason?
 
 - `%`
 - `px`
@@ -27,11 +31,11 @@ Which units do you actually use in production, and why?
 - `rem`
 - `vh`
 
-Height question: how would you make a div truly full-page height?
+Height question: how would you make a div truly full-page height without accidentally creating a mobile Safari bug?
 
-Internationalization question: in LTR/RTL layouts, how would you set a `1em` margin at the end of text correctly?
+Internationalisation question: in LTR/RTL layouts, how would you set a `1em` margin at the end of text correctly?
 
-Spacing question: how would you build a footer with predictable margins across breakpoints?
+Spacing question: how would you build a footer with predictable margins across breakpoints, and how would you stop future changes from breaking it?
 
 Which positioning modes do you trust, and when?
 
@@ -42,11 +46,11 @@ Which positioning modes do you trust, and when?
 - `relative`
 - `sticky`
 
-Explain absolute positioning in plain language. What happens with `inset: 10px`?
+Explain absolute positioning in plain language. What happens with `inset: 10px`, and what does it position itself against?
 
 ## Stacking context
 
-What is a stacking context, and what bugs have you seen because of it?
+What is a stacking context, and what bugs have you personally seen because of it?
 
 - Setting `opacity` to a value less than `1`
 - Setting `position` to `fixed` or `sticky`
@@ -58,3 +62,12 @@ What is a stacking context, and what bugs have you seen because of it?
 How would you make a container scroll on `y` but not `x`?
 
 The practical pattern I like: outer wrapper handles clipping/border radius, inner wrapper handles scrolling.
+
+The scorecard in my head:
+
+- [ ] Can they explain the browser's behaviour without sounding like MDN pasted into a human?
+- [ ] Can they name a bug they have actually fought?
+- [ ] Can they turn a visual layout problem into constraints?
+- [ ] Can they pair without either disappearing or taking over?
+
+If someone can do that, I care much less whether they remembered the perfect formal definition on the first try.

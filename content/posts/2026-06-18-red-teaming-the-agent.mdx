@@ -2,8 +2,8 @@
 title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "An agent will write the system, the tests, and a confident paragraph explaining why it's safe. Red teaming is the part where one named person assumes it's lying and goes to find the lie. Here's what that actually looks like on a real diff."
-coverImage: "/images/posts/red-teaming-the-agent-cover.svg"
+summary: "I recently stared at a PR so large my laptop struggled to render the diff. The code looked clean, the tests existed, and still nobody could reasonably review it."
+coverImage: "/images/posts/red-teaming-the-agent-cover.png"
 draft: false
 series: "ai-slop"
 tags:
@@ -13,61 +13,118 @@ tags:
   - security
 ---
 
-I gave red teaming one paragraph in the [remedies post](/blog/remedies-for-the-slop) and moved on. It deserved more, because once agents write a real share of the code it's one of the few practices that still keeps a human in the part of the loop where judgment lives: one named person who assumes the system is already broken and goes looking for the break.
+Recently I saw a couple of devs deliver a huuuuge PR. And when I say huuuuge, I mean GitHub started behaving like I had asked it to render a Pixar movie in the browser. Roughly 200k changed lines.
 
-A reviewer asks "is this correct?" and usually answers yes, because agent-written code is very good at looking correct. A red teamer asks "how does this hurt us?" That question finds different things, and the rest of this post is about the things it finds.
+Can you imagine reviewing that?
 
-## Why the agent makes this harder
+I tried. My 8-core Mac tried. The diff opened, paused, thought about its life choices, and then began coughing up chunks of files in no particular hurry. Somewhere around the point where I was scrolling through generated-looking tests for code I had not read, my review turned into one question:
 
-The old failure mode was a tired human making a mistake, and another human reading carefully might catch the off-by-one or the missing null check. Review worked, some of the time, because both sides were fallible in the same human ways.
+Can the person who gave me this PR explain wtf is going on here?
 
-The new failure mode doesn't look like a mistake. The agent produces confident code at volume, wrapped in tests that pass and a commit message explaining why the approach is sound. The fluency is the whole problem. When the code reads right and ships with its own justification attached, the natural response is to believe it: you skim, it's plausible, you approve. The agent has written both the answer and the argument for why you can stop checking.
+If the answer is no, the review is theatre. It doesn't matter that the tests are green. It doesn't matter that the code is formatted. A change that large has already escaped the part of the process where a human can hold it in their head.
 
-And here's the part that catches people. The tests pass *because* they avoid the dangerous case, not despite it. An agent writes the test it can imagine passing, which is the same shape as the code it just wrote. The test and the bug agree with each other. Green doesn't mean safe; it means the code is consistent with a test that shares its blind spot.
+For changes like that, I want a different kind of review comment. Not "looks good." More like: I tried duplicate submits, bad permissions, retries, timeouts, weird inputs, and missing product rules. Here's what broke. Here's what I still don't understand.
 
-## A worked example
+<figure className="not-prose my-8">
+  <a href="https://gunshowcomic.com/648">
+    <img src="https://gunshowcomic.com/comics/20130109.png" alt="KC Green's Question Hound sitting in a burning room and saying this is fine." className="mx-auto w-full max-w-2xl border border-stone-300" loading="lazy" />
+  </a>
+  <figcaption className="mt-2 text-center text-sm italic text-stone-500">Sometimes green CI is just Question Hound with a coffee mug. Comic: <a href="https://gunshowcomic.com/648">On Fire</a> by KC Green.</figcaption>
+</figure>
 
-Abstract advice about "thinking adversarially" evaporates the first sprint someone's behind, so let me make it concrete. Say the agent adds a Stripe webhook handler. The PR is eighty lines, the tests are green, the commit message says "Handle payment confirmation webhook." Here's roughly what it wrote:
+## Clean code can hide an unreadable change
+
+The old failure mode was a tired human making a mistake. Another tired human might catch it. Review worked, some of the time, because both people were operating in the same messy human way. You could see the scar tissue in the code. A weird variable name. A half-finished abstraction. A branch that smelled like someone changed their mind at 11pm.
+
+The new failure mode arrives pre-tidied. Names, formatting, tests, commit message, the little paragraph explaining why the approach is sound. The agent gives you the code and the alibi in the same box.
+
+So you skim. Of course you skim. The PR is too large, the tests are green, the commit message sounds reasonable, and nobody wants to be the person blocking "velocity" because their laptop is hot and their stomach feels weird.
+
+But sometimes the tests pass because they share the same blind spot as the code. The agent writes the case it can imagine passing. Then it writes the implementation that passes that case.
+
+This is the QA engineer walks into a bar joke in expensive clothing. He orders a beer. Orders zero beers. Orders 99,999,999,999 beers. Orders a lizard. Orders -1 beers. Orders gibberish. Everything looks covered. Then the first real customer walks in and asks where the bathroom is, and the bar catches fire.
+
+The test suite proved the bar could handle weird beer orders. It did not prove the bar could run as a bar.
+
+Someone squints at the order of operations and calls this TDD. Or, because we apparently need a new term every time a loop gets worse, agentic test-driven development. Huiiii. Real TDD lets the test put pressure on the design. This is the implementation writing its own alibi. The bug and the test shake hands and walk into your main branch together.
+
+<figure className="not-prose my-8">
+  <a href="https://xkcd.com/1695/">
+    <img src="https://imgs.xkcd.com/comics/code_quality_2.png" alt="xkcd Code Quality 2 comic comparing unreadable code to a burning bus." className="mx-auto w-full max-w-2xl border border-stone-300 bg-white" loading="lazy" />
+  </a>
+  <figcaption className="mt-2 text-center text-sm italic text-stone-500">Old bad code had the courtesy to look like a burning bus. The agent version can park the same bus inside tidy abstractions. Comic: <a href="https://xkcd.com/1695/">xkcd Code Quality 2</a>, CC BY-NC 2.5.</figcaption>
+</figure>
+
+## The example from my own blog
+
+In this blog, there is a post called [Noah's Daily Exercises](/blog/noahs-daily-exercises). The goal is practical: generate exercises for Noah and Lara using an LLM. Maths, quizzes, drawings, creative writing, little physical challenges, all the stuff that makes a morning worksheet feel less like a photocopy from 1998.
+
+The app only exists because I did this manually for a long time. I used to draw these worksheets by hand before school. Lovely when I had time and coffee. Less lovely when I had neither and still needed maths problems, a drawing prompt, and something vaguely educational that didn't bore everyone to death.
+
+So yes, using an LLM here makes my life easier. This sounds great BUT, as this little app grows inside the blog, a few product problems start popping up. One of them is not a code bug at all.
+
+Imagine I ask an agent to add a "make today's worksheet" button. The PR is small. The UI renders. The API calls return data. The tests check that the sections appear. Nice little change. Exactly the kind of thing I would approve too quickly if I were tired.
+
+Here's roughly what it does:
 
 <Quote>
-POST /webhooks/stripe → parse the JSON body, read event.type, and on `payment_intent.created` look up the order by metadata.order_id and set status = paid. Returns 200.
+Click the button -> call the math, words, physical exercise, sketch, and challenge generators, then render the returned sections. Any refresh asks for a new sheet. Store nothing.
 </Quote>
 
-A reviewer reads that and sees a clean handler with a passing test. A red teamer reads it for twenty minutes and finds three separate ways it hurts you.
+The button works. That is the trap.
 
-First, it never verifies the signature. Stripe signs every webhook with a secret and expects you to check the `Stripe-Signature` header before trusting a byte of the body. This handler doesn't, which means anyone who learns the URL can POST a fake `order_id` and mark any order paid. The reason the agent skipped it is worth sitting with: the test constructs its own fake event object and calls the handler directly, so the test never needed a valid signature, so nothing in the loop ever demanded one. The missing check and the passing test are the same fact.
+First, I just created a reroll machine. The promise was "today's worksheet." The implementation says "keep refreshing until the maths looks easy and the physical exercise isn't the one you hate." No attacker required. A kid with a browser and a perfectly rational interest in doing less work is enough.
 
-Second, it fires on the wrong event. `payment_intent.created` means Stripe *started* a payment, not that money moved. The event you want is `payment_intent.succeeded`. The handler is internally consistent and does exactly what the code says; it just confirms payments that haven't happened. No automated check catches this, because "wrong event name, right structure" is invisible to a type system and to a test written by the same author who picked the wrong event.
+Second, the difficulty rules are vibes. Age nine. Times tables to five. Safe bodyweight exercises. Short hints. No equipment. All of that sits in prompts and helper code and the general intent of the thing. If the generator returns long division, twenty burpees, or a writing prompt that needs an adult parked beside him for forty minutes, the JSON can still be perfect. Perfectly wrong, but perfect.
 
-Third, it isn't idempotent. Stripe retries webhooks, sometimes for days, until it gets a 200. Nothing here records that an event was already processed, so a retried `succeeded` re-runs the fulfilment: a second shipment, a second license, a second email. The happy path the agent built runs fine exactly once, which is exactly how often the test runs it.
+Third, the sections don't live in separate universes. Maths, words, physical work, sketches, and challenges might each look fine alone. A real morning doesn't work like that. Ten hard maths problems plus a demanding writing hook plus a physical block after surf practice is a bad worksheet. The agent built five tidy boxes. I need one kid's morning.
 
-None of these are exotic. They're the inputs the agent didn't imagine, the checks it didn't add, and the gap between what you said and what you meant. That's the whole job, and the example maps onto the three fronts you attack on every change.
+None of this shows up as a syntax error. None of it looks dramatic in a diff. The code works. The product behavior is wrong.
 
-## The three fronts
+## My red-team pass is three annoying questions
 
-Inputs it didn't imagine. The agent tested the cases it thought of, so your time goes to the ones it didn't: the empty list, the Unicode in the name field, the timezone at the date boundary, the request that arrives twice because the client retried. Agents are strong in the middle of the input space and careless at the edges. Live at the edges.
+When I red team an agent change, I don't start with "is this elegant?" I start with three more irritating questions.
 
-The thing it didn't build. Read the change for what's absent, not just what's present. The rate limit nobody put on the new endpoint. The signature check missing from the webhook. The timeout absent from the outbound call that will one day hang and take the connection pool with it. Absences don't appear in a diff; you can't review a line that isn't there, so someone has to hold the shape of the whole system in their head and notice the missing piece. This is the front tools are worst at and the one that takes systems down.
+What did it not imagine?
 
-Intent against behavior. Code that's consistent and does the wrong thing passes everything. The agent optimized for what you typed; the red teamer checks against what you meant, which usually lives in a human's head and nowhere in the repository. The `created`-versus-`succeeded` bug is this front in one line.
+The empty list. The Unicode name. The kid who refreshes twice. The parent who opens the worksheet after a hard surf session and gets a monster set of exercises. Agents are pretty good in the middle of the input space. They get weirdly casual at the edges. I try to live there for twenty minutes.
 
-## Running it so it sticks
+What did it not build?
 
-Rotate the role. One person per risky change, named, whose only job for that session is to break it. Never the author, because adversarial review of your own work is theatre: you'll defend the choices you already made. Rotating it also spreads the skill, and thinking like an attacker is learnable by people who've never once been asked to.
+The daily lock. The difficulty cap as an actual rule, not a wish in a prompt. The parent review step. The timeout. The boring guardrail nobody added because the happy path was already green. Missing things don't appear in a diff. You can't comment on the line that isn't there.
 
-Time-box it and write it down. Twenty focused minutes on "how does this fail?" beats an hour of polite line-by-line reading. The output is a short note on the PR, and it's worth keeping in a fixed shape: what I attacked, what I found, what we're choosing to accept. For the webhook that note reads: *attacked signature, event type, retries. Found no signature verification (blocking), wrong event, no idempotency. Accepting nothing, all three get fixed before merge.* When a note instead says "we aren't covered here and we've decided that's fine for now," that's a real decision a named person made on purpose, and you can find it again when it bites.
+What did I mean but fail to say?
 
-Keep the surface small enough to attack at all. You cannot red team a two-thousand-line diff. Nobody can hold it in their head, so the adversarial reading degrades into skimming, which is the exact failure you were trying to prevent. Small PRs earn their keep here more than anywhere else: they're the thing that lets a human stay in the loop.
+This one hurts because it's usually my fault. I said "generate today's worksheet." I meant "generate one age-appropriate worksheet that a parent can commit to for the day." The agent optimised for the words. The red teamer has to recover the meaning.
 
-## It isn't a security review
+## Concrete takeaway: your red team checklist
 
-Half the webhook findings were security bugs and one wasn't, and that's the point. Red teaming isn't a pass with a scanner or a checklist of the OWASP top ten, though it'll surface plenty of those. It's broader and it's cheaper: one person asking how a specific change fails under an adversary, where the adversary might be a real attacker, a retrying client, a clock, or just reality declining to match the happy path. The wrong-event bug had no attacker and would still have refunded money to people who never paid. A scanner finds none of that. A person holding the goal in their head finds all of it.
+Under a risky PR, I want a comment like this:
 
-## The part that's yours
+<Quote>
+I attacked: duplicate submits, retries, bad permissions, weird inputs, missing product rules, and whole-flow behavior.
 
-The machine produces the work, the tests, and the confidence. It can't be the one looking for the lie, because it doesn't know it's lying and has no stake in being wrong. Red teaming is where a human decides that "it looks fine" and "it is fine" are different claims and goes to find out which is true.
+I found: unlimited worksheet rerolls, difficulty rules living only in prompts, and no check for total load across maths, writing, and physical work.
 
-That used to happen a little by accident, in the friction of writing code by hand and noticing things along the way. The friction is gone, so you arrange the noticing on purpose: give it to a named person, time-box it, write down what they found, and make it part of how risky changes ship. Teams that do this still move fast. They've just stopped confusing speed with safety.
+I still don't understand: whether "today's worksheet" means one committed sheet per day or infinite generation until the kid likes the result.
+</Quote>
+
+If you can't write that comment, you probably didn't red team it. You skimmed it. Which is fine for a CSS tweak. It is not fine for a change where the blast radius is bigger than your attention span.
+
+My checklist looks like this:
+
+- [ ] Explain the change in one sentence without rereading the PR description.
+- [ ] Run the duplicate-click, refresh, retry, and come-back-tomorrow paths.
+- [ ] Write down what the tests proved.
+- [ ] Write down what the tests avoided proving.
+- [ ] Find every rule that only exists in a prompt, comment, ticket, or someone's head.
+- [ ] Try one bored-user path, one angry-customer path, one retrying-client path, and one bad-clock path.
+- [ ] Check that production failure would show up before a human complains.
+- [ ] Write down the risk being accepted because fixing it now is not worth it.
+
+Red teaming is allowed to end with "ship it." I don't want every reviewer cosplaying as a corporate risk committee. In this case it's my blog, so yes, I have to red team myself, which is a bit schizophrenic. But if I decide the worksheet can reroll forever for now, or the difficulty cap can stay in the prompt for another week, I want that written down in normal language.
+
+The scanner won't find "this teaches Noah to refresh until the worksheet is easy." The agent won't feel embarrassed that it generated the tests and the bug from the same blind spot. Somebody still has to look at the thing and say: I don't buy it yet.
 
 ---
 
