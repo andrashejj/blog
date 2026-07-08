@@ -2,7 +2,7 @@
 title: "Remedies for the Slop"
 date: "2026-05-30"
 slug: "remedies-for-the-slop"
-summary: "The last post was the diagnosis. This is what to do about AI slop, as one person, as a team, and as a company. None of it is banning the tools."
+summary: "Banning AI tools is a lazy answer. The real work is deciding where humans still have to understand, review, and own the result."
 coverImage: "/images/posts/remedies-for-the-slop-cover.jpg"
 series: "ai-slop"
 tags:
@@ -12,15 +12,15 @@ tags:
   - leadership
 ---
 
-My [last post](/blog/take-anything-seriously) was a rant about AI slop, and a confession that an agent wrote it. This is the part where I stop complaining and say what actually helps.
+My [last post](/blog/take-anything-seriously) was a rant about AI slop, and a confession that an agent wrote it. Complaining is easy. The harder question is where to put the human back.
 
-One principle holds it together at every scale: someone has to keep doing the thinking the machine can't be trusted to do, and since that stopped happening by accident, you have to arrange for it on purpose. Not by banning the tools. The speed is real and I'm not giving it up. By deciding, deliberately, where a human stays in the loop, and making that part non-negotiable.
+The answer is not to ban the tools. The speed is real and I'm not giving it up. The answer is to decide which parts still require a named human who understands the work and can be held to it.
 
 ## What one person can do
 
 <ImageFloat src="/images/posts/remedies-blacksmith.jpg" alt="One person, accountable for the thing they make, able to explain every part of it." side="right">
 
-Start with the one that sounds obvious and almost nobody honours: own what you ship. "The agent wrote it" is not a defense. If your name is on the PR, you're accountable for every line as if you'd typed it, because the model won't be the one paged at 3am. Owning it means you can explain it, all of it, to someone who asks a hard question. If you can't, you're not done, no matter how green the checks are.
+Start with the one that sounds obvious and almost nobody honours: own what you ship. "The agent wrote it" is not a defense. If your name is on the PR, you're accountable for every line as if you'd typed it. The model will not be paged at 3am. If you can't explain the change to someone asking hard questions, you're not done.
 
 </ImageFloat>
 
@@ -47,7 +47,7 @@ If this fails in production six months from now, what's the most likely cause, a
 
 An agent will never ask you that. It will generate the system, the tests, and a confident paragraph on why it's fine. Whether it's actually fine is a human call, and red teaming is where you make it.
 
-Review against intent, not just correctness. Code that's internally consistent and does the wrong thing sails through every automated check and fails the only one that matters. Someone has to hold the real goal in their head and check the work against it, not just confirm the tests are green.
+Review against intent as well as correctness. Code that's internally consistent and does the wrong thing sails through every automated check and fails the only one that matters. Someone has to hold the real goal in their head and check the work against it, instead of only confirming the tests are green.
 
 Keep the units small and the trunk clean. Small PRs aren't a style preference anymore, they're what keeps a human able to review at all. Keep the main branch releasable, so a break stops the line and gets fixed before it compounds. And make room for review that isn't about any single change, because most of the failures that take a system down don't live in one PR. They live in the gaps between them, in the duplicated abstraction and the slow drift from what you meant to build. No line-by-line review catches that, because it isn't on any line.
 
@@ -61,7 +61,7 @@ Build in layers, because no single check is enough when the output is this fluen
 
 Then the slower structural work. Concentrate the hardest thinking on your most senior people instead of spreading it thin across everyone with an agent and a keyboard; the tool rewards judgment, and judgment is unevenly distributed. Rebuild the path for juniors, who used to learn the craft by writing production code and can't anymore, around the parts that still need a human: review, planning, design, and the discipline of understanding a system before changing it. And measure the right thing. If your dashboard celebrates output volume, you're measuring the disease. Count the defects that escape to production, the time it takes to actually understand an incident, the share of shipped code someone can explain. Those only move the right way when thinking is happening.
 
-The thread through all of it, from one engineer reading a diff by hand to a company rebuilding how it trains people, is the same. The machine can produce the work. It can't be accountable for it, and it can't be trusted to have understood it. That part is still yours, at every scale, and the teams that decide where to put it on purpose will quietly pull away from the ones still counting how much they shipped.
+The machine can produce the work. It cannot be accountable for it, and it cannot be trusted to have understood it. That part is still yours. Teams that remember this will ship less impressive graphs and fewer mystery systems.
 
 ---
 
