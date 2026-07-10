@@ -32,6 +32,80 @@ Before rewriting any post, read it once and answer these questions in the margin
 
 The goal is not to make every post chatty. The goal is to make every post earned.
 
+## The "Huii" Bar
+
+Clean prose is the minimum. A finished post should make a smart stranger think, "huii, I haven't seen it put like that before."
+
+That reaction usually comes from one of four things:
+
+- access: I show the reader a room, decision, failure, object, number, or conversation they couldn't have seen themselves
+- recognition: I name something they have felt but haven't managed to phrase
+- collision: two subjects that rarely meet illuminate each other, such as Shannon and investor meetings, or surfboard shaping and software work
+- consequence: the idea changes what I will build, stop, ask, spend, or do next
+
+If a post offers none of those, correct sentences won't save it. Find the thing only I can say or don't publish it yet.
+
+The test is not whether the article is useful. Plenty of useful writing is forgettable. Ask:
+
+- Would a stranger read past the second paragraph?
+- What question is alive after the opening and unanswered until later?
+- Which detail could only have come from my life?
+- What sentence or image will still be in the reader's head tomorrow?
+- Does anything in the post cost me something to admit?
+- Did writing it change my own mind, or did I merely organise what I already believed?
+
+Aim for one unforgettable thing, not constant cleverness. One image, admission, distinction, or fact can carry a post. If every sentence asks to be quoted, the voice starts sounding synthetic.
+
+## Tell the Truth, Including the Limits of the Story
+
+Never invent a scene, quote, number, chronology, emotion, or sensory detail to improve an article. Personal writing earns trust by being exact. When the source material doesn't contain a scene, use the true artifact that does exist: the letter, checklist, drawing, PR, spreadsheet, train journey, customer question, board, or decision.
+
+Don't inflate stakes. A useful week can stay a useful week. A small family note doesn't need to become a theory of life. Short posts may remain short if the moment is real.
+
+Separate memory from reconstruction. "I remember..." and "roughly" are better than false precision. Paraphrase conversations unless the exact words were recorded.
+
+Keep contradictions that are true. I can want the interesting project and the reliable income. I can use agents daily and distrust their output. Resolving every tension makes a person sound like a brand.
+
+## Create Forward Pull
+
+The first paragraph should open a question, pressure, or contradiction. It needn't be dramatic, but something must remain unsettled.
+
+Don't spend the summary and opening explaining the entire argument. A summary should establish the situation and stakes without giving away the last turn. A title can name the object, tension, or strange detail rather than filing the post under its topic.
+
+Every section should do at least one of these:
+
+- complicate what came before
+- reveal evidence
+- change the scale
+- make the claim more concrete
+- admit where my first interpretation failed
+
+If sections can be reordered without changing the reading experience, the post is probably a list wearing an essay's clothes.
+
+Lists are for genuine sets, references, and artifacts. Don't use a list where a scene, worked example, or decision would expose more. After drafting, convert the most important bullet into prose and see whether the article wakes up.
+
+## First Person Means a Mind on the Page
+
+Using the word "I" is not enough. The reader should be able to follow what I noticed, assumed, got wrong, resisted, and changed.
+
+Prefer:
+
+- "I thought the LOI meant the deal was alive. Then the calendar went quiet."
+- "I kept adding a fourth point to the pitch and watching one of the first three disappear."
+- "I wanted to clean up Noah's duck until it looked professional. That was exactly the danger."
+
+Avoid turning personal experience into universal law too quickly. "This happened to me three times" is stronger than "founders always." When I make a broad claim, show the evidence or mark it clearly as my working rule.
+
+Leave fingerprints: names, places, awkward preferences, doubts, selfish motives, small jokes, and details that a corporate editor would remove. Don't add quirks decoratively. Keep the ones that reveal how I actually saw the event.
+
+## Endings That Stay Open in the Reader
+
+An ending should feel inevitable only after the reader reaches it. Don't announce the takeaway, repeat the thesis, or climb into a grand statement about the future.
+
+Strong endings often return to an object from the opening with its meaning changed. They may leave a live question, a decision now made, an exact line I will use, or a physical image. The reader should do the final centimetre of thinking.
+
+Before keeping the last paragraph, delete it temporarily. If the post gets stronger, it was a summary. If the previous paragraph is also a summary, keep cutting.
+
 The tone can be blunt and a bit amused. It can say "wtf" if the moment earns it. It can use emphasis like "huuuuge" when the exaggeration is part of the human story. Don't sprinkle this everywhere. One vivid human phrase beats ten forced ones.
 
 Good openings sound like:
