@@ -1,8 +1,8 @@
 ---
-title: "Interviews in the Age of AI: Build Together"
+title: "Make the Requirement Annoying"
 date: "2026-01-13"
 slug: "interview-project-update"
-summary: "I don't want candidates performing memory under a timer. I want to build with them and see how they think when the problem changes."
+summary: "An address book tells me almost nothing until I change the brief while we're both looking at the code."
 coverImage: "/images/posts/interview-project-update-cover.svg"
 series: "founder-notes"
 tags:
@@ -12,35 +12,33 @@ tags:
   - interview
 ---
 
-I got tired of interviews where both people leave with almost no idea what just happened.
+I got tired of interviews where a candidate completes the exercise, I fill in the scorecard, and both of us leave with almost no idea whether we'd work well together.
 
-The candidate solves a puzzle under a timer. The interviewer watches for clues. Everyone pretends this is close enough to engineering. Then the person joins the team and the real job is nothing like that. The real job has docs, search, Slack, annoying requirements, unclear product language, existing code, and a teammate asking whether the thing can ship by Thursday.
+The candidate solves a puzzle under a timer. I watch for clues. We pretend this resembles engineering. The actual job has docs, search, Slack, unclear product language, existing code, and somebody asking on Wednesday whether it can ship by Thursday.
 
 So I started with a small interview challenge and turned it into a public project:
 
 - Source code: [GitHub repository](https://github.com/andrashejj/interview)
 - Live demo: [interview-eight-rosy.vercel.app](https://interview-eight-rosy.vercel.app/)
 
-The stack is incidental. The format is the point.
-
-I don't want candidates performing memory under pressure. I want to build with them and see what happens when the problem moves.
+The address book is deliberately ordinary. The interesting moment comes after it works, when I move the problem.
 
 <Divider />
 
-## What the classic format misses
+## The lonely version
 
-The classic format is lonely on purpose:
+The classic format removes the things engineers use all day:
 
 - no internet
 - no docs
 - no helper tools
 - one person, one editor, one timer
 
-I never loved it. It rewards memory and composure under pressure. Those are useful traits, but they're not the job.
+It rewards memory and composure under pressure. Those traits help. They still don't tell me what happens when two people disagree about an incomplete requirement.
 
 The job is noticing ambiguity, asking the slightly uncomfortable question, making a reversible decision, and leaving code behind that another person can pick up without swearing at you.
 
-## Build something together first
+## First, make the boring thing work
 
 Start with a shared build. An address book is enough:
 
@@ -50,28 +48,21 @@ Start with a shared build. An address book is enough:
 - sort
 - render responsive cards
 
-Then change the brief while you're both looking at the code:
+Once it works, I change the brief while we're both looking at the code. Maybe search must tolerate misspelled names. Maybe results arrive slowly and out of order. Maybe product wants the filter encoded in the URL by Thursday.
 
-1. Live code a new requirement
-2. Write a mini spec on the fly
-3. Debate technical trade-offs
-4. Sketch algorithm choices
-5. Decide what to postpone and why
+Now we have to write a tiny spec, debate the trade-offs, sketch an approach, and decide what we're willing to postpone. The candidate no longer has to guess what answer is hidden in my head because I don't have one either.
 
 <Quote>
 The useful signal starts when the requirement is slightly annoying.
 </Quote>
 
-- who asks sharp questions
-- who can structure ambiguity
-- who collaborates under constraints
-- who can make safe, reversible decisions quickly
+I can see who asks the question that changes the task, who can give ambiguity a shape, and who makes a safe decision without pretending it will be permanent.
 
 ## What AI changes
 
 AI makes code cheap. It does not make judgment cheap. I want to see the candidate notice the missing failure mode, push back on a vague requirement, and split the work into something we could ship without making the next person hate us.
 
-In an interview I pay attention to the things agents don't fix:
+I pay attention to the things an agent won't settle for us:
 
 - [ ] Turn a fuzzy idea into a spec small enough to build.
 - [ ] Split the work into increments that won't trap the next developer.
@@ -79,11 +70,9 @@ In an interview I pay attention to the things agents don't fix:
 - [ ] Explain a technical trade-off without hiding inside jargon.
 - [ ] Change direction when an assumption dies.
 
-## One small project, many directions
+## The address book has trapdoors
 
-One small base project opens up real discussions.
-
-From the same address book, I can explore with a candidate:
+The same small project has trapdoors into almost every part of the job:
 
 - product thinking (what problem are we actually solving?)
 - UX decisions (search behaviour, empty states, mobile-first flows)
@@ -96,14 +85,12 @@ From the same address book, I can explore with a candidate:
 - observability (logs, traces, metrics, alerting)
 - team collaboration (specs, RFCs, code review style, rollout planning)
 
-That's why I like this format. The code is useful, but the conversation around the code is the test.
+We don't need to visit all of them. One good disagreement about an empty state can tell me more than ten completed algorithm questions.
 
 <Divider />
 
-## The interview
+## The question I want to end with
 
-Give me a real problem. Build version one together. Then ask: "where do we take this next, and why?"
+Build version one together. Then ask: "where do we take this next, and why?"
 
-I learn more from that conversation than from any perfect kata.
-
-Give me the engineer who can think, ship, and change their mind before the mistake hardens into architecture.
+I don't need the candidate to choose my answer. I want to see whether they can choose one, make me understand it, and abandon it without drama when the next requirement kills it.

@@ -2,7 +2,7 @@
 title: "Remedies for the Slop"
 date: "2026-05-30"
 slug: "remedies-for-the-slop"
-summary: "Banning AI tools is a lazy answer. The real work is deciding where humans still have to understand, review, and own the result."
+summary: "After watching a team turn the agents off to escape a production failure, I wanted rules that survive contact with Monday morning."
 coverImage: "/images/posts/remedies-for-the-slop-cover.jpg"
 series: "ai-slop"
 tags:
@@ -12,11 +12,11 @@ tags:
   - leadership
 ---
 
-My [last post](/blog/take-anything-seriously) was a rant about AI slop, and a confession that an agent wrote it. Complaining is easy. The harder question is where to put the human back.
+The team in my [last post](/blog/take-anything-seriously) escaped its production failure by turning the agents off and reading the code line by line. More than ten engineers had spent the better part of a week generating fixes. The slow method was the one that finally moved.
 
-The same problem shows up at every scale: someone has to keep doing the thinking the machine can't be trusted to do. Since that stopped happening by accident, you have to arrange for it on purpose. That doesn't mean banning the tools. The speed is real and I'm not giving it up. It means deciding where a human stays in the loop, and holding that line.
+I use these tools every day and I'm not giving up the speed. I do want rules for the moment when speed starts producing work nobody owns. The rules change with the size of the room.
 
-## What one person can do
+## If my name is on it
 
 <ImageFloat src="/images/posts/remedies-blacksmith.jpg" alt="One person, accountable for the thing they make, able to explain every part of it." side="right">
 
@@ -35,7 +35,7 @@ And when something breaks, fight the reflex to throw another agent at it. That's
   <figcaption className="mt-2 text-xs text-gray-400 italic text-center">The slow way: something made by hand, by someone who understands every blow.</figcaption>
 </figure>
 
-## What a team can do
+## Somebody has to look for the lie
 
 One person being disciplined doesn't survive contact with a team that isn't. Thinking has to be built into how the team works, not left to individual virtue.
 
@@ -51,7 +51,7 @@ Review against intent, not just correctness. Code that's internally consistent a
 
 Keep the units small and the trunk clean. Small PRs aren't a style preference anymore, they're what keeps a human able to review at all. Keep the main branch releasable, so a break stops the line and gets fixed before it compounds. And make room for review that isn't tied to any single change, because most of the failures that take a system down live between PRs: the duplicated abstraction, the slow drift from what you meant to build. Line-by-line review can't catch those.
 
-## What a company can do
+## At company scale, volume wins
 
 At company scale, no single team is the problem. What bites you is that you can't see across all of them at once, and the volume is now enormous.
 
@@ -61,7 +61,7 @@ Build in layers, because no single check is enough when the output is this fluen
 
 Then the slower structural work. Concentrate the hardest thinking on your most senior people instead of spreading it thin across everyone with an agent and a keyboard; the tool rewards judgment, and judgment is unevenly distributed. Rebuild the path for juniors, who used to learn the craft by writing production code and can't anymore, around the parts that still need a human: review, planning, design, and the discipline of understanding a system before changing it. And measure the right thing. If your dashboard celebrates output volume, you're measuring the disease. Count the defects that escape to production, the time it takes to actually understand an incident, the share of shipped code someone can explain. Those only move the right way when thinking is happening.
 
-The machine can produce the work. It can't be accountable for it, and it can't be trusted to have understood it. Deciding where a human stays responsible for those two things is the actual job now, whether you're one engineer approving a diff or a company rebuilding how it trains juniors.
+The rule I keep is embarrassingly old-fashioned: if my name is on the change, I need to be able to explain it when the page arrives at 3am. The agent won't be awake, embarrassed, or accountable. I will.
 
 ---
 

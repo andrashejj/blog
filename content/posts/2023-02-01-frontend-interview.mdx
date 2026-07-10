@@ -2,28 +2,26 @@
 title: "Frontend Interview"
 date: "2023-02-01"
 slug: "frontend-interview"
-summary: "A practical checklist of frontend interview topics I like to cover, especially around CSS and React."
+summary: "The textbook answer tells me very little. I want the CSS bug the candidate has actually fought."
 coverImage: "/images/posts/frontend-interview-cover.svg"
 tags:
   - software-development
 ---
 
-I have asked enough frontend interview questions to know when the room has gone fake.
+I know a frontend interview has gone fake when the candidate gives the textbook answer and I nod as if either of us learned something.
 
-The candidate gives the textbook answer. I nod. We both know nothing useful has happened yet.
-
-The useful part starts when they explain what they would actually do on a real codebase, with a real teammate waiting for the fix. So I keep coming back to two things:
+The room becomes useful again when they tell me what they'd do in a real codebase with a teammate waiting for the fix. I keep returning to two ways of getting there:
 
 - CSS fundamentals, because CSS exposes whether someone understands the browser or only memorised utility classes.
 - React pair coding, using this [challenge template](https://codesandbox.io/s/coding-challenge-template-7gkem1), because implementation choices get much clearer when we're looking at the same screen.
 
-I don't want trivia answers. I want to see someone think out loud, notice a constraint, debug without panicking, and explain the trade-off like a person.
+The question isn't really whether they know CSS specificity. It's whether they can explain it to somebody who is already stuck and annoyed.
 
-## CSS and layout questions
+## Questions that make the browser appear
 
 How would you explain CSS specificity to a teammate who is stuck and annoyed?
 
-Which units do you actually use in production, and what do you avoid unless there is a good reason?
+Then I ask which units they actually use in production, and what they avoid unless there is a good reason:
 
 - `%`
 - `px`
@@ -31,13 +29,13 @@ Which units do you actually use in production, and what do you avoid unless ther
 - `rem`
 - `vh`
 
-Height question: how would you make a div truly full-page height without accidentally creating a mobile Safari bug?
+How would they make a div truly full-page height without accidentally creating a mobile Safari bug?
 
-Internationalisation question: in LTR/RTL layouts, how would you set a `1em` margin at the end of text correctly?
+In an LTR/RTL layout, how would they set a `1em` margin at the end of text correctly?
 
-Spacing question: how would you build a footer with predictable margins across breakpoints, and how would you stop future changes from breaking it?
+How would they build a footer with predictable margins across breakpoints, then stop the next change from breaking it?
 
-Which positioning modes do you trust, and when?
+Which positioning modes do they trust, and when?
 
 - `static` (default)
 - `initial`
@@ -46,11 +44,11 @@ Which positioning modes do you trust, and when?
 - `relative`
 - `sticky`
 
-Explain absolute positioning in plain language. What happens with `inset: 10px`, and what does it position itself against?
+Finally, explain absolute positioning without reciting a definition. What happens with `inset: 10px`, and what does it position itself against?
 
-## Stacking context
+## Tell me about the z-index bug
 
-What is a stacking context, and what bugs have you personally seen because of it?
+I can ask for the definition of a stacking context. I learn more by asking what bug they have personally seen because of one.
 
 - Setting `opacity` to a value less than `1`
 - Setting `position` to `fixed` or `sticky`
@@ -59,15 +57,15 @@ What is a stacking context, and what bugs have you personally seen because of it
 - Using `transform`, `filter`, `clip-path`, or `perspective`
 - Explicitly creating a context with `isolation: isolate`
 
-How would you make a container scroll on `y` but not `x`?
+Then a small practical problem: make a container scroll on `y` but not `x`.
 
-The practical pattern I like: outer wrapper handles clipping/border radius, inner wrapper handles scrolling.
+The pattern I tend to reach for is an outer wrapper for clipping and border radius, with an inner wrapper handling the scroll. If they choose something else, good. Now we have a decision to discuss.
 
-The scorecard in my head:
+By then, this is the scorecard in my head:
 
 - [ ] Can they explain the browser's behaviour without sounding like MDN pasted into a human?
 - [ ] Can they name a bug they have actually fought?
 - [ ] Can they turn a visual layout problem into constraints?
 - [ ] Can they pair without either disappearing or taking over?
 
-If someone can do that, I care much less whether they remembered the perfect formal definition on the first try.
+The formal definition can be looked up. The story about the modal that stayed behind the header despite a `z-index` of 9999 tells me they have met the browser in person.

@@ -1,8 +1,8 @@
 ---
-title: "Knowledge is power, or..?"
+title: "Old Certainty in a Fresh Shirt"
 date: "2026-02-13"
 slug: "knowledge-is-power-or"
-summary: "My notes are only useful if they remember when something was true. Product facts rot faster than they look."
+summary: "My notes looked organised until I needed to know whether a product fact was still true."
 coverImage: "/images/posts/knowledge-is-power-or-cover.png"
 series: "founder-notes"
 tags:
@@ -11,43 +11,23 @@ tags:
   - knowledge
 ---
 
-My notes used to be a graveyard for things I was sure I would need later.
+My notes looked organised until I tried to make a decision from them.
 
-Bookmarks, call notes, screenshots, links from Slack, AI answers I half-trusted, market comments I couldn't place two weeks later. It all looked organised until I needed to make a decision from it.
+Bookmarks, call notes, screenshots, links from Slack, AI answers I half-trusted, market comments I couldn't place two weeks later. I had kept everything except the part that would tell me whether it was still true.
 
-The old loop was simpler: ship feature, check metrics, repeat. That still works for some things. It doesn't help much when the real question is whether the user has the problem you think they have.
-
-That question lives in fragments. A sentence from a customer call. A failed onboarding experiment. A competitor changing their pricing page. A prospect asking the same confused question three calls in a row.
+The old loop was simpler: ship feature, check metrics, repeat. That still works until the question becomes whether the user has the problem I think they have. The answer arrives in fragments: a sentence from a customer call, a failed onboarding experiment, a competitor changing its pricing page, the same confused question from three prospects.
 
 I stopped thinking in lists and started thinking in connections. A personal knowledge graph sounds fancy, but for me it just means connecting what I learn to what I decide.
 
-I use Obsidian very simply: small notes, links between ideas, post-call reflections, failed experiments, surprises.
+In Obsidian I keep small notes, links between ideas, post-call reflections, failed experiments, and surprises. I separate the user's words from my interpretation, the assumed problem from the observed one, and a decision from the evidence that produced it.
 
-- notes about users (their words, not my interpretation)
-- notes about problems (real vs assumed)
-- notes about solutions (what worked, what flopped, what surprised me)
-- notes about decisions (why I picked A over B)
-
-Without my own memory system it all turns to mush.
+Without those connections, it all turns to mush.
 
 AI makes the mush more dangerous because it can make it sound coherent. If my notes are shallow, the answer comes back polished and wrong in exactly my own accent. If the notes are specific, dated, and tied to decisions, the model has something to work with.
 
-The habits that have held up:
+Writing is part of the memory system. A post or short video forces me to connect what a user said to what I built and what happened next. Any content-strategy upside comes later.
 
-- continuous learning about users
-- writing notes even when they're messy
-- linking insights to product decisions
-- creating content from what I learned
-
-When I write a post, record a short video, or share what I learned that week, the first job is just to make it stick in my own head. Any content-strategy upside comes second.
-
-And yes, this gets overwhelming.
-
-The questions pile up in a very specific way:
-
-- I don't really know if users want this.
-- I'm not sure we're solving the right problem.
-- Everyone else seems to know their market better.
+It still gets overwhelming. I don't know if users want the thing. I don't know if we're solving the right problem. Everyone else appears to know their market better, although I suspect their notes are lying to them too.
 
 Talking to other builders helps because they catch the stale parts of my map. They ask the dumb question I stopped asking. They remember that the thing I treat as obvious was only true for one customer segment in March.
 
@@ -55,7 +35,7 @@ I don't need a perfect map. I need one that tells me which notes are old.
 
 <Divider />
 
-## Knowledge graphs, triplets, and why time matters
+## The missing field was time
 
 A knowledge graph is entities connected by relationships. The basic unit is a triplet:
 
@@ -72,7 +52,7 @@ A knowledge graph is entities connected by relationships. The basic unit is a tr
 
 Link triplets together and you get a graph, not a folder of disconnected notes.
 
-### The problem with static facts
+### A correct note can become a wrong decision
 
 Most notes are static. Product truth isn't.
 
@@ -80,7 +60,7 @@ Most notes are static. Product truth isn't.
 - a pricing model worked until we hit a certain scale
 - competitor X mattered a lot, now competitor Y does
 
-Drop the time dimension and your notes slowly become wrong while still looking organised.
+Drop the time dimension and the note doesn't even need to become false to hurt you. It only needs to outlive the conditions that made it useful.
 
 <Quote>
 A fact with no date attached quietly goes stale, and you keep trusting it long after it stopped being true.
@@ -123,7 +103,7 @@ That lets you ask what was true then, what's true now, and exactly when it chang
 
 In product work, most facts that matter are dynamic. That's exactly why they go stale so fast.
 
-### Why single-pass retrieval breaks
+### One search is too confident
 
 Research on temporal knowledge graphs suggests single-pass retrieval breaks easily. Agentic flows do better by:
 
@@ -132,7 +112,7 @@ Research on temporal knowledge graphs suggests single-pass retrieval breaks easi
 3. checking whether facts are still valid
 4. iterating when context is missing
 
-That's close to how real product debugging works anyway. Probe, compare, update your model, repeat.
+That resembles the way I debug a product belief: probe, compare, update the model, repeat. The dangerous answer is the one retrieved once and delivered without its age showing.
 
 Typical temporal operators:
 
@@ -142,7 +122,7 @@ Typical temporal operators:
 - `Search_after(query, t)`
 - `Search_between(query, t1, t2)`
 
-### Practical personal setup
+### The version I can maintain
 
 <Callout type="default" title="You don't need a full system">
   You don't need to build a full temporal graph system to get value from this.
@@ -153,9 +133,7 @@ Typical temporal operators:
 - [ ] Invalidate stale notes instead of letting them sit there looking wise.
 - [ ] Connect notes instead of collecting them.
 
-### Obsidian workflow
-
-My setup is simple:
+### My weekly cleanup
 
 - daily notes: what changed, what confused me
 - concept notes: one atomic idea per note
@@ -163,7 +141,7 @@ My setup is simple:
 - links between notes
 - dates on decisions
 
-Once a week I clean duplicates, archive stale notes, and add missing links. Over time, that turns into a usable personal graph instead of a pile of disconnected notes.
+I use daily notes for what changed or confused me, concept notes for one idea, and project notes for decisions and outcomes. Once a week I clean duplicates, archive stale notes, and add missing links. The dates matter more than the diagram.
 
 <Divider />
 
@@ -173,4 +151,4 @@ Once a week I clean duplicates, archive stale notes, and add missing links. Over
 - [TKG-Thinker paper](https://arxiv.org/html/2602.05818v2)
 - [Obsidian](https://obsidian.md/)
 
-The timestamp is the unglamorous bit that saves the whole system. Without it, old certainty keeps wearing a fresh shirt.
+I used to open Obsidian and feel reassured by how much I'd saved. Now the first thing I want to see is the timestamp. Old certainty looks remarkably convincing in a fresh shirt.
