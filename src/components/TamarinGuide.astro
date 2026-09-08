@@ -1,13 +1,9 @@
 ---
 import {
   ACTIVITIES,
-  BOAT_TRIP_USD_PER_PERSON,
   CAR_HIRE_USD_PER_DAY,
   CATEGORY_LABELS,
 } from "../lib/tamarin-activities";
-
-const mapBase = "https://maps.google.com/maps?hl=en&z=13&output=embed&q=";
-const defaultQuery = "Tamarin, Mauritius";
 
 const categories = ["land", "water", "air", "food"] as const;
 
@@ -28,7 +24,7 @@ const field =
       <div>
         <p class={label}>Tamarin &middot; Mauritius</p>
         <h2 class="font-display text-2xl sm:text-3xl tracking-[-0.02em] text-ink mt-1 mb-0">
-          <span data-en="The day trip board" data-de="Die Ausflugstafel">The day trip board</span>
+          <span data-en="Places to visit" data-de="Ausflugsziele">Places to visit</span>
         </h2>
       </div>
       <div class="flex items-center gap-0 border border-ink" role="group" aria-label="Language">
@@ -41,28 +37,78 @@ const field =
 
     <div class="mt-4 flex flex-wrap gap-2">
       <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
-        <span data-en="Car hire" data-de="Mietwagen">Car hire</span> &middot; ${CAR_HIRE_USD_PER_DAY}/<span data-en="day" data-de="Tag">day</span>
+        <span data-en="Car hire estimate" data-de="Mietwagen-Richtwert">Car hire estimate</span> &middot; ${CAR_HIRE_USD_PER_DAY}/<span data-en="day" data-de="Tag">day</span>
       </span>
       <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
-        <span data-en="Boat trips" data-de="Bootstouren">Boat trips</span> &middot; ~${BOAT_TRIP_USD_PER_PERSON} <span data-en="per person" data-de="pro Person">per person</span>
+        <span data-en="Boat prices vary by trip" data-de="Bootspreise hängen von der Tour ab">Boat prices vary by trip</span>
       </span>
       <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
         {ACTIVITIES.length} <span data-en="entries" data-de="Einträge">entries</span>
       </span>
     </div>
+    <p class="text-[0.8rem] text-muted mt-3 mb-0" data-en="Times are estimates from Tamarin, including travel. Sources checked 8 September 2026; confirm prices and availability when booking." data-de="Zeitangaben sind Schätzungen ab Tamarin inklusive Anfahrt. Quellen am 8. September 2026 geprüft; Preise und Verfügbarkeit bei der Buchung bestätigen.">Times are estimates from Tamarin, including travel. Sources checked 8 September 2026; confirm prices and availability when booking.</p>
   </header>
 
   <div class="border-b border-rule">
-    <iframe
-      id="tamarin-map"
-      title="Map of the selected place"
-      src={mapBase + encodeURIComponent(defaultQuery)}
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      class="w-full h-[18rem] sm:h-[24rem] border-0 block"></iframe>
-    <p class="px-5 sm:px-7 py-2 text-[0.8rem] text-muted border-t border-rule-soft m-0">
-      <span id="map-caption" data-en="Showing Tamarin. Pick any row to move the map." data-de="Zeigt Tamarin. Eine Zeile wählen, um die Karte zu bewegen.">Showing Tamarin. Pick any row to move the map.</span>
+    <div id="tamarin-map" role="region" aria-label="Map of all day trips from Tamarin" class="relative z-0 w-full h-[22rem] sm:h-[28rem] bg-paper-deep"></div>
+    <div class="px-5 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-3 border-t border-rule-soft">
+      <p id="map-caption" class="text-[0.8rem] text-muted m-0" data-en="All places shown. Click a numbered group to see nearby places, or pick a row below." data-de="Alle Orte sichtbar. Eine Zahlengruppe anklicken, um nahe Orte zu sehen, oder unten eine Zeile wählen.">All places shown. Click a numbered group to see nearby places, or pick a row below.</p>
+      <button id="map-show-all" type="button" class={chip} data-en="Show all places" data-de="Alle Orte zeigen">Show all places</button>
+    </div>
+  </div>
+
+  <div id="tamarin-planner" class="border-b border-ink px-5 py-6 sm:px-7 bg-paper-deep/40">
+    <p class={label} data-en="Itinerary" data-de="Reiseplan">Itinerary</p>
+    <h3 class="font-display text-xl sm:text-2xl text-ink mt-1 mb-3">
+      <span data-en="Plan your stay" data-de="Deinen Aufenthalt planen">Plan your stay</span>
+    </h3>
+    <p class="text-ink-soft text-[0.95rem] mt-0 mb-4 max-w-[80ch]" data-en="Choose your trip length and pace. To include specific places, select them in the list below." data-de="Wähle die Dauer und das Tempo deiner Reise. Orte, die du besuchen möchtest, kannst du unten in der Liste ankreuzen.">
+      Choose your trip length and pace. To include specific places, select them in the list below.
     </p>
+
+    <div class="grid gap-3 sm:grid-cols-3">
+      <div>
+        <label class={label} for="plan-days" data-en="Days" data-de="Tage">Days</label>
+        <select id="plan-days" class={field}>
+          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+            <option value={n} selected={n === 4}>{n}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label class={label} for="plan-party" data-en="Travellers" data-de="Reisende">Travellers</label>
+        <select id="plan-party" class={field}>
+          <option value="family with young kids" data-en="Family with young kids" data-de="Familie mit kleinen Kindern">Family with young kids</option>
+          <option value="family with teenagers" data-en="Family with teenagers" data-de="Familie mit Teenagern">Family with teenagers</option>
+          <option value="couple" data-en="Couple" data-de="Paar">Couple</option>
+          <option value="solo traveller" data-en="Solo" data-de="Alleine">Solo</option>
+          <option value="group of friends" data-en="Group of friends" data-de="Freundesgruppe">Group of friends</option>
+        </select>
+      </div>
+      <div>
+        <label class={label} for="plan-pace" data-en="Pace" data-de="Tempo">Pace</label>
+        <select id="plan-pace" class={field}>
+          <option value="relaxed, one thing a day" data-en="Relaxed" data-de="Entspannt">Relaxed</option>
+          <option value="balanced" selected data-en="Balanced" data-de="Ausgewogen">Balanced</option>
+          <option value="packed, we want to see everything" data-en="Packed" data-de="Vollgepackt">Packed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <label class={label} for="plan-notes" data-en="Notes" data-de="Anmerkungen">Notes</label>
+      <input id="plan-notes" type="text" class={field} placeholder="Two kids, one gets seasick, no car on Monday" data-ph-en="Two kids, one gets seasick, no car on Monday" data-ph-de="Zwei Kinder, eines wird seekrank, Montag kein Auto" />
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center gap-3">
+      <button id="plan-btn" type="button"
+        class="font-mono text-[0.66rem] uppercase tracking-[0.18em] bg-ink text-paper px-5 py-3 cursor-pointer transition-colors hover:bg-terracotta-strong disabled:opacity-50 disabled:cursor-wait">
+        <span data-en="Create itinerary" data-de="Reiseplan erstellen">Create itinerary</span>
+      </button>
+      <span id="plan-picks" class="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted"></span>
+    </div>
+
+    <div id="plan-output" class="mt-6" aria-live="polite"></div>
   </div>
 
   <div class="px-5 py-5 sm:px-7 border-b border-rule flex flex-col gap-4">
@@ -111,8 +157,16 @@ const field =
     </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full min-w-[52rem] border-collapse text-[0.92rem]">
+  <div class="activity-board">
+    <table class="activity-table w-full border-collapse text-[1rem]" role="table">
+      <colgroup>
+        <col style="width: 3rem" />
+        <col style="width: 20%" />
+        <col style="width: 12%" />
+        <col style="width: 18%" />
+        <col style="width: 16%" />
+        <col />
+      </colgroup>
       <thead>
         <tr class="border-b border-ink bg-paper-deep/60 text-left">
           <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal w-10">
@@ -134,15 +188,15 @@ const field =
             data-hours={a.hours}
             data-car={a.needsCar ? "yes" : "no"}
             data-map={a.mapQuery}
-            data-search={`${a.name} ${a.duration.en} ${a.duration.de} ${a.transport.en} ${a.transport.de} ${a.food.en} ${a.food.de} ${a.notes.en} ${a.notes.de}`.toLowerCase()}
+            data-search={`${a.name} ${a.kind.en} ${a.kind.de} ${a.duration.en} ${a.duration.de} ${a.transport.en} ${a.transport.de} ${a.food.en} ${a.food.de} ${a.notes.en} ${a.notes.de}`.toLowerCase()}
             class="border-b border-rule-soft align-top cursor-pointer transition-colors hover:bg-paper-deep/50 aria-selected:bg-paper-deep"
           >
             <td class="px-3 py-3">
-              <input type="checkbox" data-pick={a.id} aria-label={`Add ${a.name} to the plan`} class="accent-terracotta w-4 h-4 cursor-pointer" />
+              <input type="checkbox" data-pick={a.id} disabled={a.plannerEligible === false} aria-label={`Add ${a.name} to the plan`} class="accent-terracotta w-4 h-4 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" />
             </td>
             <td class="px-3 py-3">
               <span class="font-medium text-ink block">{a.name}</span>
-              <span class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted" data-en={CATEGORY_LABELS[a.category].en} data-de={CATEGORY_LABELS[a.category].de}>{CATEGORY_LABELS[a.category].en}</span>
+              <span class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted" data-en={a.kind.en} data-de={a.kind.de}>{a.kind.en}</span>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.mapQuery)}`}
                 target="_blank"
@@ -151,81 +205,35 @@ const field =
                 data-en="Directions" data-de="Route"
               >Directions</a>
             </td>
-            <td class="px-3 py-3 text-ink-soft" data-en={a.duration.en} data-de={a.duration.de}>{a.duration.en}</td>
-            <td class="px-3 py-3 text-ink-soft" data-en={a.transport.en} data-de={a.transport.de}>{a.transport.en}</td>
-            <td class="px-3 py-3 text-ink-soft" data-en={a.food.en} data-de={a.food.de}>{a.food.en}</td>
-            <td class="px-3 py-3 text-ink-soft" data-en={a.notes.en} data-de={a.notes.de}>{a.notes.en}</td>
+            <td data-label-en="Time" data-label-de="Dauer" class="px-3 py-3 text-ink-soft" data-en={a.duration.en} data-de={a.duration.de}>{a.duration.en}</td>
+            <td data-label-en="Transport" data-label-de="Anfahrt" class="px-3 py-3 text-ink-soft" data-en={a.transport.en} data-de={a.transport.de}>{a.transport.en}</td>
+            <td data-label-en="Food" data-label-de="Essen" class="px-3 py-3 text-ink-soft" data-en={a.food.en} data-de={a.food.de}>{a.food.en}</td>
+            <td data-label-en="Notes" data-label-de="Notizen" class="px-3 py-3 text-ink-soft">
+              <div>
+                <span data-en={a.notes.en} data-de={a.notes.de}>{a.notes.en}</span>
+                {a.sources.length > 0 && <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-[0.7rem]">
+                  {a.sources.map((source) => <a href={source.url} target="_blank" rel="noopener noreferrer" class="activity-source text-terracotta-strong hover:text-terracotta">{source.label} ↗</a>)}
+                </div>}
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>
     </table>
-    <p id="tamarin-empty" hidden class="px-5 sm:px-7 py-6 text-ink-soft m-0" data-en="Nothing matches that. Loosen a filter." data-de="Dazu passt nichts. Filter lockern.">Nothing matches that. Loosen a filter.</p>
+    <p id="tamarin-empty" hidden class="px-5 sm:px-7 py-6 text-ink-soft m-0" data-en="No matching activities. Try another filter." data-de="Keine passenden Aktivitäten. Versuche einen anderen Filter.">No matching activities. Try another filter.</p>
   </div>
 
-  <div class="border-t border-ink px-5 py-6 sm:px-7 bg-paper-deep/40">
-    <p class={label} data-en="Ask for a plan" data-de="Plan erstellen lassen">Ask for a plan</p>
-    <h3 class="font-display text-xl sm:text-2xl text-ink mt-1 mb-3">
-      <span data-en="Tell it how long you have" data-de="Sag, wie viel Zeit du hast">Tell it how long you have</span>
-    </h3>
-    <p class="text-ink-soft text-[0.95rem] mt-0 mb-4 max-w-[52ch]" data-en="Tick the rows you refuse to miss, set the length, and it builds a day-by-day plan out of this list." data-de="Zeilen ankreuzen, die auf keinen Fall fehlen dürfen, Länge einstellen, und es baut daraus einen Tagesplan.">
-      Tick the rows you refuse to miss, set the length, and it builds a day-by-day plan out of this list.
-    </p>
 
-    <div class="grid gap-3 sm:grid-cols-3">
-      <div>
-        <label class={label} for="plan-days" data-en="Days" data-de="Tage">Days</label>
-        <select id="plan-days" class={field}>
-          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-            <option value={n} selected={n === 4}>{n}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label class={label} for="plan-party" data-en="Who" data-de="Wer">Who</label>
-        <select id="plan-party" class={field}>
-          <option value="family with young kids" data-en="Family with young kids" data-de="Familie mit kleinen Kindern">Family with young kids</option>
-          <option value="family with teenagers" data-en="Family with teenagers" data-de="Familie mit Teenagern">Family with teenagers</option>
-          <option value="couple" data-en="Couple" data-de="Paar">Couple</option>
-          <option value="solo traveller" data-en="Solo" data-de="Alleine">Solo</option>
-          <option value="group of friends" data-en="Group of friends" data-de="Freundesgruppe">Group of friends</option>
-        </select>
-      </div>
-      <div>
-        <label class={label} for="plan-pace" data-en="Pace" data-de="Tempo">Pace</label>
-        <select id="plan-pace" class={field}>
-          <option value="relaxed, one thing a day" data-en="Relaxed" data-de="Entspannt">Relaxed</option>
-          <option value="balanced" selected data-en="Balanced" data-de="Ausgewogen">Balanced</option>
-          <option value="packed, we want to see everything" data-en="Packed" data-de="Vollgepackt">Packed</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="mt-3">
-      <label class={label} for="plan-notes" data-en="Anything else" data-de="Sonst noch was">Anything else</label>
-      <input id="plan-notes" type="text" class={field} placeholder="Two kids, one gets seasick, no car on Monday" data-ph-en="Two kids, one gets seasick, no car on Monday" data-ph-de="Zwei Kinder, eines wird seekrank, Montag kein Auto" />
-    </div>
-
-    <div class="mt-4 flex flex-wrap items-center gap-3">
-      <button id="plan-btn" type="button"
-        class="font-mono text-[0.66rem] uppercase tracking-[0.18em] bg-ink text-paper px-5 py-3 cursor-pointer transition-colors hover:bg-terracotta-strong disabled:opacity-50 disabled:cursor-wait">
-        <span data-en="Build the plan" data-de="Plan bauen">Build the plan</span>
-      </button>
-      <span id="plan-picks" class="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted"></span>
-    </div>
-
-    <div id="plan-output" class="mt-6" aria-live="polite"></div>
-  </div>
 </section>
 
 <script>
+  import { initTamarinMap } from "../lib/tamarin-map";
+
   type Lang = "en" | "de";
 
   interface PlanDay {
     title: string;
-    morning: string;
-    afternoon: string;
-    evening: string;
-    logistics: string;
+    paragraphs: string[];
   }
 
   interface PlanResponse {
@@ -241,7 +249,8 @@ const field =
     const rows = Array.from(
       root.querySelectorAll<HTMLTableRowElement>("#tamarin-rows tr"),
     );
-    const mapFrame = root.querySelector<HTMLIFrameElement>("#tamarin-map");
+    const mapContainer = root.querySelector<HTMLElement>("#tamarin-map");
+    let guideMap: ReturnType<typeof initTamarinMap> | undefined;
     const mapCaption = root.querySelector<HTMLElement>("#map-caption");
     const search = root.querySelector<HTMLInputElement>("#tamarin-search");
     const noCar = root.querySelector<HTMLInputElement>("#tamarin-nocar");
@@ -272,6 +281,7 @@ const field =
           String(btn.dataset.langBtn === state.lang),
         );
       });
+      guideMap?.setLang(state.lang);
       updateCount();
       updatePicks();
     }
@@ -344,9 +354,9 @@ const field =
 
     /* ---- map ---- */
     function showOnMap(row: HTMLTableRowElement) {
-      const query = row.dataset.map;
-      if (!query || !mapFrame) return;
-      mapFrame.src = `https://maps.google.com/maps?hl=en&z=13&output=embed&q=${encodeURIComponent(query)}`;
+      const id = row.dataset.id;
+      if (!id || !guideMap) return;
+      guideMap.select(id);
       rows.forEach((r) => r.setAttribute("aria-selected", String(r === row)));
       const name = row.querySelector("td:nth-child(2) span")?.textContent ?? "";
       if (mapCaption) {
@@ -355,6 +365,16 @@ const field =
         mapCaption.dataset.de = `Zeigt ${name}.`;
       }
     }
+
+    root.querySelector("#map-show-all")?.addEventListener("click", () => {
+      guideMap?.showAll();
+      rows.forEach((row) => row.removeAttribute("aria-selected"));
+      if (mapCaption) {
+        mapCaption.dataset.en = "All places shown. Click a numbered group to see nearby places, or pick a row below.";
+        mapCaption.dataset.de = "Alle Orte sichtbar. Eine Zahlengruppe anklicken, um nahe Orte zu sehen, oder unten eine Zeile wählen.";
+        mapCaption.textContent = t(mapCaption.dataset.en, mapCaption.dataset.de);
+      }
+    });
 
     rows.forEach((row) => {
       row.addEventListener("click", (event) => {
@@ -375,8 +395,8 @@ const field =
       if (!picksLabel) return;
       const n = picked().length;
       picksLabel.textContent = n
-        ? t(`${n} must-do picked`, `${n} Pflichtpunkte gewählt`)
-        : t("Nothing picked yet", "Noch nichts gewählt");
+        ? t(`${n} ${n === 1 ? "place" : "places"} selected`, `${n} ${n === 1 ? "Ort" : "Orte"} ausgewählt`)
+        : t("No places selected", "Keine Orte ausgewählt");
     }
 
     root
@@ -392,35 +412,21 @@ const field =
 
     function renderPlan(plan: PlanResponse) {
       if (!output) return;
-      const slots: Array<[keyof PlanDay, string, string]> = [
-        ["morning", "Morning", "Vormittag"],
-        ["afternoon", "Afternoon", "Nachmittag"],
-        ["evening", "Evening", "Abend"],
-        ["logistics", "Logistics", "Logistik"],
-      ];
-
       output.innerHTML = `
-        <div class="border border-ink bg-paper p-5">
+        <div class="border border-ink bg-paper p-4 sm:p-7">
           <h4 class="font-display text-xl text-ink m-0">${esc(plan.title)}</h4>
           <p class="text-ink-soft text-[0.95rem] mt-2 mb-5">${esc(plan.summary)}</p>
-          <ol class="list-none p-0 m-0 grid gap-4">
+          <ol class="list-none p-0 m-0 grid gap-8">
             ${plan.days
               .map(
                 (day) => `
               <li class="border-l-2 border-terracotta pl-4">
-                <p class="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-terracotta-strong m-0">${esc(day.title)}</p>
-                <dl class="m-0 mt-2 grid gap-1.5">
-                  ${slots
-                    .filter(([key]) => day[key])
-                    .map(
-                      ([key, en, de]) => `
-                    <div class="grid sm:grid-cols-[7rem_1fr] gap-x-3">
-                      <dt class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted pt-1">${t(en, de)}</dt>
-                      <dd class="m-0 text-ink-soft text-[0.95rem]">${esc(String(day[key]))}</dd>
-                    </div>`,
-                    )
+                <h5 class="font-display text-xl font-normal text-ink m-0">${esc(day.title)}</h5>
+                <div class="mt-3 max-w-[90ch] grid gap-3">
+                  ${day.paragraphs
+                    .map((paragraph) => `<p class="m-0 text-ink-soft text-[1.05rem] leading-[1.8]">${esc(paragraph)}</p>`)
                     .join("")}
-                </dl>
+                </div>
               </li>`,
               )
               .join("")}
@@ -455,8 +461,8 @@ const field =
       planBtn.disabled = true;
       renderStatus(
         t(
-          "Working on it. This takes about fifteen seconds.",
-          "Wird gebaut. Das dauert etwa fünfzehn Sekunden.",
+          "Writing your days out in detail. This can take up to a minute.",
+          "Deine Tage werden ausführlich geplant. Das kann bis zu einer Minute dauern.",
         ),
       );
 
@@ -478,8 +484,8 @@ const field =
       } catch {
         renderStatus(
           t(
-            "The planner did not answer. Try again in a moment.",
-            "Der Planer hat nicht geantwortet. Gleich noch einmal versuchen.",
+            "The planner couldn't finish a complete plan at this pace. Please try again.",
+            "Der Planer konnte keinen vollständigen Plan mit diesem Tempo erstellen. Bitte versuch es noch einmal.",
           ),
         );
       } finally {
@@ -494,5 +500,125 @@ const field =
     } catch {}
     applyLang();
     applyFilters();
+    if (mapContainer) guideMap = initTamarinMap(mapContainer, state.lang);
   }
 </script>
+
+<style>
+  #tamarin-map {
+    font-family: var(--font-sans);
+  }
+
+  #tamarin-map :global(.leaflet-control a),
+  #tamarin-map :global(.leaflet-popup-close-button) {
+    background-image: none;
+  }
+
+  #tamarin-map :global(.guide-map-pin span),
+  #tamarin-map :global(.guide-map-cluster span) {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--color-paper);
+    border-radius: 50%;
+    color: var(--color-paper);
+    font: 12px var(--font-mono);
+    box-shadow: 0 1px 5px #1b171366;
+  }
+
+  #tamarin-map :global(.guide-map-cluster span) {
+    background: var(--color-ink);
+    border-width: 3px;
+  }
+
+  #tamarin-map :global(.leaflet-popup-content-wrapper) {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-radius: 0;
+  }
+
+  #tamarin-map :global(.guide-map-popup) {
+    font: 0.95rem/1.5 var(--font-sans);
+  }
+
+  #tamarin-map :global(.guide-map-popup p) {
+    margin: 0.5rem 0;
+  }
+
+  #tamarin-map :global(.leaflet-popup-tip) {
+    background: var(--color-paper);
+  }
+
+  .activity-table {
+    table-layout: fixed;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 899px) {
+    .activity-table colgroup {
+      display: none;
+    }
+
+    .activity-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .activity-table,
+    .activity-table tbody {
+      display: block;
+    }
+
+    .activity-table tbody tr:not([hidden]) {
+      display: grid;
+      grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 1fr);
+      padding: 1rem;
+      gap: 0.75rem 1rem;
+    }
+
+    .activity-table td {
+      min-width: 0;
+      padding: 0;
+    }
+
+    .activity-table td:nth-child(2),
+    .activity-table td:nth-child(6) {
+      grid-column: 2 / -1;
+    }
+
+    .activity-table td:nth-child(3),
+    .activity-table td:nth-child(5) {
+      grid-column: 2;
+    }
+
+    .activity-table td[data-label-en]::before {
+      content: attr(data-label-en);
+      display: block;
+      margin-bottom: 0.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    [data-lang="de"] .activity-table td[data-label-de]::before {
+      content: attr(data-label-de);
+    }
+  }
+
+  @media (max-width: 479px) {
+    .activity-table tbody tr:not([hidden]) {
+      grid-template-columns: 1.25rem minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .activity-table td[data-label-en] {
+      grid-column: 2;
+    }
+  }
+</style>

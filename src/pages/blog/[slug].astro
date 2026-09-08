@@ -59,6 +59,7 @@ const filteredHeadings = headings.filter(
   path={meta.routePath}
   image={meta.coverImage}
   type='article'
+  wide={meta.wide}
 >
   <!-- Article masthead -->
   <section class='reveal reveal-2'>
@@ -70,8 +71,8 @@ const filteredHeadings = headings.filter(
     <div class='rule-horizontal mt-[3px]'></div>
   </section>
 
-  <div class='mt-10 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_220px]'>
-    <article>
+  <div class:list={['mt-10 grid grid-cols-1 gap-12', !meta.wide && 'lg:grid-cols-[minmax(0,1fr)_220px]']}>
+    <article class:list={['min-w-0', meta.wide && 'article-wide']}>
       <header class='reveal reveal-3'>
         <p class='eyebrow mb-4'>Article · Field notes</p>
         <h1
@@ -161,7 +162,7 @@ const filteredHeadings = headings.filter(
       </script>
     </article>
 
-    <aside class='reveal reveal-4 hidden h-fit lg:sticky lg:top-24 lg:block'>
+    {!meta.wide && <aside class='reveal reveal-4 hidden h-fit lg:sticky lg:top-24 lg:block'>
       <div class='border-l border-rule pl-5'>
         <h4 class='eyebrow mb-4'>On this page</h4>
         <nav class='space-y-2.5'>
@@ -177,6 +178,16 @@ const filteredHeadings = headings.filter(
           ))}
         </nav>
       </div>
-    </aside>
+    </aside>}
   </div>
 </SiteLayout>
+
+<style>
+  .article-wide :global(.prose) {
+    max-width: none;
+  }
+
+  .article-wide :global(.prose > p) {
+    max-width: 90ch;
+  }
+</style>

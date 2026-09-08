@@ -10,9 +10,17 @@ interface Props {
   path?: string;
   image?: string;
   type?: "website" | "article";
+  wide?: boolean;
 }
 
-const { title, description, path, image, type = "website" } = Astro.props;
+const {
+  title,
+  description,
+  path,
+  image,
+  type = "website",
+  wide = false,
+} = Astro.props;
 
 const seo = buildSeo({ title, description, path, image });
 
@@ -73,7 +81,7 @@ const year = new Date().getFullYear();
         </div>
       </header>
 
-      <main class='reveal reveal-2 mx-auto w-[min(100%-2rem,1120px)] py-12 md:py-16'>
+      <main class:list={['reveal reveal-2 mx-auto py-12 md:py-16', wide ? 'w-[min(100%-2rem,1200px)] md:w-[min(100%-4rem,1200px)]' : 'w-[min(100%-2rem,1120px)]']}>
         <slot />
       </main>
 
