@@ -1,0 +1,498 @@
+---
+import {
+  ACTIVITIES,
+  BOAT_TRIP_USD_PER_PERSON,
+  CAR_HIRE_USD_PER_DAY,
+  CATEGORY_LABELS,
+} from "../lib/tamarin-activities";
+
+const mapBase = "https://maps.google.com/maps?hl=en&z=13&output=embed&q=";
+const defaultQuery = "Tamarin, Mauritius";
+
+const categories = ["land", "water", "air", "food"] as const;
+
+const chip =
+  "font-mono text-[0.62rem] uppercase tracking-[0.16em] px-3 py-1.5 border border-rule bg-paper text-muted transition-colors hover:text-ink hover:border-ink cursor-pointer aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:border-ink";
+const label = "font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted";
+const field =
+  "w-full border border-rule bg-paper px-3 py-2 text-[0.95rem] text-ink outline-none focus:border-ink";
+---
+
+<section
+  id="tamarin-guide"
+  data-lang="en"
+  class="not-prose my-12 border border-ink bg-surface shadow-[6px_6px_0_0_rgba(27,23,19,1)]"
+>
+  <header class="border-b border-rule px-5 py-5 sm:px-7">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <p class={label}>Tamarin &middot; Mauritius</p>
+        <h2 class="font-display text-2xl sm:text-3xl tracking-[-0.02em] text-ink mt-1 mb-0">
+          <span data-en="The day trip board" data-de="Die Ausflugstafel">The day trip board</span>
+        </h2>
+      </div>
+      <div class="flex items-center gap-0 border border-ink" role="group" aria-label="Language">
+        <button type="button" data-lang-btn="en" aria-pressed="true"
+          class="font-mono text-[0.62rem] uppercase tracking-[0.16em] px-3 py-2 cursor-pointer transition-colors aria-pressed:bg-ink aria-pressed:text-paper">EN</button>
+        <button type="button" data-lang-btn="de" aria-pressed="false"
+          class="font-mono text-[0.62rem] uppercase tracking-[0.16em] px-3 py-2 cursor-pointer transition-colors aria-pressed:bg-ink aria-pressed:text-paper">DE</button>
+      </div>
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
+        <span data-en="Car hire" data-de="Mietwagen">Car hire</span> &middot; ${CAR_HIRE_USD_PER_DAY}/<span data-en="day" data-de="Tag">day</span>
+      </span>
+      <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
+        <span data-en="Boat trips" data-de="Bootstouren">Boat trips</span> &middot; ~${BOAT_TRIP_USD_PER_PERSON} <span data-en="per person" data-de="pro Person">per person</span>
+      </span>
+      <span class="font-mono text-[0.62rem] uppercase tracking-[0.14em] border border-rule bg-paper px-2.5 py-1 text-ink">
+        {ACTIVITIES.length} <span data-en="entries" data-de="Einträge">entries</span>
+      </span>
+    </div>
+  </header>
+
+  <div class="border-b border-rule">
+    <iframe
+      id="tamarin-map"
+      title="Map of the selected place"
+      src={mapBase + encodeURIComponent(defaultQuery)}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="w-full h-[18rem] sm:h-[24rem] border-0 block"></iframe>
+    <p class="px-5 sm:px-7 py-2 text-[0.8rem] text-muted border-t border-rule-soft m-0">
+      <span id="map-caption" data-en="Showing Tamarin. Pick any row to move the map." data-de="Zeigt Tamarin. Eine Zeile wählen, um die Karte zu bewegen.">Showing Tamarin. Pick any row to move the map.</span>
+    </p>
+  </div>
+
+  <div class="px-5 py-5 sm:px-7 border-b border-rule flex flex-col gap-4">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class={label} data-en="Filter" data-de="Filter">Filter</span>
+      <button type="button" class={chip} data-filter="category" data-value="all" aria-pressed="true">
+        <span data-en="All" data-de="Alle">All</span>
+      </button>
+      {categories.map((c) => (
+        <button type="button" class={chip} data-filter="category" data-value={c} aria-pressed="false">
+          <span data-en={CATEGORY_LABELS[c].en} data-de={CATEGORY_LABELS[c].de}>{CATEGORY_LABELS[c].en}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <span class={label} data-en="Length" data-de="Dauer">Length</span>
+      <button type="button" class={chip} data-filter="duration" data-value="all" aria-pressed="true">
+        <span data-en="Any" data-de="Egal">Any</span>
+      </button>
+      <button type="button" class={chip} data-filter="duration" data-value="short" aria-pressed="false">
+        <span data-en="Under 3 hours" data-de="Unter 3 Stunden">Under 3 hours</span>
+      </button>
+      <button type="button" class={chip} data-filter="duration" data-value="half" aria-pressed="false">
+        <span data-en="Half day" data-de="Halber Tag">Half day</span>
+      </button>
+      <button type="button" class={chip} data-filter="duration" data-value="full" aria-pressed="false">
+        <span data-en="Full day" data-de="Ganzer Tag">Full day</span>
+      </button>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <input
+        id="tamarin-search"
+        type="search"
+        placeholder="Search"
+        data-ph-en="Search"
+        data-ph-de="Suchen"
+        class="border border-rule bg-paper px-3 py-2 text-[0.95rem] text-ink outline-none focus:border-ink w-full sm:w-56"
+      />
+      <label class="inline-flex items-center gap-2 text-[0.9rem] text-ink-soft cursor-pointer">
+        <input id="tamarin-nocar" type="checkbox" class="accent-terracotta w-4 h-4" />
+        <span data-en="Works without a car" data-de="Geht ohne Auto">Works without a car</span>
+      </label>
+      <span id="tamarin-count" class="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted ml-auto"></span>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[52rem] border-collapse text-[0.92rem]">
+      <thead>
+        <tr class="border-b border-ink bg-paper-deep/60 text-left">
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal w-10">
+            <span class="sr-only" data-en="Add to plan" data-de="Zum Plan">Add to plan</span>
+            <span aria-hidden="true">+</span>
+          </th>
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal" data-en="Activity" data-de="Aktivität">Activity</th>
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal" data-en="Time" data-de="Dauer">Time</th>
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal" data-en="Transport" data-de="Anfahrt">Transport</th>
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal" data-en="Food" data-de="Essen">Food</th>
+          <th scope="col" class="px-3 py-2.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted font-normal" data-en="Notes" data-de="Notizen">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="tamarin-rows">
+        {ACTIVITIES.map((a) => (
+          <tr
+            data-id={a.id}
+            data-category={a.category}
+            data-hours={a.hours}
+            data-car={a.needsCar ? "yes" : "no"}
+            data-map={a.mapQuery}
+            data-search={`${a.name} ${a.duration.en} ${a.duration.de} ${a.transport.en} ${a.transport.de} ${a.food.en} ${a.food.de} ${a.notes.en} ${a.notes.de}`.toLowerCase()}
+            class="border-b border-rule-soft align-top cursor-pointer transition-colors hover:bg-paper-deep/50 aria-selected:bg-paper-deep"
+          >
+            <td class="px-3 py-3">
+              <input type="checkbox" data-pick={a.id} aria-label={`Add ${a.name} to the plan`} class="accent-terracotta w-4 h-4 cursor-pointer" />
+            </td>
+            <td class="px-3 py-3">
+              <span class="font-medium text-ink block">{a.name}</span>
+              <span class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted" data-en={CATEGORY_LABELS[a.category].en} data-de={CATEGORY_LABELS[a.category].de}>{CATEGORY_LABELS[a.category].en}</span>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.mapQuery)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="no-rule font-mono text-[0.58rem] uppercase tracking-[0.14em] text-terracotta-strong hover:text-terracotta block mt-1"
+                data-en="Directions" data-de="Route"
+              >Directions</a>
+            </td>
+            <td class="px-3 py-3 text-ink-soft" data-en={a.duration.en} data-de={a.duration.de}>{a.duration.en}</td>
+            <td class="px-3 py-3 text-ink-soft" data-en={a.transport.en} data-de={a.transport.de}>{a.transport.en}</td>
+            <td class="px-3 py-3 text-ink-soft" data-en={a.food.en} data-de={a.food.de}>{a.food.en}</td>
+            <td class="px-3 py-3 text-ink-soft" data-en={a.notes.en} data-de={a.notes.de}>{a.notes.en}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p id="tamarin-empty" hidden class="px-5 sm:px-7 py-6 text-ink-soft m-0" data-en="Nothing matches that. Loosen a filter." data-de="Dazu passt nichts. Filter lockern.">Nothing matches that. Loosen a filter.</p>
+  </div>
+
+  <div class="border-t border-ink px-5 py-6 sm:px-7 bg-paper-deep/40">
+    <p class={label} data-en="Ask for a plan" data-de="Plan erstellen lassen">Ask for a plan</p>
+    <h3 class="font-display text-xl sm:text-2xl text-ink mt-1 mb-3">
+      <span data-en="Tell it how long you have" data-de="Sag, wie viel Zeit du hast">Tell it how long you have</span>
+    </h3>
+    <p class="text-ink-soft text-[0.95rem] mt-0 mb-4 max-w-[52ch]" data-en="Tick the rows you refuse to miss, set the length, and it builds a day-by-day plan out of this list." data-de="Zeilen ankreuzen, die auf keinen Fall fehlen dürfen, Länge einstellen, und es baut daraus einen Tagesplan.">
+      Tick the rows you refuse to miss, set the length, and it builds a day-by-day plan out of this list.
+    </p>
+
+    <div class="grid gap-3 sm:grid-cols-3">
+      <div>
+        <label class={label} for="plan-days" data-en="Days" data-de="Tage">Days</label>
+        <select id="plan-days" class={field}>
+          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+            <option value={n} selected={n === 4}>{n}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label class={label} for="plan-party" data-en="Who" data-de="Wer">Who</label>
+        <select id="plan-party" class={field}>
+          <option value="family with young kids" data-en="Family with young kids" data-de="Familie mit kleinen Kindern">Family with young kids</option>
+          <option value="family with teenagers" data-en="Family with teenagers" data-de="Familie mit Teenagern">Family with teenagers</option>
+          <option value="couple" data-en="Couple" data-de="Paar">Couple</option>
+          <option value="solo traveller" data-en="Solo" data-de="Alleine">Solo</option>
+          <option value="group of friends" data-en="Group of friends" data-de="Freundesgruppe">Group of friends</option>
+        </select>
+      </div>
+      <div>
+        <label class={label} for="plan-pace" data-en="Pace" data-de="Tempo">Pace</label>
+        <select id="plan-pace" class={field}>
+          <option value="relaxed, one thing a day" data-en="Relaxed" data-de="Entspannt">Relaxed</option>
+          <option value="balanced" selected data-en="Balanced" data-de="Ausgewogen">Balanced</option>
+          <option value="packed, we want to see everything" data-en="Packed" data-de="Vollgepackt">Packed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <label class={label} for="plan-notes" data-en="Anything else" data-de="Sonst noch was">Anything else</label>
+      <input id="plan-notes" type="text" class={field} placeholder="Two kids, one gets seasick, no car on Monday" data-ph-en="Two kids, one gets seasick, no car on Monday" data-ph-de="Zwei Kinder, eines wird seekrank, Montag kein Auto" />
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center gap-3">
+      <button id="plan-btn" type="button"
+        class="font-mono text-[0.66rem] uppercase tracking-[0.18em] bg-ink text-paper px-5 py-3 cursor-pointer transition-colors hover:bg-terracotta-strong disabled:opacity-50 disabled:cursor-wait">
+        <span data-en="Build the plan" data-de="Plan bauen">Build the plan</span>
+      </button>
+      <span id="plan-picks" class="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted"></span>
+    </div>
+
+    <div id="plan-output" class="mt-6" aria-live="polite"></div>
+  </div>
+</section>
+
+<script>
+  type Lang = "en" | "de";
+
+  interface PlanDay {
+    title: string;
+    morning: string;
+    afternoon: string;
+    evening: string;
+    logistics: string;
+  }
+
+  interface PlanResponse {
+    title: string;
+    summary: string;
+    days: PlanDay[];
+    budget: string;
+    watchOuts: string[];
+  }
+
+  const root = document.getElementById("tamarin-guide");
+  if (root) {
+    const rows = Array.from(
+      root.querySelectorAll<HTMLTableRowElement>("#tamarin-rows tr"),
+    );
+    const mapFrame = root.querySelector<HTMLIFrameElement>("#tamarin-map");
+    const mapCaption = root.querySelector<HTMLElement>("#map-caption");
+    const search = root.querySelector<HTMLInputElement>("#tamarin-search");
+    const noCar = root.querySelector<HTMLInputElement>("#tamarin-nocar");
+    const count = root.querySelector<HTMLElement>("#tamarin-count");
+    const empty = root.querySelector<HTMLElement>("#tamarin-empty");
+    const picksLabel = root.querySelector<HTMLElement>("#plan-picks");
+    const output = root.querySelector<HTMLElement>("#plan-output");
+    const planBtn = root.querySelector<HTMLButtonElement>("#plan-btn");
+
+    const state = { lang: "en" as Lang, category: "all", duration: "all" };
+
+    const t = (en: string, de: string) => (state.lang === "de" ? de : en);
+
+    /* ---- language ---- */
+    function applyLang() {
+      root.setAttribute("data-lang", state.lang);
+      root.querySelectorAll<HTMLElement>("[data-en]").forEach((el) => {
+        const next = state.lang === "de" ? el.dataset.de : el.dataset.en;
+        if (next) el.textContent = next;
+      });
+      root.querySelectorAll<HTMLInputElement>("[data-ph-en]").forEach((el) => {
+        const next = state.lang === "de" ? el.dataset.phDe : el.dataset.phEn;
+        if (next) el.placeholder = next;
+      });
+      root.querySelectorAll<HTMLElement>("[data-lang-btn]").forEach((btn) => {
+        btn.setAttribute(
+          "aria-pressed",
+          String(btn.dataset.langBtn === state.lang),
+        );
+      });
+      updateCount();
+      updatePicks();
+    }
+
+    root.querySelectorAll<HTMLElement>("[data-lang-btn]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.lang = btn.dataset.langBtn === "de" ? "de" : "en";
+        try {
+          localStorage.setItem("tamarin-lang", state.lang);
+        } catch {}
+        applyLang();
+      });
+    });
+
+    /* ---- filters ---- */
+    function visibleRows() {
+      return rows.filter((row) => !row.hidden);
+    }
+
+    function updateCount() {
+      if (!count) return;
+      const n = visibleRows().length;
+      count.textContent = t(
+        `${n} of ${rows.length} shown`,
+        `${n} von ${rows.length} sichtbar`,
+      );
+    }
+
+    function applyFilters() {
+      const term = (search?.value ?? "").trim().toLowerCase();
+      const carOnly = noCar?.checked ?? false;
+
+      rows.forEach((row) => {
+        const hours = Number(row.dataset.hours ?? "0");
+        const okCategory =
+          state.category === "all" || row.dataset.category === state.category;
+        const okDuration =
+          state.duration === "all" ||
+          (state.duration === "short" && hours < 3) ||
+          (state.duration === "half" && hours >= 3 && hours <= 5) ||
+          (state.duration === "full" && hours > 5);
+        const okCar = !carOnly || row.dataset.car === "no";
+        const okTerm = !term || (row.dataset.search ?? "").includes(term);
+        row.hidden = !(okCategory && okDuration && okCar && okTerm);
+      });
+
+      if (empty) empty.hidden = visibleRows().length > 0;
+      updateCount();
+    }
+
+    root.querySelectorAll<HTMLElement>("[data-filter]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const group = btn.dataset.filter as "category" | "duration";
+        const value = btn.dataset.value ?? "all";
+        state[group] = value;
+        root
+          .querySelectorAll<HTMLElement>(`[data-filter="${group}"]`)
+          .forEach((sibling) => {
+            sibling.setAttribute(
+              "aria-pressed",
+              String(sibling.dataset.value === value),
+            );
+          });
+        applyFilters();
+      });
+    });
+
+    search?.addEventListener("input", applyFilters);
+    noCar?.addEventListener("change", applyFilters);
+
+    /* ---- map ---- */
+    function showOnMap(row: HTMLTableRowElement) {
+      const query = row.dataset.map;
+      if (!query || !mapFrame) return;
+      mapFrame.src = `https://maps.google.com/maps?hl=en&z=13&output=embed&q=${encodeURIComponent(query)}`;
+      rows.forEach((r) => r.setAttribute("aria-selected", String(r === row)));
+      const name = row.querySelector("td:nth-child(2) span")?.textContent ?? "";
+      if (mapCaption) {
+        mapCaption.textContent = t(`Showing ${name}.`, `Zeigt ${name}.`);
+        mapCaption.dataset.en = `Showing ${name}.`;
+        mapCaption.dataset.de = `Zeigt ${name}.`;
+      }
+    }
+
+    rows.forEach((row) => {
+      row.addEventListener("click", (event) => {
+        const target = event.target as HTMLElement;
+        if (target.closest("a") || target.closest("input")) return;
+        showOnMap(row);
+      });
+    });
+
+    /* ---- picks ---- */
+    function picked(): string[] {
+      return Array.from(
+        root.querySelectorAll<HTMLInputElement>("[data-pick]:checked"),
+      ).map((box) => box.dataset.pick ?? "");
+    }
+
+    function updatePicks() {
+      if (!picksLabel) return;
+      const n = picked().length;
+      picksLabel.textContent = n
+        ? t(`${n} must-do picked`, `${n} Pflichtpunkte gewählt`)
+        : t("Nothing picked yet", "Noch nichts gewählt");
+    }
+
+    root
+      .querySelectorAll<HTMLInputElement>("[data-pick]")
+      .forEach((box) => box.addEventListener("change", updatePicks));
+
+    /* ---- planner ---- */
+    function esc(value: string): string {
+      const div = document.createElement("div");
+      div.textContent = value;
+      return div.innerHTML;
+    }
+
+    function renderPlan(plan: PlanResponse) {
+      if (!output) return;
+      const slots: Array<[keyof PlanDay, string, string]> = [
+        ["morning", "Morning", "Vormittag"],
+        ["afternoon", "Afternoon", "Nachmittag"],
+        ["evening", "Evening", "Abend"],
+        ["logistics", "Logistics", "Logistik"],
+      ];
+
+      output.innerHTML = `
+        <div class="border border-ink bg-paper p-5">
+          <h4 class="font-display text-xl text-ink m-0">${esc(plan.title)}</h4>
+          <p class="text-ink-soft text-[0.95rem] mt-2 mb-5">${esc(plan.summary)}</p>
+          <ol class="list-none p-0 m-0 grid gap-4">
+            ${plan.days
+              .map(
+                (day) => `
+              <li class="border-l-2 border-terracotta pl-4">
+                <p class="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-terracotta-strong m-0">${esc(day.title)}</p>
+                <dl class="m-0 mt-2 grid gap-1.5">
+                  ${slots
+                    .filter(([key]) => day[key])
+                    .map(
+                      ([key, en, de]) => `
+                    <div class="grid sm:grid-cols-[7rem_1fr] gap-x-3">
+                      <dt class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted pt-1">${t(en, de)}</dt>
+                      <dd class="m-0 text-ink-soft text-[0.95rem]">${esc(String(day[key]))}</dd>
+                    </div>`,
+                    )
+                    .join("")}
+                </dl>
+              </li>`,
+              )
+              .join("")}
+          </ol>
+          <p class="mt-5 mb-0 border-t border-rule pt-4 text-ink text-[0.95rem]"><span class="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted">${t("Budget", "Budget")}</span><br />${esc(plan.budget)}</p>
+          ${
+            plan.watchOuts.length
+              ? `<ul class="mt-4 mb-0 pl-5 text-ink-soft text-[0.92rem] list-disc">${plan.watchOuts
+                  .map((w) => `<li>${esc(w)}</li>`)
+                  .join("")}</ul>`
+              : ""
+          }
+        </div>`;
+    }
+
+    function renderStatus(message: string) {
+      if (!output) return;
+      output.innerHTML = `<p class="border border-rule bg-paper px-4 py-3 text-ink-soft m-0">${esc(message)}</p>`;
+    }
+
+    planBtn?.addEventListener("click", async () => {
+      const days = Number(
+        root.querySelector<HTMLSelectElement>("#plan-days")?.value ?? "4",
+      );
+      const party =
+        root.querySelector<HTMLSelectElement>("#plan-party")?.value ?? "";
+      const pace =
+        root.querySelector<HTMLSelectElement>("#plan-pace")?.value ?? "";
+      const notes =
+        root.querySelector<HTMLInputElement>("#plan-notes")?.value ?? "";
+
+      planBtn.disabled = true;
+      renderStatus(
+        t(
+          "Working on it. This takes about fifteen seconds.",
+          "Wird gebaut. Das dauert etwa fünfzehn Sekunden.",
+        ),
+      );
+
+      try {
+        const res = await fetch("/api/tamarin-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            days,
+            lang: state.lang,
+            party,
+            pace,
+            notes,
+            mustDo: picked(),
+          }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        renderPlan((await res.json()) as PlanResponse);
+      } catch {
+        renderStatus(
+          t(
+            "The planner did not answer. Try again in a moment.",
+            "Der Planer hat nicht geantwortet. Gleich noch einmal versuchen.",
+          ),
+        );
+      } finally {
+        planBtn.disabled = false;
+      }
+    });
+
+    /* ---- boot ---- */
+    try {
+      const saved = localStorage.getItem("tamarin-lang");
+      if (saved === "de" || saved === "en") state.lang = saved;
+    } catch {}
+    applyLang();
+    applyFilters();
+  }
+</script>
