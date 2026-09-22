@@ -1,0 +1,140 @@
+---
+title: "Trunk and Trains"
+date: "2026-09-22"
+slug: "trunk-and-trains"
+summary: "A branching model for 300 engineers and their agents: one green trunk you can demo from, release branches on a two-month timetable, and never a twin PR again."
+coverImage: "/images/posts/branching-after-git-flow-cover.svg"
+tags:
+  - engineering
+  - git
+  - ai
+  - agents
+  - leadership
+---
+
+The shape is always the same. A bug turns up in the release branch two weeks before the train leaves. Someone opens a PR into `release/2026.09`, because that's what ships, and a second PR with the same diff into `develop`, because that's where everyone else is working. The first one gets reviewed, merged and deployed to staging within the hour. The second one waits a week, picks up a conflict with a feature branch, and gets closed by whoever is tidying stale PRs on Friday. The next train leaves with the bug back in it. Nobody broke a rule. The rule was the bug.
+
+This is about a team of a few hundred engineers, plus their agents, all pushing to one codebase, shipping on a two-month train, and needing a development branch that's stable enough to demo from on any given afternoon. That's a real set of constraints and git-flow was never the answer to it. Something close to what Chromium and Kubernetes do is.
+
+## Where the second merge came from
+
+Subversion started in 2000 and made a branch a cheap copy. Merging stayed expensive. Until [version 1.5 in 2008](https://subversion.apache.org/docs/release-notes/1.5.html), SVN kept no record of what had already been merged, so you tracked it by hand in commit messages and hoped you didn't apply the same change twice. Teams responded rationally: they branched rarely, merged with dread, and did most of the work on trunk. Google ran its whole codebase on one Perforce server for over a decade with the same instinct. One mainline, everyone on it.
+
+Git arrived in 2005 and made branches free. GitHub arrived in 2008 and made the pull request the unit of work; Chris Wanstrath [announced it](https://github.blog/news-insights/the-library/oh-yeah-there-s-pull-requests-now/) that February, before the site was public. Suddenly a branch per feature cost nothing, and every branch needed a ceremony to get back home.
+
+Vincent Driessen's [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/), January 2010, gave that ceremony a name. Git-flow: `master` for what's in production, `develop` for what's coming, feature branches off develop, release branches off develop, hotfix branches off master. Every release and every hotfix merges twice, into master and back into develop. It made complete sense for the software Driessen was writing, which shipped in numbered versions to customers who might sit on an old one for years.
+
+Ten years later he added a note to the top of the post. Web apps aren't that class of software. They're delivered continuously and rolled forward, not back, and he points those teams at GitHub flow instead.
+
+<Quote author="Vincent Driessen, 2020 note on the git-flow post">
+Panaceas don't exist. Consider your own context.
+</Quote>
+
+The reference implementation was [archived in October 2025](https://github.com/nvie/gitflow/issues/6470). Atlassian's own tutorial now files git-flow under [legacy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). And plenty of companies founded before 2018 still run some version of it, usually with a release branch that stays open for most of the cycle and a `develop` branch that only stays green by accident.
+
+## Why twin PRs are worse than they look
+
+The double merge is where git-flow quietly breaks. Everything else is a symptom.
+
+A twin PR is two originals. The same fix gets reviewed twice, by different people, against two different bases, sometimes weeks apart, and nothing in git links them. They can produce different trees. CI tested each of them, and neither run tells you anything about the combination, because the release branch never merges back cleanly and `develop` has moved on. Fowler's [Branching Patterns](https://martinfowler.com/articles/branching-patterns.html) names the failure: it's too easy to neglect copying a fix over to the mainline, and it gets harder the further the branches drift. GitLab's tracker has a [long-standing request](https://gitlab.com/gitlab-org/gitlab/-/issues/276698) to automate the double merge, with a workaround involving a third branch and switching protections off. When a workflow needs tooling to remember its own steps, the workflow is wrong.
+
+The second merge is the one nobody gets paged about, so it's the one that gets forgotten. Then the release branch that was cut for a two-week stabilisation stays open for the whole cycle, because QA signs off there and only there, so that's where fixes go first, and someone forward-ports them later, or doesn't. Two months in, the release branch and `develop` are two products. Adam Ruka [pointed out in 2015](https://www.endoflineblog.com/gitflow-considered-harmful) the other redundancy: if every commit on master is a merge from a release branch, master carries no information the tags don't. Three branches, one of which is real.
+
+The projects that ship versioned software on a schedule solved this a long time ago, and none of them use twin PRs. The [Linux stable trees](https://docs.kernel.org/process/stable-kernel-rules.html) only accept a fix once it already exists in mainline, and it has to be small and obviously correct. [Chromium](https://chromium.googlesource.com/chromium/src.git/+/main/docs/process/merge_request.md) is main-first: fixes land on main, and a release manager reviews every request to merge one into a release branch within two business days, with criteria that tighten from beta to stable. [Kubernetes](https://github.com/kubernetes/community/blob/main/contributors/devel/sig-release/cherry-picks.md) fixes on master and opens one cherry-pick PR per supported branch, approved by the release team. The pattern is the same in all three: one canonical change on the trunk, and the backport is a mechanical copy with provenance, not a second piece of work. That's your situation. You ship versions on a timetable. Copy their rules.
+
+## One trunk, trains every two months
+
+Here's the model. It's [scaled trunk-based development](https://trunkbaseddevelopment.com/branch-for-release/) with a fixed timetable, and it's what a 300-engineer shop should be running whether or not agents are in the mix.
+
+```
+main      ●──●──●──●──●──●──●──●──●──●──▶  always green
+             │                    │
+             └ release/2026.09 ●──●──▶ v2026.09.0 (prod)
+               cherry-picks only  └ release/2026.11 ●──▶
+feature/x ●──●──┐  two days, rebased on main, merge queue
+agent/y   ●──┘
+```
+
+There is one long-lived branch and it's `main`. It is the stable development branch you asked for, with one change: it's held to release standard, not "mostly works." Every commit passes the full pre-merge suite. Every merge redeploys it to an integration environment that product, sales and QA can open at any time. When someone says "let's see where the new checkout is," the answer is a URL, not a branch name. Fowler calls this a [release-ready mainline](https://martinfowler.com/articles/branching-patterns.html), and his point is that it doesn't require releasing every commit. It requires that you could.
+
+Feature branches come off `main` and go back within days. You rebase your private branch onto `main` every morning, so conflicts arrive one at a time while they're small, and you never force-push a branch someone else has checked out. You don't merge to `main` yourself. The merge queue does it, on top of whatever landed while you were reviewing, so the thing that gets tested is the thing that ships. Anything that takes longer than a train to build gets merged dark behind a [flag](https://martinfowler.com/articles/feature-toggles.html), or split into a stack of small PRs, or done as a [branch by abstraction](https://martinfowler.com/bliki/BranchByAbstraction.html). Schema changes go through [expand and contract](https://martinfowler.com/bliki/ParallelChange.html). The six-week feature branch that rebases weekly and merges in one 4,000-line PR is the thing this model exists to eliminate, because that PR is the one nobody can review and the one most likely to be wrong.
+
+Release branches are cut from `main` on a fixed date, two weeks before the train leaves, and named for the train: `release/2026.11`. From that moment the branch only accepts cherry-picks of commits already on `main`. You label the original PR, a bot opens the cherry-pick with `-x` so the commit records where it came from, and the release manager approves it against one question: does this need to ride this train, or can it wait eight weeks? The bar goes up as the date approaches. Ship, tag, and the branch goes quiet. It gets hotfix cherry-picks until the next train ships, and then it's dead. Two release branches exist at any time, never three.
+
+The hotfix path is the same path. A bug in production gets fixed on `main` first, always, with the only PR anyone reviews. The bot backports it to the live release branch, the release manager approves, it deploys. The one exception is a fix that genuinely can't apply to `main` because the code has moved. Then you fix on the release branch, open a forward-port issue the same hour, and count it, because every one of those is a measure of how far `main` and the release branch have drifted, and the number should be near zero.
+
+Environments follow the branches. Every PR gets a preview environment on open and loses it on merge. `main` deploys continuously to the integration environment. The release branch deploys to staging and then production. There's no long-lived staging server fed by hand, because a staging server that people push to is a branch with worse tooling.
+
+If you currently have a `master` that only ever receives merges from release branches, retire it. Tags on the release branches carry that information. If your stable branch is called `develop` and there's nothing above it, keep the name if you like. What matters is that there's exactly one of it.
+
+Two months between trains is fine. Chrome shipped every six weeks for a decade, went to four in 2021, and [moved to two weeks](https://developer.chrome.com/blog/chrome-two-week-release) this month, with the team [citing](https://developer.chrome.com/blog/chrome-two-week-start) the volume of patches coming out of automated AI discovery tools. Firefox started a [two-week experiment](https://groups.google.com/a/mozilla.org/g/dev-platform/c/qlaQ1YSlOP8) on the first of September. Both are drifting shorter, but both ran for years on the rule that matters more than the interval: the train leaves on time, and a feature that isn't ready rides the next one. The interval is a business decision. The stabilisation window isn't. If it takes six weeks to get a release branch shippable, that's `main` telling you it wasn't release-ready when you cut.
+
+## What 300 engineers and their agents do to this
+
+The model above has been standard at large shops for years. What's changed is the load on it.
+
+By April 2026 Sundar Pichai was [saying](https://www.semafor.com/article/04/24/2026/google-ceo-says-75-of-companys-new-code-is-ai-generated) three quarters of Google's new code is AI-generated and then approved by an engineer. Anthropic's [own retrospective](https://www.anthropic.com/institute/recursive-self-improvement) puts Claude's share of merged code at 80%, with eight times the lines merged per engineer per day compared with 2024. Uber [reports](https://www.uber.com/us/en/blog/efficient-software-factory/) over 70% of PRs attributed to agents. Across GitHub, merged PRs went from about 25 million a month in early 2023 to [about 90 million a month](https://github.blog/open-source/maintainers/how-pull-request-limits-are-cutting-down-the-noise/) by mid-2026. Three hundred engineers merging twice a day is six hundred PRs. Multiply by what those numbers imply and the trunk is taking a few thousand a day.
+
+The pull request was designed for one human to explain a change to another. Point a few thousand agents at it and every seam shows. LinearB's [benchmark](https://linearb.io/blog/8-million-prs-engineering-productivity) of 8 million PRs found AI-authored ones wait over sixteen hours for a first review, against about three hours for human ones, and merge at 33% instead of 85%. A [study](https://arxiv.org/abs/2605.02273) of 33,000 agent PRs found 61% never got a human review at all. When different agents work the same repo concurrently, [42% of PR pairs](https://arxiv.org/abs/2607.04697) conflict. Anthropic's CI job count [grew 25 times](https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic) in six months while headcount barely moved, and their test-selection service fell over three times before they rebuilt it.
+
+So the scale version of the model adds machinery, not branches.
+
+A merge queue with batching, because at that volume nobody can be allowed to merge to `main` directly. Uber built [SubmitQueue](https://blog.acolyer.org/2019/04/18/keeping-master-green-at-scale/) after measuring that its iOS mainline was green only 52% of the time. The queue takes PRs in order, builds them speculatively on top of each other, and lands a batch only if the batch passes; on failure it bisects and ejects the culprit. Shopify ran [batches of eight](https://shopify.engineering/successfully-merging-work-1000-developers) at 400 commits a day with direct merges disabled by branch protection. GitHub's own engineers run [2,500 PRs a month](https://github.blog/engineering/how-github-uses-merge-queue-to-ship-hundreds-of-changes-every-day/) through theirs. GitHub's built-in queue is enough until you're doing many hundreds a day, at which point the [single queue and the lack of bisection](https://trunk.io/blog/outgrowing-github-merge-queue) start to hurt and you look at Trunk, Aviator or Graphite.
+
+Affected-target testing, because the full suite on every PR at a few thousand PRs a day is the CI bill that ends the programme. Google's TAP runs presubmit on [over 50,000 changes a day](https://abseil.io/resources/swe-book/html/ch23.html) by testing only what a change can reach through the dependency graph. Bazel, Nx and Turborepo give you the same graph at smaller scale. Flake quarantine sits next to it, because a queue that ejects a PR for someone else's flaky test is a queue people learn to bypass.
+
+Ownership in the repo. CODEOWNERS on every directory, so a PR that touches billing gets the billing owner as a required reviewer, and everything else can go to whoever picks it up. A release manager on rotation, with the authority to say no to a cherry-pick. A merge captain for the week who watches the queue and the flake board. At 300 people these can't be "someone senior" any more; they're names on a schedule.
+
+Policy before review. The PR carries the metadata that decides who looks at it: lines changed, paths touched, whether tests were removed, whether a migration or an auth module is involved. Intercom [says](https://www.intercom.com/blog/ai-is-approving-our-pull-requests-heres-how-we-made-it-safe/) 93% of its PRs are agent-driven, 19% merge with no human at all, and the AI-authored backend changes get reverted less often than the human ones. Ona [auto-approves](https://ona.com/stories/auto-approving-low-risk-prs) anything under a thousand lines that doesn't touch migrations, infrastructure, auth or protobufs, and keeps a human on the merge button for the auditors. You don't have to like those thresholds to see the shape. Humans review by exception, and the exceptions are written down in a file.
+
+Agent branches are ordinary branches with a prefix and a policy. One task, one branch, `agent/` or `copilot/` in the name, opened as a draft PR, CI held until a human approves the run, and gone when merged. The agent doesn't get merge rights. It gets the same queue as everyone else and a size cap that will annoy it. Google's guidance is that [around 100 lines](https://google.github.io/eng-practices/review/developer/small-cls.html) is a reasonable change and 1,000 is too large; one recent [measurement](https://brodzinski.com/2026/07/3x-pull-request-size-ai.html) of an AI-heavy project saw the median PR triple from 66 to 210 lines. Stacked PRs are how an agent that did real work gets it reviewed, since a chain of five dependent changes as one diff is the 200,000-line PR from [The Person Looking for the Lie](/blog/red-teaming-the-agent). Meta open-sourced [Sapling](https://engineering.fb.com/2022/11/15/open-source/sapling-source-control-scalable/) for this in 2022. GitHub finally shipped [native stacks](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview/) in public preview this July, with the queue keeping a stack together.
+
+Even the commit is being questioned. [Jujutsu](https://github.com/jj-vcs/jj), which Martin von Zweigbergk started at Google and [left this month](https://ersc.io/blog/martin-joins-ersc) to build a hosting company around, treats the working copy as a commit and keeps conflicts in the graph instead of stopping you, and Zed's [DeltaDB](https://zed.dev/blog/introducing-deltadb) ties every edit to the conversation that produced it. Neither changes the model above. They change how cheap it is to keep a branch rebased.
+
+## The forge is where the knowledge goes
+
+For twenty years the answer to "why does this code exist" was the commit message, maybe the PR description, and otherwise a person. When 80% of the code is written by an agent in a session that's closed and gone, the person doesn't know either. The diff was never the knowledge. Now nobody has it.
+
+That's the gap the new GitHub alternatives are built around, and the one to watch is [Entire](https://entire.io/). Thomas Dohmke, who ran GitHub until 2025, [announced it](https://entire.io/blog/hello-entire-world) in February 2026 with a $60 million seed round. Its first product, Checkpoints, is an [open-source CLI](https://github.com/entireio/cli) that hooks git and stores every agent session, the prompt, the transcript, the tool calls, the files touched, as refs inside the repository, next to the commit but never on your working branch. An append-only log of the reasoning behind each change, portable across Claude Code, Codex, Copilot, Cursor and the rest. Dohmke's pitch is that the diff is half the record and the reasoning that produced it is the other half. I argued the same in [Remedies for the Slop](/blog/remedies-for-the-slop), and it's cheaper to start capturing now than to reconstruct later.
+
+Cursor's [Origin](https://www.infoq.com/news/2026/08/cursor-origin-alternative-github/), which went into beta in August on the same day GitHub was down for nearly eight hours, is the other shape of the bet: a full forge with stacked PRs and an agent-aware merge queue, syncing both ways with GitHub so GitHub stays the system of record. Cursor had bought Graphite eight months earlier, so the queue and the stacks came with the deal. GitLab's [Orbit](https://ir.gitlab.com/news/news-details/2026/GitLab-Announces-New-Capabilities-to-Give-Enterprises-Speed-and-Control-at-Agentic-Scale/default.aspx) builds a context graph across code, issues, pipelines and production signals so an agent can ask the platform instead of re-reading the repo. Scott Chacon's [GitButler](https://blog.gitbutler.com/series-a), which just raised a Series A, is organised around his line that generating change was never the hard problem; organising, reviewing and integrating it is.
+
+GitHub's answer has been to let you write the knowledge down by hand and feed it to the agent: AGENTS.md, organisation-wide instruction files, [Copilot Memory](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/) that expires after 28 days, Copilot Spaces, and an [Agent HQ](https://github.blog/news-insights/company-news/welcome-home-agents/) dashboard where agents from five vendors report in. It works. It's also the wiki again, and we know how wikis go.
+
+Notice what none of these capture: ownership and architecture. Those still live in CODEOWNERS and in catalogues derived from the code itself, the way [encore.dev](https://encore.dev/docs/platform/observability/encore-flow) redraws its service graph from the application model on every deploy. The knowledge the new forges store is the agent's reasoning. Who is accountable for the change is still a human problem, and I'd argue it's the bigger one.
+
+My position: don't switch forges this year. Do start writing agent sessions into the repo, because the format is a git ref and it travels. And read every one of these products as a signal about what your own process can't answer. If the market is building "why did this change happen" as a feature, it's because your repo can't tell you.
+
+## The steps
+
+This is the order I'd do it in for a team on git-flow with a two-month train. Each step is safe on its own. Stop wherever the pain stops.
+
+1. Measure the damage first. Run `git log --oneline release/current..develop` and the reverse, and count the commits that exist on only one side. Find the fixes that were opened as twin PRs and check how many second halves merged. Write down how long the last three release branches stayed open. This is the number you'll use to justify the rest.
+
+2. Make the trunk release-ready. Required CI on every PR, branch protection, no direct pushes, and a merge queue, which on GitHub is a checkbox. Deploy the trunk to an integration environment on every merge. If it can't be deployed today, fixing that is step two, not step nine.
+
+3. Collapse to one long-lived branch. If `master` only receives merges from release branches, retire it and let tags do the job. Rename `develop` to `main` if that helps people believe it's real. Retarget every open PR.
+
+4. Ban twin PRs and automate the backport. The rule is trunk-first: the only reviewed PR is the one to `main`. A label triggers a bot that opens the cherry-pick to the release branch with `-x`. The release manager approves it against the train's criteria, not for code quality, because that review already happened. Kubernetes and Chromium both publish their criteria; copy one.
+
+5. Shorten the stabilisation window. Cut the release branch two weeks before the train, not eight. Tighten the cherry-pick bar each week. The train leaves on the date. What isn't ready rides the next one, and since flags decouple shipping from launching, that costs less than it used to.
+
+6. Put anything longer than a train behind a flag. One flag per seam, removed when it hits 100%. Expand and contract for every schema change. Branch by abstraction for the rewrite you were going to do on a six-month branch.
+
+7. Set size and path rules and enforce them in the repo, not in review culture. Around 100 lines is reasonable and 1,000 is too large. Changes to migrations, auth, billing and infrastructure need a named human from CODEOWNERS. Everything else is reviewed by exception. Agents get the same rules, a branch prefix, and no merge rights.
+
+8. Make every other environment ephemeral. One preview environment per PR, created on open, destroyed on merge. This kills the last argument for a hand-fed staging branch, which was always that QA needs somewhere to test.
+
+9. Put names on the roles. A release manager per train, a merge captain per week, an owner per directory. Write the rotation down where the on-call rotation lives.
+
+10. Cut CI cost before it cuts you. Affected-target testing through the build graph, flake quarantine with an owner, and a budget you look at monthly. The volume is going to go up faster than the team.
+
+11. Capture the reasoning. AGENTS.md in the repo, PR descriptions that link to the intent, and agent session checkpoints stored as refs. When the page comes at 3am, the diff tells you what changed. Only the transcript tells you why.
+
+12. Change what you measure. Revert rate per train, days the release branch was open, forward-ports per train, time from open to merge, and the share of merged code someone on the team can explain. PR count goes up on its own now. That isn't news.
+
+The last holdout is always the same. Someone senior says the double merge has never actually bitten them. Run the query from step one and show them the fixes that only exist on one side. It has.
+
+---
+
+*Want to chat?* [X](https://x.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
