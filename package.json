@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "vercel deploy",
-    "check": "biome check .",
+    "check": "biome check . && node scripts/check-cover-images.mjs",
+    "check:covers": "node scripts/check-cover-images.mjs",
     "format": "biome format --write .",
     "thumbs": "node scripts/make-board-thumbs.mjs"
   },
