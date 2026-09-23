@@ -1,72 +1,85 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for coding agents (Claude Code, Codex, etc.) working in this repository. `AGENTS.md` is a symlink to this file.
 
 ## Project Overview
 
-Andras Hejj's personal blog. Astro 5 + MDX, content collections, deployed static to Vercel.
+Andras Hejj's personal blog (www.andrashejj.com). Astro 7 + MDX, content collections, deployed to Vercel. Output is `static`; the only on-demand routes are the `src/pages/api/*` endpoints (`export const prerender = false`), which run as Vercel functions.
 
 Content lives in:
 
-- `content/posts/*.mdx` — blog posts (loaded via `src/content.config.ts`)
-- `content/pages/*.mdx` — static pages
+- `content/posts/*.mdx` — blog posts (files starting with `_`, e.g. `_template.mdx`, are ignored)
+- `content/pages/*.mdx` — static pages (`about.mdx`)
+
+Other reference docs: `design.md` (visual system), `style.md` (writing voice), `docs/writing-posts.md` (frontmatter, drafts, images).
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start Astro dev server |
+| `pnpm dev` | Start Astro dev server (port 4321) |
 | `pnpm build` | Production build |
 | `pnpm preview` | Preview the built site |
-| `pnpm check` | Biome lint/format check |
+| `pnpm check` | Biome lint/format check + cover-image check |
+| `pnpm check:covers` | Fail if a post's `coverImage` is missing or shared with another post |
 | `pnpm format` | Biome format-write |
+| `pnpm thumbs` | Regenerate board-project WebP thumbnails (output is committed) |
 | `pnpm deploy` | `vercel deploy` |
+
+One-off scripts in `scripts/`: `generate-og-background.mjs` / `generate-og-avatar.mjs` (rebake `public/og-templates/*.png`), `generate-pdf.mjs` (Puppeteer PDF of the Noah worksheet).
+
+## Environment
+
+- `GEMINI_API_KEY` — required by the `/api/*` generators (`src/lib/gemini.ts`)
+- `GEMINI_SURF_MODEL` — optional model override for `generate-surf-exercises`
 
 ## Architecture
 
 ### Routes (`src/pages/`)
 
 - `index.astro` — homepage
-- `blog/index.astro` — blog index
+- `blog/index.astro` — archive (grouped/filterable by `series`)
 - `blog/[slug].astro` — canonical post page
-- `blog/[year]/[month]/[slug].ts` — dated URL redirect/handler
+- `blog/[year]/[month]/[slug].ts` — 301 from legacy dated URLs to `/blog/[slug]` (also mirrored in `vercel.json` redirects)
 - `about.astro`, `subscribe.astro`, `404.astro`
-- `feed.ts`, `rss.xml.ts`, `sitemap.xml.ts`
-- `og/[...route].ts` — OG image generation (`astro-og-canvas`)
-- `api/*.ts` — server endpoints (Gemini-powered exercise/sketch/word generators for the Noah and surf-coaching worksheets)
+- `rss.xml.ts`; `feed.ts` redirects to `/rss.xml`
+- `sitemap.xml.ts` plus `@astrojs/sitemap` (`sitemap-index.xml`); `vercel.json` redirects `/sitemap.xml` to the index
+- `og/[...route].ts` — OG images, rendered with CanvasKit by `src/lib/og.ts` on top of `public/og-templates/paper.png`
+- `api/*.ts` — Gemini-powered endpoints: `generate-{challenges,math-exercises,physical-exercises,sketches,words}` (Noah worksheet), `generate-surf-exercises` (surf coaching), `tamarin-plan` (Tamarin day-trip planner)
 
 ### Content pipeline
 
-- `src/content.config.ts` — Astro content collections (`posts`, `pages`) with Zod frontmatter schema
+- `src/content.config.ts` — collections (`posts`, `pages`) via `glob` loader. Post frontmatter: required `title`, `date` (`YYYY-MM-DD`), `slug`, `summary`, `coverImage`; optional `draft`, `wide`, `tags`, `series`, `updated`, `readingTime`, `canonicalUrl`
 - `src/lib/content.ts` — post helpers (sorting, route metadata)
+- `src/lib/site.ts` — site constants, `seriesRegistry` (valid `series` ids), `staticPages`
 - `src/lib/seo.ts` — SEO metadata helpers
-- `src/lib/site.ts` — site constants
-- `src/lib/gemini.ts` — Gemini client for the AI endpoints
-- `src/lib/{exercise-collection-data,noah-worksheet,noah-worksheet-client,surf-exercises,surf-skills}.ts` — interactive worksheet data
+- `src/lib/og.ts` — custom OG card renderer
+- `src/lib/gemini.ts` — Gemini client for the API endpoints
+- Interactive post data: `exercise-collection-data`, `noah-worksheet{,-client}`, `surf-{exercises,skills}`, `tamarin-{activities,map,map-locations}` (all `src/lib/*.ts`; the Tamarin map uses Leaflet)
 
 ### Layouts & components
 
 - `src/layouts/SiteLayout.astro`
-- `src/components/{PostCard,PostMeta,NoahWorksheet,SurfCoachingPlan,ExerciseCollection}.astro`
-- `src/components/mdx/{Callout,Divider,Highlight,Quote,CTA,ImageFloat,ImageGrid}.astro` — components usable inside MDX posts
+- `src/components/{PostCard,PostMeta}.astro`
+- Interactive embeds: `src/components/{NoahWorksheet,SurfCoachingPlan,ExerciseCollection,TamarinGuide}.astro`
+- `src/components/mdx/{Callout,ClipGrid,CTA,Divider,Highlight,ImageFloat,ImageGrid,Quote}.astro` — components usable inside MDX posts
 
-### Markdown plugins
+### Styling & markdown
 
-- `remark-gfm`
-- `rehype-slug`
-- `rehype-autolink-headings` (append behaviour)
+- Tailwind CSS v4 via `@tailwindcss/vite`; theme tokens live in `@theme` in `src/styles/global.css` (not `tailwind.config.mjs`)
+- Markdown: `remark-gfm`, `rehype-slug`, `rehype-autolink-headings` (append)
 
 ## Tech Stack
 
-- Framework: Astro 5
-- Content: MDX via `@astrojs/mdx`
-- Styling: Tailwind CSS v4 (`@tailwindcss/vite`)
-- AI: `@google/genai` (Gemini) for the worksheet endpoints
+- Framework: Astro 7 (`@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/vercel` with Web Analytics)
+- Styling: Tailwind CSS v4 + `@tailwindcss/typography`
+- AI: `@google/genai` (Gemini)
+- Lint/format: Biome
 - Package manager: pnpm
-- Deployment: Vercel (`@astrojs/vercel`, static output)
+- Deployment: Vercel
 
 <writing_voice>
-This applies to all blog post prose in `content/posts/*.mdx` and `content/pages/*.mdx`.
+This applies to all blog post prose in `content/posts/*.mdx` and `content/pages/*.mdx`. The long-form voice guide (scene-first structure, review pass, endings) is `style.md`; frontmatter and image conventions are in `docs/writing-posts.md`.
 
 ## Voice
 
@@ -120,21 +133,7 @@ These mimic insight without providing any.
 </writing_voice>
 
 <frontend_aesthetics>
-You tend to converge toward generic, "on distribution" outputs. In frontend design, this creates what users call the "AI slop" aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight. Focus on:
+The site has an established look, documented in `design.md`: vintage atlas / letterpress ledger, warm paper background, ink type, terracotta as the single accent, Fraunces/Newsreader/JetBrains Mono. New pages and interactive embeds should extend that system, not introduce a new one. Palette tokens are CSS variables in `src/styles/global.css`.
 
-Typography: Choose fonts that are beautiful, unique, and interesting. Avoid generic fonts like Arial and Inter; opt instead for distinctive choices that elevate the frontend's aesthetics.
-
-Color & Theme: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Draw from IDE themes and cultural aesthetics for inspiration.
-
-Motion: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions.
-
-Backgrounds: Create atmosphere and depth rather than defaulting to solid colors. Layer CSS gradients, use geometric patterns, or add contextual effects that match the overall aesthetic.
-
-Avoid generic AI-generated aesthetics:
-- Overused font families (Inter, Roboto, Arial, system fonts)
-- Clichéd color schemes (particularly purple gradients on white backgrounds)
-- Predictable layouts and component patterns
-- Cookie-cutter design that lacks context-specific character
-
-Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics. You still tend to converge on common choices (Space Grotesk, for example) across generations. Avoid this: it is critical that you think outside the box!
+Within that system, avoid generic "AI slop": no Inter/Roboto/system-font defaults, no purple gradients, no soft-shadow card grids, no scattered hover sparkle. Prefer one orchestrated load reveal and CSS-only motion. Read "Adding something new" in `design.md` before building a new component.
 </frontend_aesthetics>
