@@ -1,0 +1,40 @@
+---
+title: "A Hundred Agents and One Quiet Morning"
+date: "2026-09-23"
+slug: "puzzle-pieces-falling-into-place"
+summary: "Years of collecting pieces, illio, Jev, Neo4j, Perigon, X. Then a hundred agents turning them into a mess. Then the morning it all hums and nobody has found the bug yet."
+coverImage: "https://images.unsplash.com/photo-1605712916066-e143c317df72?auto=format&fit=crop&fm=jpg&q=80&w=1600&h=900"
+draft: false
+tags:
+  - engineering
+  - ai
+  - agents
+  - motif
+  - startup
+---
+
+I want to write this down before the next bug ruins it.
+
+For years it was pieces. Not a plan, pieces. You sit with the illio guys and they walk you through the quant engine, risk, drawdown, income, backtests, an explainer for every position, and you nod and think: that's a piece. You get on a call with typesafe.ai about Jev, a judge model that hands you a calibrated number instead of a paragraph of vibes, and you think: piece. Neo4j. Ontology. Taxonomy. What's the difference between the two and why are we arguing about it at 11pm again. Perigon and the news firehose. RSS. Research PDFs someone forwards you. X, which is the worst source and the best source at the same time. Years of reading, talking, exploring, building a bit, throwing it away, building it again.
+
+Then one day you stop collecting and start building for real. And it's a huuuge mess.
+
+Let me be specific, because "mess" sounds cosy. Five engineers. Each one running something like twenty agents. A hundred agents at full speed on one repo. Every morning the same question: is this slop or is this awesome? Usually both, in the same PR. Claude is the fifth most prolific committer in our git log, 614 commits under its own name, and that's only the ones it signed. We adopted Mastra and ripped it out. We wrote the graph into Postgres, moved it to DuckDB with parquet files on Tigris, and last week Neo4j showed up in the docker-compose, because of course it did. We built a voice agent and retired it. A stored prompt config silently shadowed every prompt edit for who knows how long, so a lot of careful prompt work changed exactly nothing, and nobody noticed because nothing errored. Two services registered under the same Inngest app id and news ingestion just stopped, quietly, like a fridge. Seven thousand commits of that. Wtf, some mornings.
+
+And then, over the last few weeks, click. Click. Click.
+
+Perigon pulls news every hour. X streams the accounts we track. The PDFs get uploaded. Every article gets torn into entities, dated claims and edges, and every edge carries one of eleven categories, causal, supply chain, ownership, regulation, market event and so on. That's the ontology. It sounds like a whiteboard word until you watch a rate decision run along it into bank margins. Every small judgment on the way, is this the same company, does the article actually say this, does this touch the Hormuz thesis, goes to Jev at four cents per million tokens instead of a general-purpose model writing an essay about it. illio's numbers sit behind a tool, so an agent that never asks a risk question never pays for risk numbers. Ten desks, CIO, macro, sector, equity, portfolio, risk, advisor, research, QA, private markets, run on one kernel, post to one board, and the lead writes the answer. When causal-chain expansion finally landed in retrieval, the analyst eval went from 45 to 89 in one change.
+
+It works. An article costs about a cent to ingest. An answer, a few cents. The one time an answer cost $1.09 was when a profile got routed to a model without cached-input pricing. That was a bug, not the product. We fixed it and wrote it into the repo rules so nobody does it again.
+
+And then the moment. No bugs yet. Nobody's paging. The system is quiet, humming along, producing insights that people actually like. You open a card about a stock you hold and it tells you something you didn't know, and it's right. You sit there for a second and you don't touch anything, because you know how this goes.
+
+Then you show it to people. And you feel it. They get excited. For two years the question in every meeting was "ok, but what can it actually do". Now the question is "how can we afford this".
+
+That's the rush. That's the drug. I'm not going to pretend otherwise.
+
+It won't last. Tomorrow somebody will find the bug. Right now it hums, and I'm going to sit here and listen to it a bit longer.
+
+---
+
+*Want to chat?* [X](https://x.com/andrashejj) / [LinkedIn](https://www.linkedin.com/in/andras-hejj-70a18764/)
