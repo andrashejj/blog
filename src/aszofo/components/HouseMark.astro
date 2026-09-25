@@ -1,0 +1,23 @@
+---
+// The press house drawn as a single line: steep thatch, gable window, door.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox='0 0 32 32'
+  fill='none'
+  stroke='currentColor'
+  stroke-linecap='round'
+  stroke-linejoin='round'
+  aria-hidden='true'
+>
+  <path d='M3.4 16.6 15.9 3.3l12.7 13.1' stroke-width='2.1'></path>
+  <path d='M6.9 13.2v15.6h18.3V13.4' stroke-width='1.15'></path>
+  <path d='M14.6 11.2h2.9v3.4h-2.9z' stroke-width='1.1'></path>
+  <path d='M13.9 28.8v-6.3h4.3v6.3' stroke-width='1.1'></path>
+  <path d='M2.8 28.9h26.6' stroke-width='1' opacity='.55'></path>
+</svg>

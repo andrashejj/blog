@@ -1,0 +1,282 @@
+---
+import BookingWidget from "../../aszofo/components/BookingWidget.astro";
+import Photo from "../../aszofo/components/Photo.astro";
+import Ripples from "../../aszofo/components/Ripples.astro";
+import { BASE_PATH, LANGS, type Lang } from "../../aszofo/config";
+import { destinations, lakeName } from "../../aszofo/content";
+import { dict, fill } from "../../aszofo/i18n";
+import AszofoLayout from "../../aszofo/layouts/AszofoLayout.astro";
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({
+    params: { lang: lang === "en" ? undefined : lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = dict(lang);
+
+const pathFor = (l: Lang) => (l === "en" ? BASE_PATH : `${BASE_PATH}/${l}`);
+const langHrefs = Object.fromEntries(
+  LANGS.map((l) => [l, pathFor(l)]),
+) as Record<Lang, string>;
+
+const rooms = t.house.rooms;
+const alt = t.house.alt;
+const near = destinations.filter((d) => d.minutes <= 40);
+const minutes = (n: number) =>
+  n < 60
+    ? fill(t.around.minutes, { n })
+    : `${Math.floor(n / 60)} h ${n % 60 ? String(n % 60).padStart(2, "0") : ""}`.trim();
+
+const glyphs = [
+  // spring: a five-petal blossom
+  "M17 13.2c-1.4-3.4-.2-6.6 0-6.9.2.3 1.4 3.5 0 6.9Zm0 0c3.2-1.9 6.6-1 6.9-.8-.2.3-2.8 2.5-6.9.8Zm0 0c3.6.9 5 4 5.1 4.3-.3.1-3.7.3-5.1-4.3Zm0 0c.4 3.7-2 6-2.3 6.2-.1-.3-.9-3.6 2.3-6.2Zm0 0c-2.4 2.8-5.8 2.6-6.1 2.5.2-.3 2.4-2.9 6.1-2.5Z M17 13.2v14",
+  // summer: sun over water
+  "M17 7v2M8.5 10.5l1.4 1.4M25.5 10.5l-1.4 1.4M12 18a5 5 0 0 1 10 0M5 22c2 0 2-1.2 4-1.2s2 1.2 4 1.2 2-1.2 4-1.2 2 1.2 4 1.2 2-1.2 4-1.2 2 1.2 4 1.2M8 26.5c1.8 0 1.8-1 3.6-1s1.8 1 3.6 1 1.8-1 3.6-1 1.8 1 3.6 1 1.8-1 3.6-1",
+  // autumn: a bunch of grapes
+  "M17 5.5c0 2 .8 3 2.6 3.6M13 9.5a2.2 2.2 0 1 0 0 .1M17.4 9.8a2.2 2.2 0 1 0 0 .1M21.8 9.5a2.2 2.2 0 1 0 0 .1M15.2 13.6a2.2 2.2 0 1 0 0 .1M19.6 13.6a2.2 2.2 0 1 0 0 .1M17.4 17.6a2.2 2.2 0 1 0 0 .1M13 17.4a2.2 2.2 0 1 0 0 .1M21.8 17.4a2.2 2.2 0 1 0 0 .1M15.2 21.6a2.2 2.2 0 1 0 0 .1M19.6 21.6a2.2 2.2 0 1 0 0 .1M17.4 25.6a2.2 2.2 0 1 0 0 .1",
+  // winter: the flame in the tile stove
+  "M17 28c-4.4 0-7-2.8-7-6.6 0-4.6 4.4-6.4 4.8-11.4 2.8 2 3.6 4.6 3 7.2 1.2-.6 2-1.8 2.2-3.2 2.2 2 4 4.4 4 7.4 0 3.8-2.6 6.6-7 6.6Z M17 28c-1.8 0-3-1.2-3-2.8 0-2 1.8-2.8 3-4.8 1.2 2 3 2.8 3 4.8 0 1.6-1.2 2.8-3 2.8Z",
+];
+---
+
+<AszofoLayout
+  lang={lang}
+  title={t.meta.title}
+  description={t.meta.description}
+  langHrefs={langHrefs}
+  canonical={pathFor(lang)}
+  alternates
+  nav
+  cta
+  autoLang={lang === "en"}
+>
+  <!-- ------------------------------------------------------------ hero -->
+  <section class='hero'>
+    <div class='wrap hero-grid'>
+      <div class='intro-seq'>
+        <span class='label'>{t.hero.eyebrow}</span>
+        <h1>{t.hero.title}</h1>
+        <p class='lead'>{t.hero.lead}</p>
+        <div class='hero-actions'>
+          <a class='btn' href='#dates'>{t.hero.cta} <span class='arrow' aria-hidden='true'>→</span></a>
+          <a class='btn quiet' href='#house'>{t.hero.secondary}</a>
+        </div>
+      </div>
+      <Photo
+        name='front'
+        alt={alt.front}
+        class='hero-photo'
+        caption={t.hero.caption}
+        sizes='(min-width: 960px) 46vw, 100vw'
+        eager
+      >
+        <span class='coords' aria-hidden='true'>46°55′ N · 17°50′ E</span>
+      </Photo>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ intro -->
+  <section class='section intro' style='padding-top:clamp(3rem,7vw,6rem)'>
+    <div class='wrap'>
+      <div style='max-width:52rem' data-reveal>
+        <p class='body'>{t.intro.body}</p>
+        <p class='sign'>— {t.intro.sign}</p>
+      </div>
+      <div class='facts'>
+        {
+          t.facts.map((f, i) => (
+            <div class='fact' data-reveal style={`--delay:${i * 0.1}s`}>
+              <span class='value'>
+                {f.value.replace(" m²", "")}
+                {f.value.endsWith("m²") && <span class='unit'>m²</span>}
+              </span>
+              <span class='what'>{f.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ the house -->
+  <section class='section' id='house' style='padding-top:0' aria-labelledby='house-title'>
+    <div class='wrap'>
+      <span class='label' id='house-title'>{t.house.label}</span>
+      <div class='rooms' style='margin-top:3.5rem'>
+        <article class='room a'>
+          <Photo name='table' alt={alt.table} class='photo p1' sizes='(min-width: 900px) 48vw, 100vw' />
+          <div class='text' data-reveal>
+            <span class='num'>i.</span>
+            <h3>{rooms.downstairs.title}</h3>
+            <p>{rooms.downstairs.body}</p>
+          </div>
+        </article>
+
+        <article class='room pair'>
+          <div class='text' data-reveal>
+            <span class='num'>ii.</span>
+            <h3>{rooms.upstairs.title}</h3>
+            <p>{rooms.upstairs.body}</p>
+          </div>
+          <Photo name='stove' alt={alt.stove} class='photo q1' sizes='(min-width: 900px) 24vw, 50vw' />
+          <Photo name='beams' alt={alt.beams} class='photo q2' sizes='(min-width: 900px) 24vw, 50vw' />
+        </article>
+
+        <article class='room c'>
+          <Photo name='cellar' alt={alt.cellar} class='photo p1' sizes='100vw' position='50% 30%' />
+          <div class='text' data-reveal>
+            <span class='num'>iii.</span>
+            <h3>{rooms.cellar.title}</h3>
+            <p>{rooms.cellar.body}</p>
+          </div>
+        </article>
+
+        <article class='room d'>
+          <Photo name='terrace' alt={alt.terrace} class='photo p1' sizes='(min-width: 900px) 64vw, 100vw' />
+          <Photo name='pergola' alt={alt.pergola} class='photo p2' sizes='(min-width: 900px) 30vw, 100vw' />
+          <div class='text' data-reveal>
+            <span class='num'>iv.</span>
+            <h3>{rooms.outside.title}</h3>
+            <p>{rooms.outside.body}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby='vineyard-title'>
+    <Photo name='vines-lake' alt={alt.vinesLake} class='wide-photo' sizes='100vw' />
+    <div class='wrap vineyard-text'>
+      <div class='text' data-reveal>
+        <span class='num'>v.</span>
+        <h3 id='vineyard-title' style='margin-bottom:1rem'>{rooms.vineyard.title}</h3>
+        <p class='muted' style='color:var(--ink-soft)'>{rooms.vineyard.body}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ evenings -->
+  <section class='section evening' style='margin-top:var(--section)' aria-labelledby='evening-title'>
+    <div class='wrap'>
+      <div class='evening-grid'>
+        <div data-reveal>
+          <span class='label bare'>—</span>
+          <h2 id='evening-title'>{t.evenings.title}</h2>
+          <p>{t.evenings.body}</p>
+        </div>
+        <Photo name='door' alt={alt.door} class='photo' sizes='(min-width: 900px) 30vw, 100vw' />
+      </div>
+      <aside class='progress-note' data-reveal>
+        <span class='label'>{t.progress.label}</span>
+        <p>{t.progress.body}</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ seasons -->
+  <section class='section' id='seasons' aria-labelledby='seasons-title'>
+    <div class='wrap'>
+      <span class='label'>{t.seasons.label}</span>
+      <h2 id='seasons-title' style='margin-top:1.4rem;max-width:16ch'>{t.seasons.title}</h2>
+      <div class='seasons'>
+        {
+          t.seasons.items.map((s, i) => (
+            <article class='season' data-reveal style={`--delay:${i * 0.12}s`}>
+              <svg
+                viewBox='0 0 34 34'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='1.1'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+                aria-hidden='true'
+              >
+                <path d={glyphs[i]} />
+              </svg>
+              <h3>{s.name}</h3>
+              <p>{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ around -->
+  <section class='section' id='around' style='padding-top:0' aria-labelledby='around-title'>
+    <div class='wrap'>
+      <span class='label'>{t.around.label}</span>
+      <div class='around-grid'>
+        <div data-reveal>
+          <Ripples
+            items={near.map((d) => ({ name: d.name[lang], lat: d.lat, lng: d.lng, minutes: d.minutes }))}
+            minutesLabel={t.around.minutes}
+            lakeLabel={lakeName[lang]}
+            label={t.around.diagramLabel}
+          />
+        </div>
+        <div>
+          <h2 id='around-title' style='margin-bottom:1.4rem'>{t.around.title}</h2>
+          <p class='lead' style='margin-bottom:2.2rem'>{t.around.lead}</p>
+          <ul class='distances'>
+            {
+              destinations.map((d) => (
+                <li>
+                  <span>{d.name[lang]}</span>
+                  <span class='t'>{minutes(d.minutes)}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class='note-line'>{t.around.note}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ dates -->
+  <section class='section booking-section' id='dates' aria-labelledby='dates-title'>
+    <div class='wrap'>
+      <span class='label'>{t.booking.label}</span>
+      <h2 id='dates-title' style='margin:1.4rem 0 1.4rem'>{t.booking.title}</h2>
+      <p class='lead'>{t.booking.lead}</p>
+      <div class='booking-grid'>
+        <BookingWidget lang={lang} />
+        <aside class='aside' aria-labelledby='practical-title'>
+          <span class='label'>{t.practical.label}</span>
+          <h3 id='practical-title' class='visually-hidden'>{t.practical.label}</h3>
+          <dl class='dl' style='margin-top:1.2rem'>
+            {
+              t.practical.items.map((item) => (
+                <>
+                  <dt>{item.term}</dt>
+                  <dd>{item.detail}</dd>
+                </>
+              ))
+            }
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ how -->
+  <section class='section' style='padding-top:clamp(3rem,6vw,5rem)' aria-labelledby='how-title'>
+    <div class='wrap'>
+      <span class='label' id='how-title'>{t.how.label}</span>
+      <ol class='how'>
+        {
+          t.how.steps.map((s, i) => (
+            <li data-reveal style={`--delay:${i * 0.12}s`}>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</AszofoLayout>

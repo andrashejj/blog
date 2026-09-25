@@ -1,0 +1,388 @@
+---
+export const prerender = false;
+
+import { isHost } from "../../../aszofo/auth";
+import {
+  type Booking,
+  accessUntil,
+  getSettings,
+  listBlocks,
+  listBookings,
+  stayLimits,
+  unavailableRanges,
+} from "../../../aszofo/bookings";
+import { BASE_PATH, booking as rules } from "../../../aszofo/config";
+import { diffDays, overlaps, todayAtHouse } from "../../../aszofo/dates";
+import { emailConfigured, stayUrl } from "../../../aszofo/email";
+import { env } from "../../../aszofo/env";
+import { siteOrigin } from "../../../aszofo/http";
+import { dict, formatDate, formatRange, guestLine } from "../../../aszofo/i18n";
+import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
+import { StoreUnavailableError } from "../../../aszofo/store";
+
+if (!isHost(Astro.cookies)) return Astro.redirect(`${BASE_PATH}/admin/login`);
+
+const today = todayAtHouse();
+const origin = siteOrigin(Astro.request);
+const en = dict("en");
+const here = `${BASE_PATH}/admin`;
+const hasStorage = Boolean(
+  env("KV_REST_API_URL") ?? env("UPSTASH_REDIS_REST_URL"),
+);
+const hasEmail = emailConfigured();
+const hasSecret = Boolean(env("ASZOFO_SECRET"));
+
+let storageError = false;
+let bookings: Booking[] = [];
+let blocks: Awaited<ReturnType<typeof listBlocks>> = [];
+const settings = await getSettings().catch(() => null);
+let unavailable: Awaited<ReturnType<typeof unavailableRanges>> = [];
+try {
+  [bookings, blocks, unavailable] = await Promise.all([
+    listBookings(today),
+    listBlocks(),
+    unavailableRanges(today),
+  ]);
+} catch (error) {
+  if (!(error instanceof StoreUnavailableError)) throw error;
+  storageError = true;
+}
+
+const pending = bookings.filter(
+  (b) => b.status === "pending" && b.checkIn >= today,
+);
+const upcoming = bookings.filter(
+  (b) => b.status === "approved" && b.checkOut >= today,
+);
+const closed = bookings
+  .filter((b) => !pending.includes(b) && !upcoming.includes(b))
+  .sort((a, b) => b.checkIn.localeCompare(a.checkIn));
+
+const rangeOf = (b: Booking) => ({ start: b.checkIn, end: b.checkOut });
+
+function clashes(b: Booking): string[] {
+  const out: string[] = [];
+  for (const o of bookings) {
+    if (o.id === b.id || !overlaps(rangeOf(b), rangeOf(o))) continue;
+    if (o.status === "approved")
+      out.push(`Overlaps the confirmed stay of ${o.name}`);
+    if (o.status === "pending" && b.status === "pending") {
+      out.push(`Overlaps another request from ${o.name}`);
+    }
+  }
+  for (const block of blocks) {
+    if (overlaps(rangeOf(b), block))
+      out.push(
+        `Overlaps blocked dates${block.label ? ` (${block.label})` : ""}`,
+      );
+  }
+  return out;
+}
+
+const nights = (b: Booking) => diffDays(b.checkIn, b.checkOut);
+const created = (b: Booking) =>
+  new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Budapest",
+  }).format(new Date(b.createdAt));
+
+const calendarData = {
+  locale: "en-GB",
+  today,
+  ...stayLimits(today),
+  unavailable,
+  marks: pending.map(rangeOf),
+  maxNights: rules.maxNights,
+};
+
+const statusLabel: Record<Booking["status"], string> = {
+  pending: "Waiting for you",
+  approved: "Confirmed",
+  declined: "Declined",
+  cancelled: "Cancelled",
+};
+
+const settingFields = [
+  {
+    key: "address",
+    label: "Address",
+    hint: "Shown to confirmed guests from the start.",
+  },
+  {
+    key: "mapsUrl",
+    label: "Map link",
+    hint: "A Google or Apple Maps link to the gate.",
+  },
+  { key: "parking", label: "Parking", hint: "Where to leave the car." },
+  {
+    key: "arrival",
+    label: "Arrival and keys",
+    hint: `Door code, key box, anything about getting in. Shown ${rules.revealDaysBefore} days before arrival.`,
+    long: true,
+  },
+  {
+    key: "wifiName",
+    label: "Wi-Fi network",
+    hint: `Shown ${rules.revealDaysBefore} days before arrival.`,
+  },
+  { key: "wifiPassword", label: "Wi-Fi password", hint: "" },
+  {
+    key: "hostPhone",
+    label: "Your phone",
+    hint: `Shown ${rules.revealDaysBefore} days before arrival.`,
+  },
+  {
+    key: "notes",
+    label: "House notes",
+    hint: "Heating, bins, the cellar light, quirks. Shown to confirmed guests.",
+    long: true,
+  },
+] as const;
+---
+
+<AszofoLayout
+  lang='en'
+  title='Requests · Aszófő'
+  langHrefs={{ en: here, hu: here, de: here }}
+  private
+  langs={false}
+  homeHref={BASE_PATH}
+>
+  <section class='section admin' style='padding-top:7rem'>
+    <div class='wrap'>
+      <div class='admin-head'>
+        <div>
+          <span class='label'>Host</span>
+          <h1 style='font-size:clamp(2.4rem,5vw,3.6rem);margin-top:1rem'>
+            {pending.length === 0 ? "Nothing waiting." : pending.length === 1 ? "One request waiting." : `${pending.length} requests waiting.`}
+          </h1>
+        </div>
+        <form method='post' action={`${BASE_PATH}/api/host/logout`}>
+          <button class='btn quiet' type='submit'>Sign out</button>
+        </form>
+      </div>
+
+      {
+        (!hasStorage || !hasEmail || !hasSecret || storageError) && (
+          <aside class='setup'>
+            <span class='label'>Setup</span>
+            <ul>
+              {storageError && <li><strong>Storage is not reachable.</strong> Requests can't be saved until KV_REST_API_URL and KV_REST_API_TOKEN are set.</li>}
+              {!hasStorage && !storageError && <li>Using the local development store (.data/). Connect Upstash Redis for production: KV_REST_API_URL, KV_REST_API_TOKEN.</li>}
+              {!hasEmail && <li>Email is off (RESEND_API_KEY). Guests won't get emails; copy their page links from here and send them yourself.</li>}
+              {!hasSecret && <li>ASZOFO_SECRET is missing. Sessions use a development secret.</li>}
+            </ul>
+          </aside>
+        )
+      }
+
+      <!-- ------------------------------------------------ pending -->
+      <div class='admin-list'>
+        {
+          pending.map((b) => (
+            <article class='req' id={b.id} data-id={b.id}>
+              <header>
+                <div>
+                  <span class='stamp pending'>{statusLabel[b.status]}</span>
+                  <h2>{b.name}</h2>
+                  <p class='when'>
+                    {formatRange("en", b.checkIn, b.checkOut)} · {nights(b)} nights · {guestLine("en", b.adults, b.children)}
+                    {b.dog && " · dog"}
+                  </p>
+                </div>
+                <p class='meta'>
+                  <a href={`mailto:${b.email}`}>{b.email}</a>
+                  {b.phone && <><br /><a href={`tel:${b.phone}`}>{b.phone}</a></>}
+                  <br />
+                  {dict(b.lang).langName} · asked {created(b)}
+                </p>
+              </header>
+              {clashes(b).map((c) => <p class='clash'>{c}</p>)}
+              {b.message && <blockquote>{b.message}</blockquote>}
+              <dl class='prefs'>
+                {b.prefs.group && <><dt>Group</dt><dd>{en.booking.group.options[b.prefs.group]}</dd></>}
+                {b.prefs.interests.length > 0 && <><dt>Likes</dt><dd>{b.prefs.interests.map((i) => en.booking.interests.options[i]).join(", ")}</dd></>}
+                {b.prefs.pace && <><dt>Pace</dt><dd>{en.booking.pace.options[b.prefs.pace]}</dd></>}
+                {b.prefs.transport && <><dt>Travel</dt><dd>{en.booking.transport.options[b.prefs.transport]}</dd></>}
+                {b.prefs.food && <><dt>Food</dt><dd>{b.prefs.food}</dd></>}
+                {b.prefs.occasion && <><dt>Occasion</dt><dd>{b.prefs.occasion}</dd></>}
+              </dl>
+              <div class='field'>
+                <label for={`note-${b.id}`}>Note to the guest (optional)</label>
+                <textarea id={`note-${b.id}`} data-note rows='3' placeholder='Price, what to bring, anything personal. Goes in the email and on their page.'>{b.hostNote ?? ""}</textarea>
+              </div>
+              <div class='req-actions'>
+                <label class='check'>
+                  <input type='checkbox' data-notify checked={hasEmail} disabled={!hasEmail} />
+                  <span>Email the guest {hasEmail ? `(${dict(b.lang).langName})` : "(email is off)"}</span>
+                </label>
+                <div class='buttons'>
+                  <button class='btn ghost' type='button' data-action='decline'>Decline</button>
+                  <button class='btn' type='button' data-action='approve'>Approve</button>
+                </div>
+              </div>
+              <p class='req-status' data-status role='status' hidden />
+            </article>
+          ))
+        }
+      </div>
+
+      <!-- ------------------------------------------------ upcoming -->
+      <h2 class='admin-h'>Confirmed</h2>
+      {upcoming.length === 0 && <p class='muted'>No confirmed stays ahead.</p>}
+      <div class='admin-list'>
+        {
+          upcoming.map((b) => (
+            <article class='req confirmed' id={b.id} data-id={b.id}>
+              <header>
+                <div>
+                  <span class='stamp ok'>{statusLabel[b.status]}</span>
+                  <h2>{b.name}</h2>
+                  <p class='when'>
+                    {formatRange("en", b.checkIn, b.checkOut)} · {nights(b)} nights · {guestLine("en", b.adults, b.children)}
+                    {b.dog && " · dog"}
+                  </p>
+                </div>
+                <p class='meta'>
+                  <a href={`mailto:${b.email}`}>{b.email}</a>
+                  {b.phone && <><br /><a href={`tel:${b.phone}`}>{b.phone}</a></>}
+                  <br />
+                  Their page stays open until {formatDate("en", accessUntil(b))}
+                </p>
+              </header>
+              {clashes(b).map((c) => <p class='clash'>{c}</p>)}
+              <div class='linkrow'>
+                <input type='text' readonly value={stayUrl(origin, b)} aria-label='Guest page link' />
+                <button class='btn ghost' type='button' data-copy>Copy link</button>
+                <a class='btn quiet' href={stayUrl(origin, b)} target='_blank' rel='noopener'>Open</a>
+              </div>
+              <details>
+                <summary>Note, preferences, cancel</summary>
+                {b.message && <blockquote>{b.message}</blockquote>}
+                <div class='field'>
+                  <label for={`note-${b.id}`}>Note on their page</label>
+                  <textarea id={`note-${b.id}`} data-note rows='3'>{b.hostNote ?? ""}</textarea>
+                </div>
+                <div class='req-actions'>
+                  <button class='btn quiet' type='button' data-action='cancel' data-confirm={`Cancel ${b.name}'s stay? Their page will say it was cancelled; no email is sent.`}>Cancel stay</button>
+                  <button class='btn ghost' type='button' data-action='note'>Save note</button>
+                </div>
+              </details>
+              <p class='req-status' data-status role='status' hidden />
+            </article>
+          ))
+        }
+      </div>
+
+      <!-- ------------------------------------------------ calendar + blocks -->
+      <h2 class='admin-h'>Calendar</h2>
+      <div class='admin-cal'>
+        <div class='panel' data-host-calendar data-cal={JSON.stringify(calendarData)}>
+          <div class='cal-head'>
+            <p class='selection' data-block-selection>Select dates to block</p>
+            <div class='cal-nav'>
+              <button type='button' data-cal-prev aria-label='Previous month'>←</button>
+              <button type='button' data-cal-next aria-label='Next month'>→</button>
+            </div>
+          </div>
+          <div class='cal-months' data-calendar></div>
+          <div class='legend'>
+            <span><i class='l-taken'></i>Confirmed or blocked</span>
+            <span><i style='background:var(--clay);width:.4rem;height:.4rem'></i>Requested</span>
+          </div>
+          <div class='req-actions' style='margin-top:1.5rem'>
+            <div class='field' style='flex:1;min-width:12rem'>
+              <label for='block-label'>Label (only you see it)</label>
+              <input id='block-label' type='text' maxlength='80' placeholder='Family, renovation…' data-block-label />
+            </div>
+            <button class='btn' type='button' data-block-add disabled>Block these dates</button>
+          </div>
+        </div>
+        <div>
+          <span class='label'>Blocked</span>
+          {blocks.length === 0 && <p class='muted' style='margin-top:1rem'>No blocked dates.</p>}
+          <ul class='blocks'>
+            {
+              blocks.map((block) => (
+                <li>
+                  <span>
+                    {formatRange("en", block.start, block.end)}
+                    {block.label && <em> · {block.label}</em>}
+                  </span>
+                  <button class='btn quiet' type='button' data-block-remove={block.id}>Remove</button>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------ settings -->
+      <h2 class='admin-h'>House details for guests</h2>
+      <p class='muted' style='max-width:40rem'>
+        Kept private. Confirmed guests see the address, parking and house notes on their page; the arrival details, Wi-Fi and your phone appear {rules.revealDaysBefore} days before they arrive.
+      </p>
+      <form class='panel settings' data-settings>
+        <div class='fields two'>
+          {
+            settingFields.map((f) => (
+              <div class={`field ${"long" in f && f.long ? "span" : ""}`}>
+                <label for={`s-${f.key}`}>{f.label}</label>
+                {"long" in f && f.long ? (
+                  <textarea id={`s-${f.key}`} name={f.key} rows='4'>{settings?.[f.key] ?? ""}</textarea>
+                ) : (
+                  <input id={`s-${f.key}`} name={f.key} type='text' value={settings?.[f.key] ?? ""} />
+                )}
+                {f.hint && <span class='hint'>{f.hint}</span>}
+              </div>
+            ))
+          }
+        </div>
+        <div class='req-actions' style='margin-top:1.8rem'>
+          <p class='req-status' data-status role='status' hidden />
+          <button class='btn' type='submit'>Save details</button>
+        </div>
+      </form>
+
+      <!-- ------------------------------------------------ closed -->
+      {
+        closed.length > 0 && (
+          <details class='closed'>
+            <summary>
+              <h2 class='admin-h' style='display:inline'>Past, declined and cancelled</h2> ({closed.length})
+            </summary>
+            <div class='admin-list'>
+              {closed.map((b) => (
+                <article class='req muted-card' id={b.id} data-id={b.id}>
+                  <header>
+                    <div>
+                      <span class='stamp'>{b.status === "approved" ? "Stayed" : b.status === "pending" ? "Expired" : statusLabel[b.status]}</span>
+                      <h2>{b.name}</h2>
+                      <p class='when'>{formatRange("en", b.checkIn, b.checkOut)} · {guestLine("en", b.adults, b.children)}</p>
+                    </div>
+                    <p class='meta'><a href={`mailto:${b.email}`}>{b.email}</a></p>
+                  </header>
+                  <div class='req-actions'>
+                    {(b.status === "declined" || b.status === "cancelled") && b.checkIn >= today && (
+                      <button class='btn quiet' type='button' data-action='reopen'>Reopen</button>
+                    )}
+                    <button class='btn quiet' type='button' data-action='delete' data-confirm={`Delete ${b.name}'s record for good?`}>Delete</button>
+                  </div>
+                  <p class='req-status' data-status role='status' hidden />
+                </article>
+              ))}
+            </div>
+          </details>
+        )
+      }
+    </div>
+  </section>
+</AszofoLayout>
+
+<script>
+  import { initAdmin } from "../../../aszofo/client/admin";
+  initAdmin();
+</script>

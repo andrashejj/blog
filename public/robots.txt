@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /aszofo/stay/
+Disallow: /aszofo/admin/
+Disallow: /aszofo/api/
 
 Sitemap: https://andrashejj.com/sitemap.xml

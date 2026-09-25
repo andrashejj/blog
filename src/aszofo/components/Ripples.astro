@@ -1,0 +1,104 @@
+---
+// Places around the house, set by compass direction and driving time, drawn
+// as rings spreading from the house like ripples on the lake.
+import { house } from "../config";
+
+interface Destination {
+  name: string;
+  lat: number;
+  lng: number;
+  minutes: number;
+}
+
+interface Props {
+  items: Destination[];
+  minutesLabel: string; // "{n} min"
+  lakeLabel: string;
+  label: string;
+}
+
+const { items, minutesLabel, lakeLabel, label } = Astro.props;
+
+const SIZE = 600;
+const C = SIZE / 2;
+const MAX_MIN = 40;
+const R = 222;
+const rings = [10, 20, 30, 40];
+
+const radius = (min: number) => (Math.min(min, MAX_MIN) / MAX_MIN) * R;
+
+// A circle with a slight tremor, so the rings look drawn rather than plotted.
+function ring(r: number, seed: number): string {
+  const steps = 96;
+  let d = "";
+  for (let i = 0; i <= steps; i++) {
+    const a = (i / steps) * Math.PI * 2;
+    const wobble =
+      1 + 0.012 * Math.sin(a * 3 + seed) + 0.006 * Math.sin(a * 7 + seed * 2);
+    const x = C + r * wobble * Math.sin(a);
+    const y = C - r * wobble * Math.cos(a);
+    d += `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  return `${d}Z`;
+}
+
+const cosLat = Math.cos((house.lat * Math.PI) / 180);
+const points = items.map((item) => {
+  const dx = (item.lng - house.lng) * cosLat;
+  const dy = item.lat - house.lat;
+  const angle = Math.atan2(dx, dy);
+  const r = radius(item.minutes);
+  const x = C + r * Math.sin(angle);
+  const y = C - r * Math.cos(angle);
+  const right = x >= C;
+  return {
+    ...item,
+    x,
+    y,
+    beyond: item.minutes > MAX_MIN,
+    anchor: right ? "start" : "end",
+    lx: x + (right ? 9 : -9),
+    time: minutesLabel.replace("{n}", String(item.minutes)),
+  };
+});
+
+const fmtHours = (min: number) => {
+  if (min < 60) return minutesLabel.replace("{n}", String(min));
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return `${h} h${m ? ` ${m}` : ""}`;
+};
+---
+
+<svg class='ripples' viewBox={`0 0 ${SIZE} ${SIZE}`} role='img' aria-label={label}>
+  <text class='home-label' x={C + 150} y={C + 132} text-anchor='middle' style='fill:var(--lake)'>
+    {lakeLabel}
+  </text>
+  {
+    rings.map((m, i) => (
+      <>
+        <path class='ring' d={ring(radius(m), i * 1.7)} style={`opacity:${1 - i * 0.18}`} />
+        <text class='ring-label' x={C + 4} y={C - radius(m) - 6}>
+          {minutesLabel.replace("{n}", String(m))}
+        </text>
+      </>
+    ))
+  }
+  {
+    points.map((p) => (
+      <g>
+        <line class='spoke' x1={C} y1={C} x2={p.x} y2={p.y} />
+        <circle class='dot' cx={p.x} cy={p.y} r={p.beyond ? 2.2 : 3} />
+        <text class='place' x={p.lx} y={p.y - 1} text-anchor={p.anchor}>
+          {p.name}
+        </text>
+        <text class='mins' x={p.lx} y={p.y + 14} text-anchor={p.anchor}>
+          {p.beyond ? `→ ${fmtHours(p.minutes)}` : p.time}
+        </text>
+      </g>
+    ))
+  }
+  <circle class='home' cx={C} cy={C} r='5' />
+  <circle cx={C} cy={C} r='11' fill='none' stroke='var(--clay)' stroke-width='0.8' />
+  <text class='home-label' x={C} y={C - 20} text-anchor='middle'>Aszófő</text>
+</svg>

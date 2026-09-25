@@ -1,0 +1,39 @@
+---
+export const prerender = false;
+
+import { BASE_PATH, LANGS, type Lang, house } from "../../../aszofo/config";
+import { dict } from "../../../aszofo/i18n";
+import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
+
+Astro.response.status = 404;
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+
+// No booking means no known language; take the browser's first choice.
+const header = Astro.request.headers.get("accept-language") ?? "";
+const lang: Lang =
+  (header
+    .split(",")
+    .map((part) => part.trim().slice(0, 2).toLowerCase())
+    .find((code) => (LANGS as readonly string[]).includes(code)) as
+    | Lang
+    | undefined) ?? "en";
+const t = dict(lang);
+const home = (l: Lang) => `${BASE_PATH}${l === "en" ? "" : `/${l}`}`;
+---
+
+<AszofoLayout
+  lang={lang}
+  title={t.stay.metaTitle}
+  langHrefs={Object.fromEntries(LANGS.map((l) => [l, home(l)])) as Record<Lang, string>}
+  private
+>
+  <section class='section'>
+    <div class='narrow'>
+      <h1 style='font-size:clamp(2.2rem,5vw,3.4rem);margin-bottom:1.4rem'>Aszófő</h1>
+      <p class='lead'>{t.stay.notFound}</p>
+      <p style='margin-top:2rem'>
+        <a class='btn ghost' href={`mailto:${house.contactEmail}`}>{house.contactEmail}</a>
+      </p>
+    </div>
+  </section>
+</AszofoLayout>

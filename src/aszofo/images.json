@@ -1,0 +1,62 @@
+{
+  "front": {
+    "width": 1536,
+    "height": 2048,
+    "widths": [720, 1200, 1536],
+    "placeholder": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JZQDA3CG8AoXVshzW5SwAAP7V/RlXmmmB8th5SAxcYczgLSfMsuVfvQs/FTAWnE0/L2Ie3D/s/1F0hJMAAA=="
+  },
+  "terrace": {
+    "width": 2048,
+    "height": 1382,
+    "widths": [720, 1200, 1800],
+    "placeholder": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoQAAsAA4BaJZgCdAEPCW3rGAAA/s+BtmcklUDkEvH5+iduX08ccFKZhZtlQ3faUnbIf1EzGUpEPyLgAAA="
+  },
+  "vines-lake": {
+    "width": 2048,
+    "height": 1536,
+    "widths": [720, 1200, 1800],
+    "placeholder": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADQAQCdASoQAAwAA4BaJYgCdAEKS+NvQAD+4E+8wCusKT2BbkKIqkbYswV7eMPwMy+AcCh+GYHFmULUjAAAAA=="
+  },
+  "vines-house": {
+    "width": 2048,
+    "height": 1536,
+    "widths": [720, 1200, 1800],
+    "placeholder": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADwAQCdASoQAAwAA4BaJYgCdAD0ohGmTyAA/H5WY/1Tn7f65tDyTlpao/0rTiF5QIsVVtniycFAAA=="
+  },
+  "table": {
+    "width": 1536,
+    "height": 1126,
+    "widths": [720, 1200, 1536],
+    "placeholder": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAAAwAgCdASoQAAwAA4BaJZgCdADw1C8qhYiQAAD3vPcPqaDpCItFPfP0y+A7L7M95DfQiRfIC2wNybj4iRzVgAAA"
+  },
+  "door": {
+    "width": 1536,
+    "height": 2048,
+    "widths": [720, 1200, 1536],
+    "placeholder": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAwBACdASoQABUAPu1iqU2ppaQiMAgBMB2JQBOmUABfT8Fu83jOL7YeIAAA/Rl8ubJ8qpjf4P4VuNPKbQiHg/vaIETB1fnbqrtDwmOzD9jjI4/VdsbuZpR6BD+35XdfjCAAAA=="
+  },
+  "pergola": {
+    "width": 1536,
+    "height": 2048,
+    "widths": [720, 1200, 1536],
+    "placeholder": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JQBOkJABeJ8pet8XL9HEAAP6ynmND5+An609nkBZUKufn1iRrimiYiB7EyAOH2GjoYvfFlq6Yyt1aJ2KpNp7xcugAAA=="
+  },
+  "stove": {
+    "width": 722,
+    "height": 1393,
+    "widths": [720],
+    "placeholder": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAADQAwCdASoQAB8APu1qrU8ppiQiMAgBMB2JQBYdjGSqtOEJnjBf4AAA/lnnFLVkBJBsh1VXcGOvmyJ0DVZnez92bkaS8t66ID6+5GiDRYD/fzNr0IyGhH5gyhn7lyuJ/mnDX2XksyxrurIJy3iXArOdQAA="
+  },
+  "beams": {
+    "width": 922,
+    "height": 1556,
+    "widths": [720, 922],
+    "placeholder": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoQABsAPu1iqk2ppaQiMAgBMB2JYwCdABb1pcWgVxDQRYnbkoAA/tE/Lbb5In56DPU8lzlLhj1v7V/rJkBBtrl+li+0UcmIRlLYQbP9RT38baVSXZFoJIqysg+xoeO51gAAAA=="
+  },
+  "cellar": {
+    "width": 1536,
+    "height": 942,
+    "widths": [720, 1200, 1536],
+    "placeholder": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAQCdASoQAAoAA4BaJQBOgB6voaUa4wAA/gEP/32CJBIrzqGTkwtI1gOYFWAA"
+  }
+}

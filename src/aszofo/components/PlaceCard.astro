@@ -1,0 +1,67 @@
+---
+import type { Lang } from "../config";
+import { dict, fill } from "../i18n";
+import type { Scored } from "../recommend";
+
+interface Props {
+  item: Scored;
+  lang: Lang;
+  showReasons?: boolean;
+  large?: boolean;
+  trainGuest?: boolean;
+}
+
+const {
+  item,
+  lang,
+  showReasons = false,
+  large = false,
+  trainGuest = false,
+} = Astro.props;
+const { place, reasons, unconfirmed } = item;
+const t = dict(lang);
+const s = t.stay;
+
+const weekday = new Intl.DateTimeFormat(t.locale, {
+  weekday: "long",
+  timeZone: "UTC",
+});
+// 2024-01-07 was a Sunday, so day n is 7 + n.
+const dayNames = place.days?.map((d) =>
+  weekday.format(new Date(Date.UTC(2024, 0, 7 + d))),
+);
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+const because = reasons.map((r) => t.booking.interests.options[r]).join(", ");
+---
+
+<article class={`place ${large ? "large" : ""}`} data-place={place.id}>
+  <header>
+    <h4>{place.name}</h4>
+    <p class='where'>
+      {place.town} · {fill(t.around.minutes, { n: place.minutes })}
+      {
+        place.price && (
+          <span class='price' title={`${place.price} / 4`}>
+            {" · "}
+            {"●".repeat(place.price)}
+            <span class='off'>{"●".repeat(4 - place.price)}</span>
+          </span>
+        )
+      }
+    </p>
+  </header>
+  <p class='desc'>{place.desc[lang]}</p>
+  {place.tip && <p class='tip'>{place.tip[lang]}</p>}
+  <ul class='chips-inline'>
+    {showReasons && because && <li class='why'>{fill(s.because, { x: because })}</li>}
+    {unconfirmed && <li>{s.datesVary}</li>}
+    {place.bookingAdvised && <li>{s.bookAhead}</li>}
+    {trainGuest && !place.noCar && <li>{s.easierByCar}</li>}
+    {place.kidFriendly && <li>{s.goodWithKids}</li>}
+    {dayNames && dayNames.length < 7 && <li>{fill(s.onlyOn, { days: dayNames.join(", ") })}</li>}
+  </ul>
+  <p class='links'>
+    <a href={directions} target='_blank' rel='noopener noreferrer'>{s.directions} ↗</a>
+    {place.url && <a href={place.url} target='_blank' rel='noopener noreferrer'>{s.website} ↗</a>}
+  </p>
+</article>

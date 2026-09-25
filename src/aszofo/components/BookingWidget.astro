@@ -1,0 +1,233 @@
+---
+import { BASE_PATH, type Lang, house, booking as rules } from "../config";
+import { dict, fill } from "../i18n";
+import { GROUPS, INTERESTS, PACES, TRANSPORTS } from "../prefs";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dict(lang);
+const b = t.booking;
+
+// Only the strings the browser needs, in one language.
+const clientText = {
+  locale: t.locale,
+  lang,
+  email: house.contactEmail,
+  base: BASE_PATH,
+  maxGuests: house.maxGuests,
+  booking: {
+    chooseArrival: b.chooseArrival,
+    chooseDeparture: b.chooseDeparture,
+    minNights: b.minNights,
+    prev: b.prev,
+    next: b.next,
+    loading: b.loading,
+    loadError: b.loadError,
+    submit: b.submit,
+    sending: b.sending,
+    errors: b.errors,
+    success: b.success,
+    taken: b.legend.taken,
+    today: b.legend.today,
+  },
+  units: { night: t.units.night },
+};
+---
+
+<div class='panel booking' data-booking data-text={JSON.stringify(clientText)}>
+  <ol class='steps' aria-label={b.title}>
+    {
+      b.steps.map((label, i) => (
+        <li data-step-tab={i + 1} aria-current={i === 0 ? "step" : undefined}>
+          <span>{i + 1}</span>
+          {label}
+        </li>
+      ))
+    }
+  </ol>
+
+  <form novalidate data-form>
+    <!-- 1 · dates -->
+    <section class='step' data-step='1' aria-labelledby='step1-title'>
+      <h3 class='visually-hidden' id='step1-title'>{b.steps[0]}</h3>
+      <div class='cal-head'>
+        <p class='selection' data-selection aria-live='polite'>
+          {b.chooseArrival}
+          <span class='hint'>{fill(b.minNights, { n: rules.minNights })}</span>
+        </p>
+        <div class='cal-nav'>
+          <button type='button' data-cal-prev aria-label={b.prev}>←</button>
+          <button type='button' data-cal-next aria-label={b.next}>→</button>
+        </div>
+      </div>
+      <div class='cal-months' data-calendar aria-busy='true'>
+        <p class='cal-status'>{b.loading}</p>
+      </div>
+      <div class='legend' aria-hidden='true'>
+        <span><i class='l-open'></i>{b.legend.open}</span>
+        <span><i class='l-taken'></i>{b.legend.taken}</span>
+        <span><i class='l-selected'></i>{b.legend.selected}</span>
+      </div>
+      <p class='form-error' data-error='1' role='alert' hidden></p>
+      <div class='step-actions'>
+        <button type='button' class='btn quiet' data-clear hidden>{b.clear}</button>
+        <span></span>
+        <button type='button' class='btn' data-next='2' disabled>
+          {b.continue} <span class='arrow' aria-hidden='true'>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2 · guests -->
+    <section class='step' data-step='2' hidden aria-labelledby='step2-title'>
+      <h3 class='visually-hidden' id='step2-title'>{b.steps[1]}</h3>
+      <div class='fields two'>
+        <div class='field' data-field='adults'>
+          <span class='question' id='adults-label'>{b.fields.adults}</span>
+          <div class='stepper' role='group' aria-labelledby='adults-label'>
+            <button type='button' data-dec='adults' aria-label={`${b.fields.adults} −1`}>−</button>
+            <output data-count='adults' aria-live='polite'>2</output>
+            <button type='button' data-inc='adults' aria-label={`${b.fields.adults} +1`}>+</button>
+          </div>
+        </div>
+        <div class='field' data-field='children'>
+          <span class='question' id='children-label'>{b.fields.children}</span>
+          <div class='stepper' role='group' aria-labelledby='children-label'>
+            <button type='button' data-dec='children' aria-label={`${b.fields.children} −1`}>−</button>
+            <output data-count='children' aria-live='polite'>0</output>
+            <button type='button' data-inc='children' aria-label={`${b.fields.children} +1`}>+</button>
+          </div>
+        </div>
+        <div class='field' data-field='name'>
+          <label for='bk-name'>{b.fields.name}</label>
+          <input id='bk-name' name='name' type='text' autocomplete='name' maxlength='80' required />
+        </div>
+        <div class='field' data-field='email'>
+          <label for='bk-email'>{b.fields.email}</label>
+          <input id='bk-email' name='email' type='email' autocomplete='email' maxlength='120' required />
+        </div>
+        <div class='field' data-field='phone'>
+          <label for='bk-phone'>{b.fields.phone}</label>
+          <input id='bk-phone' name='phone' type='tel' autocomplete='tel' maxlength='40' />
+        </div>
+        <div class='field' style='align-self:end'>
+          <label class='check'>
+            <input type='checkbox' name='dog' />
+            <span>{b.fields.dog}</span>
+          </label>
+        </div>
+        <div class='field span' data-field='message'>
+          <label for='bk-message'>{b.fields.message}</label>
+          <textarea id='bk-message' name='message' maxlength='1500' rows='4'></textarea>
+          <span class='hint'>{b.fields.messageHint}</span>
+        </div>
+      </div>
+      <div class='honey' aria-hidden='true'>
+        <label>Website <input type='text' name='website' tabindex='-1' autocomplete='off' /></label>
+      </div>
+      <p class='form-error' data-error='2' role='alert' hidden></p>
+      <div class='step-actions'>
+        <button type='button' class='btn quiet' data-back='1'>← {b.back}</button>
+        <button type='button' class='btn' data-next='3'>
+          {b.continue} <span class='arrow' aria-hidden='true'>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3 · preferences -->
+    <section class='step' data-step='3' hidden aria-labelledby='step3-title'>
+      <h3 class='visually-hidden' id='step3-title'>{b.steps[2]}</h3>
+      <p class='muted' style='max-width:36rem;margin-bottom:2rem'>{b.prefsIntro}</p>
+
+      <fieldset class='q'>
+        <legend class='question'>{b.group.question}</legend>
+        <div class='chips'>
+          {
+            GROUPS.map((g) => (
+              <label class='chip'>
+                <input type='radio' name='group' value={g} />
+                <span>{b.group.options[g]}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class='q'>
+        <legend class='question'>{b.interests.question}</legend>
+        <div class='chips'>
+          {
+            INTERESTS.map((i) => (
+              <label class='chip'>
+                <input type='checkbox' name='interests' value={i} />
+                <span>{b.interests.options[i]}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class='fields two'>
+        <fieldset class='q'>
+          <legend class='question'>{b.pace.question}</legend>
+          <div class='chips'>
+            {
+              PACES.map((p) => (
+                <label class='chip'>
+                  <input type='radio' name='pace' value={p} />
+                  <span>{b.pace.options[p]}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <fieldset class='q'>
+          <legend class='question'>{b.transport.question}</legend>
+          <div class='chips'>
+            {
+              TRANSPORTS.map((tr) => (
+                <label class='chip'>
+                  <input type='radio' name='transport' value={tr} />
+                  <span>{b.transport.options[tr]}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <div class='field'>
+          <label for='bk-food'>{b.food}</label>
+          <input id='bk-food' name='food' type='text' maxlength='200' />
+        </div>
+        <div class='field'>
+          <label for='bk-occasion'>{b.occasion}</label>
+          <input id='bk-occasion' name='occasion' type='text' maxlength='160' />
+        </div>
+      </div>
+
+      <label class='check' style='margin-top:2.2rem'>
+        <input type='checkbox' name='consent' />
+        <span>{b.consent}</span>
+      </label>
+
+      <p class='form-error' data-error='3' role='alert' hidden></p>
+      <div class='step-actions'>
+        <button type='button' class='btn quiet' data-back='2'>← {b.back}</button>
+        <button type='submit' class='btn' data-submit>
+          {b.submit} <span class='arrow' aria-hidden='true'>→</span>
+        </button>
+      </div>
+    </section>
+  </form>
+
+  <div class='success' data-success hidden tabindex='-1'></div>
+</div>
+
+<script>
+  import { initBooking } from "../client/booking";
+  for (const root of document.querySelectorAll<HTMLElement>("[data-booking]")) {
+    initBooking(root);
+  }
+</script>

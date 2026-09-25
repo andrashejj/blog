@@ -1,0 +1,401 @@
+---
+export const prerender = false;
+
+import {
+  accessUntil,
+  detailsRevealed,
+  getBookingByToken,
+  getSettings,
+  guestAccess,
+} from "../../../aszofo/bookings";
+import Photo from "../../../aszofo/components/Photo.astro";
+import PlaceCard from "../../../aszofo/components/PlaceCard.astro";
+import {
+  BASE_PATH,
+  LANGS,
+  type Lang,
+  house,
+  isLang,
+  booking as rules,
+} from "../../../aszofo/config";
+import {
+  beforeYouLeave,
+  essentials,
+  manual,
+  travel,
+} from "../../../aszofo/content";
+import { diffDays, todayAtHouse } from "../../../aszofo/dates";
+import {
+  dict,
+  fill,
+  formatDate,
+  formatDateForSuffix,
+  formatRange,
+  guestLine,
+  plural,
+} from "../../../aszofo/i18n";
+import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
+import { recommend } from "../../../aszofo/recommend";
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+
+const token = Astro.params.token ?? "";
+const booking = await getBookingByToken(token);
+if (!booking) {
+  return Astro.rewrite(`${BASE_PATH}/stay/not-found`);
+}
+
+const asked = Astro.url.searchParams.get("lang");
+const lang: Lang = isLang(asked) ? asked : booking.lang;
+const t = dict(lang);
+const s = t.stay;
+const today = todayAtHouse();
+const access = guestAccess(booking, today);
+const here = `${BASE_PATH}/stay/${token}`;
+const langHrefs = Object.fromEntries(
+  LANGS.map((l) => [l, `${here}?lang=${l}`]),
+) as Record<Lang, string>;
+const publicHome = `${BASE_PATH}${lang === "en" ? "" : `/${lang}`}`;
+
+const nights = diffDays(booking.checkIn, booking.checkOut);
+// The full name: Hungarian guests write the family name first.
+const guestName = booking.name;
+const dates = formatRange(lang, booking.checkIn, booking.checkOut);
+const until = formatDateForSuffix(lang, accessUntil(booking));
+
+const untilArrival = diffDays(today, booking.checkIn);
+let countdown = "";
+if (untilArrival > 1)
+  countdown = fill(s.countdown.future, {
+    days: plural(lang, untilArrival, t.units.day),
+  });
+else if (untilArrival === 1) countdown = s.countdown.tomorrow;
+else if (untilArrival === 0) countdown = s.countdown.today;
+else if (today < booking.checkOut)
+  countdown = fill(s.countdown.during, { d: 1 - untilArrival, n: nights });
+else countdown = s.countdown.after;
+
+const open = access === "open";
+// The map link comes from the host settings form; only follow web links.
+const safeHref = (url: string) => (/^https?:\/\//i.test(url) ? url : "");
+const settings = open ? await getSettings() : null;
+const revealed = open && detailsRevealed(booking, today);
+const recs = open ? recommend(booking) : null;
+const trainGuest = booking.prefs.transport === "train";
+const hasPrefs =
+  booking.prefs.interests.length > 0 || Boolean(booking.prefs.group);
+const travelOrder = trainGuest
+  ? (["train", "car", "plane"] as const)
+  : (["car", "train", "plane"] as const);
+const travelTitle = { car: s.byCar, train: s.byTrain, plane: s.byPlane };
+
+const mapPlaces = recs
+  ? recs.groups.flatMap((g) =>
+      g.items.map(({ place }) => ({
+        id: place.id,
+        name: place.name,
+        town: place.town,
+        lat: place.lat,
+        lng: place.lng,
+        category: place.category,
+        label: s.categories[place.category],
+        minutes: place.minutes,
+      })),
+    )
+  : [];
+
+const sections = open
+  ? [
+      ["arrive", s.arriveTitle],
+      ["house", s.houseTitle],
+      ["picks", s.picksTitle],
+      ["around", s.allTitle],
+      ["everyday", s.essentialsTitle],
+      ["contact", s.contactTitle],
+    ]
+  : [];
+---
+
+<AszofoLayout
+  lang={lang}
+  title={s.metaTitle}
+  langHrefs={langHrefs}
+  private
+  homeHref={publicHome}
+>
+  <section class='stay-hero'>
+    <div class='wrap stay-hero-grid'>
+      <div class='intro-seq'>
+        <span class={`stamp ${open ? "ok" : access === "pending" ? "pending" : ""}`}>{s.status[access]}</span>
+        <h1>{fill(open ? s.hello : s.helloPending, { name: guestName })}</h1>
+        {
+          access !== "ended" && (
+            <p class='stay-dates'>
+              {dates}
+              {open && <span class='countdown'>{countdown}</span>}
+            </p>
+          )
+        }
+        <p class='lead'>
+          {access === "pending" && s.pendingBody}
+          {access === "declined" && s.declinedBody}
+          {access === "cancelled" && fill(s.cancelledBody, { email: house.contactEmail })}
+          {access === "ended" && s.endedBody}
+          {open && fill(s.validUntil, { date: until })}
+        </p>
+        {
+          (access === "declined" || access === "ended") && (
+            <a class='btn ghost' href={`${publicHome}#dates`}>
+              {s.otherDates} <span class='arrow' aria-hidden='true'>→</span>
+            </a>
+          )
+        }
+      </div>
+      {
+        (open || access === "pending") && (
+          <Photo name='vines-house' alt={t.house.alt.vinesHouse} class='photo stay-photo' sizes='(min-width: 960px) 40vw, 100vw' eager />
+        )
+      }
+    </div>
+  </section>
+
+  {
+    (open || access === "pending") && (
+      <section class='wrap'>
+        <dl class='stay-facts'>
+          <div>
+            <dt>{s.arrive}</dt>
+            <dd>{formatDate(lang, booking.checkIn, { weekday: "long", day: "numeric", month: "long" })}</dd>
+            <dd class='sub'>{fill(s.from, { time: house.checkInFrom })}</dd>
+          </div>
+          <div>
+            <dt>{s.depart}</dt>
+            <dd>{formatDate(lang, booking.checkOut, { weekday: "long", day: "numeric", month: "long" })}</dd>
+            <dd class='sub'>{fill(s.by, { time: house.checkOutBy })}</dd>
+          </div>
+          <div>
+            <dt>{s.guests}</dt>
+            <dd>{guestLine(lang, booking.adults, booking.children)}</dd>
+            {booking.dog && <dd class='sub'>{s.dog}</dd>}
+          </div>
+          <div>
+            <dt>&nbsp;</dt>
+            <dd>{plural(lang, nights, t.units.night)}</dd>
+          </div>
+        </dl>
+      </section>
+    )
+  }
+
+  {
+    booking.hostNote && access !== "ended" && (
+      <section class='wrap'>
+        <aside class='letter' data-reveal>
+          <span class='label'>{s.noteTitle}</span>
+          <p>{booking.hostNote}</p>
+          <p class='sign'>— {house.hostName}</p>
+        </aside>
+      </section>
+    )
+  }
+
+  {
+    open && settings && recs && (
+      <div class='wrap stay-body'>
+        <nav class='toc' aria-label={s.metaTitle}>
+          <ol>
+            {sections.map(([id, title]) => (
+              <li>
+                <a href={`#${id}`}>{title}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div class='stay-main'>
+          <!-- getting here -->
+          <section id='arrive' class='stay-section'>
+            <span class='label'>i.</span>
+            <h2>{s.arriveTitle}</h2>
+            <div class='two-col'>
+              <div>
+                <h3 class='mini'>{s.address}</h3>
+                {settings.address ? (
+                  <p class='big'>{settings.address}</p>
+                ) : (
+                  <p class='muted'>{s.notSetYet}</p>
+                )}
+                {safeHref(settings.mapsUrl) && (
+                  <a class='btn ghost' href={safeHref(settings.mapsUrl)} target='_blank' rel='noopener noreferrer'>
+                    {s.openMaps} <span class='arrow' aria-hidden='true'>↗</span>
+                  </a>
+                )}
+                {settings.parking && (
+                  <>
+                    <h3 class='mini' style='margin-top:2rem'>{s.parking}</h3>
+                    <p class='pre'>{settings.parking}</p>
+                  </>
+                )}
+              </div>
+              <div class='keys'>
+                <h3 class='mini'>{s.keysTitle}</h3>
+                {revealed ? (
+                  settings.arrival ? <p class='pre'>{settings.arrival}</p> : <p class='muted'>{s.notSetYet}</p>
+                ) : (
+                  <p class='locked'>{fill(s.revealLater, { n: rules.revealDaysBefore })}</p>
+                )}
+              </div>
+            </div>
+            <div class='travel'>
+              {travelOrder.map((mode) => (
+                <div>
+                  <h3 class='mini'>{travelTitle[mode]}</h3>
+                  <p>{travel[mode][lang]}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <!-- the house -->
+          <section id='house' class='stay-section'>
+            <span class='label'>ii.</span>
+            <h2>{s.houseTitle}</h2>
+            <div class='two-col'>
+              <div>
+                <h3 class='mini'>{s.wifi}</h3>
+                {revealed && settings.wifiName ? (
+                  <dl class='dl compact'>
+                    <dt>{s.network}</dt>
+                    <dd>{settings.wifiName}</dd>
+                    <dt>{s.password}</dt>
+                    <dd><code>{settings.wifiPassword}</code></dd>
+                  </dl>
+                ) : (
+                  <p class='locked'>{revealed ? s.notSetYet : fill(s.revealShort, { n: rules.revealDaysBefore })}</p>
+                )}
+                {settings.notes && <p class='pre' style='margin-top:2rem'>{settings.notes}</p>}
+              </div>
+              <div>
+                <h3 class='mini'>{s.manualTitle}</h3>
+                <ul class='plain'>
+                  {manual[lang].map((line) => <li>{line}</li>)}
+                </ul>
+                <h3 class='mini' style='margin-top:2rem'>{s.leaveTitle}</h3>
+                <ul class='ticks'>
+                  {beforeYouLeave[lang].map((line) => <li>{line}</li>)}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- picks -->
+          <section id='picks' class='stay-section'>
+            <span class='label'>iii.</span>
+            <h2>{s.picksTitle}</h2>
+            <p class='lead'>{hasPrefs ? s.picksLead : s.picksLeadNoPrefs}</p>
+            {recs.picks.length === 0 && <p class='muted'>{s.none}</p>}
+            <div class='picks'>
+              {recs.picks.map((item) => (
+                <PlaceCard item={item} lang={lang} showReasons large trainGuest={trainGuest} />
+              ))}
+            </div>
+          </section>
+
+          <!-- around -->
+          <section id='around' class='stay-section'>
+            <span class='label'>iv.</span>
+            <h2>{s.allTitle}</h2>
+            <div
+              class='stay-map'
+              data-stay-map
+              data-places={JSON.stringify(mapPlaces)}
+              data-home={JSON.stringify({ lat: house.lat, lng: house.lng, name: "Aszófő" })}
+              data-directions={s.directions}
+              aria-label={s.mapTitle}
+            />
+            <div class='groups'>
+              {recs.groups.map((group) => (
+                <details class='group' open={group.category === "restaurant" || group.category === "winery"}>
+                  <summary>
+                    <span>{s.categories[group.category]}</span>
+                    <span class='count'>{group.items.length}</span>
+                  </summary>
+                  <div class='cards'>
+                    {group.items.map((item) => (
+                      <PlaceCard item={item} lang={lang} trainGuest={trainGuest} />
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
+
+          <!-- everyday -->
+          <section id='everyday' class='stay-section'>
+            <span class='label'>v.</span>
+            <h2>{s.essentialsTitle}</h2>
+            <ul class='essentials'>
+              {essentials.map((e) => {
+                const href =
+                  e.href ??
+                  `https://www.google.com/maps/dir/?api=1&destination=${e.lat},${e.lng}`;
+                return (
+                  <li>
+                    <span class='what'>{e.label[lang]}</span>
+                    <span class='name'>
+                      <a
+                        href={href}
+                        target={e.href ? undefined : "_blank"}
+                        rel='noopener noreferrer'
+                      >
+                        {e.name}
+                      </a>
+                    </span>
+                    <span class='detail'>{e.detail[lang]}</span>
+                  </li>
+                );
+              })}
+            </ul>
+            <p class='emergency'><strong>112</strong> · {s.emergency}</p>
+          </section>
+
+          <!-- contact -->
+          <section id='contact' class='stay-section'>
+            <span class='label'>vi.</span>
+            <h2>{s.contactTitle}</h2>
+            <div class='hero-actions'>
+              {revealed && settings.hostPhone && (
+                <a class='btn' href={`tel:${settings.hostPhone.replace(/\s/g, "")}`}>
+                  {s.call} · {settings.hostPhone}
+                </a>
+              )}
+              <a class='btn ghost' href={`mailto:${house.contactEmail}`}>
+                {s.write} · {house.contactEmail}
+              </a>
+            </div>
+            {!revealed && <p class='muted' style='margin-top:1.2rem'>{fill(s.revealShort, { n: rules.revealDaysBefore })}</p>}
+          </section>
+        </div>
+      </div>
+    )
+  }
+</AszofoLayout>
+
+<script>
+  const el = document.querySelector<HTMLElement>("[data-stay-map]");
+  if (el) {
+    const load = () => import("../../../aszofo/client/stay-map").then((m) => m.initStayMap(el));
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          load();
+        }
+      }, { rootMargin: "400px" });
+      io.observe(el);
+    } else {
+      load();
+    }
+  }
+</script>

@@ -1,0 +1,201 @@
+---
+import "../styles/aszofo.css";
+import HouseMark from "../components/HouseMark.astro";
+import { BASE_PATH, LANGS, type Lang, house, indexable } from "../config";
+import { dict } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  // Link targets for the language switcher, one per language.
+  langHrefs: Record<Lang, string>;
+  // Public pages list their language versions for search engines.
+  alternates?: boolean;
+  canonical?: string;
+  // Guest and host pages: never indexed, never leak their URL.
+  private?: boolean;
+  nav?: boolean;
+  cta?: boolean;
+  // Send first-time visitors to their browser language (root page only).
+  autoLang?: boolean;
+  homeHref?: string;
+  // Host pages are English-only and skip the language switch.
+  langs?: boolean;
+}
+
+const {
+  lang,
+  title,
+  description,
+  langHrefs,
+  alternates = false,
+  canonical,
+  private: isPrivate = false,
+  nav = false,
+  cta = false,
+  autoLang = false,
+  homeHref,
+  langs = true,
+} = Astro.props;
+
+const t = dict(lang);
+const site = Astro.site ?? new URL(Astro.url.origin);
+const abs = (path: string) => new URL(path, site).toString();
+const robots = isPrivate || !indexable ? "noindex, nofollow" : "index, follow";
+const home = homeHref ?? `${BASE_PATH}${lang === "en" ? "" : `/${lang}`}`;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover' />
+    <title>{title}</title>
+    {description && <meta name='description' content={description} />}
+    <meta name='robots' content={robots} />
+    {isPrivate && <meta name='referrer' content='strict-origin' />}
+    <meta name='theme-color' content='#f3efe7' />
+    <link rel='icon' href='/aszofo/favicon.svg' type='image/svg+xml' />
+    {canonical && <link rel='canonical' href={abs(canonical)} />}
+    {
+      alternates &&
+        LANGS.map((l) => (
+          <link rel='alternate' hreflang={l} href={abs(langHrefs[l])} />
+        ))
+    }
+    {alternates && <link rel='alternate' hreflang='x-default' href={abs(langHrefs.en)} />}
+    {
+      !isPrivate && (
+        <>
+          <meta property='og:type' content='website' />
+          <meta property='og:title' content={title} />
+          {description && <meta property='og:description' content={description} />}
+          <meta property='og:image' content={abs("/aszofo/img/terrace-1200.webp")} />
+          <meta property='og:locale' content={t.locale.replace("-", "_")} />
+          <meta name='twitter:card' content='summary_large_image' />
+        </>
+      )
+    }
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300..600&family=Spectral:ital,wght@0,200;0,300;0,400;1,200;1,300&display=swap'
+    />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    {
+      autoLang && (
+        <script is:inline>
+          {`(function(){try{if(localStorage.getItem("aszofo-lang"))return;var l=navigator.languages||[navigator.language];for(var i=0;i<l.length;i++){var c=String(l[i]).slice(0,2).toLowerCase();if(c==="hu"||c==="de"){location.replace("/aszofo/"+c+location.hash);return}if(c==="en")return}}catch(e){}})();`}
+        </script>
+      )
+    }
+    <slot name='head' />
+  </head>
+  <body>
+    <a class='skip' href='#main'>{t.nav.skip}</a>
+    <header class='site-header' data-header>
+      <div class='wrap bar'>
+        <a class='wordmark' href={home} aria-label='Aszófő'>
+          <HouseMark />
+          <span>
+            <span class='name'>Aszófő</span>
+            <span class='sub'>Présház · Balaton</span>
+          </span>
+        </a>
+        <nav class='nav' aria-label='Aszófő'>
+          {
+            nav && (
+              <div class='links'>
+                <a href='#house'>{t.nav.house}</a>
+                <a href='#around'>{t.nav.around}</a>
+                <a href='#seasons'>{t.nav.seasons}</a>
+              </div>
+            )
+          }
+          <div class='langs' hidden={!langs}>
+            {
+              LANGS.map((l) => (
+                <a
+                  href={langHrefs[l]}
+                  hreflang={l}
+                  lang={l}
+                  data-lang={l}
+                  aria-current={l === lang ? "true" : undefined}
+                  title={dict(l).langName}
+                >
+                  {l.toUpperCase()}
+                </a>
+              ))
+            }
+          </div>
+          {cta && <a class='cta' href='#dates'>{t.nav.request}</a>}
+        </nav>
+      </div>
+    </header>
+
+    <main id='main'>
+      <slot />
+    </main>
+
+    <footer class='site-footer'>
+      <div class='wrap cols'>
+        <div>
+          <a class='wordmark' href={home} aria-label='Aszófő'>
+            <HouseMark />
+            <span class='name'>Aszófő</span>
+          </a>
+          <p style='margin-top:1rem'>{t.footer.place}</p>
+          <p>{t.footer.hosted}</p>
+        </div>
+        <div style='text-align:right'>
+          <p>
+            {t.footer.questions}{" "}
+            <a href={`mailto:${house.contactEmail}`}>{house.contactEmail}</a>
+          </p>
+          <p>© {year}</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const header = document.querySelector<HTMLElement>("[data-header]");
+      const onScroll = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // Remember an explicit language choice so the root page stops redirecting.
+      for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-lang]")) {
+        link.addEventListener("click", () => {
+          try {
+            localStorage.setItem("aszofo-lang", link.dataset.lang ?? "en");
+          } catch {
+            // Private mode: the choice just isn't remembered.
+          }
+        });
+      }
+
+      const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-in");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        for (const el of targets) io.observe(el);
+      } else {
+        for (const el of targets) el.classList.add("is-in");
+      }
+    </script>
+  </body>
+</html>

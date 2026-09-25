@@ -50,6 +50,10 @@ Content lives in:
 - `src/components/{PostCard,PostMeta,NoahWorksheet,SurfCoachingPlan,ExerciseCollection}.astro`
 - `src/components/mdx/{Callout,Divider,Highlight,Quote,CTA,ImageFloat,ImageGrid}.astro` — components usable inside MDX posts
 
+### Aszófő booking pages
+
+`/aszofo` is a separate, trilingual (en/hu/de) booking-request site for the Balaton press house, with its own branding. Everything lives in `src/aszofo/` (config, copy, data, layout, components, client scripts) and `src/pages/aszofo/` (static public page; server-rendered guest page, host dashboard and API). Storage is Upstash Redis via REST, email is Resend. It is not linked from the blog and is excluded from the sitemap. See `src/aszofo/README.md`.
+
 ### Markdown plugins
 
 - `remark-gfm`

@@ -19,7 +19,12 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    // The Aszófő pages carry their own branding and stay out of the blog's
+    // sitemap until they move to their own domain.
+    sitemap({ filter: (page) => !page.includes("/aszofo") }),
+  ],
   markdown: {
     processor: unified({
       remarkPlugins: [remarkGfm],

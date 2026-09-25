@@ -1,0 +1,53 @@
+---
+import images from "../images.json";
+
+export type PhotoName = keyof typeof images;
+
+interface Props {
+  name: PhotoName;
+  alt: string;
+  sizes?: string;
+  class?: string;
+  caption?: string;
+  eager?: boolean;
+  position?: string;
+}
+
+const {
+  name,
+  alt,
+  sizes = "(min-width: 900px) 50vw, 100vw",
+  class: className = "photo",
+  caption,
+  eager = false,
+  position,
+} = Astro.props;
+
+const photo = images[name];
+const srcset = photo.widths
+  .map((w) => `/aszofo/img/${name}-${w}.webp ${w}w`)
+  .join(", ");
+const src = `/aszofo/img/${name}-${photo.widths.at(-1)}.webp`;
+---
+
+<figure class={className}>
+  <div
+    class='frame blur-up'
+    style={`background-image:url(${photo.placeholder})`}
+  >
+    <img
+      src={src}
+      srcset={srcset}
+      sizes={sizes}
+      width={photo.width}
+      height={photo.height}
+      alt={alt}
+      loading={eager ? "eager" : "lazy"}
+      decoding={eager ? "sync" : "async"}
+      fetchpriority={eager ? "high" : "auto"}
+      style={position ? `object-position:${position}` : undefined}
+    />
+  </div>
+  {caption && <figcaption class='caption'>{caption}</figcaption>}
+  <slot />
+</figure>

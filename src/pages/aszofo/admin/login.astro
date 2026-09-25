@@ -1,0 +1,122 @@
+---
+export const prerender = false;
+
+import { isHost, passwordEnabled } from "../../../aszofo/auth";
+import { BASE_PATH } from "../../../aszofo/config";
+import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
+
+if (isHost(Astro.cookies)) return Astro.redirect(`${BASE_PATH}/admin`);
+
+const token = Astro.url.searchParams.get("t") ?? "";
+const error = Astro.url.searchParams.get("e");
+const withPassword = passwordEnabled();
+const here = `${BASE_PATH}/admin/login`;
+---
+
+<AszofoLayout
+  lang='en'
+  title='Sign in · Aszófő'
+  langHrefs={{ en: here, hu: here, de: here }}
+  private
+  langs={false}
+  homeHref={BASE_PATH}
+>
+  <section class='section'>
+    <div class='narrow' style='max-width:30rem'>
+      <span class='label'>Host</span>
+      {
+        token ? (
+          <>
+            <h1 style='font-size:clamp(2.2rem,5vw,3.2rem);margin:1.4rem 0 1.2rem'>Welcome back.</h1>
+            <p class='lead'>Press the button to finish signing in.</p>
+            <form method='post' action={`${BASE_PATH}/api/host/verify`} style='margin-top:2rem'>
+              <input type='hidden' name='t' value={token} />
+              <button class='btn' type='submit'>
+                Sign in <span class='arrow' aria-hidden='true'>→</span>
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h1 style='font-size:clamp(2.2rem,5vw,3.2rem);margin:1.4rem 0 1.2rem'>Sign in</h1>
+            <p class='lead'>
+              {withPassword
+                ? "Enter your email for a one-time link, or add your password to sign in right away."
+                : "Enter your email and we'll send you a one-time link."}
+            </p>
+            {error === "expired" && (
+              <p class='form-error'>That link has expired or was already used. Ask for a new one.</p>
+            )}
+            <form data-login style='margin-top:2.2rem' novalidate>
+              <div class='fields'>
+                <div class='field'>
+                  <label for='login-email'>Email</label>
+                  <input id='login-email' name='email' type='email' autocomplete='email' required />
+                </div>
+                {withPassword && (
+                  <div class='field'>
+                    <label for='login-password'>Password (optional)</label>
+                    <input
+                      id='login-password'
+                      name='password'
+                      type='password'
+                      autocomplete='current-password'
+                    />
+                  </div>
+                )}
+              </div>
+              <div style='margin-top:2rem'>
+                <button class='btn' type='submit'>
+                  Continue <span class='arrow' aria-hidden='true'>→</span>
+                </button>
+              </div>
+              <p class='form-error' data-message role='status' hidden />
+            </form>
+          </>
+        )
+      }
+    </div>
+  </section>
+</AszofoLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-login]");
+  const message = form?.querySelector<HTMLElement>("[data-message]");
+  const say = (html: string, error = false) => {
+    if (!message) return;
+    message.hidden = false;
+    message.style.color = error ? "var(--clay)" : "var(--ink-soft)";
+    message.innerHTML = html;
+  };
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const res = await fetch("/aszofo/api/host/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: String(data.get("email") ?? ""),
+        password: String(data.get("password") ?? ""),
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      signedIn?: boolean;
+      devLink?: string;
+      error?: string;
+    };
+    if (body.signedIn) {
+      location.href = "/aszofo/admin";
+    } else if (body.devLink) {
+      say(`Email isn't configured, so here is the link (development only): <a href="${body.devLink}">sign in</a>.`);
+    } else if (body.error === "password") {
+      say("That email and password don't match.", true);
+    } else if (body.error === "rate") {
+      say("Too many attempts. Try again in a few minutes.", true);
+    } else if (res.ok) {
+      say("If that's the host address, a sign-in link is on its way. It works once, for 15 minutes.");
+    } else {
+      say("Something went wrong. Try again.", true);
+    }
+  });
+</script>
