@@ -220,6 +220,14 @@ const settingFields = [
                   <span>Email the guest {hasEmail ? `(${dict(b.lang).langName})` : "(email is off)"}</span>
                 </label>
                 <div class='buttons'>
+                  <button
+                    class='btn quiet'
+                    type='button'
+                    data-action='delete'
+                    data-confirm={`Delete ${b.name}'s request? Nobody is emailed. Use this for spam or tests.`}
+                  >
+                    Delete
+                  </button>
                   <button class='btn ghost' type='button' data-action='decline'>Decline</button>
                   <button class='btn' type='button' data-action='approve'>Approve</button>
                 </div>
