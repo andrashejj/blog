@@ -38,6 +38,8 @@ Set these in Vercel (see `.env.example`):
 - `ASZOFO_SECRET`: a long random string for signing the host session.
 - `RESEND_API_KEY` and `ASZOFO_EMAIL_FROM`: a Resend key and a sender on a
   domain verified there. Without email, the dashboard shows guest links to copy.
+- `ASZOFO_NOTIFY`: comma-separated addresses that hear about new requests
+  and every approval, decline and cancellation. Defaults to the admin address.
 - Optional: `ASZOFO_ADMIN_EMAIL` (defaults to `andras@hejj.xyz`),
   `ASZOFO_ADMIN_PASSWORD` (sign-in fallback), `ASZOFO_BASE_URL`.
 

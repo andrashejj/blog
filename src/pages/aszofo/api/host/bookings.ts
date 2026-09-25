@@ -11,7 +11,12 @@ import {
   listBookings,
   updateBooking,
 } from "../../../../aszofo/bookings";
-import { sendApproved, sendDeclined, stayUrl } from "../../../../aszofo/email";
+import {
+  sendApproved,
+  sendDecisionToHosts,
+  sendDeclined,
+  stayUrl,
+} from "../../../../aszofo/email";
 import {
   guard,
   json,
@@ -76,6 +81,7 @@ export const POST = ({ request, cookies }: APIContext) =>
         hostNote: note ?? current.hostNote,
       });
       const emailed = next && notify ? await sendApproved(origin, next) : false;
+      if (next) await sendDecisionToHosts(origin, next, "approved", emailed);
       return json({
         ok: true,
         booking: next,
@@ -90,11 +96,13 @@ export const POST = ({ request, cookies }: APIContext) =>
         hostNote: note ?? current.hostNote,
       });
       const emailed = next && notify ? await sendDeclined(origin, next) : false;
+      if (next) await sendDecisionToHosts(origin, next, "declined", emailed);
       return json({ ok: true, booking: next, emailed });
     }
 
     if (action === "cancel") {
       const next = await updateBooking(current.id, { status: "cancelled" });
+      if (next) await sendDecisionToHosts(origin, next, "cancelled", false);
       return json({ ok: true, booking: next, emailed: false });
     }
 

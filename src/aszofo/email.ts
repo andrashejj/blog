@@ -16,7 +16,7 @@ import {
 } from "./i18n";
 
 interface Mail {
-  to: string;
+  to: string | string[];
   subject: string;
   paragraphs: string[];
   link?: { href: string; label: string };
@@ -66,7 +66,7 @@ export async function send(mail: Mail): Promise<boolean> {
       },
       body: JSON.stringify({
         from: env("ASZOFO_EMAIL_FROM") ?? "Aszófő <onboarding@resend.dev>",
-        to: [mail.to],
+        to: Array.isArray(mail.to) ? mail.to : [mail.to],
         reply_to: mail.replyTo ?? house.contactEmail,
         subject: mail.subject,
         html: html(mail),
@@ -154,6 +154,16 @@ export function sendDeclined(origin: string, b: Booking) {
 
 // ---------------------------------------------------------------- to the host
 
+// Everyone who hears about requests and decisions: ASZOFO_NOTIFY as a
+// comma-separated list (kept out of the repo), otherwise the host address.
+export function hostRecipients(): string[] {
+  const list = (env("ASZOFO_NOTIFY") ?? "")
+    .split(",")
+    .map((address) => address.trim())
+    .filter((address) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address));
+  return list.length > 0 ? list : [adminEmail()];
+}
+
 export function sendNewRequestToHost(origin: string, b: Booking) {
   const d = dict("en");
   const p = b.prefs;
@@ -173,7 +183,7 @@ export function sendNewRequestToHost(origin: string, b: Booking) {
   ].filter(Boolean) as string[];
 
   return send({
-    to: adminEmail(),
+    to: hostRecipients(),
     replyTo: b.email,
     subject: `New request: ${b.name}, ${formatRange("en", b.checkIn, b.checkOut)}`,
     paragraphs: [
@@ -185,6 +195,44 @@ export function sendNewRequestToHost(origin: string, b: Booking) {
       href: `${origin}${BASE_PATH}/admin#${b.id}`,
       label: "Review request",
     },
+  });
+}
+
+const DECISIONS = {
+  approved: "Approved",
+  declined: "Declined",
+  cancelled: "Cancelled",
+} as const;
+
+// Tells every host what just happened, so whoever didn't press the button
+// still knows.
+export function sendDecisionToHosts(
+  origin: string,
+  b: Booking,
+  decision: keyof typeof DECISIONS,
+  guestEmailed: boolean,
+) {
+  const dates = formatRange("en", b.checkIn, b.checkOut);
+  const guestLineText = guestEmailed
+    ? `${b.name} was emailed in ${dict(b.lang).langName}.`
+    : `${b.name} was not emailed; let them know yourself.`;
+  const paragraphs = [
+    `${dates} · ${guestLine("en", b.adults, b.children)}${b.dog ? " · with a dog" : ""}`,
+    `${b.name} <${b.email}>${b.phone ? ` · ${b.phone}` : ""}`,
+    guestLineText,
+  ];
+  if (b.hostNote && decision !== "cancelled") {
+    paragraphs.push(`Note to the guest:\n${b.hostNote}`);
+  }
+  return send({
+    to: hostRecipients(),
+    replyTo: b.email,
+    subject: `${DECISIONS[decision]}: ${b.name}, ${dates}`,
+    paragraphs,
+    link:
+      decision === "approved"
+        ? { href: stayUrl(origin, b), label: "Their guest page" }
+        : { href: `${origin}${BASE_PATH}/admin`, label: "Open the dashboard" },
   });
 }
 
