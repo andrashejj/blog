@@ -301,9 +301,19 @@ const sections = open
                     <p>{fill(s.keysHunorBody, { name: keyContact })}</p>
                     {revealed ? (
                       settings.keyPhone ? (
-                        <a class='btn' href={`tel:${settings.keyPhone.replace(/[^\d+]/g, "")}`}>
-                          {fill(s.callKey, { name: keyContact })} · {settings.keyPhone}
-                        </a>
+                        <div class='hero-actions'>
+                          <a class='btn' href={`tel:${settings.keyPhone.replace(/[^\d+]/g, "")}`}>
+                            {fill(s.callKey, { name: keyContact })} · {settings.keyPhone}
+                          </a>
+                          <a
+                            class='btn ghost'
+                            href={`https://wa.me/${settings.keyPhone.replace(/\D/g, "")}`}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            {fill(s.whatsapp, { name: keyContact })}
+                          </a>
+                        </div>
                       ) : (
                         <p class='muted'>{s.notSetYet}</p>
                       )
