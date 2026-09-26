@@ -12,9 +12,8 @@ export const POST = async ({ request, cookies, redirect }: APIContext) => {
     return redirect(`${BASE_PATH}/admin/login?e=origin`, 303);
   const form = await request.formData();
   const token = String(form.get("t") ?? "");
-  if (!(await consumeLoginToken(token))) {
-    return redirect(`${BASE_PATH}/admin/login?e=expired`, 303);
-  }
-  startSession(cookies, isSecure(request));
+  const host = await consumeLoginToken(token);
+  if (!host) return redirect(`${BASE_PATH}/admin/login?e=expired`, 303);
+  startSession(cookies, isSecure(request), host);
   return redirect(`${BASE_PATH}/admin`, 303);
 };

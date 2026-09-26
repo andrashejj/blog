@@ -38,17 +38,23 @@ Set these in Vercel (see `.env.example`):
 - `ASZOFO_SECRET`: a long random string for signing the host session.
 - `RESEND_API_KEY` and `ASZOFO_EMAIL_FROM`: a Resend key and a sender on a
   domain verified there. Without email, the dashboard shows guest links to copy.
-- `ASZOFO_NOTIFY`: comma-separated addresses that hear about new requests
-  and every approval, decline and cancellation. Defaults to the admin address.
-- Optional: `ASZOFO_ADMIN_EMAIL` (defaults to `andras@hejj.xyz`),
-  `ASZOFO_ADMIN_PASSWORD` (sign-in fallback), `ASZOFO_BASE_URL`.
+- `ASZOFO_HOSTS`: everyone who may sign in, as `Name <email>` separated by
+  commas. They all get the notices about new requests and every approval,
+  decline and cancellation (override with `ASZOFO_NOTIFY`). Defaults to
+  `ASZOFO_ADMIN_EMAIL` or `andras@hejj.xyz`.
+- `ASZOFO_HOUSE`: optional JSON with private house details (map link, pin,
+  key pickup, WhatsApp) used until a host saves them in the dashboard.
+- Optional: `ASZOFO_ADMIN_PASSWORD` (sign-in fallback), `ASZOFO_BASE_URL`.
 
 Sign in at `/aszofo/admin` with the host address; a one-time link arrives by
 email. In `pnpm dev` without Resend, the link is shown on the page.
 
 ## Editing
 
-- House rules, capacity, times, minimum stay: `config.ts`.
+- House rules, capacity, times, minimum stay, costs and the key holder:
+  `config.ts`. There's no nightly rate: cleaning plus Hunor's two visits
+  (required October to April; May to September guests may collect the keys
+  in Budapest instead), plus a thank-you the guest chooses.
 - All page and email text in three languages: `i18n.ts`. English is the
   reference; TypeScript fails if Hungarian or German miss a key.
 - Directions, house manual, check-out list, distances: `content.ts`.
@@ -58,5 +64,8 @@ email. In `pnpm dev` without Resend, the link is shown on the page.
   guest's year are shown as "dates change yearly" and never picked.
 - Photos: `node scripts/aszofo-images.mjs` crops and grades the originals from
   the Balaton cottage posts into `public/aszofo/img/`.
-- Private details (address, door code, Wi‑Fi, phone): the dashboard's "House
-  details for guests" form. They're stored in Redis, never in the repo.
+- Private details (address, map pin, Hunor's phone, key pickup, WhatsApp):
+  the dashboard's "House details for guests" form. They're stored in Redis,
+  never in the repo. A Google Maps link is turned into a pin when saved.
+- Favourite places: set `"hostPick": true` in `data/places.json`. They get a
+  badge, rank higher, and have their own group on the guest page.

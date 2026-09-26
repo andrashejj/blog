@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 
-import { isHost } from "../../../aszofo/auth";
+import { currentHost, hosts } from "../../../aszofo/auth";
 import {
   type Booking,
   accessUntil,
@@ -11,7 +11,12 @@ import {
   stayLimits,
   unavailableRanges,
 } from "../../../aszofo/bookings";
-import { BASE_PATH, booking as rules } from "../../../aszofo/config";
+import {
+  BASE_PATH,
+  keyContact,
+  booking as rules,
+} from "../../../aszofo/config";
+import { costsFor, euro } from "../../../aszofo/costs";
 import { diffDays, overlaps, todayAtHouse } from "../../../aszofo/dates";
 import { emailConfigured, stayUrl } from "../../../aszofo/email";
 import { env } from "../../../aszofo/env";
@@ -20,7 +25,8 @@ import { dict, formatDate, formatRange, guestLine } from "../../../aszofo/i18n";
 import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
 import { StoreUnavailableError } from "../../../aszofo/store";
 
-if (!isHost(Astro.cookies)) return Astro.redirect(`${BASE_PATH}/admin/login`);
+const me = currentHost(Astro.cookies);
+if (!me) return Astro.redirect(`${BASE_PATH}/admin/login`);
 
 const today = todayAtHouse();
 const origin = siteOrigin(Astro.request);
@@ -98,6 +104,13 @@ const calendarData = {
   maxNights: rules.maxNights,
 };
 
+const costLine = (b: Booking) => {
+  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
+  const keys =
+    c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : "keys from Budapest";
+  return `Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
+};
+
 const statusLabel: Record<Booking["status"], string> = {
   pending: "Waiting for you",
   approved: "Confirmed",
@@ -109,30 +122,38 @@ const settingFields = [
   {
     key: "address",
     label: "Address",
-    hint: "Shown to confirmed guests from the start.",
-  },
-  {
-    key: "mapsUrl",
-    label: "Map link",
-    hint: "A Google or Apple Maps link to the gate.",
-  },
-  { key: "parking", label: "Parking", hint: "Where to leave the car." },
-  {
-    key: "arrival",
-    label: "Arrival and keys",
-    hint: `Door code, key box, anything about getting in. Shown ${rules.revealDaysBefore} days before arrival.`,
+    hint: "No street address, so describe the way in. Shown to confirmed guests.",
     long: true,
   },
   {
-    key: "wifiName",
-    label: "Wi-Fi network",
-    hint: `Shown ${rules.revealDaysBefore} days before arrival.`,
+    key: "mapsUrl",
+    label: "Google Maps link to the house",
+    hint:
+      settings?.lat && settings?.lng
+        ? `Pin found: ${settings.lat}, ${settings.lng}. Guests see it on a small map.`
+        : "Paste a Google Maps pin link; the map on the guest page uses it.",
   },
-  { key: "wifiPassword", label: "Wi-Fi password", hint: "" },
+  { key: "parking", label: "Parking", hint: "Where to leave the car." },
   {
-    key: "hostPhone",
-    label: "Your phone",
-    hint: `Shown ${rules.revealDaysBefore} days before arrival.`,
+    key: "keyPhone",
+    label: `${keyContact}'s phone`,
+    hint: `Guests call ${keyContact} a few days before. Shown ${rules.revealDaysBefore} days before arrival.`,
+  },
+  {
+    key: "keyPickup",
+    label: "Key pickup in Budapest",
+    hint: "For May to September guests who collect the keys themselves.",
+  },
+  {
+    key: "whatsapp",
+    label: "Your WhatsApp link",
+    hint: "Shown to confirmed guests, e.g. a wa.me link.",
+  },
+  {
+    key: "arrival",
+    label: "Arrival notes",
+    hint: `Anything else about getting in. Shown ${rules.revealDaysBefore} days before arrival.`,
+    long: true,
   },
   {
     key: "notes",
@@ -161,6 +182,10 @@ const settingFields = [
           </h1>
         </div>
         <form method='post' action={`${BASE_PATH}/api/host/logout`}>
+          <p class='muted' style='margin:0 0 .4rem;font-size:.9rem;text-align:right'>
+            Signed in as {me.name}
+            {hosts().length > 1 && ` · hosts: ${hosts().map((h) => h.name).join(", ")}`}
+          </p>
           <button class='btn quiet' type='submit'>Sign out</button>
         </form>
       </div>
@@ -192,6 +217,7 @@ const settingFields = [
                     {formatRange("en", b.checkIn, b.checkOut)} · {nights(b)} nights · {guestLine("en", b.adults, b.children)}
                     {b.dog && " · dog"}
                   </p>
+                  <p class='when muted' style='font-size:.88rem'>{costLine(b)}</p>
                 </div>
                 <p class='meta'>
                   <a href={`mailto:${b.email}`}>{b.email}</a>
@@ -253,6 +279,7 @@ const settingFields = [
                     {formatRange("en", b.checkIn, b.checkOut)} · {nights(b)} nights · {guestLine("en", b.adults, b.children)}
                     {b.dog && " · dog"}
                   </p>
+                  <p class='when muted' style='font-size:.88rem'>{costLine(b)}</p>
                 </div>
                 <p class='meta'>
                   <a href={`mailto:${b.email}`}>{b.email}</a>
@@ -331,7 +358,7 @@ const settingFields = [
       <!-- ------------------------------------------------ settings -->
       <h2 class='admin-h'>House details for guests</h2>
       <p class='muted' style='max-width:40rem'>
-        Kept private. Confirmed guests see the address, parking and house notes on their page; the arrival details, Wi-Fi and your phone appear {rules.revealDaysBefore} days before they arrive.
+        Kept private. Confirmed guests see the address, map, parking, key pickup, WhatsApp and house notes on their page; {keyContact}'s phone and the arrival notes appear {rules.revealDaysBefore} days before they arrive.
       </p>
       <form class='panel settings' data-settings>
         <div class='fields two'>

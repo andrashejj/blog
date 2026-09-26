@@ -1,7 +1,8 @@
 // Booking requests, owner blocks and private house settings.
 
 import { randomBytes } from "node:crypto";
-import { type Lang, house, isLang, booking as rules } from "./config";
+import { type Lang, costs, house, isLang, booking as rules } from "./config";
+import { KEY_OPTIONS, type KeyOption, effectiveKeys } from "./costs";
 import {
   type DateRange,
   type ISODate,
@@ -11,6 +12,7 @@ import {
   overlaps,
   todayAtHouse,
 } from "./dates";
+import { env } from "./env";
 import {
   GROUPS,
   INTERESTS,
@@ -42,8 +44,14 @@ export interface Booking {
   message?: string;
   lang: Lang;
   prefs: Prefs;
+  // How the guest gets in: Hunor, or keys collected in Budapest (summer only).
+  keys: KeyOption;
+  // An optional thank-you in euros, on top of cleaning and keys.
+  thanks: number;
   // Shown to the guest on their page and in the approval email.
   hostNote?: string;
+  // The host who approved or declined, who signs the note.
+  decidedBy?: string;
 }
 
 export interface Block {
@@ -54,24 +62,30 @@ export interface Block {
 }
 
 export interface PrivateSettings {
+  // Free text; the house has no street address.
   address: string;
   mapsUrl: string;
-  arrival: string;
+  // Resolved from mapsUrl when the settings are saved.
+  lat: string;
+  lng: string;
   parking: string;
-  wifiName: string;
-  wifiPassword: string;
-  hostPhone: string;
+  keyPhone: string;
+  keyPickup: string;
+  arrival: string;
+  whatsapp: string;
   notes: string;
 }
 
 export const EMPTY_SETTINGS: PrivateSettings = {
   address: "",
   mapsUrl: "",
-  arrival: "",
+  lat: "",
+  lng: "",
   parking: "",
-  wifiName: "",
-  wifiPassword: "",
-  hostPhone: "",
+  keyPhone: "",
+  keyPickup: "",
+  arrival: "",
+  whatsapp: "",
   notes: "",
 };
 
@@ -82,7 +96,13 @@ const newToken = () => randomBytes(24).toString("base64url");
 
 export type RequestInput = Omit<
   Booking,
-  "id" | "token" | "status" | "createdAt" | "updatedAt" | "hostNote"
+  | "id"
+  | "token"
+  | "status"
+  | "createdAt"
+  | "updatedAt"
+  | "hostNote"
+  | "decidedBy"
 >;
 
 function text(value: unknown, max: number): string {
@@ -159,6 +179,11 @@ export function parseRequest(
 
   if (errors.length > 0) return { ok: false, errors };
 
+  const thanks = Math.min(
+    costs.maxThanks,
+    Math.max(0, Math.round(Number(body.thanks) || 0)),
+  );
+
   return {
     ok: true,
     value: {
@@ -172,6 +197,8 @@ export function parseRequest(
       phone: text(body.phone, 40) || undefined,
       message: text(body.message, 1500) || undefined,
       lang: isLang(body.lang) ? body.lang : "en",
+      keys: effectiveKeys(checkIn as ISODate, oneOf(KEY_OPTIONS, body.keys)),
+      thanks,
       prefs: {
         group: oneOf(GROUPS, rawPrefs.group),
         interests,
@@ -252,7 +279,7 @@ export async function createBooking(input: RequestInput): Promise<Booking> {
 
 export async function updateBooking(
   id: string,
-  patch: Partial<Pick<Booking, "status" | "hostNote">>,
+  patch: Partial<Pick<Booking, "status" | "hostNote" | "decidedBy">>,
 ): Promise<Booking | null> {
   const b = await getBooking(id);
   if (!b) return null;
@@ -349,16 +376,74 @@ export function detailsRevealed(b: Booking, today = todayAtHouse()): boolean {
 
 // ---------------------------------------------------------------- settings
 
-export async function getSettings(): Promise<PrivateSettings> {
-  const raw = await store.get("settings");
-  if (!raw) return { ...EMPTY_SETTINGS };
+// Values set in the environment (ASZOFO_HOUSE, a JSON object) fill in
+// anything the hosts haven't saved from the dashboard yet.
+function settingsDefaults(): Partial<PrivateSettings> {
   try {
-    return {
-      ...EMPTY_SETTINGS,
-      ...(JSON.parse(raw) as Partial<PrivateSettings>),
-    };
+    const parsed = JSON.parse(env("ASZOFO_HOUSE") ?? "{}") as Record<
+      string,
+      unknown
+    >;
+    const out: Partial<PrivateSettings> = {};
+    for (const key of Object.keys(
+      EMPTY_SETTINGS,
+    ) as (keyof PrivateSettings)[]) {
+      if (parsed[key] !== undefined) out[key] = String(parsed[key]);
+    }
+    return out;
   } catch {
-    return { ...EMPTY_SETTINGS };
+    return {};
+  }
+}
+
+export async function getSettings(): Promise<PrivateSettings> {
+  const defaults = settingsDefaults();
+  const raw = await store.get("settings");
+  let saved: Partial<PrivateSettings> = {};
+  try {
+    saved = raw ? (JSON.parse(raw) as Partial<PrivateSettings>) : {};
+  } catch {
+    saved = {};
+  }
+  const merged = { ...EMPTY_SETTINGS };
+  for (const key of Object.keys(EMPTY_SETTINGS) as (keyof PrivateSettings)[]) {
+    merged[key] = saved[key] || defaults[key] || "";
+  }
+  // The pin belongs to whichever map link is in use.
+  if (saved.mapsUrl) {
+    merged.lat = saved.lat ?? "";
+    merged.lng = saved.lng ?? "";
+  }
+  return merged;
+}
+
+// Pulls the pin out of a Google Maps link. Short links (maps.app.goo.gl) are
+// followed one redirect; only Google hosts are fetched.
+export async function coordsFromMapsUrl(
+  url: string,
+): Promise<{ lat: string; lng: string } | null> {
+  const parse = (value: string) => {
+    const pin =
+      value.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/) ??
+      value.match(
+        /[?&](?:q|query|destination)=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/,
+      ) ??
+      value.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+    return pin ? { lat: pin[1], lng: pin[2] } : null;
+  };
+  const direct = parse(decodeURIComponent(url));
+  if (direct) return direct;
+  try {
+    const host = new URL(url).hostname;
+    if (!/(^|\.)(goo\.gl|google\.[a-z.]+)$/.test(host)) return null;
+    const res = await fetch(url, {
+      redirect: "manual",
+      signal: AbortSignal.timeout(5000),
+    });
+    const location = res.headers.get("location");
+    return location ? parse(decodeURIComponent(location)) : null;
+  } catch {
+    return null;
   }
 }
 
@@ -369,9 +454,12 @@ export async function saveSettings(
   for (const key of Object.keys(EMPTY_SETTINGS) as (keyof PrivateSettings)[]) {
     next[key] = text(
       body[key],
-      key === "arrival" || key === "notes" ? 3000 : 300,
+      key === "arrival" || key === "notes" || key === "address" ? 3000 : 300,
     );
   }
+  const pin = next.mapsUrl ? await coordsFromMapsUrl(next.mapsUrl) : null;
+  next.lat = pin?.lat ?? "";
+  next.lng = pin?.lng ?? "";
   await store.set("settings", JSON.stringify(next));
   return next;
 }

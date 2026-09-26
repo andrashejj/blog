@@ -2,10 +2,11 @@
 // is logged instead, so the flow still works locally and the host can copy
 // links from the admin page.
 
-import { adminEmail } from "./auth";
+import { type Host, hostNames, hosts } from "./auth";
 import type { Booking } from "./bookings";
 import { accessUntil } from "./bookings";
-import { BASE_PATH, house } from "./config";
+import { BASE_PATH, house, keyContact } from "./config";
+import { costsFor, euro } from "./costs";
 import { env } from "./env";
 import {
   dict,
@@ -92,6 +93,17 @@ const publicUrl = (origin: string, b: Booking) =>
 
 // ---------------------------------------------------------------- to guests
 
+// "Cleaning 40 €, Hunor 20 €, a thank-you 30 € (total 90 €)" in the guest's
+// language.
+function costLine(b: Booking): string {
+  const d = dict(b.lang);
+  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
+  const items = [`${d.costs.cleaning} ${euro(c.cleaning)}`];
+  items.push(c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : d.costs.budapest);
+  if (c.thanks > 0) items.push(`${d.costs.thanks} ${euro(c.thanks)}`);
+  return `${items.join(", ")} (${d.costs.total.toLowerCase()} ${euro(c.total)})`;
+}
+
 export function sendReceived(origin: string, b: Booking) {
   const d = dict(b.lang);
   const dates = formatRange(b.lang, b.checkIn, b.checkOut);
@@ -104,14 +116,15 @@ export function sendReceived(origin: string, b: Booking) {
         dates,
         guests: guestLine(b.lang, b.adults, b.children),
       }),
+      fill(d.email.received.costs, { items: costLine(b) }),
       d.email.received.link,
-      d.email.signoff,
+      hostNames(),
     ],
     link: { href: stayUrl(origin, b), label: d.booking.success.link },
   });
 }
 
-export function sendApproved(origin: string, b: Booking) {
+export function sendApproved(origin: string, b: Booking, by: Host) {
   const d = dict(b.lang);
   const paragraphs = [
     fill(d.email.greeting, { name: b.name }),
@@ -124,17 +137,18 @@ export function sendApproved(origin: string, b: Booking) {
     fill(d.email.approved.link, {
       until: formatDateForSuffix(b.lang, accessUntil(b)),
     }),
-    d.email.signoff,
+    by.name,
   );
   return send({
     to: b.email,
+    replyTo: by.email,
     subject: d.email.approved.subject,
     paragraphs,
     link: { href: stayUrl(origin, b), label: d.email.approved.button },
   });
 }
 
-export function sendDeclined(origin: string, b: Booking) {
+export function sendDeclined(origin: string, b: Booking, by: Host) {
   const d = dict(b.lang);
   const paragraphs = [
     fill(d.email.greeting, { name: b.name }),
@@ -143,25 +157,33 @@ export function sendDeclined(origin: string, b: Booking) {
     }),
   ];
   if (b.hostNote) paragraphs.push(b.hostNote);
-  paragraphs.push(d.email.declined.link, d.email.signoff);
+  paragraphs.push(d.email.declined.link, by.name);
   return send({
     to: b.email,
+    replyTo: by.email,
     subject: d.email.declined.subject,
     paragraphs,
     link: { href: publicUrl(origin, b), label: d.stay.otherDates },
   });
 }
 
-// ---------------------------------------------------------------- to the host
+// ---------------------------------------------------------------- to the hosts
 
-// Everyone who hears about requests and decisions: ASZOFO_NOTIFY as a
-// comma-separated list (kept out of the repo), otherwise the host address.
+// Everyone who hears about requests and decisions: ASZOFO_NOTIFY if set,
+// otherwise every host.
 export function hostRecipients(): string[] {
   const list = (env("ASZOFO_NOTIFY") ?? "")
     .split(",")
     .map((address) => address.trim())
     .filter((address) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address));
-  return list.length > 0 ? list : [adminEmail()];
+  return list.length > 0 ? list : hosts().map((h) => h.email);
+}
+
+function costSummaryForHosts(b: Booking): string {
+  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
+  const keys =
+    c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : "keys collected in Budapest";
+  return `Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
 }
 
 export function sendNewRequestToHost(origin: string, b: Booking) {
@@ -171,6 +193,7 @@ export function sendNewRequestToHost(origin: string, b: Booking) {
     `${b.name} <${b.email}>${b.phone ? ` · ${b.phone}` : ""}`,
     `${formatRange("en", b.checkIn, b.checkOut)} · ${guestLine("en", b.adults, b.children)}${b.dog ? " · with a dog" : ""}`,
     `Language: ${dict(b.lang).langName}`,
+    costSummaryForHosts(b),
   ];
   const prefs = [
     p.group && `Group: ${d.booking.group.options[p.group]}`,
@@ -204,22 +227,23 @@ const DECISIONS = {
   cancelled: "Cancelled",
 } as const;
 
-// Tells every host what just happened, so whoever didn't press the button
-// still knows.
+// Tells every host what just happened and who did it.
 export function sendDecisionToHosts(
   origin: string,
   b: Booking,
   decision: keyof typeof DECISIONS,
+  by: Host,
   guestEmailed: boolean,
 ) {
   const dates = formatRange("en", b.checkIn, b.checkOut);
-  const guestLineText = guestEmailed
-    ? `${b.name} was emailed in ${dict(b.lang).langName}.`
-    : `${b.name} was not emailed; let them know yourself.`;
   const paragraphs = [
+    `${DECISIONS[decision]} by ${by.name}.`,
     `${dates} · ${guestLine("en", b.adults, b.children)}${b.dog ? " · with a dog" : ""}`,
     `${b.name} <${b.email}>${b.phone ? ` · ${b.phone}` : ""}`,
-    guestLineText,
+    costSummaryForHosts(b),
+    guestEmailed
+      ? `${b.name} was emailed in ${dict(b.lang).langName}.`
+      : `${b.name} was not emailed; let them know yourself.`,
   ];
   if (b.hostNote && decision !== "cancelled") {
     paragraphs.push(`Note to the guest:\n${b.hostNote}`);
@@ -236,11 +260,14 @@ export function sendDecisionToHosts(
   });
 }
 
-export function sendLoginLink(origin: string, token: string) {
+export function sendLoginLink(origin: string, token: string, host: Host) {
   return send({
-    to: adminEmail(),
+    to: host.email,
     subject: "Sign in to Aszófő",
-    paragraphs: ["Use this link within 15 minutes to sign in. It works once."],
+    paragraphs: [
+      `Hi ${host.name},`,
+      "Use this link within 15 minutes to sign in. It works once.",
+    ],
     link: {
       href: `${origin}${BASE_PATH}/admin/login?t=${encodeURIComponent(token)}`,
       label: "Sign in",

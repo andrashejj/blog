@@ -1,5 +1,12 @@
 ---
-import { BASE_PATH, type Lang, house, booking as rules } from "../config";
+import {
+  BASE_PATH,
+  type Lang,
+  costs,
+  house,
+  keyContact,
+  booking as rules,
+} from "../config";
 import { dict, fill } from "../i18n";
 import { GROUPS, INTERESTS, PACES, TRANSPORTS } from "../prefs";
 
@@ -34,6 +41,18 @@ const clientText = {
     today: b.legend.today,
   },
   units: { night: t.units.night },
+  costs: {
+    cleaning: costs.cleaning,
+    keys: costs.keyVisits * costs.keyVisitPrice,
+    optionalMonths: costs.keysOptionalMonths,
+    labels: {
+      cleaning: t.costs.cleaning,
+      keys: keyContact,
+      budapest: t.costs.budapest,
+      thanks: t.costs.thanks,
+      total: t.costs.total,
+    },
+  },
 };
 ---
 
@@ -123,6 +142,40 @@ const clientText = {
           <label for='bk-message'>{b.fields.message}</label>
           <textarea id='bk-message' name='message' maxlength='1500' rows='4'></textarea>
           <span class='hint'>{b.fields.messageHint}</span>
+        </div>
+        <fieldset class='q span keys-field' data-keys>
+          <legend class='question'>{b.keysQuestion}</legend>
+          <p class='muted' data-keys-required>{b.keysRequired}</p>
+          <div class='chips' data-keys-choice hidden>
+            <label class='chip'>
+              <input type='radio' name='keys' value='hunor' checked />
+              <span>{b.keysHunor}</span>
+            </label>
+            <label class='chip'>
+              <input type='radio' name='keys' value='budapest' />
+              <span>{b.keysBudapest}</span>
+            </label>
+          </div>
+        </fieldset>
+        <div class='field' data-field='thanks'>
+          <label for='bk-thanks'>{b.thanksLabel}</label>
+          <div class='euro'>
+            <input
+              id='bk-thanks'
+              name='thanks'
+              type='number'
+              inputmode='numeric'
+              min='0'
+              max={costs.maxThanks}
+              step='1'
+            />
+            <span aria-hidden='true'>€</span>
+          </div>
+          <span class='hint'>{b.thanksHint}</span>
+        </div>
+        <div class='field'>
+          <dl class='cost-summary' data-cost-summary aria-live='polite'></dl>
+          <span class='hint'>{t.costs.payNote}</span>
         </div>
       </div>
       <div class='honey' aria-hidden='true'>

@@ -15,7 +15,7 @@ export const house = {
   // Public contact shown on the pages and used as the reply-to for emails.
   contactEmail: "andras@hejj.xyz",
   hostName: "Andras",
-  maxGuests: 10,
+  maxGuests: 6,
   bedrooms: 3,
   plotSquareMetres: 6186,
   checkInFrom: "15:00",
@@ -40,6 +40,23 @@ export const booking = {
   keepClosedDays: 90,
   keepPastDays: 400,
 } as const;
+
+// There's no nightly rate: guests cover cleaning and the key holder, whatever
+// the length of stay, and may add a thank-you of their own choosing.
+export const costs = {
+  cleaning: 40,
+  // Hunor comes twice (arrival and departure), 10 € a visit.
+  keyVisits: 2,
+  keyVisitPrice: 10,
+  // From October to April he also opens the water and runs the heating, so
+  // he's needed. From May to September guests may collect the keys in
+  // Budapest instead.
+  keysOptionalMonths: [5, 6, 7, 8, 9],
+  maxThanks: 5000,
+} as const;
+
+// Who holds the keys. His phone number is a private setting.
+export const keyContact = "Hunor";
 
 // Keep the public page out of search results until it has its own domain.
 export const indexable = false;

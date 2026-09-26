@@ -109,3 +109,29 @@ export function initStayMap(el: HTMLElement) {
   fit();
   map.on("resize", fit);
 }
+
+// A small map of the house itself, for the "Getting here" section.
+export function initPinMap(el: HTMLElement) {
+  const pin = JSON.parse(el.dataset.pin ?? "{}") as {
+    lat: number;
+    lng: number;
+  };
+  const map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.5 }).setView(
+    [pin.lat, pin.lng],
+    15,
+  );
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+  L.marker([pin.lat, pin.lng], {
+    title: "Aszófő",
+    icon: L.divIcon({
+      className: "stay-home",
+      html: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 16.6 15.9 3.3l12.7 13.1" stroke-width="2.4"/><path d="M6.9 13.2v15.6h18.3V13.4" stroke-width="1.6"/></svg>`,
+      iconSize: [34, 34],
+      iconAnchor: [17, 30],
+    }),
+  }).addTo(map);
+}

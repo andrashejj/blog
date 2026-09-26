@@ -54,6 +54,7 @@ const because = reasons.map((r) => t.booking.interests.options[r]).join(", ");
   {place.tip && <p class='tip'>{place.tip[lang]}</p>}
   <ul class='chips-inline'>
     {showReasons && because && <li class='why'>{fill(s.because, { x: because })}</li>}
+    {place.hostPick && <li class='fav'>{s.hostPick}</li>}
     {unconfirmed && <li>{s.datesVary}</li>}
     {place.bookingAdvised && <li>{s.bookAhead}</li>}
     {trainGuest && !place.noCar && <li>{s.easierByCar}</li>}

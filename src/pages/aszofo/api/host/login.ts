@@ -2,9 +2,9 @@ export const prerender = false;
 
 import type { APIContext } from "astro";
 import {
-  adminEmail,
   checkPassword,
   createLoginToken,
+  findHost,
   startSession,
 } from "../../../../aszofo/auth";
 import { emailConfigured, sendLoginLink } from "../../../../aszofo/email";
@@ -38,18 +38,19 @@ export const POST = (context: APIContext) =>
     const password = typeof body.password === "string" ? body.password : "";
 
     if (password) {
-      if (!checkPassword(email, password))
-        return json({ error: "password" }, 401);
-      startSession(cookies, isSecure(request));
+      const host = checkPassword(email, password);
+      if (!host) return json({ error: "password" }, 401);
+      startSession(cookies, isSecure(request), host);
       return json({ ok: true, signedIn: true });
     }
 
-    // The reply is the same whether or not the address matches.
-    if (email !== adminEmail()) return json({ ok: true, sent: true });
+    // The reply is the same whether or not the address belongs to a host.
+    const host = findHost(email);
+    if (!host) return json({ ok: true, sent: true });
 
-    const token = await createLoginToken();
+    const token = await createLoginToken(host);
     const origin = siteOrigin(request);
-    await sendLoginLink(origin, token);
+    await sendLoginLink(origin, token, host);
     if (!emailConfigured() && isDev()) {
       return json({
         ok: true,

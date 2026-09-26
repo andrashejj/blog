@@ -25,6 +25,18 @@ interface Text {
     today: string;
   };
   units: { night: { one: string; other: string } };
+  costs: {
+    cleaning: number;
+    keys: number;
+    optionalMonths: number[];
+    labels: {
+      cleaning: string;
+      keys: string;
+      budapest: string;
+      thanks: string;
+      total: string;
+    };
+  };
 }
 
 interface Availability {
@@ -184,6 +196,7 @@ export function initBooking(root: HTMLElement) {
         selection = next;
         showError(1, null);
         renderSelection();
+        renderCosts();
       },
     });
     renderSelection();
@@ -247,6 +260,59 @@ export function initBooking(root: HTMLElement) {
     return null;
   }
 
+  // ------------------------------------------------------------ costs
+
+  const summaryEl = root.querySelector<HTMLElement>("[data-cost-summary]");
+  const keysRequired = root.querySelector<HTMLElement>("[data-keys-required]");
+  const keysChoice = root.querySelector<HTMLElement>("[data-keys-choice]");
+  const keysOptional = () =>
+    Boolean(selection.checkIn) &&
+    text.costs.optionalMonths.includes(Number(selection.checkIn?.slice(5, 7)));
+  const chosenKeys = () =>
+    keysOptional() &&
+    form.querySelector<HTMLInputElement>('input[name="keys"]:checked')
+      ?.value === "budapest"
+      ? "budapest"
+      : "hunor";
+  const thanksValue = () =>
+    Math.max(0, Math.round(Number(field("thanks")?.value) || 0));
+
+  function renderCosts() {
+    if (keysRequired) keysRequired.hidden = keysOptional();
+    if (keysChoice) keysChoice.hidden = !keysOptional();
+    if (!summaryEl) return;
+    const c = text.costs;
+    const keys = chosenKeys() === "hunor" ? c.keys : 0;
+    const thanks = thanksValue();
+    const rows: [string, string][] = [
+      [c.labels.cleaning, `${c.cleaning}\u00a0€`],
+      keys > 0
+        ? [c.labels.keys, `${keys}\u00a0€`]
+        : [c.labels.budapest, "0\u00a0€"],
+    ];
+    if (thanks > 0) rows.push([c.labels.thanks, `${thanks}\u00a0€`]);
+    rows.push([c.labels.total, `${c.cleaning + keys + thanks}\u00a0€`]);
+    summaryEl.replaceChildren(
+      ...rows.flatMap(([term, value], i) => {
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = term;
+        dd.textContent = value;
+        if (i === rows.length - 1) {
+          dt.className = "total";
+          dd.className = "total";
+        }
+        return [dt, dd];
+      }),
+    );
+  }
+
+  form.addEventListener("input", (e) => {
+    const name = (e.target as HTMLInputElement).name;
+    if (name === "thanks" || name === "keys") renderCosts();
+  });
+  renderCosts();
+
   // ------------------------------------------------------------ navigation
 
   function advance(to: number) {
@@ -290,6 +356,8 @@ export function initBooking(root: HTMLElement) {
       phone: value("phone"),
       message: value("message"),
       lang: text.lang,
+      keys: chosenKeys(),
+      thanks: thanksValue(),
       website: value("website"),
       startedAt,
       consent: Boolean(field("consent")?.checked),

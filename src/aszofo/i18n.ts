@@ -9,7 +9,7 @@ const en = {
   meta: {
     title: "Aszófő · A press house above Lake Balaton",
     description:
-      "A thatched press house among the vines above Lake Balaton, for up to ten guests. See open dates and send a booking request.",
+      "A thatched press house among the vines above Lake Balaton, for up to six guests. See open dates and send a booking request.",
   },
   nav: {
     house: "The house",
@@ -31,7 +31,7 @@ const en = {
     sign: "Andras & family",
   },
   facts: [
-    { value: "10", label: "guests at most" },
+    { value: "6", label: "guests at most" },
     { value: "3", label: "bedrooms under old beams" },
     { value: "6,186 m²", label: "of garden and vineyard" },
     { value: "0", label: "televisions, on purpose" },
@@ -41,7 +41,7 @@ const en = {
     rooms: {
       downstairs: {
         title: "Downstairs",
-        body: "One long room around the green tile stove. A table for ten, wooden benches, and double doors that open straight onto the terrace.",
+        body: "One long room around the green tile stove. A long table, wooden benches, and double doors that open straight onto the terrace.",
       },
       upstairs: {
         title: "Upstairs",
@@ -116,7 +116,7 @@ const en = {
   booking: {
     label: "Dates",
     title: "Open dates",
-    lead: "Choose your arrival and departure. This sends a request, not a booking: we reply within two days, usually with a quote, and nothing is binding until you confirm.",
+    lead: "Choose your arrival and departure. This sends a request, not a booking: we reply within two days, and nothing is binding until you confirm.",
     legend: {
       open: "Open",
       taken: "Taken",
@@ -181,13 +181,21 @@ const en = {
     },
     food: "Food preferences or allergies",
     occasion: "Celebrating anything?",
+    keysQuestion: "Keys",
+    keysHunor: "Hunor lets us in (20 €)",
+    keysBudapest: "We'll collect the keys in Budapest",
+    keysRequired:
+      "From October to April Hunor lets you in and looks after the water and heating: 20 € for his two visits.",
+    thanksLabel: "A thank-you for the house (optional)",
+    thanksHint:
+      "Whatever feels right, in euros. Leave it empty if you'd rather not.",
     consent:
       "I understand this is a request. You'll use these details only to answer it and host our stay, and delete them afterwards.",
     submit: "Send request",
     sending: "Sending…",
     errors: {
       dates: "Please choose valid dates.",
-      guests: "Please check the number of guests (up to 10).",
+      guests: "Please check the number of guests (up to 6).",
       name: "Please add your name.",
       email: "Please check your email address.",
       consent: "Please confirm you've read the note above.",
@@ -202,14 +210,30 @@ const en = {
       link: "Your request page",
     },
   },
+  costs: {
+    label: "What it costs",
+    lead: "There's no nightly rate. We ask for what a stay actually costs us, however long you stay.",
+    cleaning: "Cleaning",
+    keys: "Hunor: keys, water and heating (two visits)",
+    keysNote:
+      "Needed from October to April. From May to September you can collect the keys in Budapest instead.",
+    budapest: "Keys collected in Budapest",
+    thanks: "A thank-you",
+    thanksValue: "Your choice",
+    thanksNote:
+      "If you'd like to give something towards the house on top, you decide how much.",
+    total: "Total",
+    payNote: "We'll tell you how to pay when we confirm.",
+  },
   practical: {
     label: "Good to know",
     items: [
       { term: "Arrival", detail: "From 15:00" },
       { term: "Departure", detail: "By 11:00" },
       { term: "Minimum stay", detail: "2 nights" },
-      { term: "Guests", detail: "Up to 10, children welcome" },
+      { term: "Guests", detail: "Up to 6, children welcome" },
       { term: "Dogs", detail: "Ask us" },
+      { term: "Wi‑Fi", detail: "None" },
       { term: "Included", detail: "Bed linen, towels, firewood" },
       {
         term: "Getting here",
@@ -227,7 +251,7 @@ const en = {
       },
       {
         title: "Reply",
-        body: "We answer within two days with availability and a quote.",
+        body: "We answer within two days, and tell you how to pay the small costs.",
       },
       {
         title: "Your page",
@@ -288,16 +312,25 @@ const en = {
     byPlane: "By plane",
     keysTitle: "Arrival and keys",
     revealLater:
-      "Door details, Wi‑Fi and our phone number appear here {n} days before you arrive.",
+      "Hunor's number and the arrival details appear here {n} days before you arrive.",
     notSetYet: "We'll add this before you arrive.",
     revealShort: "Appears {n} days before you arrive.",
     notFound:
       "This link doesn't open a stay. Check the address in your email, or write to us.",
     parking: "Parking",
     houseTitle: "In the house",
-    wifi: "Wi‑Fi",
-    network: "Network",
-    password: "Password",
+    noStreet:
+      "There's no street address up on the hill. Use the pin, or the plus code in any maps app.",
+    plusCode: "Plus code",
+    keysHunorBody:
+      "{name} has the keys and gets the house ready, with water and heating in the colder months. Call him a few days before you arrive to agree on a time and anything else.",
+    keysPickupBody: "You're collecting the keys in Budapest:",
+    keysPickupAfter: "Message us on WhatsApp to agree on a time.",
+    callKey: "Call {name}",
+    costsTitle: "Your costs",
+    whatsapp: "WhatsApp {name}",
+    favourites: "Our favourites",
+    hostPick: "One of ours",
     manualTitle: "How the house works",
     leaveTitle: "Before you leave",
     picksTitle: "Chosen for you",
@@ -337,16 +370,17 @@ const en = {
   },
   email: {
     greeting: "Hello {name},",
-    signoff: "Andras",
     received: {
       subject: "We have your request · Aszófő",
       body: "Thank you for your request for {dates} ({guests}). We'll reply within two days.",
       link: "You can see your request here:",
+      costs:
+        "What it costs: {items}. We'll tell you how to pay when we confirm.",
     },
     approved: {
       subject: "Your stay in Aszófő is confirmed",
       body: "Good news: {dates} are yours.",
-      link: "Everything you need is on your private page. Door details and Wi‑Fi appear there two weeks before you arrive, and the page stays open until {until}.",
+      link: "Everything you need is on your private page. Hunor's number and the arrival details appear there two weeks before you arrive, and the page stays open until {until}.",
       button: "Your stay page",
     },
     declined: {
@@ -365,7 +399,7 @@ const hu: Dict = {
   meta: {
     title: "Aszófő · Présház a Balaton fölött",
     description:
-      "Nádtetős présház a szőlők között, a Balaton fölött, legfeljebb tíz vendégnek. Nézd meg a szabad időpontokat, és küldj foglalási kérést.",
+      "Nádtetős présház a szőlők között, a Balaton fölött, legfeljebb hat vendégnek. Nézd meg a szabad időpontokat, és küldj foglalási kérést.",
   },
   nav: {
     house: "A ház",
@@ -387,7 +421,7 @@ const hu: Dict = {
     sign: "András és a család",
   },
   facts: [
-    { value: "10", label: "vendég fér el" },
+    { value: "6", label: "vendég fér el" },
     { value: "3", label: "hálószoba öreg gerendák alatt" },
     { value: "6186 m²", label: "kert és szőlő" },
     { value: "0", label: "tévé, szándékosan" },
@@ -397,7 +431,7 @@ const hu: Dict = {
     rooms: {
       downstairs: {
         title: "Lent",
-        body: "Egy hosszú tér a zöld cserépkályha körül. Tízszemélyes asztal, fapadok, és kétszárnyú ajtó, amely egyenesen a teraszra nyílik.",
+        body: "Egy hosszú tér a zöld cserépkályha körül. Hosszú asztal, fapadok, és kétszárnyú ajtó, amely egyenesen a teraszra nyílik.",
       },
       upstairs: {
         title: "Fent",
@@ -471,7 +505,7 @@ const hu: Dict = {
   booking: {
     label: "Időpontok",
     title: "Szabad időpontok",
-    lead: "Válaszd ki az érkezés és a távozás napját. Ez kérés, nem foglalás: két napon belül válaszolunk, általában árajánlattal, és semmi sem kötelező, amíg vissza nem igazolod.",
+    lead: "Válaszd ki az érkezés és a távozás napját. Ez kérés, nem foglalás: két napon belül válaszolunk, és semmi sem kötelező, amíg vissza nem igazolod.",
     legend: {
       open: "Szabad",
       taken: "Foglalt",
@@ -539,13 +573,21 @@ const hu: Dict = {
     },
     food: "Étkezési szokások, allergiák",
     occasion: "Ünnepeltek valamit?",
+    keysQuestion: "Kulcs",
+    keysHunor: "Hunor enged be (20 €)",
+    keysBudapest: "A kulcsot Budapesten vesszük át",
+    keysRequired:
+      "Októbertől áprilisig Hunor enged be, és ő intézi a vizet és a fűtést: a két útja 20 €.",
+    thanksLabel: "Köszönet a házra (nem kötelező)",
+    thanksHint:
+      "Amennyit jónak érzel, euróban. Hagyd üresen, ha nem szeretnél.",
     consent:
       "Tudom, hogy ez csak kérés. Az adataimat csak a válaszhoz és a vendégséghez használjátok, utána törlitek.",
     submit: "Kérés elküldése",
     sending: "Küldés…",
     errors: {
       dates: "Válassz érvényes időpontot.",
-      guests: "Nézd meg a vendégek számát (legfeljebb 10).",
+      guests: "Nézd meg a vendégek számát (legfeljebb 6).",
       name: "Add meg a neved.",
       email: "Nézd meg az e-mail-címed.",
       consent: "Kérjük, erősítsd meg, hogy elolvastad a fenti megjegyzést.",
@@ -560,14 +602,30 @@ const hu: Dict = {
       link: "A kérésed oldala",
     },
   },
+  costs: {
+    label: "Mennyibe kerül",
+    lead: "Éjszakánkénti ár nincs. Csak azt kérjük, ami egy vendégséggel ténylegesen felmerül, akármeddig maradtok.",
+    cleaning: "Takarítás",
+    keys: "Hunor: kulcs, víz és fűtés (két alkalom)",
+    keysNote:
+      "Októbertől áprilisig szükséges. Májustól szeptemberig a kulcsot Budapesten is átveheted helyette.",
+    budapest: "Kulcsátvétel Budapesten",
+    thanks: "Köszönet",
+    thanksValue: "Rajtad áll",
+    thanksNote:
+      "Ha ezen felül a házra is adnál valamit, te döntöd el, mennyit.",
+    total: "Összesen",
+    payNote: "A visszaigazolással együtt megírjuk, hogyan fizethetsz.",
+  },
   practical: {
     label: "Jó tudni",
     items: [
       { term: "Érkezés", detail: "15:00-tól" },
       { term: "Távozás", detail: "11:00-ig" },
       { term: "Legrövidebb foglalás", detail: "2 éjszaka" },
-      { term: "Vendégek", detail: "Legfeljebb 10, gyerekekkel is" },
+      { term: "Vendégek", detail: "Legfeljebb 6, gyerekekkel is" },
       { term: "Kutya", detail: "Kérdezz minket" },
+      { term: "Wifi", detail: "Nincs" },
       { term: "Az árban", detail: "Ágynemű, törölköző, tűzifa" },
       {
         term: "Megközelítés",
@@ -585,7 +643,7 @@ const hu: Dict = {
       },
       {
         title: "Válasz",
-        body: "Két napon belül megírjuk, szabad-e az időpont, és mennyibe kerül.",
+        body: "Két napon belül válaszolunk, és megírjuk, hogyan fizethetsz.",
       },
       {
         title: "A saját oldalad",
@@ -646,16 +704,25 @@ const hu: Dict = {
     byPlane: "Repülővel",
     keysTitle: "Érkezés és kulcsok",
     revealLater:
-      "Az ajtó adatai, a wifi és a telefonszámunk {n} nappal az érkezésed előtt jelennek meg itt.",
+      "Hunor telefonszáma és az érkezés részletei {n} nappal az érkezésed előtt jelennek meg itt.",
     notSetYet: "Érkezésed előtt kiegészítjük.",
     revealShort: "Az érkezésed előtt {n} nappal jelenik meg.",
     notFound:
       "Ez a link nem nyit meg vendégséget. Nézd meg a címet az e-mailben, vagy írj nekünk.",
     parking: "Parkolás",
     houseTitle: "A házban",
-    wifi: "Wifi",
-    network: "Hálózat",
-    password: "Jelszó",
+    noStreet:
+      "A hegyen nincs utcanév és házszám. Használd a jelölést, vagy bármelyik térképen a plus code-ot.",
+    plusCode: "Plus code",
+    keysHunorBody:
+      "{name} viszi a kulcsot és készíti elő a házat, a hidegebb hónapokban a vízzel és a fűtéssel együtt. Pár nappal az érkezésed előtt hívd fel, és beszéljetek meg mindent.",
+    keysPickupBody: "A kulcsot Budapesten veszed át:",
+    keysPickupAfter: "Írj nekünk WhatsAppon, és megbeszéljük az időpontot.",
+    callKey: "{name} hívása",
+    costsTitle: "Költségek",
+    whatsapp: "WhatsApp: {name}",
+    favourites: "A kedvenceink",
+    hostPick: "Kedvencünk",
     manualTitle: "Hogyan működik a ház",
     leaveTitle: "Mielőtt elindulsz",
     picksTitle: "Nektek válogattuk",
@@ -695,16 +762,17 @@ const hu: Dict = {
   },
   email: {
     greeting: "Szia {name}!",
-    signoff: "András",
     received: {
       subject: "Megkaptuk a kérésed · Aszófő",
       body: "Köszönjük a kérésed: {dates} ({guests}). Két napon belül válaszolunk.",
       link: "A kérésed itt látod:",
+      costs:
+        "A költségek: {items}. A visszaigazolással együtt megírjuk, hogyan fizethetsz.",
     },
     approved: {
       subject: "Visszaigazoltuk az aszófői vendégséged",
       body: "Jó hír: visszaigazoltuk a foglalást ({dates}).",
-      link: "Minden tudnivalót megtalálsz a saját oldaladon. Az ajtó adatai és a wifi két héttel az érkezésed előtt jelennek meg, az oldal pedig {until}-ig nyitva marad.",
+      link: "Minden tudnivalót megtalálsz a saját oldaladon. Hunor telefonszáma és az érkezés részletei két héttel az érkezésed előtt jelennek meg, az oldal pedig {until}-ig nyitva marad.",
       button: "A vendégoldalad",
     },
     declined: {
@@ -721,7 +789,7 @@ const de: Dict = {
   meta: {
     title: "Aszófő · Ein Presshaus über dem Balaton",
     description:
-      "Ein reetgedecktes Presshaus zwischen Reben über dem Balaton, für bis zu zehn Gäste. Freie Termine ansehen und eine Anfrage senden.",
+      "Ein reetgedecktes Presshaus zwischen Reben über dem Balaton, für bis zu sechs Gäste. Freie Termine ansehen und eine Anfrage senden.",
   },
   nav: {
     house: "Das Haus",
@@ -743,7 +811,7 @@ const de: Dict = {
     sign: "Andras & Familie",
   },
   facts: [
-    { value: "10", label: "Gäste höchstens" },
+    { value: "6", label: "Gäste höchstens" },
     { value: "3", label: "Schlafzimmer unter alten Balken" },
     { value: "6.186 m²", label: "Garten und Weinberg" },
     { value: "0", label: "Fernseher, mit Absicht" },
@@ -753,7 +821,7 @@ const de: Dict = {
     rooms: {
       downstairs: {
         title: "Unten",
-        body: "Ein langer Raum um den grünen Kachelofen. Ein Tisch für zehn, Holzbänke und eine Flügeltür, die direkt auf die Terrasse führt.",
+        body: "Ein langer Raum um den grünen Kachelofen. Ein langer Tisch, Holzbänke und eine Flügeltür, die direkt auf die Terrasse führt.",
       },
       upstairs: {
         title: "Oben",
@@ -828,7 +896,7 @@ const de: Dict = {
   booking: {
     label: "Termine",
     title: "Freie Termine",
-    lead: "Wählen Sie Anreise und Abreise. Das ist eine Anfrage, keine Buchung: Wir antworten innerhalb von zwei Tagen, meist mit einem Angebot, und nichts ist verbindlich, bevor Sie bestätigen.",
+    lead: "Wählen Sie Anreise und Abreise. Das ist eine Anfrage, keine Buchung: Wir antworten innerhalb von zwei Tagen, und nichts ist verbindlich, bevor Sie bestätigen.",
     legend: {
       open: "Frei",
       taken: "Belegt",
@@ -897,13 +965,21 @@ const de: Dict = {
     },
     food: "Ernährung oder Allergien",
     occasion: "Gibt es etwas zu feiern?",
+    keysQuestion: "Schlüssel",
+    keysHunor: "Hunor lässt uns ein (20 €)",
+    keysBudapest: "Wir holen die Schlüssel in Budapest ab",
+    keysRequired:
+      "Von Oktober bis April lässt Hunor Sie ein und kümmert sich um Wasser und Heizung: 20 € für seine zwei Besuche.",
+    thanksLabel: "Ein Dankeschön für das Haus (freiwillig)",
+    thanksHint:
+      "Was sich richtig anfühlt, in Euro. Leer lassen, wenn Sie nicht möchten.",
     consent:
       "Mir ist klar, dass dies eine Anfrage ist. Die Angaben werden nur für die Antwort und den Aufenthalt verwendet und danach gelöscht.",
     submit: "Anfrage senden",
     sending: "Wird gesendet…",
     errors: {
       dates: "Bitte wählen Sie gültige Daten.",
-      guests: "Bitte prüfen Sie die Zahl der Gäste (höchstens 10).",
+      guests: "Bitte prüfen Sie die Zahl der Gäste (höchstens 6).",
       name: "Bitte geben Sie Ihren Namen an.",
       email: "Bitte prüfen Sie Ihre E-Mail-Adresse.",
       consent: "Bitte bestätigen Sie den Hinweis oben.",
@@ -920,14 +996,31 @@ const de: Dict = {
       link: "Ihre Anfrageseite",
     },
   },
+  costs: {
+    label: "Was es kostet",
+    lead: "Es gibt keinen Preis pro Nacht. Wir bitten nur um das, was ein Aufenthalt uns tatsächlich kostet, egal wie lange Sie bleiben.",
+    cleaning: "Reinigung",
+    keys: "Hunor: Schlüssel, Wasser und Heizung (zwei Besuche)",
+    keysNote:
+      "Von Oktober bis April nötig. Von Mai bis September können Sie die Schlüssel stattdessen in Budapest abholen.",
+    budapest: "Schlüssel in Budapest abgeholt",
+    thanks: "Ein Dankeschön",
+    thanksValue: "Ganz nach Ihnen",
+    thanksNote:
+      "Wenn Sie darüber hinaus etwas für das Haus geben möchten, bestimmen Sie den Betrag.",
+    total: "Gesamt",
+    payNote:
+      "Mit der Bestätigung schreiben wir Ihnen, wie Sie bezahlen können.",
+  },
   practical: {
     label: "Gut zu wissen",
     items: [
       { term: "Anreise", detail: "ab 15:00" },
       { term: "Abreise", detail: "bis 11:00" },
       { term: "Mindestaufenthalt", detail: "2 Nächte" },
-      { term: "Gäste", detail: "bis zu 10, Kinder willkommen" },
+      { term: "Gäste", detail: "bis zu 6, Kinder willkommen" },
       { term: "Hunde", detail: "Bitte fragen" },
+      { term: "WLAN", detail: "Keins" },
       { term: "Inklusive", detail: "Bettwäsche, Handtücher, Brennholz" },
       {
         term: "Anfahrt",
@@ -945,7 +1038,7 @@ const de: Dict = {
       },
       {
         title: "Antwort",
-        body: "Wir antworten innerhalb von zwei Tagen mit Verfügbarkeit und Preis.",
+        body: "Wir antworten innerhalb von zwei Tagen und sagen Ihnen, wie Sie die kleinen Kosten bezahlen.",
       },
       {
         title: "Ihre Seite",
@@ -1007,16 +1100,26 @@ const de: Dict = {
     byPlane: "Mit dem Flugzeug",
     keysTitle: "Ankunft und Schlüssel",
     revealLater:
-      "Türdetails, WLAN und unsere Telefonnummer erscheinen hier {n} Tage vor Ihrer Anreise.",
+      "Hunors Nummer und die Details zur Ankunft erscheinen hier {n} Tage vor Ihrer Anreise.",
     notSetYet: "Wir ergänzen das vor Ihrer Anreise.",
     revealShort: "Erscheint {n} Tage vor Ihrer Anreise.",
     notFound:
       "Dieser Link führt zu keinem Aufenthalt. Prüfen Sie die Adresse in Ihrer E-Mail oder schreiben Sie uns.",
     parking: "Parken",
     houseTitle: "Im Haus",
-    wifi: "WLAN",
-    network: "Netzwerk",
-    password: "Passwort",
+    noStreet:
+      "Oben am Hang gibt es keine Straßenadresse. Nutzen Sie die Markierung oder den Plus Code in einer Karten-App.",
+    plusCode: "Plus Code",
+    keysHunorBody:
+      "{name} hat die Schlüssel und bereitet das Haus vor, in den kälteren Monaten auch Wasser und Heizung. Rufen Sie ihn ein paar Tage vor der Anreise an und besprechen Sie alles.",
+    keysPickupBody: "Sie holen die Schlüssel in Budapest ab:",
+    keysPickupAfter:
+      "Schreiben Sie uns auf WhatsApp, dann vereinbaren wir eine Zeit.",
+    callKey: "{name} anrufen",
+    costsTitle: "Ihre Kosten",
+    whatsapp: "WhatsApp an {name}",
+    favourites: "Unsere Favoriten",
+    hostPick: "Unser Favorit",
     manualTitle: "Wie das Haus funktioniert",
     leaveTitle: "Vor der Abreise",
     picksTitle: "Für Sie ausgesucht",
@@ -1056,16 +1159,17 @@ const de: Dict = {
   },
   email: {
     greeting: "Hallo {name},",
-    signoff: "Andras",
     received: {
       subject: "Ihre Anfrage ist da · Aszófő",
       body: "vielen Dank für Ihre Anfrage für {dates} ({guests}). Wir antworten innerhalb von zwei Tagen.",
       link: "Ihre Anfrage können Sie hier ansehen:",
+      costs:
+        "Die Kosten: {items}. Mit der Bestätigung schreiben wir Ihnen, wie Sie bezahlen können.",
     },
     approved: {
       subject: "Ihr Aufenthalt in Aszófő ist bestätigt",
       body: "gute Nachricht: Wir haben Ihren Aufenthalt bestätigt ({dates}).",
-      link: "Alles Wichtige steht auf Ihrer persönlichen Seite. Türdetails und WLAN erscheinen dort zwei Wochen vor der Anreise, und die Seite bleibt bis {until} geöffnet.",
+      link: "Alles Wichtige steht auf Ihrer persönlichen Seite. Hunors Nummer und die Details zur Ankunft erscheinen dort zwei Wochen vor der Anreise, und die Seite bleibt bis {until} geöffnet.",
       button: "Ihre Gästeseite",
     },
     declined: {

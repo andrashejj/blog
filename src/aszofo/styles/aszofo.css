@@ -1392,6 +1392,7 @@ em,
 .field input[type="email"],
 .field input[type="tel"],
 .field input[type="password"],
+.field input[type="number"],
 .field input[type="date"],
 .field textarea,
 .field select {
@@ -2567,4 +2568,120 @@ code {
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--clay);
+}
+
+/* ------------------------------------------------------------ costs */
+
+.keys-field {
+  margin: 0.4rem 0 0;
+}
+
+.keys-field .muted {
+  margin: 0;
+  font-size: 0.95rem;
+  max-width: 36rem;
+}
+
+.euro {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  max-width: 10rem;
+}
+
+.euro span {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--ash);
+}
+
+.field .euro input {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}
+
+.cost-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin: 0.4rem 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.cost-summary dt,
+.cost-summary dd {
+  margin: 0;
+  padding: 0.35rem 0;
+  border-bottom: 1px dotted var(--rule);
+}
+
+.cost-summary dt {
+  color: var(--ash);
+}
+
+.cost-summary dd {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-summary .total {
+  border-bottom: 0;
+  padding-top: 0.6rem;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.costs-card {
+  margin-bottom: 2.6rem;
+}
+
+.costs-card .costs-lead {
+  margin: 1.1rem 0 0.4rem;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.costs-card .note {
+  margin: 0.8rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ash);
+}
+
+.pin-map {
+  height: 260px;
+  margin: 1.2rem 0 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--lime-2);
+  z-index: 0;
+}
+
+.pin-map .leaflet-tile-pane {
+  filter: grayscale(1) sepia(0.22) contrast(0.9) brightness(1.05);
+}
+
+.plus-code {
+  font-size: 0.88rem;
+  color: var(--ash);
+}
+
+.plus-code code {
+  color: var(--ink);
+}
+
+.chips-inline .fav {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.field input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.field input[type="number"]::-webkit-inner-spin-button,
+.field input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

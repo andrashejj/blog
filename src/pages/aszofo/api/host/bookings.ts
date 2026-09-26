@@ -1,7 +1,7 @@
 export const prerender = false;
 
 import type { APIContext } from "astro";
-import { isHost } from "../../../../aszofo/auth";
+import { currentHost } from "../../../../aszofo/auth";
 import {
   type Booking,
   conflictsWith,
@@ -50,7 +50,8 @@ async function clashes(b: Booking) {
 export const POST = ({ request, cookies }: APIContext) =>
   guard(async () => {
     if (!sameOrigin(request)) return json({ error: "origin" }, 403);
-    if (!isHost(cookies)) return json({ error: "auth" }, 401);
+    const host = currentHost(cookies);
+    if (!host) return json({ error: "auth" }, 401);
 
     const body = await readJson(request);
     const action = body?.action as Action;
@@ -79,9 +80,13 @@ export const POST = ({ request, cookies }: APIContext) =>
       const next = await updateBooking(current.id, {
         status: "approved",
         hostNote: note ?? current.hostNote,
+        decidedBy: host.name,
       });
-      const emailed = next && notify ? await sendApproved(origin, next) : false;
-      if (next) await sendDecisionToHosts(origin, next, "approved", emailed);
+      const emailed =
+        next && notify ? await sendApproved(origin, next, host) : false;
+      if (next) {
+        await sendDecisionToHosts(origin, next, "approved", host, emailed);
+      }
       return json({
         ok: true,
         booking: next,
@@ -94,15 +99,21 @@ export const POST = ({ request, cookies }: APIContext) =>
       const next = await updateBooking(current.id, {
         status: "declined",
         hostNote: note ?? current.hostNote,
+        decidedBy: host.name,
       });
-      const emailed = next && notify ? await sendDeclined(origin, next) : false;
-      if (next) await sendDecisionToHosts(origin, next, "declined", emailed);
+      const emailed =
+        next && notify ? await sendDeclined(origin, next, host) : false;
+      if (next) {
+        await sendDecisionToHosts(origin, next, "declined", host, emailed);
+      }
       return json({ ok: true, booking: next, emailed });
     }
 
     if (action === "cancel") {
       const next = await updateBooking(current.id, { status: "cancelled" });
-      if (next) await sendDecisionToHosts(origin, next, "cancelled", false);
+      if (next) {
+        await sendDecisionToHosts(origin, next, "cancelled", host, false);
+      }
       return json({ ok: true, booking: next, emailed: false });
     }
 

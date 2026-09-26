@@ -109,6 +109,7 @@ export function score(place: Place, b: Booking): Scored {
   if (p.pace === "slow")
     s += place.minutes <= 20 ? 1 : place.minutes > 40 ? -2 : 0;
   if (place.category === "event") s += 1.5; // timely, and only shown when on
+  if (place.hostPick) s += 2.5; // where the hosts go themselves
 
   s -= place.minutes / 30;
   const unconfirmed =
@@ -119,6 +120,7 @@ export function score(place: Place, b: Booking): Scored {
 
 export interface Recommendation {
   picks: Scored[];
+  favourites: Scored[];
   groups: { category: Category; items: Scored[] }[];
 }
 
@@ -184,5 +186,6 @@ export function recommend(b: Booking): Recommendation {
     }))
     .filter((g) => g.items.length > 0);
 
-  return { picks, groups };
+  const favourites = scored.filter((item) => item.place.hostPick);
+  return { picks, favourites, groups };
 }

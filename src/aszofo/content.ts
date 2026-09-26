@@ -114,18 +114,21 @@ export const travel: Record<"car" | "train" | "plane", Localized> = {
 // the admin settings.
 export const manual: LocalizedList = {
   en: [
+    "There's no Wi‑Fi in the house.",
     "The tile stove: ask us before you light it the first time. Never close the flue while anything inside is still glowing.",
     "The cellar stair is steep and the vault is low at the sides. Take the light, and keep small children with you.",
     "The fire pit: only on calm evenings and never during a fire ban, which is announced in dry summers. Keep a bucket of water beside it.",
     "The hill is quiet at night. Please keep music indoors after 22:00.",
   ],
   hu: [
+    "A házban nincs wifi.",
     "A cserépkályha: az első begyújtás előtt szólj nekünk. Soha ne zárd le a füstcsövet, amíg bármi parázslik benne.",
     "A pincelépcső meredek, a boltív oldalt alacsony. Vigyél lámpát, a kisgyerekeket pedig ne engedd le egyedül.",
     "A tűzrakó: csak szélcsendes estén, és soha tűzgyújtási tilalom idején, amelyet száraz nyarakon hirdetnek ki. Legyen mellette egy vödör víz.",
     "A hegyen csendesek az éjszakák. 22 óra után kérünk, a zene maradjon a házban.",
   ],
   de: [
+    "Im Haus gibt es kein WLAN.",
     "Der Kachelofen: Bitte sprechen Sie vor dem ersten Anheizen mit uns. Schließen Sie die Klappe nie, solange noch etwas glüht.",
     "Die Kellertreppe ist steil und das Gewölbe an den Seiten niedrig. Nehmen Sie Licht mit und lassen Sie kleine Kinder nicht allein hinunter.",
     "Die Feuerstelle: nur an windstillen Abenden und nie während eines Feuerverbots, das in trockenen Sommern ausgerufen wird. Ein Eimer Wasser gehört daneben.",

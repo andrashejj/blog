@@ -42,6 +42,7 @@ interface RawPlace {
   tip_hu?: string | null;
   tip_de?: string | null;
   dates?: { start: string; end: string }[];
+  hostPick?: boolean;
 }
 
 export interface Place {
@@ -64,6 +65,8 @@ export interface Place {
   tip: Record<Lang, string> | null;
   // Known dates for events that move each year; `end` is the day after.
   dates: { start: string; end: string }[];
+  // On the hosts' own list of places they go to.
+  hostPick: boolean;
 }
 
 function km(lat: number, lng: number): number {
@@ -110,4 +113,5 @@ export const places: Place[] = (raw.places as RawPlace[])
         ? { en: p.tip_en, hu: p.tip_hu, de: p.tip_de }
         : null,
     dates: p.dates ?? [],
+    hostPick: p.hostPick === true,
   }));

@@ -16,6 +16,7 @@ import {
   type Lang,
   house,
   isLang,
+  keyContact,
   booking as rules,
 } from "../../../aszofo/config";
 import {
@@ -24,6 +25,7 @@ import {
   manual,
   travel,
 } from "../../../aszofo/content";
+import { costsFor, effectiveKeys, euro } from "../../../aszofo/costs";
 import { diffDays, todayAtHouse } from "../../../aszofo/dates";
 import {
   dict,
@@ -35,6 +37,7 @@ import {
   plural,
 } from "../../../aszofo/i18n";
 import AszofoLayout from "../../../aszofo/layouts/AszofoLayout.astro";
+import { shortPlusCode } from "../../../aszofo/pluscode";
 import { recommend } from "../../../aszofo/recommend";
 
 Astro.response.headers.set("Cache-Control", "private, no-store");
@@ -76,12 +79,35 @@ else if (today < booking.checkOut)
   countdown = fill(s.countdown.during, { d: 1 - untilArrival, n: nights });
 else countdown = s.countdown.after;
 
-const open = access === "open";
-// The map link comes from the host settings form; only follow web links.
+// Links come from the host settings form; only follow web links.
 const safeHref = (url: string) => (/^https?:\/\//i.test(url) ? url : "");
+const open = access === "open";
 const settings = open ? await getSettings() : null;
 const revealed = open && detailsRevealed(booking, today);
 const recs = open ? recommend(booking) : null;
+
+// The pin from the host's map link, when there is one.
+const pinLat = Number.parseFloat(settings?.lat ?? "");
+const pinLng = Number.parseFloat(settings?.lng ?? "");
+const pin =
+  Number.isFinite(pinLat) && Number.isFinite(pinLng)
+    ? {
+        lat: pinLat,
+        lng: pinLng,
+        code: shortPlusCode(pinLat, pinLng, "Aszófő"),
+      }
+    : null;
+const mapsHref =
+  safeHref(settings?.mapsUrl ?? "") ||
+  (pin
+    ? `https://www.google.com/maps/search/?api=1&query=${pin.lat},${pin.lng}`
+    : "");
+const directionsHref = pin
+  ? `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}`
+  : "";
+const keysMode = effectiveKeys(booking.checkIn, booking.keys);
+const cost = costsFor(booking.checkIn, booking.keys, booking.thanks ?? 0);
+const whatsappHref = safeHref(settings?.whatsapp ?? "");
 const trainGuest = booking.prefs.transport === "train";
 const hasPrefs =
   booking.prefs.interests.length > 0 || Boolean(booking.prefs.group);
@@ -194,7 +220,7 @@ const sections = open
         <aside class='letter' data-reveal>
           <span class='label'>{s.noteTitle}</span>
           <p>{booking.hostNote}</p>
-          <p class='sign'>— {house.hostName}</p>
+          {booking.decidedBy && <p class='sign'>— {booking.decidedBy}</p>}
         </aside>
       </section>
     )
@@ -222,15 +248,35 @@ const sections = open
               <div>
                 <h3 class='mini'>{s.address}</h3>
                 {settings.address ? (
-                  <p class='big'>{settings.address}</p>
+                  <p class='big pre'>{settings.address}</p>
                 ) : (
-                  <p class='muted'>{s.notSetYet}</p>
+                  <p class='muted'>{s.noStreet}</p>
                 )}
-                {safeHref(settings.mapsUrl) && (
-                  <a class='btn ghost' href={safeHref(settings.mapsUrl)} target='_blank' rel='noopener noreferrer'>
-                    {s.openMaps} <span class='arrow' aria-hidden='true'>↗</span>
-                  </a>
+                {pin && (
+                  <>
+                    <div
+                      class='pin-map'
+                      data-pin-map
+                      data-pin={JSON.stringify({ lat: pin.lat, lng: pin.lng })}
+                      aria-label={s.address}
+                    />
+                    <p class='plus-code'>
+                      {s.plusCode}: <code>{pin.code}</code>
+                    </p>
+                  </>
                 )}
+                <div class='hero-actions' style='margin-top:1.2rem'>
+                  {mapsHref && (
+                    <a class='btn ghost' href={mapsHref} target='_blank' rel='noopener noreferrer'>
+                      {s.openMaps} <span class='arrow' aria-hidden='true'>↗</span>
+                    </a>
+                  )}
+                  {directionsHref && (
+                    <a class='btn quiet' href={directionsHref} target='_blank' rel='noopener noreferrer'>
+                      {s.directions} ↗
+                    </a>
+                  )}
+                </div>
                 {settings.parking && (
                   <>
                     <h3 class='mini' style='margin-top:2rem'>{s.parking}</h3>
@@ -240,11 +286,59 @@ const sections = open
               </div>
               <div class='keys'>
                 <h3 class='mini'>{s.keysTitle}</h3>
-                {revealed ? (
-                  settings.arrival ? <p class='pre'>{settings.arrival}</p> : <p class='muted'>{s.notSetYet}</p>
+                {keysMode === "budapest" ? (
+                  <>
+                    <p>{s.keysPickupBody}</p>
+                    {settings.keyPickup ? (
+                      <p class='big pre'>{settings.keyPickup}</p>
+                    ) : (
+                      <p class='muted'>{s.notSetYet}</p>
+                    )}
+                    <p class='muted'>{s.keysPickupAfter}</p>
+                  </>
                 ) : (
-                  <p class='locked'>{fill(s.revealLater, { n: rules.revealDaysBefore })}</p>
+                  <>
+                    <p>{fill(s.keysHunorBody, { name: keyContact })}</p>
+                    {revealed ? (
+                      settings.keyPhone ? (
+                        <a class='btn' href={`tel:${settings.keyPhone.replace(/[^\d+]/g, "")}`}>
+                          {fill(s.callKey, { name: keyContact })} · {settings.keyPhone}
+                        </a>
+                      ) : (
+                        <p class='muted'>{s.notSetYet}</p>
+                      )
+                    ) : (
+                      <p class='locked'>{fill(s.revealLater, { n: rules.revealDaysBefore })}</p>
+                    )}
+                  </>
                 )}
+                {revealed && settings.arrival && (
+                  <p class='pre' style='margin-top:1.4rem'>{settings.arrival}</p>
+                )}
+                <h3 class='mini' style='margin-top:2.4rem'>{s.costsTitle}</h3>
+                <dl class='cost-summary'>
+                  <dt>{t.costs.cleaning}</dt>
+                  <dd>{euro(cost.cleaning)}</dd>
+                  {cost.keys > 0 ? (
+                    <>
+                      <dt>{keyContact}</dt>
+                      <dd>{euro(cost.keys)}</dd>
+                    </>
+                  ) : (
+                    <>
+                      <dt>{t.costs.budapest}</dt>
+                      <dd>{euro(0)}</dd>
+                    </>
+                  )}
+                  {cost.thanks > 0 && (
+                    <>
+                      <dt>{t.costs.thanks}</dt>
+                      <dd>{euro(cost.thanks)}</dd>
+                    </>
+                  )}
+                  <dt class='total'>{t.costs.total}</dt>
+                  <dd class='total'>{euro(cost.total)}</dd>
+                </dl>
               </div>
             </div>
             <div class='travel'>
@@ -261,27 +355,16 @@ const sections = open
           <section id='house' class='stay-section'>
             <span class='label'>ii.</span>
             <h2>{s.houseTitle}</h2>
+            {settings.notes && <p class='pre lead' style='margin-bottom:2rem'>{settings.notes}</p>}
             <div class='two-col'>
-              <div>
-                <h3 class='mini'>{s.wifi}</h3>
-                {revealed && settings.wifiName ? (
-                  <dl class='dl compact'>
-                    <dt>{s.network}</dt>
-                    <dd>{settings.wifiName}</dd>
-                    <dt>{s.password}</dt>
-                    <dd><code>{settings.wifiPassword}</code></dd>
-                  </dl>
-                ) : (
-                  <p class='locked'>{revealed ? s.notSetYet : fill(s.revealShort, { n: rules.revealDaysBefore })}</p>
-                )}
-                {settings.notes && <p class='pre' style='margin-top:2rem'>{settings.notes}</p>}
-              </div>
               <div>
                 <h3 class='mini'>{s.manualTitle}</h3>
                 <ul class='plain'>
                   {manual[lang].map((line) => <li>{line}</li>)}
                 </ul>
-                <h3 class='mini' style='margin-top:2rem'>{s.leaveTitle}</h3>
+              </div>
+              <div>
+                <h3 class='mini'>{s.leaveTitle}</h3>
                 <ul class='ticks'>
                   {beforeYouLeave[lang].map((line) => <li>{line}</li>)}
                 </ul>
@@ -310,13 +393,30 @@ const sections = open
               class='stay-map'
               data-stay-map
               data-places={JSON.stringify(mapPlaces)}
-              data-home={JSON.stringify({ lat: house.lat, lng: house.lng, name: "Aszófő" })}
+              data-home={JSON.stringify(
+                pin
+                  ? { lat: pin.lat, lng: pin.lng, name: "Aszófő" }
+                  : { lat: house.lat, lng: house.lng, name: "Aszófő" },
+              )}
               data-directions={s.directions}
               aria-label={s.mapTitle}
             />
             <div class='groups'>
+              {recs.favourites.length > 0 && (
+                <details class='group' open>
+                  <summary>
+                    <span>{s.favourites}</span>
+                    <span class='count'>{recs.favourites.length}</span>
+                  </summary>
+                  <div class='cards'>
+                    {recs.favourites.map((item) => (
+                      <PlaceCard item={item} lang={lang} trainGuest={trainGuest} />
+                    ))}
+                  </div>
+                </details>
+              )}
               {recs.groups.map((group) => (
-                <details class='group' open={group.category === "restaurant" || group.category === "winery"}>
+                <details class='group'>
                   <summary>
                     <span>{s.categories[group.category]}</span>
                     <span class='count'>{group.items.length}</span>
@@ -365,16 +465,15 @@ const sections = open
             <span class='label'>vi.</span>
             <h2>{s.contactTitle}</h2>
             <div class='hero-actions'>
-              {revealed && settings.hostPhone && (
-                <a class='btn' href={`tel:${settings.hostPhone.replace(/\s/g, "")}`}>
-                  {s.call} · {settings.hostPhone}
+              {whatsappHref && (
+                <a class='btn' href={whatsappHref} target='_blank' rel='noopener noreferrer'>
+                  {fill(s.whatsapp, { name: house.hostName })}
                 </a>
               )}
               <a class='btn ghost' href={`mailto:${house.contactEmail}`}>
                 {s.write} · {house.contactEmail}
               </a>
             </div>
-            {!revealed && <p class='muted' style='margin-top:1.2rem'>{fill(s.revealShort, { n: rules.revealDaysBefore })}</p>}
           </section>
         </div>
       </div>
@@ -383,6 +482,10 @@ const sections = open
 </AszofoLayout>
 
 <script>
+  const pinEl = document.querySelector<HTMLElement>("[data-pin-map]");
+  if (pinEl) {
+    import("../../../aszofo/client/stay-map").then((m) => m.initPinMap(pinEl));
+  }
   const el = document.querySelector<HTMLElement>("[data-stay-map]");
   if (el) {
     const load = () => import("../../../aszofo/client/stay-map").then((m) => m.initStayMap(el));

@@ -2,7 +2,7 @@
 import BookingWidget from "../../aszofo/components/BookingWidget.astro";
 import Photo from "../../aszofo/components/Photo.astro";
 import Ripples from "../../aszofo/components/Ripples.astro";
-import { BASE_PATH, LANGS, type Lang } from "../../aszofo/config";
+import { BASE_PATH, LANGS, type Lang, costs } from "../../aszofo/config";
 import { destinations, lakeName } from "../../aszofo/content";
 import { dict, fill } from "../../aszofo/i18n";
 import AszofoLayout from "../../aszofo/layouts/AszofoLayout.astro";
@@ -246,6 +246,20 @@ const glyphs = [
       <div class='booking-grid'>
         <BookingWidget lang={lang} />
         <aside class='aside' aria-labelledby='practical-title'>
+          <div class='costs-card'>
+            <span class='label'>{t.costs.label}</span>
+            <p class='costs-lead'>{t.costs.lead}</p>
+            <dl class='dl'>
+              <dt>{t.costs.cleaning}</dt>
+              <dd>{costs.cleaning}&nbsp;€</dd>
+              <dt>{t.costs.keys}</dt>
+              <dd>{costs.keyVisits * costs.keyVisitPrice}&nbsp;€</dd>
+              <dt>{t.costs.thanks}</dt>
+              <dd>{t.costs.thanksValue}</dd>
+            </dl>
+            <p class='note'>{t.costs.keysNote}</p>
+            <p class='note'>{t.costs.thanksNote}</p>
+          </div>
           <span class='label'>{t.practical.label}</span>
           <h3 id='practical-title' class='visually-hidden'>{t.practical.label}</h3>
           <dl class='dl' style='margin-top:1.2rem'>
