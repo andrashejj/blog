@@ -2,7 +2,7 @@
 title: "Old Certainty in a Fresh Shirt"
 date: "2026-02-13"
 slug: "knowledge-is-power-or"
-summary: "My notes looked organised until I needed to know whether a product fact was still true."
+summary: "My notes looked organised until I needed to know whether a product fact was still true. The missing field was the date."
 coverImage: "/images/posts/knowledge-is-power-or-cover.png"
 series: "founder-notes"
 tags:
@@ -11,25 +11,25 @@ tags:
   - knowledge
 ---
 
-My notes looked organised until I tried to make a decision from them.
+My notes looked beautifully organised right up until I tried to make a decision with them.
 
-Bookmarks, call notes, screenshots, links from Slack, AI answers I half-trusted, market comments I couldn't place two weeks later. I had kept everything except the part that would tell me whether it was still true.
+Bookmarks, call notes, screenshots, links from Slack, AI answers I half-trusted, market comments I couldn't place two weeks later. I'd kept everything except the one thing that would tell me whether any of it was still true.
 
-The old loop was simpler: ship feature, check metrics, repeat. That still works until the question becomes whether the user has the problem I think they have. The answer arrives in fragments: a sentence from a customer call, a failed onboarding experiment, a competitor changing its pricing page, the same confused question from three prospects.
+The old loop was simple: ship a feature, check the metrics, repeat. It still works, right until the question becomes whether the user even has the problem I think they have. That answer never shows up in one piece. It arrives in fragments: a sentence from a customer call, a failed onboarding experiment, a competitor changing its pricing page, the same confused question from three different prospects.
 
-I stopped thinking in lists and started thinking in connections. A personal knowledge graph sounds fancy, but for me it just means connecting what I learn to what I decide.
+So I stopped collecting lists and started connecting things. "Personal knowledge graph" sounds fancy. For me it just means linking what I learn to what I decide.
 
-In Obsidian I keep small notes, links between ideas, post-call reflections, failed experiments, and surprises. I separate the user's words from my interpretation, the assumed problem from the observed one, and a decision from the evidence that produced it.
+In Obsidian I keep small notes, links between ideas, reflections after calls, failed experiments and surprises. I separate the user's words from my interpretation of them, the problem I assumed from the one I actually saw, and a decision from the evidence behind it.
 
-Without those connections, it all turns to mush.
+Skip the connections and it all turns to mush.
 
-AI makes the mush more dangerous because it can make it sound coherent. If my notes are shallow, the answer comes back polished and wrong in exactly my own accent. If the notes are specific, dated, and tied to decisions, the model has something to work with.
+AI makes the mush more dangerous, because it can make mush sound coherent. Feed it shallow notes and the answer comes back polished and wrong, in exactly my own accent. Feed it notes that are specific, dated and tied to decisions, and it has something to work with.
 
-Writing is part of the memory system. A post or short video forces me to connect what a user said to what I built and what happened next. Any content-strategy upside comes later.
+Writing is part of the memory system too. A post or a short video forces me to connect what a user said to what I built and what happened next. Whatever it does for content strategy is a bonus that comes later.
 
-It still gets overwhelming. I don't know if users want the thing. I don't know if we're solving the right problem. Everyone else appears to know their market better, although I suspect their notes are lying to them too.
+It still gets overwhelming. I don't know if users want the thing. I don't know if we're solving the right problem. Everyone else seems to know their market better than I know mine, although I suspect their notes are lying to them too.
 
-Talking to other builders helps because they catch the stale parts of my map. They ask the dumb question I stopped asking. They remember that the thing I treat as obvious was only true for one customer segment in March.
+Other builders help, mostly by spotting the stale bits of my map. They ask the dumb question I stopped asking. They remember that the thing I now treat as obvious was only true for one customer segment, in March.
 
 I don't need a perfect map. I need one that tells me which notes are old.
 
@@ -50,17 +50,17 @@ A knowledge graph is entities connected by relationships. The basic unit is a tr
   - `(Decision-123, was-driven-by, user-feedback)`
 </Callout>
 
-Link triplets together and you get a graph, not a folder of disconnected notes.
+Link enough triplets together and you get a graph, instead of a folder full of notes that have never heard of each other.
 
 ### A correct note can become a wrong decision
 
-Most notes are static. Product truth isn't.
+Notes sit still. Product truth moves:
 
 - we targeted enterprise, then pivoted to SMB in Q3
 - a pricing model worked until we hit a certain scale
 - competitor X mattered a lot, now competitor Y does
 
-Drop the time dimension and the note doesn't even need to become false to hurt you. It only needs to outlive the conditions that made it useful.
+Drop the time dimension and a note doesn't even have to become false to hurt you. It just has to outlive the conditions that made it useful.
 
 <Quote>
 A fact with no date attached quietly goes stale, and you keep trusting it long after it stopped being true.
@@ -68,7 +68,7 @@ A fact with no date attached quietly goes stale, and you keep trusting it long a
 
 ### Temporal knowledge graphs
 
-A temporal fact is a triplet with time attached:
+A temporal fact is a triplet with time stapled on:
 
 ```text
 (subject, predicate, object, valid_from, valid_to)
@@ -80,9 +80,9 @@ or:
 (subject, relation, object, timestamp)
 ```
 
-That lets you ask what was true then, what's true now, and exactly when it changed.
+Now you can ask what was true then, what's true now, and exactly when it changed.
 
-### Interactive graph example
+### A big graph to poke at
 
 <div className="aspect-video w-full overflow-hidden rounded-[14px] border border-border bg-[#0b1220] shadow-[0_12px_30px_rgba(22,24,29,0.12)]">
   <iframe
@@ -97,11 +97,9 @@ That lets you ask what was true then, what's true now, and exactly when it chang
 
 ### Types of facts
 
-- atemporal: always true
-- static: true from a point in time and then stable
-- dynamic: changes over time
+Facts come in three kinds. Atemporal ones are always true. Static ones become true at some point and then stay put. Dynamic ones keep changing.
 
-In product work, most facts that matter are dynamic. That's exactly why they go stale so fast.
+In product work, most of the facts that matter are dynamic, which is exactly why they go stale so fast.
 
 ### One search is too confident
 
@@ -112,7 +110,7 @@ Research on temporal knowledge graphs suggests single-pass retrieval breaks easi
 3. checking whether facts are still valid
 4. iterating when context is missing
 
-That resembles the way I debug a product belief: probe, compare, update the model, repeat. The dangerous answer is the one retrieved once and delivered without its age showing.
+That's more or less how I debug a product belief: probe, compare, update the model, repeat. The dangerous answer is the one fetched once and handed over without its age showing.
 
 Typical temporal operators:
 
@@ -125,7 +123,7 @@ Typical temporal operators:
 ### The version I can maintain
 
 <Callout type="default" title="You don't need a full system">
-  You don't need to build a full temporal graph system to get value from this.
+  You can skip building a full temporal graph system and still get value from the idea. These four habits are the part I actually keep up.
 </Callout>
 
 - [ ] Track when things change.
@@ -135,13 +133,9 @@ Typical temporal operators:
 
 ### My weekly cleanup
 
-- daily notes: what changed, what confused me
-- concept notes: one atomic idea per note
-- project notes: decisions, trade-offs, outcomes
-- links between notes
-- dates on decisions
+Daily notes get what changed and what confused me. Concept notes get one atomic idea each. Project notes get decisions, trade-offs and outcomes. Notes link to each other, and decisions get dates.
 
-I use daily notes for what changed or confused me, concept notes for one idea, and project notes for decisions and outcomes. Once a week I clean duplicates, archive stale notes, and add missing links. The dates matter more than the diagram.
+Once a week I clean up duplicates, archive the stale ones and add the links I missed. It's not glamorous. The dates matter more than the diagram.
 
 <Divider />
 
@@ -151,4 +145,4 @@ I use daily notes for what changed or confused me, concept notes for one idea, a
 - [TKG-Thinker paper](https://arxiv.org/html/2602.05818v2)
 - [Obsidian](https://obsidian.md/)
 
-I used to open Obsidian and feel reassured by how much I'd saved. Now the first thing I want to see is the timestamp. Old certainty looks remarkably convincing in a fresh shirt.
+I used to open Obsidian and feel reassured by how much I'd saved. Now the first thing I look for is the timestamp, because old certainty looks remarkably convincing in a fresh shirt.

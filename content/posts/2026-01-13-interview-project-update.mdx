@@ -2,7 +2,7 @@
 title: "Make the Requirement Annoying"
 date: "2026-01-13"
 slug: "interview-project-update"
-summary: "An address book tells me almost nothing until I change the brief while we're both looking at the code."
+summary: "The address book is boring on purpose. The interview really starts once it works and I change the brief."
 coverImage: "https://images.unsplash.com/photo-1532622785990-d2c36a76f5a6?auto=format&fit=crop&fm=jpg&q=80&w=1600&h=900"
 series: "founder-notes"
 tags:
@@ -12,57 +12,46 @@ tags:
   - interview
 ---
 
-I got tired of interviews where a candidate completes the exercise, I fill in the scorecard, and both of us leave with almost no idea whether we'd work well together.
+I got tired of a particular kind of interview. The candidate finishes the exercise, I fill in the scorecard, and we both walk out with almost no idea whether we'd work well together. Everyone did their part. Nobody found out much.
 
-The candidate solves a puzzle under a timer. I watch for clues. We pretend this resembles engineering. The actual job has docs, search, Slack, unclear product language, existing code, and somebody asking on Wednesday whether it can ship by Thursday.
+The candidate solves a puzzle under a timer, I watch for clues, and we both pretend this resembles engineering. The actual job has docs, search, Slack, fuzzy product language, existing code, and somebody asking on Wednesday whether it can ship by Thursday.
 
-So I started with a small interview challenge and turned it into a public project:
+So I took a small interview challenge and turned it into a public project:
 
 - Source code: [GitHub repository](https://github.com/andrashejj/interview)
 - Live demo: [interview-eight-rosy.vercel.app](https://interview-eight-rosy.vercel.app/)
 
-The address book is deliberately ordinary. The interesting moment comes after it works, when I move the problem.
+It's an address book, and it's ordinary on purpose. The interesting part starts once it works and I move the problem.
 
 <Divider />
 
 ## The lonely version
 
-The classic format removes the things engineers use all day:
+The classic format takes away everything engineers lean on all day: the internet, the docs, the helper tools. What's left is one person, one editor and one timer.
 
-- no internet
-- no docs
-- no helper tools
-- one person, one editor, one timer
+That rewards memory and keeping your cool under pressure. Both help. Neither tells me what happens when two people disagree about a requirement that's only half written.
 
-It rewards memory and composure under pressure. Those traits help. They still don't tell me what happens when two people disagree about an incomplete requirement.
-
-The job is noticing ambiguity, asking the slightly uncomfortable question, making a reversible decision, and leaving code behind that another person can pick up without swearing at you.
+And that's the job. Noticing the ambiguity, asking the slightly uncomfortable question, making a decision you can reverse, and leaving code behind that the next person can pick up without swearing at you.
 
 ## First, make the boring thing work
 
-Start with a shared build. An address book is enough:
+We build it together first. An address book is plenty: fetch the data, then search, filter, sort, and render it as responsive cards.
 
-- fetch data
-- search
-- filter
-- sort
-- render responsive cards
+Once it works, I change the brief while we're both looking at the code. Maybe search has to cope with misspelled names. Maybe results arrive slowly and out of order. Maybe product wants the filter in the URL, by Thursday, naturally.
 
-Once it works, I change the brief while we're both looking at the code. Maybe search must tolerate misspelled names. Maybe results arrive slowly and out of order. Maybe product wants the filter encoded in the URL by Thursday.
-
-Now we have to write a tiny spec, debate the trade-offs, sketch an approach, and decide what we're willing to postpone. The candidate no longer has to guess what answer is hidden in my head because I don't have one either.
+Now there's real work to do. We write a tiny spec, argue about trade-offs, sketch an approach and decide what we're happy to postpone. The candidate doesn't have to guess which answer is hidden in my head, because I don't have one either.
 
 <Quote>
 The useful signal starts when the requirement is slightly annoying.
 </Quote>
 
-I can see who asks the question that changes the task, who can give ambiguity a shape, and who makes a safe decision without pretending it will be permanent.
+That's when I see who asks the question that changes the task, who can give a vague problem some shape, and who makes a safe decision without pretending it'll last forever.
 
 ## What AI changes
 
-AI makes code cheap. It does not make judgment cheap. I want to see the candidate notice the missing failure mode, push back on a vague requirement, and split the work into something we could ship without making the next person hate us.
+AI makes code cheap. It hasn't made judgment any cheaper. I want to watch the candidate spot the missing failure mode, push back on a vague requirement, and cut the work into pieces we could ship without the next person hating us.
 
-I pay attention to the things an agent won't settle for us:
+So I watch for the things an agent won't settle for us:
 
 - [ ] Turn a fuzzy idea into a spec small enough to build.
 - [ ] Split the work into increments that won't trap the next developer.
@@ -72,7 +61,7 @@ I pay attention to the things an agent won't settle for us:
 
 ## The address book has trapdoors
 
-The same small project has trapdoors into almost every part of the job:
+Pull on almost any corner of this tiny project and a trapdoor opens into another part of the job:
 
 - product thinking (what problem are we actually solving?)
 - UX decisions (search behaviour, empty states, mobile-first flows)
@@ -85,12 +74,12 @@ The same small project has trapdoors into almost every part of the job:
 - observability (logs, traces, metrics, alerting)
 - team collaboration (specs, RFCs, code review style, rollout planning)
 
-We don't need to visit all of them. One good disagreement about an empty state can tell me more than ten completed algorithm questions.
+We don't have to visit all of them. One good argument about an empty state tells me more than ten finished algorithm questions.
 
 <Divider />
 
 ## The question I want to end with
 
-Build version one together. Then ask: "where do we take this next, and why?"
+Build version one together, then ask: "where do we take this next, and why?"
 
-I don't need the candidate to choose my answer. I want to see whether they can choose one, make me understand it, and abandon it without drama when the next requirement kills it.
+I don't need the candidate to pick my answer. I want to see them pick one, make me understand it, and drop it without drama when the next requirement kills it. There's always a next requirement. I'm the one writing them.

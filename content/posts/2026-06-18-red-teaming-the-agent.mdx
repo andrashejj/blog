@@ -2,7 +2,7 @@
 title: "The Person Looking for the Lie"
 date: "2026-06-18"
 slug: "red-teaming-the-agent"
-summary: "I recently stared at a PR so large my laptop struggled to render the diff. The code looked clean, the tests existed, and still nobody could reasonably review it."
+summary: "A 200k-line PR made my laptop wheeze. The code looked clean, the tests existed, and nobody could reasonably review it."
 coverImage: "/images/posts/red-teaming-the-agent-cover.png"
 draft: false
 series: "ai-slop"
@@ -13,11 +13,11 @@ tags:
   - security
 ---
 
-Recently I saw a couple of devs deliver a huuuuge PR. And when I say huuuuge, I mean GitHub started behaving like I had asked it to render a Pixar movie in the browser. Roughly 200k changed lines.
+A couple of devs recently handed over a huuuuge PR. How huuuuge? GitHub started behaving like I'd asked it to render a Pixar movie in the browser. Roughly 200k changed lines.
 
 Can you imagine reviewing that?
 
-I tried. My 8-core Mac tried. The diff opened, paused, thought about its life choices, and then began coughing up chunks of files in no particular hurry. Somewhere around the point where I was scrolling through generated-looking tests for code I had not read, my review turned into one question:
+I tried. My 8-core Mac tried. The diff opened, paused, thought about its life choices, and then began coughing up chunks of files in no particular hurry. Somewhere around the point where I was scrolling through generated-looking tests for code I hadn't read, my review turned into one question:
 
 Can the person who gave me this PR explain wtf is going on here?
 
@@ -42,7 +42,7 @@ So you skim. Of course you skim. The PR is too large, the tests are green, the c
 
 But sometimes the tests pass because they share the same blind spot as the code. The agent writes the case it can imagine passing. Then it writes the implementation that passes that case.
 
-This is the QA engineer walks into a bar joke in expensive clothing. He orders a beer. Orders zero beers. Orders 99,999,999,999 beers. Orders a lizard. Orders -1 beers. Orders gibberish. Everything looks covered. Then the first real customer walks in and asks where the bathroom is, and the bar catches fire.
+This is the old "QA engineer walks into a bar" joke in expensive clothing. He orders a beer. Orders zero beers. Orders 99,999,999,999 beers. Orders a lizard. Orders -1 beers. Orders gibberish. Everything looks covered. Then the first real customer walks in and asks where the bathroom is, and the bar catches fire.
 
 The test suite proved the bar could handle weird beer orders. It did not prove the bar could run as a bar.
 
@@ -57,11 +57,11 @@ Someone squints at the order of operations and calls this TDD. Or, because we ap
 
 ## The example from my own blog
 
-In this blog, there is a post called [Noah's Daily Exercises](/blog/noahs-daily-exercises). The goal is practical: generate exercises for Noah and Lara using an LLM. Maths, quizzes, drawings, creative writing, little physical challenges, all the stuff that makes a morning worksheet feel less like a photocopy from 1998.
+This blog has a post called [Noah's Daily Exercises](/blog/noahs-daily-exercises). The goal is practical: generate exercises for Noah and Lara using an LLM. Maths, quizzes, drawings, creative writing, little physical challenges, all the stuff that makes a morning worksheet feel less like a photocopy from 1998.
 
 The app only exists because I did this manually for a long time. I used to draw these worksheets by hand before school. Lovely when I had time and coffee. Less lovely when I had neither and still needed maths problems, a drawing prompt, and something vaguely educational that didn't bore everyone to death.
 
-So yes, using an LLM here makes my life easier. This sounds great BUT, as this little app grows inside the blog, a few product problems start popping up. One of them is not a code bug at all.
+So yes, the LLM makes my life easier. But as this little app grows inside the blog, product problems start popping up, and one of them isn't a code bug at all.
 
 Imagine I ask an agent to add a "make today's worksheet" button. The PR is small. The UI renders. The API calls return data. The tests check that the sections appear. Nice little change. Exactly the kind of thing I would approve too quickly if I were tired.
 
@@ -79,7 +79,7 @@ Second, the difficulty rules are vibes. Age nine. Times tables to five. Safe bod
 
 Third, the sections don't live in separate universes. Maths, words, physical work, sketches, and challenges might each look fine alone. A real morning doesn't work like that. Ten hard maths problems plus a demanding writing hook plus a physical block after surf practice is a bad worksheet. The agent built five tidy boxes. I need one kid's morning.
 
-None of this shows up as a syntax error. None of it looks dramatic in a diff. The code works. The product behavior is wrong.
+None of this shows up as a syntax error. None of it looks dramatic in a diff. The code works. The product behaviour is wrong.
 
 ## My red-team pass is three annoying questions
 
@@ -97,12 +97,12 @@ What did I mean but fail to say?
 
 This one hurts because it's usually my fault. I said "generate today's worksheet." I meant "generate one age-appropriate worksheet that a parent can commit to for the day." The agent optimised for the words. The red teamer has to recover the meaning.
 
-## Concrete takeaway: your red team checklist
+## Show your work
 
 Under a risky PR, I want a comment like this:
 
 <Quote>
-I attacked: duplicate submits, retries, bad permissions, weird inputs, missing product rules, and whole-flow behavior.
+I attacked: duplicate submits, retries, bad permissions, weird inputs, missing product rules, and whole-flow behaviour.
 
 I found: unlimited worksheet rerolls, difficulty rules living only in prompts, and no check for total load across maths, writing, and physical work.
 
@@ -122,7 +122,7 @@ My checklist looks like this:
 - [ ] Check that production failure would show up before a human complains.
 - [ ] Write down the risk being accepted because fixing it now is not worth it.
 
-Red teaming is allowed to end with "ship it." I don't want every reviewer cosplaying as a corporate risk committee. In this case it's my blog, so yes, I have to red team myself, which is a bit schizophrenic. But if I decide the worksheet can reroll forever for now, or the difficulty cap can stay in the prompt for another week, I want that written down in normal language.
+Red teaming is allowed to end with "ship it." I don't want every reviewer cosplaying as a corporate risk committee. In this case it's my blog, so yes, I have to red team myself, which feels a lot like marking my own homework. But if I decide the worksheet can reroll forever for now, or the difficulty cap can stay in the prompt for another week, I want that written down in normal language.
 
 The scanner won't find "this teaches Noah to refresh until the worksheet is easy." The agent won't feel embarrassed that it generated the tests and the bug from the same blind spot. Somebody still has to look at the thing and say: I don't buy it yet.
 
