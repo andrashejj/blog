@@ -28,7 +28,7 @@ Git landed in 2005 and made branches free. GitHub landed in 2008 and made the pu
 
 Vincent Driessen's [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/) named the ceremony in January 2010. `master` for production, `develop` for what's coming, feature branches, release branches, hotfix branches, and every release and every hotfix merging twice. The diagram has five lanes and the colour scheme of a Tokyo metro map, and for about eight years printing it out was how you announced that you had a process.
 
-It was correct for the software Driessen was writing, which shipped in numbered versions to customers who might sit on 2.3 until 2015. Ten years later he stuck a note on the top of his own post saying web apps aren't that class of software, they roll forward and not back, and those teams should go and use GitHub flow instead.
+It was correct for the software Driessen was writing, which shipped in numbered versions to customers who might sit on 2.3 until 2015. Ten years later he stuck a note on top of his own post saying web apps aren't that class of software, they roll forward and not back, and those teams should go and use GitHub flow instead.
 
 <Quote author="Vincent Driessen, 2020 note on the git-flow post">
 Panaceas don't exist. Consider your own context.
@@ -59,7 +59,7 @@ feature/x ●──●──┐  two days, rebased on main, merge queue
 agent/y   ●──┘
 ```
 
-One long-lived branch, held to release standard rather than to "mostly works." Every merge redeploys it somewhere product and sales can open without asking. The real test isn't what CI says. It's whether you'd let a salesperson click around it during a customer call without hovering behind them.
+One long-lived branch, held to release standard rather than to "mostly works." Every merge redeploys it somewhere product and sales can open without asking. Forget what CI says. The real test is whether you'd let a salesperson click around it during a customer call without hovering behind them.
 
 Feature branches come off it and go back within days, and the merge queue does the merging, not you. Anything longer than a train goes behind a [flag](https://martinfowler.com/articles/feature-toggles.html) or gets split into a stack of small PRs.
 
@@ -79,7 +79,7 @@ The harder problem is that nobody knows why the code exists any more. For twenty
 
 That's the hole the new forges are digging into. [Entire](https://entire.io/), from Thomas Dohmke who ran GitHub until 2025, stores every agent session, the prompt, the transcript, the tool calls, as refs inside the repository, next to the commit. Cursor's [Origin](https://www.infoq.com/news/2026/08/cursor-origin-alternative-github/) is a full forge with stacked PRs and an agent-aware merge queue. GitLab's [Orbit](https://ir.gitlab.com/news/news-details/2026/GitLab-Announces-New-Capabilities-to-Give-Enterprises-Speed-and-Control-at-Agentic-Scale/default.aspx) builds a context graph so an agent can ask the platform instead of re-reading your repo from scratch every morning. [GitButler](https://blog.gitbutler.com/series-a) just raised a Series A on Scott Chacon's line that generating change was never the hard problem, and that organising, reviewing and integrating it is.
 
-Don't switch forges this year. Do start writing agent sessions into the repo, because the format is a git ref and a git ref travels. I made [the same argument in May](/blog/remedies-for-the-slop) and I'd add that capturing this now is cheaper than reconstructing it during an incident in 2028. And read every one of these launches as a report on what your own process can't answer. If the market is selling "why did this change happen" as a feature, it's because your repo can't tell you.
+Don't switch forges this year. Do start writing agent sessions into the repo, because the format is a git ref and a git ref travels. I made [the same argument in May](/blog/remedies-for-the-slop). Capturing it now is cheaper than reconstructing it during an incident in 2028. And read every one of these launches as a report on what your own process can't answer. If the market is selling "why did this change happen" as a feature, it's because your repo can't tell you.
 
 The last holdout is always the same guy, and he'll tell you the double merge has never actually bitten him. That's bollocks, and it takes ten minutes to prove. Run `git log --oneline release/current..develop` and then the reverse, count the commits that exist on one side only, and put the list up on the screen. It bit him in March. He just wasn't the one who had to fix it.
 
