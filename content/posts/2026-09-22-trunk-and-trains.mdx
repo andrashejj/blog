@@ -2,7 +2,7 @@
 title: "Trunk and Trains"
 date: "2026-09-22"
 slug: "trunk-and-trains"
-summary: "Agents write code faster than anyone can review it. So how do you keep the release stable: a straight line from feature to dev to UAT to prod, or something else? Something else."
+summary: "A hundred agents on one repo write code faster than anyone can review it. Entire, Cursor's Origin, GitLab's Orbit and GitButler are all betting the hard part is now integrating that code and remembering why it exists. They're right."
 coverImage: "https://images.unsplash.com/photo-1779959428050-405b7355cddc?auto=format&fit=crop&fm=jpg&q=80&w=1600&h=900"
 tags:
   - engineering
@@ -20,43 +20,21 @@ Most teams already have the answer drawn on a whiteboard somewhere. It's a line:
 feature ──▶ dev ──▶ uat ──▶ prod
 ```
 
-A branch per environment, a merge at every arrow, a sign-off at every stop. It looks like control. Code earns its way to production one gate at a time, and anything bad gets caught at the next one.
+A branch per environment, a merge at every arrow, a sign-off at every stop. It looks like control. It was built for code written at human speed, and it leaks.
 
-It leaks in both directions, and agents are about to make the leak impossible to ignore.
-
-## Fixes have to swim upstream
+## The line leaks
 
 Friday afternoon, someone does the stale-PR sweep. There's one sitting there from three weeks ago, the same diff as a fix that's already in production, rotted into a conflict with a feature branch nobody remembers opening. They close it. Nothing goes red. Nobody gets paged.
 
 The bug is now back on the next train.
 
-That's the line working exactly as designed. Something breaks in UAT, on `release/2026.09`, two weeks before it ships. You open a PR into the release branch, because that's what ships. Then you open a second PR with the same diff into `develop`, because that's where everyone actually works. The first one is reviewed, merged and on staging before lunch. The second one is the one that died on Friday.
+Here's how it got there. Something broke in UAT, on `release/2026.09`, two weeks before it shipped. Someone fixed it on the release branch, because that's what ships, and opened a twin PR with the same diff into `develop`, because that's where everyone actually works. The first one was reviewed, merged and on staging before lunch. The second is the one that died on Friday.
 
 Nobody broke a rule. The rule was the bug.
 
-Code flows down the line, but fixes have to travel back up it, and every step back is a merge somebody has to remember. A twin PR isn't one change in two places. It's two originals: the same fix, reviewed twice, by different people, against different bases, sometimes weeks apart, and nothing in git says they're related. They can produce different trees, and often do. CI tested each of them, and neither run tells you anything about the combination.
+Code flows down the line, but fixes have to swim back up it, and every step back is a merge somebody has to remember. A twin PR isn't one change in two places. It's two originals, reviewed by different people against different bases, and nothing in git says they're related. They can produce different trees, and often do. Only one of the two merges wakes anybody up at 3am, so guess which one gets forgotten. GitLab has had a [request open since 2020](https://gitlab.com/gitlab-org/gitlab/-/issues/276698) to automate the double merge, complete with a workaround that involves a third branch and switching your protections off. When a workflow needs a bot to remember its own steps, the workflow is shit.
 
-Only one of the two merges wakes anybody up at 3am. Guess which one gets forgotten. Not malice, just people doing what the process rewards. Then it compounds. The release branch that was cut for a two-week stabilisation window stays open for the whole cycle, because QA signs off there and only there, so that's where fixes go first, and someone forward-ports them later. Or doesn't. Two months in, you have two products wearing the same name.
-
-The forward direction leaks too. Every arrow is a merge, and a merge makes a new tree. If prod picked up a hotfix the release branch never saw, promoting the release means merging the two, and what reaches prod is a tree nobody tested as a whole. It's a close cousin of what passed UAT, which isn't the same thing.
-
-GitLab has had a [request open since 2020](https://gitlab.com/gitlab-org/gitlab/-/issues/276698) to automate the double merge, complete with a workaround that involves a third branch and switching your protections off. When a workflow needs a bot to remember its own steps, the workflow is shit.
-
-## It made sense when software shipped on a disc
-
-The line has a famous ancestor. Subversion made a branch a cheap copy in 2000, but merging stayed expensive and stupid. Until [version 1.5 in 2008](https://subversion.apache.org/docs/release-notes/1.5.html), SVN kept no record of what had already been merged, so you tracked it by hand in commit messages like an accountant with a hangover. Git made branches free in 2005, GitHub made the pull request the unit of work in 2008, and suddenly every branch needed a ceremony to get home.
-
-Vincent Driessen's [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/) named the ceremony in January 2010. `master` for production, `develop` for what's coming, feature branches, release branches, hotfix branches, and every release and every hotfix merging twice. The diagram has five lanes and the colour scheme of a Tokyo metro map, and for about eight years printing it out was how you announced that you had a process. The feature-dev-UAT-prod line is the same picture with server names painted on the lanes.
-
-It was correct for what Driessen was building, which shipped in numbered versions to customers who might sit on 2.3 until 2015. Ten years later he stuck a note on top of his own post saying web apps aren't that class of software, they roll forward and not back, and those teams should go and use GitHub flow instead.
-
-<Quote author="Vincent Driessen, 2020 note on the git-flow post">
-Panaceas don't exist. Consider your own context.
-</Quote>
-
-The reference implementation was [archived in October 2025](https://github.com/nvie/gitflow/issues/6470). Atlassian files its own git-flow tutorial under [legacy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). A large slice of every company founded before 2018 is still running it.
-
-Nobody who ships versioned software at volume works this way. The [Linux stable trees](https://docs.kernel.org/process/stable-kernel-rules.html) won't take a fix unless it already exists in mainline. [Chromium](https://chromium.googlesource.com/chromium/src.git/+/main/docs/process/merge_request.md) is main-first, with a release manager reviewing every request to merge into a release branch. [Kubernetes](https://github.com/kubernetes/community/blob/main/contributors/devel/sig-release/cherry-picks.md) fixes on master and opens one cherry-pick PR per supported branch. Same rule three times. One canonical change on the trunk, and the backport is a mechanical copy with provenance rather than a second piece of work with its own opinions.
+That rule comes from git-flow, which Vincent Driessen [wrote up in 2010](https://nvie.com/posts/a-successful-git-branching-model/) for software that shipped in numbered versions to customers who might sit on 2.3 for years. In 2020 he added a note to the top of his own post telling web teams to use something simpler. The reference implementation was [archived in October 2025](https://github.com/nvie/gitflow/issues/6470), and Atlassian files its git-flow tutorial under [legacy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). The line on your whiteboard is the same picture with server names painted on the lanes. That's all the history this needs.
 
 ## Now pour agents into it
 
@@ -64,9 +42,29 @@ By April 2026 Sundar Pichai was [saying](https://www.semafor.com/article/04/24/2
 
 The pull request was invented so one human could explain a change to another human. LinearB's [benchmark](https://linearb.io/blog/8-million-prs-engineering-productivity) of 8 million PRs found AI-authored ones wait over sixteen hours for a first review and merge at 33% instead of 85%. A [study](https://arxiv.org/abs/2605.02273) of 33,000 agent PRs found 61% never got a human review at all. Run several agents on the same repo at once and [42% of PR pairs](https://arxiv.org/abs/2607.04697) conflict.
 
-Push that volume through a four-stage line and every gate turns into a queue. Work piles up in front of the slowest sign-off, fixes pile up behind it waiting to be merged back, and each extra agent makes both piles taller.
+Push that through a four-stage line and every gate turns into a queue. Work piles up in front of the slowest sign-off, fixes pile up behind it waiting to be merged back, and every extra agent makes both piles taller.
 
-Everybody's first instinct under load is to add a branch, because a branch feels like control. It isn't. It's a place to hide work until it becomes somebody else's problem. What helps is machinery: a merge queue that batches and bisects, affected-target testing so CI doesn't turn into a number somebody in finance forwards to your CEO, CODEOWNERS with real names on a rotation, and a size cap that agents will find annoying.
+Look at where those numbers actually hurt. None of them is about writing code. Agents are very good at writing code. The pain is in reviewing it, landing it without collisions, and knowing afterwards why it's there. Scott Chacon, who co-founded GitHub and wrote *Pro Git*, put it about as plainly as it can be put when [GitButler raised its Series A](https://blog.gitbutler.com/series-a): generating change was never the hard problem. Organising, reviewing and integrating it is.
+
+## The forge is being rebuilt around that
+
+That's the bet behind a wave of new forges, and each one goes after a specific place where the old workflow breaks under agents.
+
+The one I think about most is memory. For twenty years the answer to "why does this code exist" was the commit message, or a person you could walk over to. When 80% of the code comes out of an agent in a session that's closed and gone, that person doesn't know either. The diff was never the knowledge, and now nobody has it. [Entire](https://entire.io/), from Thomas Dohmke, who ran GitHub until 2025, stores every agent session (the prompt, the transcript, the tool calls) as refs inside the repository, next to the commit it produced. The reasoning lives where the code lives, and travels with it.
+
+Then there's integration. Cursor's [Origin](https://www.infoq.com/news/2026/08/cursor-origin-alternative-github/) is a full forge with stacked PRs and an agent-aware merge queue. Stacked PRs keep a big change reviewable by breaking it into a chain of small PRs, each built on the last. A merge queue tests each change against what `main` will actually look like when it lands. That's exactly the machinery a hundred agents need, and Origin builds it in instead of bolting it on.
+
+Then context. GitLab's [Orbit](https://ir.gitlab.com/news/news-details/2026/GitLab-Announces-New-Capabilities-to-Give-Enterprises-Speed-and-Control-at-Agentic-Scale/default.aspx) builds a context graph so an agent can ask the platform about your codebase instead of re-reading your repo from scratch every morning.
+
+And GitButler, which started out letting you work on several branches in one working directory at once, is building its whole company on Chacon's line. The work that's left for people is sorting, reviewing and landing change, and the tooling should be shaped around that.
+
+Put them side by side and you get a list of questions your repo can't answer today. Why did this change happen? Which session produced it? What else did that agent touch? What's safe to land next? If the market is selling those answers as features, it's because your process can't give them.
+
+Don't switch forges this year. It's too early to know which of these wins, and your release can't wait for the answer. Do two things now instead.
+
+First, start writing agent sessions into the repo, because the format is a git ref and a git ref travels. I made [the same argument in May](/blog/remedies-for-the-slop). Capturing it now is cheaper than reconstructing it during an incident in 2028, and it'll move with you to whichever forge you end up on.
+
+Second, get the shape right.
 
 ## Trunk and trains
 
@@ -83,19 +81,11 @@ agent/y   ●──┘
 
 One long-lived branch, held to release standard rather than to "mostly works." Every merge redeploys it somewhere product and sales can open without asking. Forget what CI says. The real test is whether you'd let a salesperson click around it during a customer call without hovering behind them.
 
-Feature branches come off it and go back within days, and the merge queue does the merging, not you. Anything longer than a train goes behind a [flag](https://martinfowler.com/articles/feature-toggles.html) or gets split into a stack of small PRs. An agent branch is just a very short feature branch. It comes off `main`, goes through the queue, and either lands green or doesn't land at all. There's no second merge for anyone to forget, because there's no second place for it to go.
+Feature branches come off it and go back within days, through a merge queue. An agent branch is just a very short feature branch: it comes off `main`, goes through the queue, and either lands green or doesn't land at all. Anything longer than a train goes behind a [flag](https://martinfowler.com/articles/feature-toggles.html) or gets split into a stack of small PRs.
 
-Release branches get cut on a fixed date, two weeks out, and from that moment accept cherry-picks of commits already on `main` and nothing else. A bot opens them with `-x` so the commit records where it came from, and the release manager approves against one question. Does this need to ride this train, or can it wait eight weeks? Hotfixes use the same path, because there isn't another one. Production is on fire, you fix it on `main`, and that's the only PR anyone reviews.
+Release branches get cut on a fixed date and from that moment accept cherry-picks of commits already on `main` and nothing else. A bot opens them with `-x` so each commit records where it came from, and the release manager asks one question: does this need to ride this train, or can it wait eight weeks? Hotfixes use the same path, because there isn't another one. Production is on fire, you fix it on `main`, and that's the only PR anyone reviews. It's how the [Linux stable trees](https://docs.kernel.org/process/stable-kernel-rules.html), [Chromium](https://chromium.googlesource.com/chromium/src.git/+/main/docs/process/merge_request.md) and [Kubernetes](https://github.com/kubernetes/community/blob/main/contributors/devel/sig-release/cherry-picks.md) already work. One canonical change on the trunk, and the backport is a mechanical copy with provenance.
 
-The interval is a business decision. Chrome ran six weeks for a decade and [moved to two](https://developer.chrome.com/blog/chrome-two-week-release) this month. The stabilisation window isn't negotiable the same way. If it takes you six weeks to get a release branch shippable, that's `main` telling you it was never release-ready when you cut it.
-
-## Nobody knows why the code exists
-
-Speed is the easy half. The harder problem is that nobody knows why the code is there any more. For twenty years the answer was the commit message, or a person you could walk over to. When 80% of it comes out of an agent in a session that's closed and gone, that person doesn't know either. The diff was never the knowledge, and now nobody has it.
-
-That's the hole the new forges are digging into. [Entire](https://entire.io/), from Thomas Dohmke who ran GitHub until 2025, stores every agent session, the prompt, the transcript, the tool calls, as refs inside the repository, next to the commit. Cursor's [Origin](https://www.infoq.com/news/2026/08/cursor-origin-alternative-github/) is a full forge with stacked PRs and an agent-aware merge queue. GitLab's [Orbit](https://ir.gitlab.com/news/news-details/2026/GitLab-Announces-New-Capabilities-to-Give-Enterprises-Speed-and-Control-at-Agentic-Scale/default.aspx) builds a context graph so an agent can ask the platform instead of re-reading your repo from scratch every morning. [GitButler](https://blog.gitbutler.com/series-a) just raised a Series A on Scott Chacon's line that generating change was never the hard problem, and that organising, reviewing and integrating it is.
-
-Don't switch forges this year. Do start writing agent sessions into the repo, because the format is a git ref and a git ref travels. I made [the same argument in May](/blog/remedies-for-the-slop). Capturing it now is cheaper than reconstructing it during an incident in 2028. And read every one of these launches as a report on what your own process can't answer. If the market is selling "why did this change happen" as a feature, it's because your repo can't tell you.
+Everybody's first instinct under load is to add a branch, because a branch feels like control. It isn't. It's a place to hide work until it becomes somebody else's problem. Add machinery instead: a merge queue that batches and bisects, affected-target testing so CI doesn't turn into a number somebody in finance forwards to your CEO, CODEOWNERS with real names on a rotation, and a size cap that agents will find annoying. Which is, not by coincidence, most of what the new forges are building in.
 
 The last holdout is always the same guy, and he'll tell you the double merge has never actually bitten him. That's bollocks, and it takes ten minutes to prove. Run `git log --oneline release/current..develop` and then the reverse, count the commits that exist on one side only, and put the list up on the screen. It bit him in March. He just wasn't the one who had to fix it.
 
