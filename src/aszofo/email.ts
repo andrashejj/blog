@@ -6,7 +6,7 @@ import { type Host, hostNames, hosts } from "./auth";
 import type { Booking } from "./bookings";
 import { accessUntil } from "./bookings";
 import { BASE_PATH, house, keyContact } from "./config";
-import { costsFor, euro } from "./costs";
+import { costsFor, euro, money } from "./costs";
 import { env } from "./env";
 import {
   dict,
@@ -93,15 +93,22 @@ const publicUrl = (origin: string, b: Booking) =>
 
 // ---------------------------------------------------------------- to guests
 
-// "Cleaning 40 €, Hunor 20 €, a thank-you 30 € (total 90 €)" in the guest's
-// language.
+// Use the saved quote and the guest's language.
 function costLine(b: Booking): string {
   const d = dict(b.lang);
-  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
-  const items = [`${d.costs.cleaning} ${euro(c.cleaning)}`];
-  items.push(c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : d.costs.budapest);
-  if (c.thanks > 0) items.push(`${d.costs.thanks} ${euro(c.thanks)}`);
-  return `${items.join(", ")} (${d.costs.total.toLowerCase()} ${euro(c.total)})`;
+  const c = costsFor(b);
+  const amount = (n: number) => money(n, b.lang, c.hufPerEuro);
+  const items = [];
+  if (c.accommodation > 0) {
+    const rate = b.guestType === "friends" ? d.costs.friends : d.costs.regular;
+    items.push(
+      `${rate}: ${c.nights} × ${amount(c.nightly)} = ${amount(c.accommodation)}`,
+    );
+  }
+  items.push(`${d.costs.cleaning} ${amount(c.cleaning)}`);
+  items.push(c.keys > 0 ? `${keyContact} ${amount(c.keys)}` : d.costs.budapest);
+  if (c.thanks > 0) items.push(`${d.costs.thanks} ${amount(c.thanks)}`);
+  return `${items.join(", ")} (${d.costs.total.toLowerCase()} ${amount(c.total)})`;
 }
 
 export function sendReceived(origin: string, b: Booking) {
@@ -132,6 +139,7 @@ export function sendApproved(origin: string, b: Booking, by: Host) {
       dates: formatRange(b.lang, b.checkIn, b.checkOut),
     }),
   ];
+  paragraphs.push(costLine(b));
   if (b.hostNote) paragraphs.push(b.hostNote);
   paragraphs.push(
     fill(d.email.approved.link, {
@@ -156,6 +164,7 @@ export function sendDeclined(origin: string, b: Booking, by: Host) {
       dates: formatRange(b.lang, b.checkIn, b.checkOut),
     }),
   ];
+  paragraphs.push(costLine(b));
   if (b.hostNote) paragraphs.push(b.hostNote);
   paragraphs.push(d.email.declined.link, by.name);
   return send({
@@ -180,10 +189,20 @@ export function hostRecipients(): string[] {
 }
 
 function costSummaryForHosts(b: Booking): string {
-  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
+  const c = costsFor(b);
   const keys =
     c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : "keys collected in Budapest";
-  return `Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
+  const rate =
+    b.guestType === "friends"
+      ? "Friends & family (host confirmation)"
+      : b.guestType === "regular"
+        ? "Regular guests"
+        : "Legacy request";
+  const stay =
+    c.accommodation > 0
+      ? `${rate} · ${c.nights} nights × ${euro(c.nightly)} · `
+      : "";
+  return `${stay}Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
 }
 
 export function sendNewRequestToHost(origin: string, b: Booking) {

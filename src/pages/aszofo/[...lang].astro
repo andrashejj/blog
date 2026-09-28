@@ -4,6 +4,7 @@ import Photo from "../../aszofo/components/Photo.astro";
 import Ripples from "../../aszofo/components/Ripples.astro";
 import { BASE_PATH, LANGS, type Lang, costs } from "../../aszofo/config";
 import { destinations, lakeName } from "../../aszofo/content";
+import { money } from "../../aszofo/costs";
 import { dict, fill } from "../../aszofo/i18n";
 import AszofoLayout from "../../aszofo/layouts/AszofoLayout.astro";
 
@@ -60,6 +61,7 @@ const glyphs = [
         <span class='label'>{t.hero.eyebrow}</span>
         <h1>{t.hero.title}</h1>
         <p class='lead'>{t.hero.lead}</p>
+        <p class='hero-essentials'>{t.hero.essentials}</p>
         <div class='hero-actions'>
           <a class='btn' href='#dates'>{t.hero.cta} <span class='arrow' aria-hidden='true'>→</span></a>
           <a class='btn quiet' href='#house'>{t.hero.secondary}</a>
@@ -78,10 +80,20 @@ const glyphs = [
     </div>
   </section>
 
+  <section class='stay-strip' aria-label={t.costs.label}>
+    <div class='wrap stay-strip-grid'>
+      <div><span class='label bare'>{t.costs.regular}</span><p><strong>{money(costs.nightly.regular, lang)}</strong><span>{t.costs.perNight}</span></p></div>
+      <div><span class='label bare'>{t.costs.friends}</span><p><strong>{money(costs.nightly.friends, lang)}</strong><span>{t.costs.perNight}</span></p></div>
+      <a href='#dates'>{t.hero.cta}<span aria-hidden='true'>↗</span></a>
+    </div>
+    <p class='wrap strip-note'>{t.costs.lead}</p>
+  </section>
+
   <!-- ------------------------------------------------------------ intro -->
   <section class='section intro' style='padding-top:clamp(3rem,7vw,6rem)'>
     <div class='wrap'>
-      <div style='max-width:52rem' data-reveal>
+      <div class='intro-copy' data-reveal>
+        <span class='label'>{t.intro.label}</span>
         <p class='body'>{t.intro.body}</p>
         <p class='sign'>— {t.intro.sign}</p>
       </div>
@@ -104,7 +116,8 @@ const glyphs = [
   <!-- ------------------------------------------------------------ the house -->
   <section class='section' id='house' style='padding-top:0' aria-labelledby='house-title'>
     <div class='wrap'>
-      <span class='label' id='house-title'>{t.house.label}</span>
+      <span class='label'>{t.house.label}</span>
+      <h2 id='house-title' class='house-heading'>{t.house.title}</h2>
       <div class='rooms' style='margin-top:3.5rem'>
         <article class='room a'>
           <Photo name='table' alt={alt.table} class='photo p1' sizes='(min-width: 900px) 48vw, 100vw' />
@@ -249,17 +262,22 @@ const glyphs = [
           <div class='costs-card'>
             <span class='label'>{t.costs.label}</span>
             <p class='costs-lead'>{t.costs.lead}</p>
+            <dl class='dl rate-list'>
+              <dt>{t.costs.regular}</dt><dd>{money(costs.nightly.regular, lang)}</dd>
+              <dt>{t.costs.friends}</dt><dd>{money(costs.nightly.friends, lang)}</dd>
+            </dl>
+            <p class='note'>{t.costs.perNight}</p>
+            <p class='label bare fee-label'>{t.costs.once}</p>
             <dl class='dl'>
               <dt>{t.costs.cleaning}</dt>
-              <dd>{costs.cleaning}&nbsp;€</dd>
+              <dd>{money(costs.cleaning, lang)}</dd>
               <dt>{t.costs.keys}</dt>
-              <dd>{costs.keyVisits * costs.keyVisitPrice}&nbsp;€</dd>
-              <dt>{t.costs.thanks}</dt>
-              <dd>{t.costs.thanksValue}</dd>
+              <dd>{money(costs.keyVisits * costs.keyVisitPrice, lang)}</dd>
             </dl>
             <p class='note'>{t.costs.keysNote}</p>
-            <p class='note'>{t.costs.thanksNote}</p>
+            <p class='note'>{t.costs.rateNote}</p>
           </div>
+          <div class='booking-notice'><span class='label'>{t.progress.label}</span><p>{t.progress.body}</p></div>
           <span class='label'>{t.practical.label}</span>
           <h3 id='practical-title' class='visually-hidden'>{t.practical.label}</h3>
           <dl class='dl' style='margin-top:1.2rem'>

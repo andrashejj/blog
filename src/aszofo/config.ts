@@ -41,9 +41,11 @@ export const booking = {
   keepPastDays: 400,
 } as const;
 
-// There's no nightly rate: guests cover cleaning and the key holder, whatever
-// the length of stay, and may add a thank-you of their own choosing.
+// Fixed published prices in EUR, with an agreed 400 Ft/EUR conversion.
+// Cleaning and keys are charged once per stay.
 export const costs = {
+  nightly: { friends: 25, regular: 250 },
+  hufPerEuro: 400,
   cleaning: 40,
   // Hunor comes twice (arrival and departure), 10 € a visit.
   keyVisits: 2,
@@ -52,7 +54,6 @@ export const costs = {
   // he's needed. From May to September guests may collect the keys in
   // Budapest instead.
   keysOptionalMonths: [5, 6, 7, 8, 9],
-  maxThanks: 5000,
 } as const;
 
 // Who holds the keys. His phone number is a private setting.

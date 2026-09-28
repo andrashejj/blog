@@ -105,10 +105,20 @@ const calendarData = {
 };
 
 const costLine = (b: Booking) => {
-  const c = costsFor(b.checkIn, b.keys, b.thanks ?? 0);
+  const c = costsFor(b);
   const keys =
     c.keys > 0 ? `${keyContact} ${euro(c.keys)}` : "keys from Budapest";
-  return `Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
+  const rate =
+    b.guestType === "friends"
+      ? "Friends & family (host confirmation)"
+      : b.guestType === "regular"
+        ? "Regular guests"
+        : "Legacy request";
+  const stay =
+    c.accommodation > 0
+      ? `${rate} · ${c.nights} nights × ${euro(c.nightly)} · `
+      : "";
+  return `${stay}Cleaning ${euro(c.cleaning)} · ${keys} · thank-you ${euro(c.thanks)} · total ${euro(c.total)}`;
 };
 
 const statusLabel: Record<Booking["status"], string> = {

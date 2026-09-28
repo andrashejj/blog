@@ -1,11 +1,18 @@
 // The three-step request form: dates, guests, preferences.
 
+import type { Lang } from "../config";
+import {
+  type GuestType,
+  money,
+  keysOptional as optionalKeys,
+  quoteStay,
+} from "../costs";
 import type { DateRange } from "../dates";
 import { type Selection, createCalendar } from "./calendar";
 
 interface Text {
   locale: string;
-  lang: string;
+  lang: Lang;
   email: string;
   base: string;
   maxGuests: number;
@@ -26,14 +33,12 @@ interface Text {
   };
   units: { night: { one: string; other: string } };
   costs: {
-    cleaning: number;
-    keys: number;
-    optionalMonths: number[];
     labels: {
       cleaning: string;
       keys: string;
       budapest: string;
-      thanks: string;
+      accommodation: string;
+      chooseDates: string;
       total: string;
     };
   };
@@ -104,6 +109,11 @@ export function initBooking(root: HTMLElement) {
 
   function showStep(n: number) {
     step = n;
+    const estimate = root.querySelector<HTMLElement>(".booking-estimate");
+    const actions = root.querySelector<HTMLElement>(
+      `[data-step="${n}"] .step-actions`,
+    );
+    if (estimate && actions) actions.before(estimate);
     for (const panel of root.querySelectorAll<HTMLElement>("[data-step]")) {
       panel.hidden = panel.dataset.step !== String(n);
     }
@@ -152,6 +162,14 @@ export function initBooking(root: HTMLElement) {
       hint.textContent = fill(b.minNights, { n: minNights });
     }
     selectionEl.append(hint);
+    const reviewDates = root.querySelector<HTMLElement>("[data-review-dates]");
+    if (reviewDates) {
+      reviewDates.hidden = !(checkIn && checkOut);
+      reviewDates.textContent =
+        checkIn && checkOut
+          ? range.formatRange(utc(checkIn), utc(checkOut))
+          : "";
+    }
     nextFromDates.disabled = !(checkIn && checkOut);
     clearBtn.hidden = !checkIn;
   }
@@ -266,32 +284,46 @@ export function initBooking(root: HTMLElement) {
   const keysRequired = root.querySelector<HTMLElement>("[data-keys-required]");
   const keysChoice = root.querySelector<HTMLElement>("[data-keys-choice]");
   const keysOptional = () =>
-    Boolean(selection.checkIn) &&
-    text.costs.optionalMonths.includes(Number(selection.checkIn?.slice(5, 7)));
+    Boolean(selection.checkIn) && optionalKeys(selection.checkIn ?? "");
   const chosenKeys = () =>
     keysOptional() &&
     form.querySelector<HTMLInputElement>('input[name="keys"]:checked')
       ?.value === "budapest"
       ? "budapest"
       : "hunor";
-  const thanksValue = () =>
-    Math.max(0, Math.round(Number(field("thanks")?.value) || 0));
+  const guestType = (): GuestType =>
+    form.querySelector<HTMLInputElement>('input[name="guestType"]:checked')
+      ?.value === "friends"
+      ? "friends"
+      : "regular";
 
   function renderCosts() {
     if (keysRequired) keysRequired.hidden = keysOptional();
     if (keysChoice) keysChoice.hidden = !keysOptional();
     if (!summaryEl) return;
-    const c = text.costs;
-    const keys = chosenKeys() === "hunor" ? c.keys : 0;
-    const thanks = thanksValue();
+    summaryEl.replaceChildren();
+    if (!selection.checkIn || !selection.checkOut) {
+      const dt = document.createElement("dt");
+      dt.textContent = text.costs.labels.chooseDates;
+      summaryEl.append(dt);
+      return;
+    }
+    const c = quoteStay(
+      selection.checkIn,
+      selection.checkOut,
+      guestType(),
+      chosenKeys(),
+    );
+    const labels = text.costs.labels;
     const rows: [string, string][] = [
-      [c.labels.cleaning, `${c.cleaning}\u00a0€`],
-      keys > 0
-        ? [c.labels.keys, `${keys}\u00a0€`]
-        : [c.labels.budapest, "0\u00a0€"],
+      [
+        `${labels.accommodation} · ${nightsLabel(c.nights)} × ${money(c.nightly, text.lang)}`,
+        money(c.accommodation, text.lang),
+      ],
+      [labels.cleaning, money(c.cleaning, text.lang)],
+      [c.keys ? labels.keys : labels.budapest, money(c.keys, text.lang)],
+      [labels.total, money(c.total, text.lang)],
     ];
-    if (thanks > 0) rows.push([c.labels.thanks, `${thanks}\u00a0€`]);
-    rows.push([c.labels.total, `${c.cleaning + keys + thanks}\u00a0€`]);
     summaryEl.replaceChildren(
       ...rows.flatMap(([term, value], i) => {
         const dt = document.createElement("dt");
@@ -306,10 +338,9 @@ export function initBooking(root: HTMLElement) {
       }),
     );
   }
-
   form.addEventListener("input", (e) => {
     const name = (e.target as HTMLInputElement).name;
-    if (name === "thanks" || name === "keys") renderCosts();
+    if (name === "guestType" || name === "keys") renderCosts();
   });
   renderCosts();
 
@@ -357,7 +388,7 @@ export function initBooking(root: HTMLElement) {
       message: value("message"),
       lang: text.lang,
       keys: chosenKeys(),
-      thanks: thanksValue(),
+      guestType: guestType(),
       website: value("website"),
       startedAt,
       consent: Boolean(field("consent")?.checked),

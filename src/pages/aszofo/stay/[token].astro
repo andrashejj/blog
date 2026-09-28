@@ -25,7 +25,7 @@ import {
   manual,
   travel,
 } from "../../../aszofo/content";
-import { costsFor, effectiveKeys, euro } from "../../../aszofo/costs";
+import { costsFor, effectiveKeys, money } from "../../../aszofo/costs";
 import { diffDays, todayAtHouse } from "../../../aszofo/dates";
 import {
   dict,
@@ -106,7 +106,8 @@ const directionsHref = pin
   ? `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}`
   : "";
 const keysMode = effectiveKeys(booking.checkIn, booking.keys);
-const cost = costsFor(booking.checkIn, booking.keys, booking.thanks ?? 0);
+const cost = costsFor(booking);
+const amount = (n: number) => money(n, lang, cost.hufPerEuro);
 const whatsappHref = safeHref(settings?.whatsapp ?? "");
 const trainGuest = booking.prefs.transport === "train";
 const hasPrefs =
@@ -210,6 +211,36 @@ const sections = open
             <dd>{plural(lang, nights, t.units.night)}</dd>
           </div>
         </dl>
+        <div class='stay-quote'>
+          <h3 class='mini' style='margin-top:2.4rem'>{s.costsTitle}</h3>
+          <dl class='cost-summary'>
+            {cost.accommodation > 0 && <>
+              <dt>{booking.guestType === "friends" ? t.costs.friends : t.costs.regular}<br />{cost.nights} × {amount(cost.nightly)}</dt>
+              <dd>{amount(cost.accommodation)}</dd>
+            </>}
+            <dt>{t.costs.cleaning}</dt>
+            <dd>{amount(cost.cleaning)}</dd>
+            {cost.keys > 0 ? (
+              <>
+                <dt>{keyContact}</dt>
+                <dd>{amount(cost.keys)}</dd>
+              </>
+            ) : (
+              <>
+                <dt>{t.costs.budapest}</dt>
+                <dd>{amount(0)}</dd>
+              </>
+            )}
+            {cost.thanks > 0 && (
+              <>
+                <dt>{t.costs.thanks}</dt>
+                <dd>{amount(cost.thanks)}</dd>
+              </>
+            )}
+            <dt class='total'>{t.costs.total}</dt>
+            <dd class='total'>{amount(cost.total)}</dd>
+          </dl>
+        </div>
       </section>
     )
   }
@@ -325,30 +356,6 @@ const sections = open
                 {revealed && settings.arrival && (
                   <p class='pre' style='margin-top:1.4rem'>{settings.arrival}</p>
                 )}
-                <h3 class='mini' style='margin-top:2.4rem'>{s.costsTitle}</h3>
-                <dl class='cost-summary'>
-                  <dt>{t.costs.cleaning}</dt>
-                  <dd>{euro(cost.cleaning)}</dd>
-                  {cost.keys > 0 ? (
-                    <>
-                      <dt>{keyContact}</dt>
-                      <dd>{euro(cost.keys)}</dd>
-                    </>
-                  ) : (
-                    <>
-                      <dt>{t.costs.budapest}</dt>
-                      <dd>{euro(0)}</dd>
-                    </>
-                  )}
-                  {cost.thanks > 0 && (
-                    <>
-                      <dt>{t.costs.thanks}</dt>
-                      <dd>{euro(cost.thanks)}</dd>
-                    </>
-                  )}
-                  <dt class='total'>{t.costs.total}</dt>
-                  <dd class='total'>{euro(cost.total)}</dd>
-                </dl>
               </div>
             </div>
             <div class='travel'>

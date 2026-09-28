@@ -20,8 +20,9 @@ it out, move `src/aszofo/`, `src/pages/aszofo/`, `public/aszofo/` and
    the form and, optionally, who's coming and what they like.
 2. The request is saved as `pending`. The guest gets a receipt with a link to
    their page; the host gets the details and a link to the dashboard.
-3. The host approves (optionally with a note, e.g. the price) or declines.
-   Approval emails the guest their page link in their language.
+3. The host checks the requested rate and approves (optionally with a note)
+   or declines. Approval emails the saved quote and guest-page link in the
+   guest's language.
 4. Door details, Wi‑Fi and the host phone appear on the guest page
    `revealDaysBefore` days before arrival. After check-out plus
    `accessGraceDays`, the page shows only a thank-you.
@@ -52,9 +53,13 @@ email. In `pnpm dev` without Resend, the link is shown on the page.
 ## Editing
 
 - House rules, capacity, times, minimum stay, costs and the key holder:
-  `config.ts`. There's no nightly rate: cleaning plus Hunor's two visits
-  (required October to April; May to September guests may collect the keys
-  in Budapest instead), plus a thank-you the guest chooses.
+  config.ts. Friends and family pay €25 / 10,000 Ft per night; regular
+  guests pay €250 / 100,000 Ft. These are whole-house rates. Hungarian pages
+  use the fixed 400 Ft/€ conversion; English and German use EUR. Cleaning
+  (€40 / 16,000 Ft) and Hunor's two visits (€20 / 8,000 Ft) are charged once.
+  Budapest key collection remains optional May–September. Hosts confirm
+  friends-and-family eligibility when approving. New requests store a
+  server-calculated quote; old requests retain their original fee-only model.
 - All page and email text in three languages: `i18n.ts`. English is the
   reference; TypeScript fails if Hungarian or German miss a key.
 - Directions, house manual, check-out list, distances: `content.ts`.
@@ -69,3 +74,9 @@ email. In `pnpm dev` without Resend, the link is shown on the page.
   never in the repo. A Google Maps link is turned into a pin when saved.
 - Favourite places: set `"hostPick": true` in `data/places.json`. They get a
   badge, rank higher, and have their own group on the guest page.
+
+## Pricing checks
+
+Run `node scripts/test-aszofo-pricing.mjs` for rate, currency, seasonal fee,
+request-validation, saved-quote and email checks. Storage and email are mocked;
+these checks do not create real bookings or send messages.

@@ -1,8 +1,16 @@
 // Booking requests, owner blocks and private house settings.
 
 import { randomBytes } from "node:crypto";
-import { type Lang, costs, house, isLang, booking as rules } from "./config";
-import { KEY_OPTIONS, type KeyOption, effectiveKeys } from "./costs";
+import { type Lang, house, isLang, booking as rules } from "./config";
+import {
+  type CostBreakdown,
+  GUEST_TYPES,
+  type GuestType,
+  KEY_OPTIONS,
+  type KeyOption,
+  effectiveKeys,
+  quoteStay,
+} from "./costs";
 import {
   type DateRange,
   type ISODate,
@@ -46,8 +54,11 @@ export interface Booking {
   prefs: Prefs;
   // How the guest gets in: Hunor, or keys collected in Budapest (summer only).
   keys: KeyOption;
-  // An optional thank-you in euros, on top of cleaning and keys.
+  // Legacy requests may include a thank-you in euros. New requests use zero.
   thanks: number;
+  // Absent on legacy fee-only requests.
+  guestType?: GuestType;
+  pricing?: CostBreakdown;
   // Shown to the guest on their page and in the approval email.
   hostNote?: string;
   // The host who approved or declined, who signs the note.
@@ -179,9 +190,13 @@ export function parseRequest(
 
   if (errors.length > 0) return { ok: false, errors };
 
-  const thanks = Math.min(
-    costs.maxThanks,
-    Math.max(0, Math.round(Number(body.thanks) || 0)),
+  const guestType = oneOf(GUEST_TYPES, body.guestType) ?? "regular";
+  const keys = effectiveKeys(checkIn as ISODate, oneOf(KEY_OPTIONS, body.keys));
+  const pricing = quoteStay(
+    checkIn as ISODate,
+    checkOut as ISODate,
+    guestType,
+    keys,
   );
 
   return {
@@ -197,8 +212,10 @@ export function parseRequest(
       phone: text(body.phone, 40) || undefined,
       message: text(body.message, 1500) || undefined,
       lang: isLang(body.lang) ? body.lang : "en",
-      keys: effectiveKeys(checkIn as ISODate, oneOf(KEY_OPTIONS, body.keys)),
-      thanks,
+      keys,
+      thanks: 0,
+      guestType,
+      pricing,
       prefs: {
         group: oneOf(GROUPS, rawPrefs.group),
         interests,

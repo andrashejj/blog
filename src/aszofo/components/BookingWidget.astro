@@ -7,6 +7,7 @@ import {
   keyContact,
   booking as rules,
 } from "../config";
+import { money } from "../costs";
 import { dict, fill } from "../i18n";
 import { GROUPS, INTERESTS, PACES, TRANSPORTS } from "../prefs";
 
@@ -42,14 +43,12 @@ const clientText = {
   },
   units: { night: t.units.night },
   costs: {
-    cleaning: costs.cleaning,
-    keys: costs.keyVisits * costs.keyVisitPrice,
-    optionalMonths: costs.keysOptionalMonths,
     labels: {
       cleaning: t.costs.cleaning,
       keys: keyContact,
       budapest: t.costs.budapest,
-      thanks: t.costs.thanks,
+      accommodation: t.costs.accommodation,
+      chooseDates: t.costs.chooseDates,
       total: t.costs.total,
     },
   },
@@ -72,6 +71,20 @@ const clientText = {
     <!-- 1 · dates -->
     <section class='step' data-step='1' aria-labelledby='step1-title'>
       <h3 class='visually-hidden' id='step1-title'>{b.steps[0]}</h3>
+      <fieldset class='rate-picker'>
+        <legend class='question'>{t.costs.rateLabel}</legend>
+        <div class='rate-options'>
+          <label>
+            <input type='radio' name='guestType' value='regular' checked />
+            <span><span>{t.costs.regular}</span><strong>{money(costs.nightly.regular, lang)}</strong><small>{t.costs.perNight}</small></span>
+          </label>
+          <label>
+            <input type='radio' name='guestType' value='friends' />
+            <span><span>{t.costs.friends}</span><strong>{money(costs.nightly.friends, lang)}</strong><small>{t.costs.perNight}</small></span>
+          </label>
+        </div>
+        <p class='hint'>{t.costs.rateNote}</p>
+      </fieldset>
       <div class='cal-head'>
         <p class='selection' data-selection aria-live='polite'>
           {b.chooseArrival}
@@ -91,6 +104,11 @@ const clientText = {
         <span><i class='l-selected'></i>{b.legend.selected}</span>
       </div>
       <p class='form-error' data-error='1' role='alert' hidden></p>
+      <aside class='booking-estimate' aria-live='polite'>
+        <p class='booking-review-dates' data-review-dates hidden></p>
+        <dl class='cost-summary' data-cost-summary></dl>
+        <p class='hint'>{t.costs.noPayment} {t.costs.payNote}</p>
+      </aside>
       <div class='step-actions'>
         <button type='button' class='btn quiet' data-clear hidden>{b.clear}</button>
         <span></span>
@@ -145,11 +163,11 @@ const clientText = {
         </div>
         <fieldset class='q span keys-field' data-keys>
           <legend class='question'>{b.keysQuestion}</legend>
-          <p class='muted' data-keys-required>{b.keysRequired}</p>
+          <p class='muted' data-keys-required>{fill(b.keysRequired, { price: money(costs.keyVisits * costs.keyVisitPrice, lang) })}</p>
           <div class='chips' data-keys-choice hidden>
             <label class='chip'>
               <input type='radio' name='keys' value='hunor' checked />
-              <span>{b.keysHunor}</span>
+              <span>{fill(b.keysHunor, { price: money(costs.keyVisits * costs.keyVisitPrice, lang) })}</span>
             </label>
             <label class='chip'>
               <input type='radio' name='keys' value='budapest' />
@@ -157,26 +175,6 @@ const clientText = {
             </label>
           </div>
         </fieldset>
-        <div class='field' data-field='thanks'>
-          <label for='bk-thanks'>{b.thanksLabel}</label>
-          <div class='euro'>
-            <input
-              id='bk-thanks'
-              name='thanks'
-              type='number'
-              inputmode='numeric'
-              min='0'
-              max={costs.maxThanks}
-              step='1'
-            />
-            <span aria-hidden='true'>€</span>
-          </div>
-          <span class='hint'>{b.thanksHint}</span>
-        </div>
-        <div class='field'>
-          <dl class='cost-summary' data-cost-summary aria-live='polite'></dl>
-          <span class='hint'>{t.costs.payNote}</span>
-        </div>
       </div>
       <div class='honey' aria-hidden='true'>
         <label>Website <input type='text' name='website' tabindex='-1' autocomplete='off' /></label>

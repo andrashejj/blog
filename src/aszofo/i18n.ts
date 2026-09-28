@@ -19,14 +19,16 @@ const en = {
     skip: "Skip to content",
   },
   hero: {
+    essentials: "Entire house · 6 guests · 3 bedrooms",
     eyebrow: "Aszófő · Balaton Uplands · Hungary",
-    title: "A press house among the vines, above Lake Balaton.",
-    lead: "Thatched roof, thick walls, a green tile stove and a vaulted cellar. Old trees, rows of vines, and the lake on the horizon.",
-    cta: "See open dates",
+    title: "A house above the lake.",
+    lead: "A thatched press house among the vines of Aszófő. Three bedrooms, a shaded terrace and long views over Lake Balaton.",
+    cta: "View rates & dates",
     secondary: "Look around",
     caption: "The press house on an August evening",
   },
   intro: {
+    label: "A few days of your own",
     body: "We bought this house for the view and stayed for everything else: the walnut trees, the evening light on the vines, the way the tile stove warms the whole room. It's our family's place. When we aren't there, we'd like to share it with people who will treat it the way we do.",
     sign: "Andras & family",
   },
@@ -37,6 +39,7 @@ const en = {
     { value: "0", label: "televisions, on purpose" },
   ],
   house: {
+    title: "The whole house, just for you",
     label: "The house",
     rooms: {
       downstairs: {
@@ -182,13 +185,10 @@ const en = {
     food: "Food preferences or allergies",
     occasion: "Celebrating anything?",
     keysQuestion: "Keys",
-    keysHunor: "Hunor lets us in (20 €)",
+    keysHunor: "Hunor lets us in ({price})",
     keysBudapest: "We'll collect the keys in Budapest",
     keysRequired:
-      "From October to April Hunor lets you in and looks after the water and heating: 20 € for his two visits.",
-    thanksLabel: "A thank-you for the house (optional)",
-    thanksHint:
-      "Whatever feels right, in euros. Leave it empty if you'd rather not.",
+      "From October to April Hunor lets you in and looks after the water and heating: {price} for his two visits.",
     consent:
       "I understand this is a request. You'll use these details only to answer it and host our stay, and delete them afterwards.",
     submit: "Send request",
@@ -211,17 +211,24 @@ const en = {
     },
   },
   costs: {
-    label: "What it costs",
-    lead: "There's no nightly rate. We ask for what a stay actually costs us, however long you stay.",
+    regular: "Regular guests",
+    friends: "Friends & family",
+    perNight: "per night · whole house",
+    rateLabel: "Your rate",
+    rateNote:
+      "The friends-and-family rate is for personal guests of the hosts and is confirmed with your request.",
+    accommodation: "Accommodation",
+    chooseDates: "Choose dates to see your total.",
+    noPayment: "No payment is taken with your request.",
+    once: "Once per stay",
+    label: "Rates & availability",
+    lead: "Nightly rates for the whole house, for up to six guests. Cleaning and key handover are added once per stay.",
     cleaning: "Cleaning",
     keys: "Hunor: keys, water and heating (two visits)",
     keysNote:
       "Needed from October to April. From May to September you can collect the keys in Budapest instead.",
     budapest: "Keys collected in Budapest",
     thanks: "A thank-you",
-    thanksValue: "Your choice",
-    thanksNote:
-      "If you'd like to give something towards the house on top, you decide how much.",
     total: "Total",
     payNote: "We'll tell you how to pay when we confirm.",
   },
@@ -251,7 +258,7 @@ const en = {
       },
       {
         title: "Reply",
-        body: "We answer within two days, and tell you how to pay the small costs.",
+        body: "We reply within two days with availability, the full price and payment details.",
       },
       {
         title: "Your page",
@@ -409,14 +416,16 @@ const hu: Dict = {
     skip: "Ugrás a tartalomra",
   },
   hero: {
+    essentials: "Teljes ház · 6 vendég · 3 hálószoba",
     eyebrow: "Aszófő · Balaton-felvidék",
-    title: "Présház a szőlők között, a Balaton fölött.",
-    lead: "Nádtető, vastag falak, zöld cserépkályha és boltíves pince. Öreg fák, szőlősorok, a láthatáron a tó.",
-    cta: "Szabad időpontok",
+    title: "Présház a Balaton fölött.",
+    lead: "Nádtetős présház az aszófői szőlők között. Három hálószoba, árnyas terasz és kilátás a Balatonra.",
+    cta: "Árak és időpontok",
     secondary: "Nézz körül",
     caption: "A présház egy augusztusi estén",
   },
   intro: {
+    label: "Néhány nap csak nektek",
     body: "A kilátás miatt vettük meg ezt a házat, és minden más miatt maradtunk: a diófák, az esti fény a szőlőn, ahogy a cserépkályha átmelegíti az egész szobát. Ez a családunk háza. Amikor nem vagyunk ott, szívesen megosztjuk olyanokkal, akik úgy vigyáznak rá, ahogy mi.",
     sign: "András és a család",
   },
@@ -427,6 +436,7 @@ const hu: Dict = {
     { value: "0", label: "tévé, szándékosan" },
   ],
   house: {
+    title: "A teljes ház a tiétek",
     label: "A ház",
     rooms: {
       downstairs: {
@@ -574,13 +584,10 @@ const hu: Dict = {
     food: "Étkezési szokások, allergiák",
     occasion: "Ünnepeltek valamit?",
     keysQuestion: "Kulcs",
-    keysHunor: "Hunor enged be (20 €)",
+    keysHunor: "Hunor enged be ({price})",
     keysBudapest: "A kulcsot Budapesten vesszük át",
     keysRequired:
-      "Októbertől áprilisig Hunor enged be, és ő intézi a vizet és a fűtést: a két útja 20 €.",
-    thanksLabel: "Köszönet a házra (nem kötelező)",
-    thanksHint:
-      "Amennyit jónak érzel, euróban. Hagyd üresen, ha nem szeretnél.",
+      "Októbertől áprilisig Hunor enged be, és ő intézi a vizet és a fűtést: a két útja {price}.",
     consent:
       "Tudom, hogy ez csak kérés. Az adataimat csak a válaszhoz és a vendégséghez használjátok, utána törlitek.",
     submit: "Kérés elküldése",
@@ -603,17 +610,24 @@ const hu: Dict = {
     },
   },
   costs: {
-    label: "Mennyibe kerül",
-    lead: "Éjszakánkénti ár nincs. Csak azt kérjük, ami egy vendégséggel ténylegesen felmerül, akármeddig maradtok.",
+    regular: "Vendégek",
+    friends: "Barátok és család",
+    perNight: "éjszakánként · teljes ház",
+    rateLabel: "Melyik árral számoljunk?",
+    rateNote:
+      "A baráti és családi ár a házigazdák személyes vendégeinek szól; a kérés visszaigazolásakor egyeztetjük.",
+    accommodation: "Szállás",
+    chooseDates: "Válassz időpontot a teljes árhoz.",
+    noPayment: "A kérés elküldésekor nem kell fizetned.",
+    once: "Tartózkodásonként egyszer",
+    label: "Árak és szabad időpontok",
+    lead: "Az éjszakánkénti ár a teljes házra vonatkozik, legfeljebb hat vendégre. A takarítás és a kulcsátadás díját tartózkodásonként egyszer számítjuk fel.",
     cleaning: "Takarítás",
     keys: "Hunor: kulcs, víz és fűtés (két alkalom)",
     keysNote:
       "Októbertől áprilisig szükséges. Májustól szeptemberig a kulcsot Budapesten is átveheted helyette.",
     budapest: "Kulcsátvétel Budapesten",
     thanks: "Köszönet",
-    thanksValue: "Rajtad áll",
-    thanksNote:
-      "Ha ezen felül a házra is adnál valamit, te döntöd el, mennyit.",
     total: "Összesen",
     payNote: "A visszaigazolással együtt megírjuk, hogyan fizethetsz.",
   },
@@ -799,14 +813,16 @@ const de: Dict = {
     skip: "Zum Inhalt springen",
   },
   hero: {
+    essentials: "Ganzes Haus · 6 Gäste · 3 Schlafzimmer",
     eyebrow: "Aszófő · Balaton-Oberland · Ungarn",
-    title: "Ein Presshaus zwischen Reben, über dem Balaton.",
-    lead: "Reetdach, dicke Mauern, ein grüner Kachelofen und ein Gewölbekeller. Alte Bäume, Rebzeilen und der See am Horizont.",
-    cta: "Freie Termine",
+    title: "Ein Haus über dem See.",
+    lead: "Ein reetgedecktes Presshaus in den Weinbergen von Aszófő. Drei Schlafzimmer, eine schattige Terrasse und ein weiter Blick über den Balaton.",
+    cta: "Preise & Termine",
     secondary: "Umsehen",
     caption: "Das Presshaus an einem Augustabend",
   },
   intro: {
+    label: "Ein paar Tage für sich",
     body: "Wir haben dieses Haus wegen der Aussicht gekauft und sind wegen allem anderen geblieben: die Nussbäume, das Abendlicht auf den Reben, die Art, wie der Kachelofen den ganzen Raum wärmt. Es ist das Haus unserer Familie. Wenn wir nicht da sind, teilen wir es gern mit Menschen, die es so behandeln wie wir.",
     sign: "Andras & Familie",
   },
@@ -817,6 +833,7 @@ const de: Dict = {
     { value: "0", label: "Fernseher, mit Absicht" },
   ],
   house: {
+    title: "Das ganze Haus für Sie",
     label: "Das Haus",
     rooms: {
       downstairs: {
@@ -966,13 +983,10 @@ const de: Dict = {
     food: "Ernährung oder Allergien",
     occasion: "Gibt es etwas zu feiern?",
     keysQuestion: "Schlüssel",
-    keysHunor: "Hunor lässt uns ein (20 €)",
+    keysHunor: "Hunor lässt uns ein ({price})",
     keysBudapest: "Wir holen die Schlüssel in Budapest ab",
     keysRequired:
-      "Von Oktober bis April lässt Hunor Sie ein und kümmert sich um Wasser und Heizung: 20 € für seine zwei Besuche.",
-    thanksLabel: "Ein Dankeschön für das Haus (freiwillig)",
-    thanksHint:
-      "Was sich richtig anfühlt, in Euro. Leer lassen, wenn Sie nicht möchten.",
+      "Von Oktober bis April lässt Hunor Sie ein und kümmert sich um Wasser und Heizung: {price} für seine zwei Besuche.",
     consent:
       "Mir ist klar, dass dies eine Anfrage ist. Die Angaben werden nur für die Antwort und den Aufenthalt verwendet und danach gelöscht.",
     submit: "Anfrage senden",
@@ -997,17 +1011,24 @@ const de: Dict = {
     },
   },
   costs: {
-    label: "Was es kostet",
-    lead: "Es gibt keinen Preis pro Nacht. Wir bitten nur um das, was ein Aufenthalt uns tatsächlich kostet, egal wie lange Sie bleiben.",
+    regular: "Reguläre Gäste",
+    friends: "Freunde & Familie",
+    perNight: "pro Nacht · ganzes Haus",
+    rateLabel: "Ihr Tarif",
+    rateNote:
+      "Der Tarif für Freunde und Familie gilt für persönliche Gäste der Gastgeber und wird mit Ihrer Anfrage bestätigt.",
+    accommodation: "Unterkunft",
+    chooseDates: "Wählen Sie Ihre Daten für den Gesamtpreis.",
+    noPayment: "Bei der Anfrage ist keine Zahlung nötig.",
+    once: "Einmal pro Aufenthalt",
+    label: "Preise & freie Termine",
+    lead: "Der Preis pro Nacht gilt für das ganze Haus mit bis zu sechs Gästen. Reinigung und Schlüsselübergabe werden einmal pro Aufenthalt berechnet.",
     cleaning: "Reinigung",
     keys: "Hunor: Schlüssel, Wasser und Heizung (zwei Besuche)",
     keysNote:
       "Von Oktober bis April nötig. Von Mai bis September können Sie die Schlüssel stattdessen in Budapest abholen.",
     budapest: "Schlüssel in Budapest abgeholt",
     thanks: "Ein Dankeschön",
-    thanksValue: "Ganz nach Ihnen",
-    thanksNote:
-      "Wenn Sie darüber hinaus etwas für das Haus geben möchten, bestimmen Sie den Betrag.",
     total: "Gesamt",
     payNote:
       "Mit der Bestätigung schreiben wir Ihnen, wie Sie bezahlen können.",
@@ -1038,7 +1059,7 @@ const de: Dict = {
       },
       {
         title: "Antwort",
-        body: "Wir antworten innerhalb von zwei Tagen und sagen Ihnen, wie Sie die kleinen Kosten bezahlen.",
+        body: "Wir antworten innerhalb von zwei Tagen mit Verfügbarkeit, Gesamtpreis und Zahlungsdetails.",
       },
       {
         title: "Ihre Seite",
