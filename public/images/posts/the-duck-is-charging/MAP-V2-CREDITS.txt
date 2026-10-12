@@ -1,0 +1,31 @@
+Structured personal life map
+Created with the built-in image_gen tool, 12 October 2026.
+Edit of the earlier generated personal-life-map.webp. Fictional people and scenes illustrate personal connections, not measured causal relationships.
+The hierarchy places Sunset Duckies within Surf & Move, breathing within Mindfulness, and five work categories within Build & Create.
+
+Final source: exec-66e30d18-7953-4b5d-bbec-9dc1b1e7fdad.png
+Original hierarchy generation: exec-1a47de50-6ae2-4c27-a71a-20e25971467b.png
+
+Final correction prompt:
+Edit this image with just one correction: add the clearly readable handwritten domain heading "BUSINESS" centred immediately below the central "Energy · curiosity · calm" text, above the lower three illustrated clusters. Make a small amount of vertical space there if needed; preserve the entire hierarchy, all existing words, illustrations, layout, colors and style. Top half remains PRIVATE LIFE, bottom half must visibly be labelled BUSINESS. Do not remove any subcategory or alter any existing label. This is a simple text-label correction.
+
+Exact generation prompt:
+Edit the attached illustrated personal map into a clearly structured hierarchical illustrated mind map. Preserve the warm hand-drawn ink and watercolor illustration style, cream paper, coastal scenes, friendly adults, muted blue/green/ochre/terracotta palette, readable handwritten lettering. This is a conceptual personal map for an article, not a scientific diagram.
+
+The key correction is INFORMATION HIERARCHY: every small subtopic visibly belongs under a larger parent heading, joined to its parent with short branching lines. Sunset Duckies is ONLY a child of SURF & MOVE. Breathing is ONLY a child of MINDFULNESS. BUILD & CREATE has several concrete child branches, not just one laptop picture.
+
+Use a spacious square high-resolution composition. Central small home/person vignette labelled "YOU" and below "Energy · curiosity · calm". Reduce the central illustration's size to make room for structured categories. Upper half labelled "PRIVATE LIFE"; lower half labelled "BUSINESS". In each half three clearly separated illustrated clusters. Large parent labels, smaller but clearly readable children. Six MAIN curved branches connect YOU to the six parent clusters; thin local twigs connect each parent to its children. Do not connect children directly to YOU. No crossing spaghetti. Two subtle curved bidirectional outer arrows imply life/work exchange. No boxes/table layout.
+
+EXACT hierarchy and wording:
+PRIVATE LIFE (above):
+- SURF & MOVE: small surfer/wave illustration, with three subordinate labels connected directly to this parent: "Sunset Duckies", "Fitness", "Time outdoors". Place all three immediately below or around this surfing cluster, not in a separate region.
+- FAMILY & FRIENDS: small illustration of a few people sharing a meal, two subordinate labels: "Shared time", "Play & connection".
+- MINDFULNESS: small peaceful person under tree beside the sea, three subordinate labels: "Breathing", "Meditation", "Presence". No one in water doing breathing exercises.
+
+BUSINESS (below):
+- BUILD & CREATE: larger cluster deserving more room, laptop/sketchbook illustration with FIVE subordinate labels in a clean fan or mini-tree visibly attached to Build & Create: "Software & products", "Design & prototyping", "Writing & content", "Granola & enterprise", "Ship & improve". Give these five short labels enough room to read. The five labels must be smaller than the parent and all visibly subordinate. No repeated generic laptop scenes needed.
+- PEOPLE & LEADERSHIP: small attentive conversation illustration, three subordinate labels: "Listen", "Empathy", "Calm decisions".
+- LEARN & GROW: small open book and lightbulb illustration, three subordinate labels: "Experiment", "New ideas", "Useful skills".
+
+Bottom line, small but readable: "Sleep, recovery & boundaries make room for it all."
+Avoid the old disconnected standalone Sunset Duckies vignette entirely. Avoid treating all labels as same-level nodes. NO extra labels, paragraphs, badges, bullets printed in art, charts, numbers, UI, logos or watermarks. Keep the illustration appealing and simple: scene sizes secondary to clear hierarchy. All requested text exactly once, spelled correctly.

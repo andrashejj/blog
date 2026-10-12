@@ -1,0 +1,17 @@
+The Duck Is Charging — active photorealistic imagery
+Created 12 October 2026 with the built-in image_gen tool.
+These fictional generated scenes do not depict the author, real Sunset Duckies
+participants, an actual club event, or a verified geographic location.
+These replace the cartoon illustrations in the article. Original illustration
+files and their CREDITS.txt remain available as earlier alternatives.
+Generated PNG originals converted to WebP at quality 88 with sharp.
+
+coastal-surf.webp (1536 x 1024) — article cover
+Original: exec-5948a9c3-72d8-4688-84d0-a0deae73e471.png
+Prompt:
+Use case: photorealistic-natural. Asset type: serious editorial cover photograph for a personal essay about surfing, health, sustained energy and demanding creative work. Create a highly photorealistic 1536x1024 horizontal image. Scene: a solitary adult surfer seen from behind walking out of shallow tropical ocean water towards a quiet beach carrying a plain well-used surfboard under one arm, understated sunset light, saltwater dripping, believable small shore waves, distant dark green coastal hills. Candid observational photography, natural anatomy, modest athletic build, normal rash vest and boardshorts, no visible identifiable face. Wide composition, surfer small in frame, textured wet sand and sea, muted slate blue and sand tones with subtle amber highlights. 35mm environmental photograph, realistic exposure, fine film grain, imperfect everyday details, serious and contemplative but alive. No staged triumph, no corporate stock-photo smile, no magical light rays, no illustration, no ducks, no text, no logos, no watermark. Fictional scene, not a record of any real club or specific real person.
+
+attentive-conversation.webp (1536 x 1024) — inline photograph-style scene
+Original: exec-6a604577-c8f6-4304-9912-347125f2b9a4.png
+Prompt:
+Use case: photorealistic-natural. Asset type: serious editorial inline photograph for an essay about having energy for focused work and attentive human connection. Create a highly photorealistic 1536x1024 horizontal image. Scene: two adult colleagues at a simple wooden table in a modest airy coastal workspace, one person in three-quarter rear profile listening attentively to the other explaining a sketched idea in an open notebook. An open ordinary unbranded laptop sits aside, a pencil and a glass of water, subtle signs of real use. Quiet focused body language, relaxed expressions, no exaggerated smiles, candid unposed moment. Gentle natural window light, realistic skin and hands, restrained earthy palette, soft shadows, fine film grain. 50mm magazine documentary photography aesthetic, intimate framing, serious and warm, no staged handshake, no high-five, no stock-photo salesmanship, no luxury lifestyle props, no readable text, no logos, no watermark. Fictional adults and workspace, not portraits of actual Sunset Duckies participants or the author.

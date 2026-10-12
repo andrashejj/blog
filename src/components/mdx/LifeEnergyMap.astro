@@ -1,0 +1,59 @@
+<figure class="life-map not-prose" id="life-mind-map">
+  <a class="map-image no-rule" href="/images/posts/the-duck-is-charging/personal-life-map-v2.webp" target="_blank" rel="noopener" aria-label="Open the illustrated personal map at full size (new tab)">
+    <img
+      src="/images/posts/the-duck-is-charging/personal-life-map-v2.webp"
+      alt="Illustrated personal map with You at the centre, private life above and business below. Surf & Move branches into Sunset Duckies, fitness and time outdoors. Mindfulness includes breathing, meditation and presence. Build & Create branches into software and products, design and prototyping, writing and content, granola and enterprise, and shipping and improving. Other branches cover family and friends, people and leadership, and learning and growth. Sleep, recovery and boundaries support the whole map."
+      width="1254"
+      height="1254"
+      loading="lazy"
+      decoding="async"
+    />
+  </a>
+  <figcaption>
+    <span>Different parts of the same life. A personal map, illustrated with AI.</span>
+    <a href="/images/posts/the-duck-is-charging/personal-life-map-v2.webp" target="_blank" rel="noopener">View full size<span class="sr-only"> (new tab)</span> ↗</a>
+  </figcaption>
+</figure>
+
+<style>
+  .life-map {
+    width: 100%;
+    margin: 3rem 0;
+    scroll-margin-top: 5rem;
+  }
+  .map-image {
+    display: block;
+    cursor: zoom-in;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .map-image:focus-visible {
+    outline: 2px solid var(--color-terracotta-strong);
+    outline-offset: 5px;
+  }
+  .map-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.8rem;
+    color: var(--color-muted);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  figcaption a {
+    flex-shrink: 0;
+    color: var(--color-ink-soft);
+  }
+  @media (max-width: 600px) {
+    .life-map { margin-block: 2rem; }
+    figcaption { display: block; padding-inline: 0.5rem; }
+    figcaption a { display: inline-block; margin-top: 0.4rem; }
+  }
+</style>
