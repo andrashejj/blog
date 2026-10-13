@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" fill="none">
 <title>A year by the water: the world shortlist</title>
-<desc>World map showing Mauritius as the current base, Indonesia and Fiji as leading candidates, and Peru, South Africa, Western Australia, New Zealand and Hawaii as alternatives. Markers identify approximate areas rather than exact surf breaks. Switzerland is marked for a visit and Hungary is labelled Home, maybe. No travel route is fixed.</desc>
+<desc>World map showing Mauritius as the current base, Indonesia and Fiji as leading candidates, and Peru, South Africa, Western Australia, New Zealand and Hawaii as alternatives. Markers identify approximate areas rather than exact surf breaks. Tentative stays: Indonesia May to July; Hungary August and early September; Fiji mid-September to mid-December; Hungary and Switzerland late December and January; possibly Peru February to April. Hungary is labelled Home, maybe. No travel route is fixed.</desc>
 <defs><clipPath id="map"><rect x="60" y="252" width="1680" height="758" rx="2"/></clipPath></defs>
 <rect width="1800" height="1100" fill="#f0e8d5"/>
 <g fill="#163f43" font-family="Georgia, serif">
 <text x="80" y="75" font-size="22" letter-spacing="4">ANDRAS HEJJ / FIELD NOTES</text>
 <text x="76" y="169" font-size="85">A year by the water.</text>
-<text x="82" y="220" font-size="28">Possible bases and visits along the way.</text>
+<text x="82" y="220" font-size="28">Possible bases, time in Hungary and Switzerland, and dates so far.</text>
 </g>
 <path d="M80 244H1720" stroke="#aab7a7"/>
 <g clip-path="url(#map)">
@@ -158,11 +158,11 @@
 <path d="M936.9,429.4L890.0,393.0L729.0,393.0" stroke="#42658a" stroke-width="1.8"/>
 <circle cx="936.9" cy="429.4" r="13" fill="#f0e8d5"/>
 <rect x="929.9" y="422.4" width="14" height="14" fill="#42658a"/>
-<g font-family="Georgia, serif" text-anchor="start" fill="#42658a" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="729" y="345" font-size="37">Switzerland</text><text x="729" y="376" font-size="23">Visit</text></g>
+<g font-family="Georgia, serif" text-anchor="start" fill="#42658a" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="729" y="345" font-size="37">Switzerland</text><text x="729" y="376" font-size="23">Late Dec–Jan</text></g>
 <path d="M987.8,427.6L1050.0,402.0L1100.0,402.0" stroke="#42658a" stroke-width="1.8"/>
 <circle cx="987.8" cy="427.6" r="13" fill="#f0e8d5"/>
 <rect x="980.8" y="420.6" width="14" height="14" fill="#42658a"/>
-<g font-family="Georgia, serif" text-anchor="start" fill="#42658a" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1100" y="352" font-size="37">Hungary</text><text x="1100" y="383" font-size="23">Home, maybe</text></g>
+<g font-family="Georgia, serif" text-anchor="start" fill="#42658a" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1100" y="291" font-size="37">Hungary</text><text x="1100" y="323" font-size="23">Home, maybe</text><text x="1100" y="355" font-size="23">Aug–early Sep</text><text x="1100" y="387" font-size="23">Late Dec–Jan</text></g>
 <path d="M196.2,546.0L196.0,489.0" stroke="#163f43" stroke-width="1.8"/>
 <circle cx="196.2" cy="546.0" r="13" fill="#f0e8d5"/>
 <circle cx="196.2" cy="546.0" r="8" fill="#f0e8d5" stroke="#163f43" stroke-width="3"/>
@@ -170,7 +170,7 @@
 <path d="M541.9,673.3L511.0,719.0L422.0,719.0" stroke="#163f43" stroke-width="1.8"/>
 <circle cx="541.9" cy="673.3" r="13" fill="#f0e8d5"/>
 <circle cx="541.9" cy="673.3" r="8" fill="#f0e8d5" stroke="#163f43" stroke-width="3"/>
-<g font-family="Georgia, serif" text-anchor="start" fill="#163f43" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="422" y="766" font-size="37">Peru</text><text x="422" y="797" font-size="23">Pacasmayo</text></g>
+<g font-family="Georgia, serif" text-anchor="start" fill="#163f43" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="422" y="766" font-size="37">Peru</text><text x="422" y="797" font-size="23">Pacasmayo</text><text x="422" y="828" font-size="23">Feb–Apr · maybe</text></g>
 <path d="M982.9,792.7L944.0,840.0L775.0,840.0" stroke="#163f43" stroke-width="1.8"/>
 <circle cx="982.9" cy="792.7" r="13" fill="#f0e8d5"/>
 <circle cx="982.9" cy="792.7" r="8" fill="#f0e8d5" stroke="#163f43" stroke-width="3"/>
@@ -185,7 +185,7 @@
 <circle cx="1453.7" cy="689.0" r="8" fill="#b34d2f" stroke="#b34d2f" stroke-width="3"/>
 <circle cx="1425.6" cy="680.4" r="13" fill="#f0e8d5"/>
 <circle cx="1425.6" cy="680.4" r="8" fill="#b34d2f" stroke="#b34d2f" stroke-width="3"/>
-<g font-family="Georgia, serif" text-anchor="middle" fill="#b34d2f" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1320" y="609" font-size="37">Indonesia</text><text x="1320" y="640" font-size="23">Rote / West Sumbawa</text></g>
+<g font-family="Georgia, serif" text-anchor="middle" fill="#b34d2f" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1320" y="609" font-size="37">Indonesia</text><text x="1320" y="640" font-size="23">Rote / West Sumbawa</text><text x="1320" y="671" font-size="23">May–Jul</text></g>
 <path d="M1417.9,792.8L1415.7,769.5" stroke="#163f43" stroke-width="1.7"/>
 <path d="M1415.7,769.5L1417.0,869.0L1330.0,869.0" stroke="#163f43" stroke-width="1.8"/>
 <circle cx="1415.7" cy="769.5" r="13" fill="#f0e8d5"/>
@@ -196,7 +196,7 @@
 <path d="M1699.4,721.9L1699.0,650.0L1659.0,650.0" stroke="#b34d2f" stroke-width="1.8"/>
 <circle cx="1699.4" cy="721.9" r="13" fill="#f0e8d5"/>
 <circle cx="1699.4" cy="721.9" r="8" fill="#b34d2f" stroke="#b34d2f" stroke-width="3"/>
-<g font-family="Georgia, serif" text-anchor="end" fill="#b34d2f" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1695" y="628" font-size="37">Fiji</text><text x="1695" y="659" font-size="23">Coral Coast / outer reefs</text></g>
+<g font-family="Georgia, serif" text-anchor="end" fill="#b34d2f" stroke="#e1e9df" stroke-width="5" stroke-linejoin="round" paint-order="stroke fill"><text x="1695" y="628" font-size="37">Fiji</text><text x="1695" y="659" font-size="23">Coral Coast / outer reefs</text><text x="1695" y="690" font-size="23">Mid-Sep–mid-Dec</text></g>
 <path d="M1682.1,815.9L1718.0,860.0L1718.0,946.0" stroke="#163f43" stroke-width="1.8"/>
 <circle cx="1682.1" cy="815.9" r="13" fill="#f0e8d5"/>
 <circle cx="1682.1" cy="815.9" r="8" fill="#f0e8d5" stroke="#163f43" stroke-width="3"/>
