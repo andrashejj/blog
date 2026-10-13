@@ -1,0 +1,23 @@
+A year by the water: world shortlist
+Created 13 October 2026 as an original SVG map for the blog post.
+
+Coastline data: Natural Earth, 1:110m land, public domain.
+Source: https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson
+Projection: equirectangular. Antarctica omitted for this travel overview.
+
+Markers show approximate areas, not precise surf breaks, launch sites or accommodation.
+Mauritius / One Eye: 57.30 E, 20.46 S (living here now)
+Rote: 123.05 E, 10.88 S; West Sumbawa: 116.80 E, 8.97 S
+Fiji / Coral Coast: 177.65 E, 18.20 S (outer reefs not separately plotted)
+Pacasmayo, Peru: 79.57 W, 7.40 S
+Cape Town, South Africa: 18.42 E, 33.93 S
+Geraldton, Australia: 114.61 E, 28.77 S; Margaret River: 115.08 E, 33.95 S
+Taranaki, New Zealand: 173.80 E, 39.10 S
+Maui, Hawaii: 156.40 W, 20.90 N
+Switzerland: 8.20 E, 46.80 N (country-level visit marker)
+Hungary: 19.50 E, 47.20 N (country-level visit marker, labelled Home, maybe)
+
+Filled terracotta markers: Indonesia and Fiji, the leading candidates in the post.
+Open green markers: other possibilities. Gold diamond: Mauritius, current base.
+Blue squares: visits to Switzerland and Hungary, dates and exact bases open.
+Leader lines connect labels to places and do not represent a booked route.
