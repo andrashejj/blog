@@ -1,0 +1,13 @@
+Additional images created 13 October 2026 with the built-in image_gen tool.
+Fictional scenes, not the author's actual surf session or workspace.
+Converted from PNG to WebP at quality 85 with sharp; 1536 x 1024.
+
+surf-turn.webp
+Original: exec-5a37f0a7-ed62-4968-8766-a1052f5d9ba8.png
+Prompt:
+Create a photorealistic editorial photograph, horizontal 1536x1024, for a personal essay titled The Need for Speed. A single adult surfer carving across a clean shoulder-high blue-green wave, seen at a distance from the shore through a telephoto lens, their body leaning naturally into the turn with a modest arc of spray. Frame wide with plenty of textured ocean, coastal overcast morning light, muted teal and slate tones, fine grain, believable ordinary surfing rather than an extreme stunt. Person small in frame, face not identifiable. Realistic surfboard, wave physics and anatomy. No text, logos, watermarks, dramatic sunset or cinematic effects. This is a fictional illustrative scene, not the author or a real named surf location.
+
+creative-worktable.webp
+Original: exec-37c96d22-efd0-478e-b51d-dbd310097a1b.png
+Prompt:
+Create a photorealistic editorial still-life photograph, horizontal 1536x1024, for a personal essay about the enjoyment of building software and small creative projects. Close oblique overhead view of a genuinely used simple wooden worktable beside an open window. A modest open laptop at the upper left has an out-of-focus code editor with indistinct text. Centre frame: an open cream notebook containing a few hand-drawn wireframe boxes and pencil arrows, no legible words. One ceramic coffee cup, pencil, a small heap of rolled oats and a plain unlabelled paper granola pouch off to the right hint at overlapping projects. Cropped surfboard rail leaning near the window at far edge, subtle and believable. Soft side daylight, imperfect lived-in arrangement, restrained warm brown and cream with deep green accents. Candid documentary magazine photography, natural shadows, fine grain. No people or hands, no text overlay, no logos, no luxury office, no decorative quote, no watermark. Fictional illustrative workspace, not the author's actual desk or a real branded product.
