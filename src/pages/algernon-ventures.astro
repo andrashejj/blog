@@ -1,0 +1,70 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import { site } from "../lib/site";
+import "../styles/algernon-ventures.css";
+
+const canonical = new URL("/algernon-ventures", site.url).href;
+const mission =
+  "We support people and projects that improve how we live and work, making everyday life better.";
+const socialImage = new URL(
+  "/images/algernon-ventures/garden-still-life.webp",
+  site.url,
+).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Algernon Ventures</title>
+    <meta name="description" content={mission} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#162f27" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/images/algernon-ventures/flower.svg" />
+    <link rel="preload" href="/fonts/Fraunces-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Fraunces-Italic.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/algernon/DMSans-Latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/images/algernon-ventures/garden-still-life.webp" as="image" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Algernon Ventures" />
+    <meta property="og:title" content="Algernon Ventures | Backing projects with conviction" />
+    <meta property="og:description" content={mission} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="Algernon Ventures. Botanical still life with poppies and a small white mouse." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Algernon Ventures | Backing projects with conviction" />
+    <meta name="twitter:description" content={mission} />
+    <meta name="twitter:image" content={socialImage} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="backdrop">
+      <img class="hero-art" src="/images/algernon-ventures/garden-still-life.webp" width="1536" height="1024" alt="A botanical still life of coral poppies and ivory flowers with a small white mouse among the roots." fetchpriority="high" decoding="async" />
+      <div class="hero-shade" aria-hidden="true"></div>
+    </div>
+    <header id="top" class="header page-width">
+      <a class="wordmark" href="#main" aria-label="Algernon Ventures">
+        <img src="/images/algernon-ventures/flower.svg" alt="" width="44" height="44" />
+        <span>algernon<span class="wordmark-sub">ventures</span></span>
+      </a>
+      <a class="contact-link" href={"mailto:" + site.email}>Contact <ArrowUpRight size={16} aria-hidden="true" /></a>
+    </header>
+    <main id="main" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content page-width">
+          <h1 id="hero-title">Backing<br />projects with<br /><em>conviction.</em></h1>
+          <div class="mission">
+            <h2>Our mission</h2>
+            <p>{mission}</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer page-width"><span>Algernon Ventures</span><a href={"mailto:" + site.email}>{site.email}<ArrowUpRight size={16} aria-hidden="true" /></a></footer>
+  </body>
+</html>

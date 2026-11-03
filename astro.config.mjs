@@ -21,9 +21,13 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    // The Aszófő pages carry their own branding and stay out of the blog's
-    // sitemap until they move to their own domain.
-    sitemap({ filter: (page) => !page.includes("/aszofo") }),
+    // Standalone pages stay out of the blog's public sitemap.
+    sitemap({
+      filter: (page) =>
+        !["/aszofo", "/algernon-ventures"].some((path) =>
+          new URL(page).pathname.startsWith(path),
+        ),
+    }),
   ],
   markdown: {
     processor: unified({
