@@ -28,6 +28,7 @@
   background: var(--av-ink);
   color: var(--av-paper);
   font-family: "Algernon Sans", sans-serif;
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }
 *,
@@ -95,6 +96,7 @@ main:focus {
 }
 .wordmark {
   display: flex;
+  min-height: 44px;
   align-items: center;
   gap: 13px;
   font-family: "Algernon Serif", serif;
@@ -352,5 +354,6 @@ h1 em {
   .contact-link svg,
   .footer a svg {
     transition: none;
+    transform: none;
   }
 }
