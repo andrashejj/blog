@@ -24,7 +24,7 @@ export default defineConfig({
     // Standalone pages stay out of the blog's public sitemap.
     sitemap({
       filter: (page) =>
-        !["/aszofo", "/algernon-ventures"].some((path) =>
+        !["/aszofo", "/algernon-ventures", "/hora-capital"].some((path) =>
           new URL(page).pathname.startsWith(path),
         ),
     }),

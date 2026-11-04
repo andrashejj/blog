@@ -1,0 +1,329 @@
+@font-face {
+  font-family: "Hora Serif";
+  src: url("/fonts/Fraunces-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hora Serif";
+  src: url("/fonts/Fraunces-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hora Sans";
+  src: url("/fonts/algernon/DMSans-Latin.woff2") format("woff2");
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --hora-paper: #ede8df;
+  --hora-ink: #302b25;
+  --hora-muted: #575047;
+  --hora-copper: #895438;
+  --hora-rule: #302b2530;
+  background: var(--hora-paper);
+  color: var(--hora-ink);
+  font-family: "Hora Sans", sans-serif;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100svh;
+  margin: 0;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+a:focus-visible {
+  outline: 2px solid var(--hora-ink);
+  outline-offset: 6px;
+}
+a:active {
+  color: var(--hora-copper);
+}
+main:focus {
+  outline: none;
+}
+::selection {
+  color: var(--hora-paper);
+  background: var(--hora-copper);
+}
+.page-width {
+  width: min(100% - 112px, 1320px);
+  margin-inline: auto;
+}
+.skip-link {
+  position: fixed;
+  z-index: 3;
+  top: 16px;
+  left: 16px;
+  padding: 12px 20px;
+  background: var(--hora-ink);
+  color: var(--hora-paper);
+  transform: translateY(-160%);
+}
+.skip-link:focus {
+  transform: none;
+}
+.scene {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--hora-paper);
+}
+.scene-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+.scene-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #ede8df 0%, #ede8dfd9 25%, #ede8df00 61%);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: clamp(80px, 13svh, 116px);
+  gap: 24px;
+  border-bottom: 1px solid var(--hora-rule);
+}
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 15px;
+  font-family: "Hora Serif", serif;
+  font-size: 38px;
+  letter-spacing: -.055em;
+  line-height: 0.9;
+}
+.wordmark-sub {
+  display: block;
+  margin-top: 9px;
+  padding-left: 2px;
+  font-family: "Hora Sans", sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+}
+.contact-link,
+.footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 12px;
+  font-size: 12px;
+}
+.contact-link svg,
+.footer a svg {
+  transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+main {
+  display: flex;
+  align-items: center;
+  padding-block: clamp(28px, 5svh, 64px);
+}
+.hero-copy {
+  padding-bottom: 20px;
+}
+h1 {
+  font-family: "Hora Serif", serif;
+  font-size: clamp(64px, min(6.9vw, 12svh), 102px);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: 1.08;
+}
+h1 em {
+  color: var(--hora-copper);
+  font-weight: 400;
+}
+.mission {
+  max-width: 41ch;
+  margin-top: clamp(30px, 5.5svh, 52px);
+}
+.mission h2 {
+  color: var(--hora-copper);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.mission p {
+  margin-top: 15px;
+  color: var(--hora-muted);
+  font-size: 16px;
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: clamp(60px, 9svh, 82px);
+  gap: 20px;
+  border-top: 1px solid var(--hora-rule);
+  color: var(--hora-muted);
+}
+.footer > span {
+  font-size: 10px;
+  letter-spacing: .04em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contact-link:hover,
+  .footer a:hover {
+    color: var(--hora-copper);
+  }
+  .contact-link:hover svg,
+  .footer a:hover svg {
+    transform: translate(3px, -3px);
+  }
+}
+@media (max-width: 1100px) {
+  .page-width {
+    width: calc(100% - 72px);
+  }
+  h1 {
+    font-size: clamp(60px, min(7.3vw, 11svh), 82px);
+  }
+  .scene-shade {
+    background: linear-gradient(
+      90deg,
+      #ede8df 0%,
+      #ede8dfeb 30%,
+      #ede8df40 66%,
+      #ede8df00 85%
+    );
+  }
+}
+@media (max-width: 700px) {
+  .page-width {
+    width: calc(100% - 40px);
+  }
+  .header {
+    min-height: 80px;
+  }
+  .wordmark {
+    gap: 11px;
+    font-size: 33px;
+  }
+  .wordmark img {
+    width: 32px;
+    height: 32px;
+  }
+  .wordmark-sub {
+    font-size: 7px;
+    margin-top: 8px;
+  }
+  .contact-link {
+    gap: 7px;
+    font-size: 11px;
+  }
+  main {
+    align-items: flex-start;
+    padding-top: clamp(32px, 6svh, 64px);
+  }
+  h1 {
+    font-size: clamp(43px, min(11.6vw, 8.6svh), 72px);
+  }
+  .mission {
+    max-width: 39ch;
+    margin-top: clamp(28px, 4svh, 36px);
+  }
+  .mission p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .scene-art {
+    inset: auto 0 0;
+    height: 52svh;
+    object-position: 78% center;
+    mask-image: linear-gradient(180deg, #0000, #000 24%);
+  }
+  .scene-shade {
+    background: linear-gradient(
+      180deg,
+      #ede8df 0%,
+      #ede8df 38%,
+      #ede8dfd9 49%,
+      #ede8df00 70%
+    );
+  }
+  .footer {
+    min-height: 64px;
+    gap: 12px;
+  }
+  .footer > span {
+    font-size: 9px;
+  }
+  .footer a {
+    gap: 8px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 701px) and (max-height: 600px) {
+  .hero-copy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    column-gap: 48px;
+    padding: 0;
+  }
+  h1 {
+    font-size: clamp(42px, 7vw, 68px);
+  }
+  .mission {
+    margin: 0;
+  }
+  .mission p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .scene-shade {
+    background: #ede8dfeb;
+  }
+}
+@media (max-width: 360px) {
+  .page-width {
+    width: calc(100% - 32px);
+  }
+  h1 {
+    font-size: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-link svg,
+  .footer a svg {
+    transition: none;
+    transform: none;
+  }
+}
