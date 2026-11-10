@@ -5,7 +5,6 @@ import { getAllPostMeta } from "../../lib/content";
 import { seriesRegistry } from "../../lib/site";
 
 const posts = await getAllPostMeta();
-const total = String(posts.length).padStart(3, "0");
 
 // Build the filter bar from whatever series actually appear in the archive,
 // keeping registry order. Each chip filters the grid client-side.
@@ -19,50 +18,39 @@ const presentSeries = Object.entries(seriesRegistry)
 ---
 
 <SiteLayout title='Blog' path='/blog'>
-  <section class='reveal reveal-2 relative'>
-    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
-      <span>Section · The Archive</span>
-      <span>№{total} dispatches</span>
-    </div>
-    <div class='rule-horizontal mt-3'></div>
-    <div class='rule-horizontal mt-[3px]'></div>
-
-    <div class='py-8'>
-      <p class='eyebrow mb-3'>Writings &amp; field notes</p>
-      <h1
-        class='font-display leading-[0.95] tracking-[-0.03em] text-ink'
-        style='font-size: clamp(2.6rem, 7vw, 5rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
-      >
-        The <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>archive</span>.
-      </h1>
-      <p class='mt-4 max-w-[58ch] text-lg leading-relaxed text-ink-soft'>
-        A chronological ledger of articles. Some technical, some personal, some
-        somewhere in between.
-      </p>
-    </div>
-    <div class='rule-horizontal'></div>
+  <section class='reveal reveal-2'>
+    <p class='font-mono text-[0.8rem] font-bold uppercase tracking-[0.16em] text-pine'>Writing · {posts.length} posts</p>
+    <h1
+      class='mt-2 font-display leading-[0.95] tracking-[-0.04em] text-ink'
+      style='font-size: clamp(2.8rem, 7.4vw, 5.6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 800;'
+    >
+      Everything I've <span class='italic text-terracotta'>written.</span>
+    </h1>
+    <p class='mt-5 max-w-[52ch] text-xl leading-relaxed text-ink-soft'>
+      Newest first. Some posts are technical, some are personal, and plenty sit awkwardly
+      between the two.
+    </p>
   </section>
 
   {presentSeries.length > 0 && (
     <section class='reveal reveal-3 mt-8' data-series-filter>
-      <div class='flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.22em]'>
-        <span class='text-muted'>Series ·</span>
+      <div class='flex flex-wrap items-center gap-2 font-mono text-[0.76rem] font-bold uppercase tracking-[0.08em]'>
         <button
           type='button'
           data-filter='all'
           aria-pressed='true'
-          class='series-chip is-active no-rule border border-rule px-3 py-1.5 text-ink transition'
+          class='series-chip is-active no-rule rounded-full border-2 border-ink px-3.5 py-1.5 text-ink transition'
         >
-          All <span class='text-muted'>({posts.length})</span>
+          All <span class='opacity-60'>({posts.length})</span>
         </button>
         {presentSeries.map((s) => (
           <button
             type='button'
             data-filter={s.id}
             aria-pressed='false'
-            class='series-chip no-rule border border-rule px-3 py-1.5 text-ink-soft transition'
+            class='series-chip no-rule rounded-full border-2 border-ink px-3.5 py-1.5 text-ink transition'
           >
-            {s.label} <span class='text-muted'>({s.count})</span>
+            {s.label} <span class='opacity-60'>({s.count})</span>
           </button>
         ))}
       </div>
@@ -70,7 +58,7 @@ const presentSeries = Object.entries(seriesRegistry)
   )}
 
   <section
-    class='reveal reveal-3 mt-12 grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'
+    class='reveal reveal-3 mt-12 grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-x-8 gap-y-14'
     data-post-grid
   >
     {posts.map((post, i) => (
@@ -88,7 +76,7 @@ const presentSeries = Object.entries(seriesRegistry)
     data-empty-state
     hidden
   >
-    No dispatches in this series yet.
+    No posts in this series yet.
   </p>
 
   <style>
@@ -97,9 +85,8 @@ const presentSeries = Object.entries(seriesRegistry)
       color: var(--color-paper, #f7f1e4);
       border-color: var(--color-ink, #1b1713);
     }
-    .series-chip:not(.is-active):hover {
-      border-color: var(--color-terracotta, #b6532e);
-      color: var(--color-terracotta-strong, #99431f);
+        .series-chip:not(.is-active):hover {
+      background: rgba(23, 24, 28, 0.08);
     }
   </style>
 

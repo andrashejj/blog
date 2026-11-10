@@ -61,23 +61,16 @@ const filteredHeadings = headings.filter(
   type='article'
   wide={meta.wide}
 >
-  <!-- Article masthead -->
   <section class='reveal reveal-2'>
-    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
-      <a href='/blog' class='no-rule transition hover:text-terracotta'>← The archive</a>
-      <span>Dispatch</span>
-    </div>
-    <div class='rule-horizontal mt-3'></div>
-    <div class='rule-horizontal mt-[3px]'></div>
+    <a href='/blog' class='no-rule font-mono text-[0.78rem] font-bold uppercase tracking-[0.14em] text-ink transition hover:text-terracotta'>← All posts</a>
   </section>
 
   <div class:list={['mt-10 grid grid-cols-1 gap-12', !meta.wide && 'lg:grid-cols-[minmax(0,1fr)_220px]']}>
     <article class:list={['min-w-0', meta.wide && 'article-wide']}>
       <header class='reveal reveal-3'>
-        <p class='eyebrow mb-4'>Article · Field notes</p>
         <h1
           class='font-display leading-[1.02] tracking-[-0.03em] text-ink'
-          style='font-size: clamp(2.2rem, 5vw, 3.6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
+          style='font-size: clamp(2.4rem, 5.6vw, 4.2rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 800; letter-spacing: -0.04em;'
         >
           {meta.title}
         </h1>
@@ -87,7 +80,7 @@ const filteredHeadings = headings.filter(
         <div class='rule-horizontal mt-6'></div>
       </header>
 
-      <figure class='reveal reveal-4 relative mt-8 overflow-hidden border border-rule bg-surface'>
+      <figure class='reveal reveal-4 relative mt-8 overflow-hidden rounded-[22px] bg-surface'>
         <img
           src={meta.coverImage}
           alt={meta.title}
@@ -95,14 +88,8 @@ const filteredHeadings = headings.filter(
           height='630'
           onerror="this.onerror=null;this.src='/images/posts/default-cover.svg';"
           class='block h-auto w-full'
-          style='filter: contrast(1.02) saturate(0.92);'
           loading='eager'
         />
-        <span
-          class='pointer-events-none absolute inset-0 mix-blend-multiply'
-          style='background-image: var(--grain); opacity: 0.28;'
-          aria-hidden='true'
-        ></span>
       </figure>
 
       <section
@@ -114,9 +101,9 @@ const filteredHeadings = headings.filter(
                prose-a:text-terracotta-strong prose-a:font-medium prose-a:underline prose-a:decoration-terracotta/50 prose-a:underline-offset-4 hover:prose-a:decoration-terracotta
                prose-strong:text-ink
                prose-blockquote:border-l-2 prose-blockquote:border-terracotta prose-blockquote:bg-transparent prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:text-ink
-               prose-code:font-mono prose-code:text-[0.9em] prose-code:rounded-none prose-code:border prose-code:border-rule prose-code:bg-paper-deep/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-ink prose-code:before:content-none prose-code:after:content-none
-               prose-pre:rounded-none prose-pre:border prose-pre:border-ink prose-pre:bg-[#14110e] prose-pre:text-[#f1e6cf] prose-pre:shadow-[6px_6px_0_0_rgba(27,23,19,1)]
-               prose-img:max-w-full prose-img:border prose-img:border-rule prose-img:shadow-[0_12px_30px_-18px_rgba(27,23,19,0.5)]
+               prose-code:font-mono prose-code:text-[0.9em] prose-code:rounded-md prose-code:border prose-code:border-rule prose-code:bg-paper-deep/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-ink prose-code:before:content-none prose-code:after:content-none
+               prose-pre:rounded-2xl prose-pre:bg-[#17181c] prose-pre:text-[#fff5dc]
+               prose-img:max-w-full prose-img:rounded-2xl
                prose-hr:border-0 prose-hr:h-px prose-hr:bg-[length:10px_1px]'
       >
         <Content components={components} />

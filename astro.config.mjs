@@ -12,6 +12,9 @@ export default defineConfig({
   site: "https://www.andrashejj.com",
   output: "static",
   compressHTML: true,
+  redirects: {
+    "/about": "/",
+  },
   adapter: vercel({
     webAnalytics: { enabled: true },
     maxDuration: 30,

@@ -3,24 +3,24 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-paper: #f1e6cf;
-  --color-paper-deep: #e8d9b8;
-  --color-ink: #1b1713;
-  --color-ink-soft: #3b332b;
-  --color-muted: #6f5f4f;
-  --color-rule: #c8b694;
-  --color-rule-soft: #d9c9a6;
+  --color-paper: #fff5dc;
+  --color-paper-deep: #f6e9c6;
+  --color-ink: #17181c;
+  --color-ink-soft: #3b3c42;
+  --color-muted: #6a6862;
+  --color-rule: #e0d3b0;
+  --color-rule-soft: #eadfc2;
 
-  --color-terracotta: #bf4024;
-  --color-terracotta-strong: #8f2c18;
-  --color-pine: #0e4140;
-  --color-pine-soft: #1b5f5c;
+  --color-terracotta: #e4560c;
+  --color-terracotta-strong: #b84105;
+  --color-pine: #0b7f78;
+  --color-pine-soft: #159a91;
   --color-ochre: #c4892d;
   --color-ocean: #1a2940;
 
   /* aliases for Tailwind utilities */
   --color-bg: var(--color-paper);
-  --color-surface: #fbf4e2;
+  --color-surface: #fffaf0;
   --color-text: var(--color-ink);
   --color-border: var(--color-rule);
   --color-brand: var(--color-terracotta);
@@ -30,8 +30,8 @@
   --font-sans: "Newsreader", "Iowan Old Style", "Georgia", serif;
   --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
 
-  --radius-soft: 6px;
-  --radius-card: 10px;
+  --radius-soft: 12px;
+  --radius-card: 18px;
   --shadow-soft: 0 1px 0 var(--color-rule), 0 18px 40px -22px
     rgba(27, 23, 19, 0.35);
   --shadow-card: 0 1px 0 var(--color-rule), 0 10px 24px -18px
@@ -55,23 +55,6 @@
     color: var(--color-ink);
     line-height: 1.65;
     background-color: var(--color-paper);
-    background-image: radial-gradient(
-        1200px 600px at 85% -10%,
-        rgba(196, 137, 45, 0.18),
-        transparent 60%
-      ),
-      radial-gradient(
-        900px 500px at -10% 110%,
-        rgba(14, 65, 64, 0.16),
-        transparent 60%
-      ),
-      radial-gradient(
-        600px 400px at 50% 40%,
-        rgba(191, 64, 36, 0.06),
-        transparent 70%
-      ), var(--grain);
-    background-attachment: fixed;
-    background-size: auto, auto, auto, 220px 220px;
     letter-spacing: -0.005em;
   }
 
@@ -94,8 +77,8 @@
   }
 
   h1 {
-    font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144;
-    font-weight: 500;
+    font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+    font-weight: 700;
   }
 
   a {
@@ -123,13 +106,7 @@
   hr {
     border: 0;
     height: 1px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--color-rule) 0,
-      var(--color-rule) 6px,
-      transparent 6px,
-      transparent 10px
-    );
+    background: var(--color-rule);
   }
 }
 
@@ -152,13 +129,7 @@
 
   .rule-horizontal {
     height: 1px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--color-rule) 0,
-      var(--color-rule) 6px,
-      transparent 6px,
-      transparent 10px
-    );
+    background: var(--color-rule);
   }
 
   .card {

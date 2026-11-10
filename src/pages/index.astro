@@ -1,186 +1,1594 @@
 ---
-import PostCard from "../components/PostCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getAllPostMeta } from "../lib/content";
+import { site } from "../lib/site";
 
 const posts = await getAllPostMeta();
-const featured = posts[0];
-const rest = posts.slice(1, 7);
+const bySlug = new Map(posts.map((post) => [post.slug, post]));
+const pick = (slugs: string[]) =>
+  slugs.flatMap((slug) => {
+    const post = bySlug.get(slug);
+    return post ? [post] : [];
+  });
 
-const issueNumber = String(posts.length).padStart(3, "0");
-// The masthead shows the date of the latest dispatch, not the build date —
-// this is a newspaper, and the issue is dated by its lede.
-const issueDate = featured
-  ? new Date(`${featured.date}T00:00:00Z`).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      timeZone: "UTC",
-    })
-  : "";
+const places = [
+  { id: "sea", name: "Mauritius", tz: "Indian/Mauritius" },
+  { id: "snow", name: "Switzerland", tz: "Europe/Zurich" },
+  { id: "lake", name: "Hungary", tz: "Europe/Budapest" },
+];
+
+const desks = [
+  {
+    name: "MyComplianceOffice",
+    logo: "/images/home/logos/mco.svg",
+    logoHeight: 46,
+    body: "I work with a lot of super fun people in Hyderabad and Dublin, and with Paul in the US. By startup stereotype it's the boring one. I've stopped calling it that.",
+    href: "https://mycomplianceoffice.com/",
+  },
+  {
+    name: "Motif",
+    logo: "/images/home/logos/motif.svg",
+    logoHeight: 30,
+    body: "Motif is a wealth advisor that works only for the client. Five of us and about a hundred AI agents share one repo. Somebody always has to look for the lie.",
+    href: "https://chatwithmotif.com/",
+  },
+  {
+    name: "Baubiber",
+    logo: "/images/home/logos/baubiber.png",
+    logoHeight: 20,
+    body: "Baubiber is an Uber for construction. I started it when I couldn't find an architect who would read the brief for our cottage.",
+    href: "https://baubiber.com/",
+  },
+  {
+    name: "Flipp",
+    logo: "/images/home/logos/flipp.svg",
+    logoHeight: 40,
+    body: "Flipp is business software for small and mid-sized Swiss companies. Each team switches on only the parts it needs.",
+    href: "https://flippapp.ai/",
+  },
+];
+
+const themes = [
+  {
+    label: "How I work",
+    blurb:
+      "I work with about a hundred agents and a knowledge graph. These posts cover the rules that keep both honest.",
+    posts: pick([
+      "puzzle-pieces-falling-into-place",
+      "remedies-for-the-slop",
+      "red-teaming-the-agent",
+      "trunk-and-trains",
+    ]),
+  },
+  {
+    label: "How I build companies",
+    blurb: "Believe the calendar, and keep one boring thing that pays.",
+    posts: pick([
+      "go-to-market-struggles",
+      "shannon-for-founders",
+      "boring-or-fancy",
+      "baubiber-uber-for-construction",
+    ]),
+  },
+  {
+    label: "How I live",
+    blurb: "I replaced regular drugs with adrenaline, and maybe with peace.",
+    posts: pick([
+      "the-duck-is-charging",
+      "planning-the-ultimate-year-of-life-and-work",
+      "objects-born-not-made",
+      "balaton-cottage-renovation",
+    ]),
+  },
+];
+
+const socials = [
+  { label: "LinkedIn", href: site.social.linkedin },
+  { label: "X", href: site.social.x },
+  { label: "GitHub", href: site.social.github },
+];
+
+const isExternal = (href: string) => href.startsWith("http");
 ---
 
-<SiteLayout path='/'>
-  <!-- Masthead: newspaper-style nameplate -->
-  <section class='reveal reveal-2 relative'>
-    <div class='flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-[0.28em] text-muted'>
-      <span>Vol. I · Issue №{issueNumber}</span>
-      <span class='hidden sm:inline'>{issueDate}</span>
-      <span>Est. MMXX</span>
-    </div>
-    <div class='rule-horizontal mt-3'></div>
-    <div class='rule-horizontal mt-[3px]'></div>
-
-    <div class='grid gap-10 py-10 md:grid-cols-[1.35fr_minmax(0,0.9fr)] md:items-center md:gap-14 md:py-12'>
-      <div>
-        <p class='eyebrow mb-3'>Field notes from the studio</p>
-        <h1
-          class='font-display leading-[0.92] tracking-[-0.035em] text-ink'
-          style='font-size: clamp(2.8rem, 8vw, 6rem); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 500;'
-        >
-          Hi, I'm <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;'>Andras</span>.
-        </h1>
-        <p class='mt-5 max-w-[50ch] text-lg leading-relaxed text-ink-soft md:text-xl'>
-          <span class='font-display italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Founder</span>
-          and serial entrepreneur. Tech geek, hands-on builder. Husband and dad.
-          Writing on the practice of building — and the quieter art of showing up.
-        </p>
-        <div class='mt-7 flex flex-wrap gap-2'>
-          <a href='/blog' class='stamp no-rule text-terracotta transition hover:bg-terracotta hover:text-paper'>Read the archive →</a>
-          <a href='/about' class='stamp no-rule text-pine transition hover:bg-pine hover:text-paper'>About</a>
+<SiteLayout
+  path='/'
+  description='Andras Hejj shapes surfboards with his son and software with his friends. He has three kids and a few startups, and the family splits the year between Mauritius, Switzerland and Hungary.'
+>
+  <div class='home' data-now>
+    <section class='hero'>
+      <canvas class='sky' aria-hidden='true'></canvas>
+      <div class='hero-inner'>
+        <div class='hero-copy'>
+          <h1>I shape surfboards with my son and software with my friends.</h1>
+          <p>
+            I have three kids and a few startups. We split the year between Mauritius, Switzerland and Hungary.
+            There's usually one project too many on the go, and I like that pace. The cover of a famous book has the
+            right advice:{" "}
+            <button type='button' class='dp' aria-label="Don't panic">Don't panic.</button>
+          </p>
+        </div>
+        <div class='hero-foot'>
+          <p class='now-line' id='now-line' role='tabpanel' data-verdict aria-live='polite'></p>
+          <div class='spots' role='tablist' aria-label='Places'>
+          {
+            places.map((place, i) => (
+              <button
+                type='button'
+                role='tab'
+                class='spot'
+                id={`spot-${place.id}`}
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls='now-line'
+                tabindex={i === 0 ? 0 : -1}
+                data-spot={place.id}
+                data-tz={place.tz}
+              >
+                <span class='spot-name'>{place.name}</span>
+                <span class='spot-time' data-time />
+              </button>
+            ))
+          }
+          </div>
+          <a class='credit' href='https://open-meteo.com/' target='_blank' rel='noopener'>Live weather from Open-Meteo</a>
         </div>
       </div>
-
-      <!-- Editorial portrait: framed photo with caption strip -->
-      <figure class='relative mx-auto w-full max-w-[360px] md:mx-0 md:justify-self-end'>
-        <div class='relative border border-ink bg-surface p-2 shadow-[10px_10px_0_0_rgba(27,23,19,0.08)]'>
-          <div class='relative aspect-[4/5] overflow-hidden border border-rule'>
-            <img
-              src='/images/posts/andras.jpg'
-              alt='Portrait of Andras'
-              loading='eager'
-              width='360'
-              height='450'
-              class='h-full w-full object-cover'
-              style='filter: contrast(1.04) saturate(0.88) sepia(0.1);'
-            />
-            <span
-              class='pointer-events-none absolute inset-0 mix-blend-multiply'
-              style='background-image: var(--grain); opacity: 0.4;'
-              aria-hidden='true'
-            ></span>
-            <span class='pointer-events-none absolute left-2 top-2 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-paper mix-blend-difference'>
-              Plate №01
-            </span>
-          </div>
-        </div>
-
-        <figcaption class='mt-4 space-y-1.5 text-ink-soft'>
-          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
-            <span class='text-muted'>Made with</span>
-            <span aria-hidden='true'>💕</span>
-            <span class='text-muted'>in</span>
-            <span class='italic text-ink' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Budapest</span>
-          </p>
-          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
-            <span class='text-muted'>Rooted</span>
-            <span aria-hidden='true'>🌳</span>
-            <span class='text-muted'>in</span>
-            <span class='italic text-pine' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Switzerland</span>
-          </p>
-          <p class='font-display text-[1.02rem] leading-snug' style='font-variation-settings: "SOFT" 80, "WONK" 1;'>
-            <span class='text-muted'>Happily</span>
-            <span aria-hidden='true'>🏄</span>
-            <span class='text-muted'>in</span>
-            <span class='italic text-terracotta' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>Mauritius</span>
-          </p>
-        </figcaption>
-      </figure>
-    </div>
-    <div class='rule-horizontal'></div>
-  </section>
-
-  <!-- Featured article: broadsheet lede -->
-  {featured && (
-    <section class='reveal reveal-3 mt-14'>
-      <div class='mb-4 flex items-center gap-3'>
-        <span class='stamp border-terracotta text-terracotta'>Lede</span>
-        <span class='font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted'>
-          Today's featured dispatch
-        </span>
-      </div>
-
-      <a
-        href={featured.routePath}
-        class='no-rule group grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-10'
-      >
-        <div class='relative overflow-hidden border border-rule bg-surface'>
-          <div class='aspect-[4/3] overflow-hidden'>
-            <img
-              src={featured.coverImage}
-              alt={featured.title}
-              loading='eager'
-              onerror="this.onerror=null;this.src='/images/posts/default-cover.svg';"
-              class='h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]'
-              style='filter: contrast(1.02) saturate(0.92);'
-            />
-          </div>
-          <span class='pointer-events-none absolute inset-0 mix-blend-multiply' style='background-image: var(--grain); opacity: 0.35;'></span>
-        </div>
-
-        <div class='flex flex-col justify-center'>
-          <p class='eyebrow'>№{issueNumber} · The Dispatch</p>
-          <h2
-            class='mt-3 font-display leading-[1.02] tracking-[-0.025em] text-ink'
-            style='font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
-          >
-            {featured.title}
-          </h2>
-          <p class='mt-4 max-w-[54ch] text-lg leading-relaxed text-ink-soft'>
-            {featured.summary}
-          </p>
-          <div class='mt-5 flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted'>
-            <span>{new Date(`${featured.date}T00:00:00Z`).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</span>
-            <span aria-hidden='true'>✦</span>
-            <span>{featured.readingTimeText}</span>
-          </div>
-          <span class='mt-6 inline-flex w-fit items-center gap-2 border-b-2 border-terracotta pb-1 font-mono text-[0.75rem] uppercase tracking-[0.2em] text-terracotta transition group-hover:gap-3'>
-            Read the lede
-            <span aria-hidden='true'>→</span>
-          </span>
-        </div>
-      </a>
     </section>
-  )}
 
-  <!-- Archive strip -->
-  <section class='reveal reveal-4 mt-20'>
-    <div class='mb-6 flex items-end justify-between gap-4'>
-      <div>
-        <p class='eyebrow'>Section II</p>
-        <h2
-          class='mt-1 font-display tracking-[-0.02em] text-ink'
-          style='font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-variation-settings: "SOFT" 80, "WONK" 1, "opsz" 144; font-weight: 500;'
-        >
-          From the <span class='italic text-pine'>archive</span>
-        </h2>
+    <section class='block' aria-labelledby='writing-label'>
+      <div class='block-head'>
+        <h2 class='label' id='writing-label'><b>01</b> Writing</h2>
+        <a class='all' href='/blog'>All {posts.length} posts →</a>
       </div>
-      <a
-        href='/blog'
-        class='no-rule font-mono text-[0.72rem] uppercase tracking-[0.22em] text-terracotta hover:text-terracotta-strong'
-      >
-        All posts →
-      </a>
-    </div>
+      <div class='themes'>
+        {
+          themes.map((theme) => (
+            <div class='theme'>
+              <h3>{theme.label}</h3>
+              <p class='theme-blurb'>{theme.blurb}</p>
+              <ul>
+                {theme.posts.map((post) => (
+                  <li>
+                    <a class='no-rule' href={post.routePath}>
+                      {post.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
 
-    <div class='rule-horizontal mb-6'></div>
+    <section class='block' aria-labelledby='work-label'>
+      <h2 class='label' id='work-label'><b>02</b> Working on</h2>
+      <ul class='desks'>
+        {
+          desks.map((desk) => (
+            <li>
+              <a
+                class='desk no-rule'
+                href={desk.href}
+                target={isExternal(desk.href) ? "_blank" : undefined}
+                rel={isExternal(desk.href) ? "noopener" : undefined}
+              >
+                <span class='desk-name'>
+                  <img src={desk.logo} alt={desk.name} style={`height:${desk.logoHeight}px`} loading='lazy' decoding='async' />
+                </span>
+                <span class='desk-body'>{desk.body}</span>
+                <span class='desk-go' aria-hidden='true'>
+                  {isExternal(desk.href) ? "↗" : "→"}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
-    <div class='grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-8'>
-      {rest.map((post, i) => (
-        <div class={`reveal reveal-${Math.min(5, i + 2)}`}>
-          <PostCard post={post} />
-        </div>
-      ))}
-    </div>
-  </section>
+    <section class='block hi' id='contact' aria-labelledby='hi-label'>
+      <h2 class='label' id='hi-label'><b>03</b> Say hi</h2>
+      <p>
+        I'm not taking on more work, I'm not buying and I'm not selling. I'm here to learn and to meet interesting
+        people. Write to me if you want to partner with one of the companies, or if you have an idea to bounce around.
+      </p>
+      <p class='reach'>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        {
+          socials.map((social) => (
+            <a href={social.href} target='_blank' rel='noopener'>
+              {social.label}
+            </a>
+          ))
+        }
+      </p>
+    </section>
+  </div>
 </SiteLayout>
+
+<style>
+  .home {
+    --ink: var(--color-ink);
+    --soft: var(--color-ink-soft);
+    --muted: var(--color-muted);
+    --rule: var(--color-rule);
+    --accent: var(--color-terracotta);
+    --water: var(--color-pine);
+    --sun: #ffd23f;
+    --violet: #6a65c9;
+    --pink: #ff4f7b;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+
+  .label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    font-variation-settings: normal;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    width: 100vw;
+    height: clamp(34rem, 92svh, 58rem);
+    margin-top: -3rem;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    background: #1aa7ec;
+    color: #fff;
+  }
+  @media (min-width: 768px) {
+    .hero {
+      margin-top: -4rem;
+    }
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 40% 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgb(20 12 60 / 0.42), transparent);
+    pointer-events: none;
+  }
+  .sky {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: opacity 200ms ease;
+  }
+  .sky.swap {
+    opacity: 0;
+  }
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: min(100% - 2rem, 62rem);
+    height: 100%;
+    margin-inline: auto;
+    padding-block: clamp(2rem, 7vh, 4.5rem) clamp(1.25rem, 4vh, 2.5rem);
+  }
+  .hero h1 {
+    max-width: 17ch;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2.3rem, 5.8vw, 4.6rem);
+    font-weight: 600;
+    font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    text-shadow: 0 2px 28px rgb(20 12 60 / 0.35);
+  }
+  .hero p {
+    max-width: 34rem;
+    margin: 1.4rem 0 0;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.5;
+    color: rgb(255 255 255 / 0.95);
+    text-shadow: 0 1px 16px rgb(20 12 60 / 0.45);
+    text-wrap: pretty;
+  }
+  .dp {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--sun);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Right now */
+  .spots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .spot {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding: 0.6rem 1.05rem;
+    border: 1.5px solid rgb(255 255 255 / 0.75);
+    border-radius: 999px;
+    background: rgb(10 20 60 / 0.3);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
+  .spot:hover {
+    background: rgb(10 20 60 / 0.5);
+  }
+  .spot:active {
+    transform: scale(0.97);
+  }
+  .spot[aria-selected="true"] {
+    border-color: #fff;
+    background: #fff;
+    color: var(--ink);
+  }
+  .spot:focus-visible {
+    outline: 3px solid var(--sun);
+    outline-offset: 3px;
+  }
+  .spot-time {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
+  }
+
+  .now-line {
+    max-width: 30rem;
+    min-height: 1.5em;
+    margin: 0 0 0.9rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    font-weight: 500;
+    line-height: 1.3;
+    color: #fff;
+    text-shadow: 0 1px 14px rgb(8 20 60 / 0.55);
+    text-wrap: balance;
+  }
+  .now-line :global(span) {
+    display: block;
+    margin-top: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.9;
+  }
+  .credit {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: rgb(255 255 255 / 0.75);
+    text-decoration-color: rgb(255 255 255 / 0.4);
+  }
+  .credit:hover {
+    color: #fff;
+  }
+
+  /* Blocks */
+  .block {
+    margin-top: clamp(4rem, 9vw, 7rem);
+    border-top: 1px solid var(--ink);
+    padding-top: 0.9rem;
+  }
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .all {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .desks {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .desk {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 8rem minmax(0, 1fr) 1.5rem;
+    gap: 0.25rem 1.5rem;
+    align-items: baseline;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--rule);
+    color: inherit;
+    text-decoration: none;
+  }
+  .desk-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .desk-role {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .desk-body {
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+  .desk-go {
+    justify-self: end;
+    color: var(--muted);
+    transition:
+      transform 180ms ease,
+      color 180ms ease;
+  }
+  @media (hover: hover) {
+    .desk:hover .desk-name {
+      color: var(--accent);
+    }
+    .desk:hover .desk-go {
+      color: var(--accent);
+      transform: translateX(3px);
+    }
+  }
+
+  .themes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem clamp(1.5rem, 4vw, 3rem);
+    margin-top: 2rem;
+  }
+  .theme h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .theme-blurb {
+    margin: 0.4rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+  .theme ul {
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .theme li + li {
+    margin-top: 0.6rem;
+  }
+  .theme li a {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: text-decoration-color 160ms ease;
+  }
+  .theme li a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .hi {
+    padding-bottom: clamp(1rem, 4vw, 3rem);
+  }
+  .hi p {
+    max-width: 38rem;
+    margin: 1rem 0 0;
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+  .hi .reach {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 520px) {
+    .spots {
+      gap: 0.25rem 1.1rem;
+    }
+    .spot {
+      font-size: 1.05rem;
+    }
+    .spot:not([aria-selected="true"]) .spot-time {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .pin-label,
+    .scale {
+      display: none;
+    }
+    .map {
+      padding-bottom: 0;
+    }
+    .now-head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .plate-sub {
+      margin: 0.4rem 0 0;
+    }
+    .place {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .desk {
+      grid-template-columns: minmax(0, 1fr) 1.5rem;
+    }
+    .desk-name {
+      grid-column: 1;
+    }
+    .desk-go {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .desk-role,
+    .desk-body {
+      grid-column: 1 / -1;
+    }
+    .themes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sky,
+    .spot,
+    .desk-go {
+      transition: none;
+    }
+    .week :global(li i),
+    .pin.on .pin-dot {
+      animation: none;
+    }
+    .land :global(circle) {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type Mode = "sea" | "snow" | "lake";
+  type Reading = { verdict: string; numbers: [string, string][] };
+  type Week = { days: string[]; values: number[] };
+  type Data = {
+    sea?: { height: number; period: number; water: number; week?: Week };
+    snow?: { air: number; depth: number; fresh: number; week?: Week };
+    lake?: { air: number; wind: number; code: number; week?: Week };
+    sun?: Partial<Record<Mode, { rise: number; set: number }>>;
+    sky?: Partial<Record<Mode, { code: number; cloud: number }>>;
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-now]");
+  const canvas = root?.querySelector<HTMLCanvasElement>("canvas.sky");
+  const ctx = canvas?.getContext("2d");
+
+  if (root && canvas && ctx) {
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--color-ink").trim() || "#17181c";
+    const water = css.getPropertyValue("--color-pine").trim() || "#0b7f78";
+    const accent = css.getPropertyValue("--color-terracotta").trim() || "#e4560c";
+
+    let mode: Mode = "sea";
+    let data: Data = {};
+    let width = 0;
+    let height = 0;
+    let pointerX: number | null = null;
+    let lift = 0;
+    let visible = true;
+    const TAU = Math.PI * 2;
+    let frame = 0;
+    const clock: Record<Mode, number> = { sea: 720, snow: 720, lake: 720 };
+
+    /* ---------- readings ---------- */
+
+    const num = (value: number, digits = 1) => value.toFixed(digits);
+
+    const kind = (code: number) => ({
+      storm: code >= 95,
+      rain: (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95,
+      snow: (code >= 71 && code <= 77) || code === 85 || code === 86,
+      fog: code === 45 || code === 48,
+    });
+    const skyWord = (which: Mode) => {
+      const now = data.sky?.[which];
+      if (!now) return "–";
+      const k = kind(now.code);
+      if (k.storm) return "Storm";
+      if (k.snow) return "Snow";
+      if (k.rain) return "Rain";
+      if (k.fog) return "Fog";
+      return now.cloud >= 80 ? "Overcast" : now.cloud >= 35 ? "Some cloud" : "Clear";
+    };
+
+    const read = (which: Mode): Reading | null => {
+      if (which === "sea" && data.sea) {
+        const { height: h, period, water: temp } = data.sea;
+        const verdict =
+          h < 0.6
+            ? "The sea is flat today, so it's a good day to work."
+            : h < 1.2
+              ? "The waves are a friendly size today. Noah and Lara both like days like this."
+              : h < 2.2
+                ? "There are proper waves today. This size is for Noah."
+                : "The waves are big today. I'd watch them from the beach.";
+        return {
+          verdict,
+          numbers: [
+            ["Waves", `${num(h)} m`],
+            ["Every", `${num(period)} s`],
+            ["Water", `${num(temp)} °C`],
+            ["Sky", skyWord("sea")],
+          ],
+        };
+      }
+      if (which === "snow" && data.snow) {
+        const { air, depth, fresh } = data.snow;
+        const verdict =
+          fresh >= 5
+            ? "It's snowing hard today. We'd be on the first lift tomorrow."
+            : depth >= 0.2
+              ? "There's snow on the ground, and the skis are waxed."
+              : air >= 10
+                ? "There's no snow yet, so it's hiking boots for now."
+                : "It's cold and bare. We're waiting for the first snow.";
+        return {
+          verdict,
+          numbers: [
+            ["Air", `${num(air)} °C`],
+            ["Snow down", `${Math.round(depth * 100)} cm`],
+            ["Fresh today", `${num(fresh)} cm`],
+            ["Sky", skyWord("snow")],
+          ],
+        };
+      }
+      if (which === "lake" && data.lake) {
+        const { air, wind, code } = data.lake;
+        const wet = code >= 51 && code <= 99;
+        const verdict = wet
+          ? "It's raining on the lake. The fire is on and the laptop is open."
+          : wind >= 25
+            ? "It's windy on the lake, and the sailors are happy."
+            : air >= 24
+              ? "It's warm enough to swim, and dinner is outside."
+              : air < 6
+                ? "It's cold and quiet at the lake. That means a sauna and then a book."
+                : "The lake is calm. That means a long dinner on the terrace.";
+        return {
+          verdict,
+          numbers: [
+            ["Air", `${num(air)} °C`],
+            ["Wind", `${Math.round(wind)} km/h`],
+            ["Sky", skyWord("lake")],
+          ],
+        };
+      }
+      return null;
+    };
+
+    const line = root.querySelector<HTMLElement>("[data-verdict]");
+    const paint = (failed = false) => {
+      if (!line) return;
+      const reading = read(mode);
+      if (reading) {
+        const numbers = document.createElement("span");
+        numbers.textContent = reading.numbers.map(([term, value]) => `${term} ${value}`).join("  ·  ");
+        line.replaceChildren(reading.verdict, numbers);
+      } else if (failed) line.textContent = "I couldn't reach the weather station. Assume the weather is nice.";
+    };
+
+    const load = async () => {
+      const key = "ah-conditions-4";
+      try {
+        const cached = JSON.parse(sessionStorage.getItem(key) ?? "null");
+        if (cached && Date.now() - cached.at < 10 * 60 * 1000) {
+          data = cached.data;
+          paint();
+          return;
+        }
+      } catch {
+        /* storage unavailable */
+      }
+      const marine =
+        "https://marine-api.open-meteo.com/v1/marine?latitude=-20.33&longitude=57.35&current=wave_height,wave_period,sea_surface_temperature&daily=wave_height_max&forecast_days=7&timezone=auto";
+      const land =
+        "https://api.open-meteo.com/v1/forecast?latitude=47.17,46.93,-20.33&longitude=8.52,17.83,57.35&current=temperature_2m,wind_speed_10m,snow_depth,weather_code,cloud_cover&daily=snowfall_sum,temperature_2m_max,sunrise,sunset&forecast_days=7&timezone=auto";
+      const [sea, hills] = await Promise.allSettled([
+        fetch(marine).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
+        fetch(land).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
+      ]);
+      const next: Data = {};
+      if (sea.status === "fulfilled" && sea.value?.current) {
+        const c = sea.value.current;
+        const d = sea.value.daily;
+        next.sea = {
+          height: c.wave_height,
+          period: c.wave_period,
+          water: c.sea_surface_temperature,
+          week: d?.wave_height_max ? { days: d.time, values: d.wave_height_max } : undefined,
+        };
+      }
+      if (hills.status === "fulfilled" && Array.isArray(hills.value) && hills.value.length === 3) {
+        const [alps, balaton, island] = hills.value;
+        const minutes = (iso?: string) => (iso ? Number(iso.slice(11, 13)) * 60 + Number(iso.slice(14, 16)) : Number.NaN);
+        const sun = (place: { daily?: { sunrise?: string[]; sunset?: string[] } }) => ({
+          rise: minutes(place.daily?.sunrise?.[0]),
+          set: minutes(place.daily?.sunset?.[0]),
+        });
+        next.sun = { sea: sun(island), snow: sun(alps), lake: sun(balaton) };
+        const sky = (place: { current: { weather_code?: number; cloud_cover?: number } }) => ({
+          code: place.current.weather_code ?? 0,
+          cloud: place.current.cloud_cover ?? 0,
+        });
+        next.sky = { sea: sky(island), snow: sky(alps), lake: sky(balaton) };
+        next.snow = {
+          air: alps.current.temperature_2m,
+          depth: alps.current.snow_depth,
+          fresh: alps.daily?.snowfall_sum?.[0] ?? 0,
+          week: alps.daily?.snowfall_sum ? { days: alps.daily.time, values: alps.daily.snowfall_sum } : undefined,
+        };
+        next.lake = {
+          air: balaton.current.temperature_2m,
+          wind: balaton.current.wind_speed_10m,
+          code: balaton.current.weather_code,
+          week: balaton.daily?.temperature_2m_max
+            ? { days: balaton.daily.time, values: balaton.daily.temperature_2m_max }
+            : undefined,
+        };
+      }
+      data = next;
+      paint(true);
+      try {
+        if (next.sea && next.snow) sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data: next }));
+      } catch {
+        /* storage unavailable */
+      }
+      if (still) draw(0);
+    };
+
+    /* ---------- clocks ---------- */
+
+    const clocks = () => {
+      for (const spot of root.querySelectorAll<HTMLElement>("[data-tz]")) {
+        const out = spot.querySelector<HTMLElement>("[data-time]");
+        if (!out) continue;
+        const text = new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: spot.dataset.tz,
+        }).format(new Date());
+        out.textContent = text;
+        if (spot.dataset.spot) clock[spot.dataset.spot as Mode] = Number(text.slice(0, 2)) * 60 + Number(text.slice(3, 5));
+      }
+    };
+    clocks();
+    setInterval(clocks, 30_000);
+
+    /* ---------- drawing ---------- */
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (still) draw(0);
+    };
+
+    /* ---------- the scene ---------- */
+
+    const rgb = (hex: string) => [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16));
+    const blend = (a: string, b: string, t: number) => {
+      const x = rgb(a);
+      const y = rgb(b);
+      const k = Math.min(Math.max(t, 0), 1);
+      return `#${x.map((v, i) => Math.round(v + (y[i] - v) * k).toString(16).padStart(2, "0")).join("")}`;
+    };
+    const SKY = {
+      day: ["#1aa7ec", "#6fd3f2", "#ffe7a0"],
+      dusk: ["#3b1c71", "#ff5d73", "#ffb347"],
+      night: ["#120b3a", "#2a1b6b", "#5b3a9b"],
+    };
+
+    // Where the sun is in that place's day, and how close it is to sunrise or sunset.
+    const light = () => {
+      const known = data.sun?.[mode];
+      const rise = known && Number.isFinite(known.rise) ? known.rise : 360;
+      const set = known && Number.isFinite(known.set) ? known.set : 1110;
+      const real = clock[mode];
+      const dayNow = real >= rise && real <= set;
+      const from = dayNow ? rise : set;
+      let at = from + ((real - from + 1440) % 1440) * intro + lapse;
+      at = ((at % 1440) + 1440) % 1440;
+      const dayThen = at >= rise && at <= set;
+      at += scrolled * (dayThen ? Math.max(set + 50 - at, 0) : 200);
+      at = ((at % 1440) + 1440) % 1440;
+      const day = at >= rise && at <= set;
+      const f = day ? (at - rise) / (set - rise) : ((at - set + 1440) % 1440) / (1440 - (set - rise));
+      const gap = (a: number, b: number) => Math.min(Math.abs(a - b), 1440 - Math.abs(a - b));
+      const dusk = Math.max(0, 1 - Math.min(gap(at, rise), gap(at, set)) / 80);
+      return { day, f, dusk };
+    };
+
+    let tone = { dusk: 0, dark: 0, gloom: 0 };
+    const shade = (hex: string) => {
+      const warm = blend(hex, "#ff7a59", tone.dusk * 0.28 * (1 - tone.gloom));
+      return blend(blend(warm, "#66717d", tone.gloom * 0.38), "#150d45", tone.dark * 0.58);
+    };
+
+    // Water surface: the real period sets how often a crest passes, the real height sets the size.
+    const surface = (band: number, x: number, t: number) => {
+      const sea = mode === "sea";
+      const h = sea ? (data.sea?.height ?? 1) : 0;
+      const wind = sea ? 0 : (data.lake?.wind ?? 6);
+      const period = sea ? (data.sea?.period ?? 10) : 2.4;
+      const amp = sea ? Math.min(Math.max(h, 0.3), 3.2) * 15 : 1.5 + Math.min(wind, 40) * 0.2;
+      const length = sea ? 130 + period * 30 : 80;
+      const grow = 0.5 + band * 0.16;
+      const phase = band * 1.3;
+      let y =
+        Math.sin(TAU * (x / length - t / period) + phase) * 0.72 +
+        Math.sin(TAU * (x / (length * 0.41) - t / (period * 0.55)) + phase * 2.3) * 0.28;
+      y *= amp * grow;
+      if (pointerX !== null || lift > 0.01) {
+        const d = (x - (pointerX ?? 0)) / 110;
+        y -= lift * 20 * grow * Math.exp(-d * d);
+      }
+      return y;
+    };
+
+    const tent = (u: number, centre: number, half: number) => Math.max(0, 1 - Math.abs(u - centre) / half);
+    const noise = (n: number) => ((n * 9301 + 49297) % 233280) / 233280;
+    const peak = (layer: number, u: number) => {
+      const horn = tent(u, 0.66 + layer * 0.07, 0.13) ** 1.4 * (0.62 - layer * 0.14);
+      const left = tent(u, 0.26 - layer * 0.08, 0.26) * (0.38 - layer * 0.05);
+      const right = tent(u, 0.97, 0.2) * 0.3;
+      const mid = tent(u, 0.46 + layer * 0.03, 0.14) * 0.22;
+      return Math.max(horn, left, right, mid) + (noise(Math.round(u * 70) + layer * 31) - 0.5) * 0.035;
+    };
+
+    const flakes = Array.from({ length: 160 }, (_, i) => ({
+      x: (i * 0.618034) % 1,
+      y: (i * 0.381966) % 1,
+      v: 0.05 + ((i * 7) % 10) / 100,
+      r: 1.2 + ((i * 3) % 5) / 2.5,
+    }));
+
+    const duck = (x: number, y: number, angle: number, board: boolean, size = 1, facing = 1) => {
+      const k = Math.min(Math.max(width / 900, 0.95), 1.7) * size;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(k * facing, k);
+      if (board) {
+        ctx.fillStyle = "#ff4f7b";
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 34, 5, 0, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(-20, -1, 40, 2);
+      }
+      ctx.fillStyle = "#ffd23f";
+      ctx.beginPath();
+      ctx.ellipse(-1, -13, 15, 10, 0, 0, TAU);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-13, -15);
+      ctx.quadraticCurveTo(-22, -24, -16, -26);
+      ctx.quadraticCurveTo(-11, -19, -4, -19);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(10, -26, 8.5, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "#f5b400";
+      ctx.beginPath();
+      ctx.ellipse(-3, -12, 8, 5, -0.2, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "#ff7a1a";
+      ctx.beginPath();
+      ctx.moveTo(17, -28);
+      ctx.lineTo(27, -25);
+      ctx.lineTo(17, -21.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#17181c";
+      ctx.beginPath();
+      ctx.arc(12, -28, 1.5, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    let sway = 0;
+    let intro = still ? 1 : 0;
+    let introStart = 0;
+    let scrolled = 0;
+    // Time-lapse: once the sun has reached the real time, a day passes every eight minutes.
+    let lapse = 0;
+    let lapseT = 0;
+    // The flock: ducks wander in, change their minds, hop, and paddle off again.
+    type Bird = { x: number; v: number; lane: number; size: number; next: number; hopAt: number };
+    const flock: Bird[] = [];
+    let spawnAt = 0;
+    let lastT = 0;
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+    const arrive = (t: number, inside = false) => {
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      flock.push({
+        x: inside ? rand(0.55, 0.8) * width : dir > 0 ? -70 : width + 70,
+        v: dir * rand(16, 52),
+        lane: Math.floor(rand(1, 4)),
+        size: rand(0.72, 1.1),
+        next: t + rand(3, 8),
+        hopAt: -10,
+      });
+    };
+    const tend = (t: number) => {
+      const dt = Math.min(Math.max(t - lastT, 0), 0.1);
+      lastT = t;
+      if (flock.length === 0) arrive(t, true);
+      if (t > spawnAt) {
+        if (spawnAt && flock.length < 6) arrive(t);
+        spawnAt = t + rand(5, 12);
+      }
+      for (let i = flock.length - 1; i >= 0; i--) {
+        const bird = flock[i];
+        bird.x += bird.v * dt;
+        if (t > bird.next) {
+          const whim = Math.random();
+          if (whim < 0.25) bird.v = -bird.v;
+          else if (whim < 0.6) bird.hopAt = t;
+          else bird.v = Math.sign(bird.v) * rand(16, 60);
+          bird.next = t + rand(3, 8);
+        }
+        if (bird.x < -90 || bird.x > width + 90) {
+          if (flock.length > 1) flock.splice(i, 1);
+          else bird.v = -bird.v;
+        }
+      }
+    };
+    const hop = (bird: Bird, t: number) => {
+      const u = (t - bird.hopAt) / 0.8;
+      return u > 0 && u < 1 ? { up: Math.sin(Math.PI * u) * 64, spin: u * TAU } : { up: 0, spin: 0 };
+    };
+    const clouds = Array.from({ length: 13 }, (_, i) => ({
+      x: (i * 0.618034 + 0.08) % 1,
+      y: 0.07 + ((i * 0.37) % 1) * 0.24,
+      s: 0.7 + ((i * 0.53) % 1) * 0.9,
+      v: 0.003 + ((i * 0.29) % 1) * 0.004,
+    }));
+    let wx = { cover: 0.2, gloom: 0, rain: false, snow: false, fog: false, storm: false };
+
+    // Rain, snow, fog and lightning for whatever the sky is doing there right now.
+    const overlay = (t: number) => {
+      if (wx.fog) {
+        const haze = ctx.createLinearGradient(0, 0, 0, height);
+        haze.addColorStop(0, "rgb(228 232 238 / 0.25)");
+        haze.addColorStop(0.6, "rgb(228 232 238 / 0.7)");
+        haze.addColorStop(1, "rgb(228 232 238 / 0.35)");
+        ctx.fillStyle = haze;
+        ctx.fillRect(0, 0, width, height);
+      }
+      if (wx.rain) {
+        ctx.strokeStyle = "rgb(255 255 255 / 0.45)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let i = 0; i < (wx.storm ? 170 : 100); i++) {
+          const xx = ((i * 0.618034) % 1) * (width + 80);
+          const yy = ((i * 0.381966 + t * (0.9 + (i % 5) * 0.08)) % 1) * (height + 40) - 20;
+          ctx.moveTo(xx, yy);
+          ctx.lineTo(xx - 7, yy + 20);
+        }
+        ctx.stroke();
+      }
+      if (wx.snow) {
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = 0.9;
+        for (const [i, flake] of flakes.entries()) {
+          const yy = ((flake.y + t * flake.v) % 1) * height;
+          const xx = (((flake.x * width + Math.sin(t * 0.6 + i) * 10 - sway * 60) % width) + width) % width;
+          ctx.beginPath();
+          ctx.arc(xx, yy, flake.r, 0, TAU);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      if (wx.storm && Math.sin(t * 1.7) * Math.sin(t * 0.37) > 0.985) {
+        ctx.fillStyle = "rgb(255 255 255 / 0.3)";
+        ctx.fillRect(0, 0, width, height);
+      }
+    };
+
+    function draw(now: number) {
+      scene(now);
+      overlay(now / 1000);
+    }
+
+    function scene(now: number) {
+      const t = now / 1000;
+      tend(t);
+      if (!still) {
+        if (!introStart) introStart = now;
+        intro = 1 - (1 - Math.min((now - introStart) / 3200, 1)) ** 3;
+        if (intro >= 1) lapse += Math.min(Math.max(t - lapseT, 0), 0.1) * 3;
+        lapseT = t;
+        const target = Math.min(Math.max(window.scrollY / Math.max(height * 0.85, 1), 0), 1);
+        scrolled += (target - scrolled) * 0.08;
+      }
+      const { day, f, dusk } = light();
+      const now2 = data.sky?.[mode] ?? { code: 0, cloud: 20 };
+      const k = kind(now2.code);
+      const cover = Math.max(now2.cloud / 100, k.rain || k.snow ? 0.85 : 0);
+      wx = { cover, gloom: Math.min(Math.max((cover - 0.45) * 1.9, 0), 1) * (k.rain || k.snow ? 1 : 0.8), ...k };
+      tone = { dusk, dark: day ? 0 : 1 - dusk * 0.6, gloom: wx.gloom };
+      sway += ((pointerX === null ? 0 : pointerX / Math.max(width, 1) - 0.5) - sway) * 0.05;
+      lift += ((pointerX === null ? 0 : 1) - lift) * 0.08;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.globalAlpha = 1;
+
+      const base = day ? SKY.day : SKY.night;
+      const sky = ctx.createLinearGradient(0, 0, 0, height * 0.82);
+      const grey = day ? ["#6f7c8c", "#9aa6b3", "#c4cbd2"] : ["#191a2b", "#262839", "#3a3c50"];
+      [0, 0.55, 1].forEach((stop, i) =>
+        sky.addColorStop(stop, blend(blend(base[i], SKY.dusk[i], dusk * (1 - wx.gloom * 0.6)), grey[i], wx.gloom * 0.8)),
+      );
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, width, height);
+
+      if (!day) {
+        ctx.fillStyle = "#fff";
+        for (let i = 0; i < 80; i++) {
+          ctx.globalAlpha = (1 - dusk) * (0.35 + 0.45 * Math.abs(Math.sin(t * 0.7 + i * 1.7)));
+          ctx.beginPath();
+          ctx.arc(((i * 0.618034) % 1) * width, ((i * 0.371) % 1) * height * 0.6, 0.8 + (i % 3) * 0.5, 0, TAU);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      const horizon = height * (mode === "snow" ? 0.8 : 0.6);
+      const sx = width * (0.16 + 0.7 * f) - sway * 20;
+      const sy = horizon - Math.sin(Math.PI * f) * height * 0.44 + 12;
+      const r = Math.max(34, height * 0.078);
+      ctx.globalAlpha = 1 - wx.gloom * 0.8;
+      const glow = ctx.createRadialGradient(sx, sy, r * 0.6, sx, sy, r * 3.2);
+      glow.addColorStop(0, day ? "rgb(255 240 170 / 0.6)" : "rgb(230 220 255 / 0.3)");
+      glow.addColorStop(1, "rgb(255 240 170 / 0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(sx - r * 3.2, sy - r * 3.2, r * 6.4, r * 6.4);
+      ctx.fillStyle = day ? blend("#fff6c4", "#ffd23f", dusk) : "#f4efff";
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, TAU);
+      ctx.fill();
+      if (!day) {
+        ctx.fillStyle = "rgb(190 180 230 / 0.55)";
+        for (const [dx, dy, cr] of [
+          [-0.3, -0.2, 0.2],
+          [0.25, 0.3, 0.14],
+          [0.35, -0.35, 0.1],
+        ]) {
+          ctx.beginPath();
+          ctx.arc(sx + dx * r, sy + dy * r, cr * r, 0, TAU);
+          ctx.fill();
+        }
+      }
+
+      ctx.globalAlpha = 1;
+      const cloudy = day ? 0.92 - dusk * 0.25 * (1 - wx.gloom) : 0.16 + wx.gloom * 0.3;
+      ctx.fillStyle = blend(blend("#ffffff", "#ffc9b8", dusk), day ? "#8b95a1" : "#4a4d63", wx.gloom * 0.85);
+      const showing = Math.min(clouds.length, 2 + Math.round(wx.cover * 11));
+      for (const [i, cloud] of clouds.slice(0, showing).entries()) {
+        const cx = ((((cloud.x + t * cloud.v) % 1.3) - 0.15) * width) - sway * (20 + i * 8);
+        const cy = cloud.y * height;
+        const k = cloud.s * Math.min(Math.max(width / 1000, 0.6), 1.2);
+        ctx.globalAlpha = cloudy;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 60 * k, 16 * k, 0, 0, TAU);
+        ctx.ellipse(cx - 22 * k, cy - 12 * k, 26 * k, 20 * k, 0, 0, TAU);
+        ctx.ellipse(cx + 14 * k, cy - 18 * k, 32 * k, 26 * k, 0, 0, TAU);
+        ctx.ellipse(cx + 44 * k, cy - 6 * k, 22 * k, 15 * k, 0, 0, TAU);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (day && mode !== "snow") {
+        ctx.strokeStyle = "rgb(30 30 60 / 0.55)";
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 3; i++) {
+          const bx = (((t * 0.018 + i * 0.07) % 1.2) - 0.1) * width;
+          const by = height * (0.3 + i * 0.035) + Math.sin(t * 0.8 + i) * 8;
+          const flap = Math.sin(t * 6 + i * 2) * 5;
+          ctx.beginPath();
+          ctx.moveTo(bx - 9, by - flap);
+          ctx.quadraticCurveTo(bx - 4, by - 3, bx, by);
+          ctx.quadraticCurveTo(bx + 4, by - 3, bx + 9, by - flap);
+          ctx.stroke();
+        }
+      }
+
+      if (mode === "snow") {
+        const colours = ["#34307f", "#6a65c9", "#a7a1f0"];
+        const depth = Math.min(data.snow?.depth ?? 0, 1);
+        for (let layer = 2; layer >= 0; layer--) {
+          const shift = sway * (3 - layer) * 14;
+          const y = (x: number) =>
+            height * (0.9 - layer * 0.03) - peak(layer, (x + shift) / Math.max(width, 1)) * height * 0.7;
+          const path = new Path2D();
+          path.moveTo(-30, height);
+          let top = height;
+          for (let x = -30; x <= width + 30; x += 10) {
+            const yy = y(x);
+            top = Math.min(top, yy);
+            path.lineTo(x, yy);
+          }
+          path.lineTo(width + 30, height);
+          path.closePath();
+          ctx.fillStyle = shade(colours[layer]);
+          ctx.fill(path);
+          if (layer < 2) {
+            const line = top + height * (0.05 + depth * 0.3 + (layer === 0 ? 0.035 : 0));
+            ctx.save();
+            ctx.clip(path);
+            ctx.fillStyle = shade("#ffffff");
+            ctx.beginPath();
+            ctx.moveTo(-30, 0);
+            for (let x = -30, i = 0; x <= width + 40; x += 22, i++) ctx.lineTo(x, line + (i % 2 ? 14 : -6));
+            ctx.lineTo(width + 40, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+        ctx.fillStyle = shade("#1d1a57");
+        ctx.beginPath();
+        ctx.moveTo(-40, height);
+        for (let x = -40; x <= width + 40; x += 20) {
+          ctx.lineTo(x, height * 0.93 + Math.sin(x / 160 + 1) * height * 0.018);
+        }
+        ctx.lineTo(width + 40, height);
+        ctx.fill();
+        for (let x = -20, i = 0; x < width + 40; x += 30 + noise(i) * 26, i++) {
+          const px = x - sway * 46;
+          const ground = height * 0.94 + Math.sin(x / 160 + 1) * height * 0.018;
+          const tall = 26 + noise(i + 7) * 44;
+          ctx.beginPath();
+          ctx.moveTo(px - tall * 0.3, ground);
+          ctx.lineTo(px, ground - tall);
+          ctx.lineTo(px + tall * 0.3, ground);
+          ctx.fill();
+        }
+        for (const bird of flock) {
+          const ground = (x: number) => height * 0.94 + Math.sin(x / 160 + 1) * height * 0.018;
+          const jump = hop(bird, t);
+          const dir = Math.sign(bird.v) || 1;
+          duck(
+            bird.x,
+            ground(bird.x) - 4 - bird.lane * 6 - jump.up,
+            Math.atan2(ground(bird.x + 8) - ground(bird.x - 8), 16) - jump.spin * dir,
+            true,
+            bird.size * 0.8,
+            dir,
+          );
+        }
+        const fresh = data.snow?.fresh ?? 0;
+        const falling = fresh > 0 && !wx.snow ? Math.min(flakes.length, Math.round(30 + fresh * 14)) : 0;
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = 0.9;
+        for (let i = 0; i < falling; i++) {
+          const flake = flakes[i];
+          const yy = ((flake.y + t * flake.v) % 1) * height;
+          const xx = (((flake.x * width + Math.sin(t * 0.6 + i) * 10 - sway * 60) % width) + width) % width;
+          ctx.beginPath();
+          ctx.arc(xx, yy, flake.r, 0, TAU);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        return;
+      }
+
+      if (mode === "lake") {
+        const hills = ["#8fd98a", "#3fa56b"];
+        hills.forEach((colour, i) => {
+          ctx.fillStyle = shade(colour);
+          ctx.beginPath();
+          ctx.moveTo(-40, horizon + 2);
+          for (let x = -40; x <= width + 40; x += 12) {
+            const u = (x + sway * (i + 1) * 12) / 260;
+            const lump = Math.sin(u + i * 2) * 0.5 + Math.sin(u * 2.3 + i) * 0.25 + 0.75;
+            ctx.lineTo(x, horizon - lump * height * (0.085 - i * 0.03));
+          }
+          ctx.lineTo(width + 40, horizon + 2);
+          ctx.fill();
+        });
+        const hx = width * 0.24 + sway * -24;
+        const hy = horizon - height * 0.058;
+        ctx.fillStyle = shade("#fff3d6");
+        ctx.fillRect(hx - 15, hy - 11, 30, 13);
+        ctx.fillStyle = shade("#8a5a2b");
+        ctx.beginPath();
+        ctx.moveTo(hx - 20, hy - 10);
+        ctx.lineTo(hx - 10, hy - 25);
+        ctx.lineTo(hx + 10, hy - 25);
+        ctx.lineTo(hx + 20, hy - 10);
+        ctx.fill();
+
+        const lake = ctx.createLinearGradient(0, horizon, 0, height);
+        lake.addColorStop(0, shade("#63d8dc"));
+        lake.addColorStop(1, shade("#126f9e"));
+        ctx.fillStyle = lake;
+        ctx.fillRect(0, horizon, width, height - horizon);
+        const chop = 1 + Math.min(data.lake?.wind ?? 6, 40) * 0.12;
+        for (let i = 0; i < 9; i++) {
+          const far = i / 9;
+          ctx.fillStyle = day ? blend("#fff6c4", "#ffd23f", dusk) : "#f4efff";
+          ctx.globalAlpha = 0.55 - far * 0.3;
+          const w = r * (0.5 + far * 1.6) + Math.sin(t * 2 + i) * 6;
+          ctx.fillRect(sx - w / 2, horizon + 8 + far * (height - horizon) * 0.7, w, 3 + far * 3);
+        }
+        ctx.fillStyle = "#fff";
+        for (let i = 0; i < 46; i++) {
+          const far = ((i * 0.37) % 1) ** 1.4;
+          const yy = horizon + 10 + far * (height - horizon - 14) + Math.sin(t * 1.4 + i) * chop;
+          const xx = ((((i * 0.618034 + t * 0.006 * ((i % 3) + 1)) % 1) * (width + 200) - 100 - sway * 30 * far) % (width + 200)) - 0;
+          ctx.globalAlpha = 0.14 + far * 0.2;
+          ctx.fillRect(xx, yy, 24 + far * 90, 2 + far * 2);
+        }
+        ctx.globalAlpha = 1;
+        for (const bird of [...flock].sort((a, b) => a.lane - b.lane)) {
+          const jump = hop(bird, t);
+          const dir = Math.sign(bird.v) || 1;
+          const scale = bird.size * (0.6 + bird.lane * 0.16);
+          const fy = horizon + (height - horizon) * (0.14 + bird.lane * 0.17) + Math.sin(t * 1.3 + bird.lane) * chop * 1.6;
+          ctx.strokeStyle = "rgb(255 255 255 / 0.5)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(bird.x, fy + 2, (34 + Math.sin(t * 1.3 + bird.lane) * 4) * scale, 5 * scale, 0, 0, TAU);
+          ctx.stroke();
+          duck(bird.x, fy + 3 - jump.up, Math.sin(t * 1.3 + bird.lane) * 0.05 - jump.spin * dir, false, scale, dir);
+        }
+        ctx.strokeStyle = shade("#1f6b4a");
+        ctx.lineWidth = 4;
+        for (let i = 0; i < 11; i++) {
+          const bx = width * 0.02 + i * 15 + noise(i) * 10;
+          const tall = height * (0.14 + noise(i + 3) * 0.16);
+          ctx.beginPath();
+          ctx.moveTo(bx, height + 4);
+          ctx.quadraticCurveTo(bx + 4, height - tall * 0.5, bx + 12 + Math.sin(t * 0.9 + i) * 7, height - tall);
+          ctx.stroke();
+        }
+        return;
+      }
+
+      const colours = ["#6fe8d3", "#2fcbc2", "#12a5b5", "#0b7fa3", "#07598a"];
+      const gap = (height - horizon) * 0.2;
+      for (let band = 0; band < 5; band++) {
+        const shift = sway * band * 18;
+        const top = horizon + band * gap;
+        ctx.beginPath();
+        ctx.moveTo(-20, height);
+        for (let x = -20; x <= width + 20; x += 6) ctx.lineTo(x, top + surface(band, x + shift, t));
+        ctx.lineTo(width + 20, height);
+        ctx.closePath();
+        ctx.fillStyle = shade(colours[band]);
+        ctx.fill();
+        ctx.strokeStyle = `rgb(255 255 255 / ${0.5 - band * 0.06})`;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let x = -20; x <= width + 20; x += 6) {
+          const y = top + surface(band, x + shift, t);
+          if (x === -20) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        for (const bird of flock) {
+          if (bird.lane !== band) continue;
+          const jump = hop(bird, t);
+          const dir = Math.sign(bird.v) || 1;
+          const y0 = surface(band, bird.x - 8 + shift, t);
+          const y1 = surface(band, bird.x + 8 + shift, t);
+          duck(
+            bird.x,
+            top + (y0 + y1) / 2 + 1 - jump.up,
+            Math.atan2(y1 - y0, 16) - jump.spin * dir,
+            true,
+            bird.size * (0.62 + band * 0.16),
+            dir,
+          );
+        }
+      }
+    }
+
+    const loop = (now: number) => {
+      draw(now);
+      frame = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
+    };
+    const start = () => {
+      if (still) draw(0);
+      else if (!frame) frame = requestAnimationFrame(loop);
+    };
+
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+    }).observe(canvas);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && visible) start();
+    });
+
+    const hero = canvas.closest<HTMLElement>(".hero") ?? canvas;
+    hero.addEventListener("pointermove", (event) => {
+      pointerX = event.clientX - canvas.getBoundingClientRect().left;
+    });
+    hero.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("button, a")) return;
+      const t = performance.now() / 1000;
+      flock.forEach((bird, i) => {
+        bird.hopAt = t + i * 0.09;
+      });
+    });
+    hero.addEventListener("pointerleave", () => {
+      pointerX = null;
+    });
+
+    /* ---------- place switcher ---------- */
+
+    const spots = [...root.querySelectorAll<HTMLButtonElement>("[data-spot]")];
+    const select = (spot: HTMLButtonElement, focus = false) => {
+      const next = spot.dataset.spot as Mode;
+      if (next === mode) return;
+      for (const other of spots) {
+        const on = other === spot;
+        other.setAttribute("aria-selected", String(on));
+        other.tabIndex = on ? 0 : -1;
+      }
+      if (focus) spot.focus();
+      if (still) {
+        mode = next;
+        paint();
+        draw(0);
+        return;
+      }
+      canvas.classList.add("swap");
+      setTimeout(() => {
+        mode = next;
+        introStart = 0;
+        lapse = 0;
+        paint();
+        canvas.classList.remove("swap");
+      }, 200);
+    };
+    for (const [index, spot] of spots.entries()) {
+      spot.addEventListener("click", () => select(spot));
+      spot.addEventListener("keydown", (event) => {
+        const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        event.preventDefault();
+        select(spots[(index + step + spots.length) % spots.length], true);
+      });
+    }
+
+    if (!still && "IntersectionObserver" in window) {
+      const reveal = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("in");
+            reveal.unobserve(entry.target);
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px" },
+      );
+      for (const group of root.querySelectorAll<HTMLElement>(".themes, .desks, .hi, .block-head, .block > .label")) {
+        const items = group.matches(".themes, .desks") ? [...group.children] : [group];
+        items.forEach((item, i) => {
+          item.classList.add("rv");
+          (item as HTMLElement).style.transitionDelay = `${i * 90}ms`;
+          reveal.observe(item);
+        });
+      }
+    }
+
+    resize();
+    start();
+    load().catch(() => paint(true));
+  }
+
+  const dp = document.querySelector<HTMLElement>(".home .dp");
+  let back = 0;
+  dp?.addEventListener("click", () => {
+    dp.textContent = "42.";
+    clearTimeout(back);
+    back = window.setTimeout(() => {
+      dp.textContent = "Don't panic.";
+    }, 1600);
+  });
+</script>
+
+<style>
+  .home .block {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .home .desks li {
+    --tone: var(--color-terracotta);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .home .desks li:nth-child(2) {
+    --tone: var(--color-pine);
+  }
+  .home .desks li:nth-child(3) {
+    --tone: #6a65c9;
+  }
+  .home .desks li:nth-child(4) {
+    --tone: #e0336a;
+  }
+  .home .desk {
+    margin-inline: -1rem;
+    padding: 1.35rem 1rem;
+    border-bottom: 0;
+    border-radius: 16px;
+    transition: background-color 180ms ease;
+  }
+  .home .desk-name {
+    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+    font-weight: 600;
+    color: var(--tone);
+    transition: color 180ms ease;
+  }
+  .home .desk-name img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+  }
+  .home .desk {
+    align-items: center;
+  }
+  @media (hover: hover) {
+    .home .desk:hover {
+      background: #fff;
+    }
+    .home .desk:hover .desk-go {
+      color: var(--tone);
+    }
+  }
+  .home .desk-role,
+  .home .desk-body,
+  .home .desk-go {
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+  .home .theme {
+    border-top: 6px solid var(--color-pine);
+    padding-top: 1.1rem;
+  }
+  .home .theme:nth-child(2) {
+    border-top-color: var(--color-terracotta);
+  }
+  .home .theme:nth-child(3) {
+    border-top-color: #6a65c9;
+  }
+  .home .theme h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  .home .hi {
+    padding: clamp(1.75rem, 5vw, 3.25rem);
+    border-radius: 24px;
+    background: #ffd23f;
+  }
+  .home .hi p {
+    color: var(--color-ink);
+  }
+  .home .hi .label {
+    color: var(--color-ink);
+  }
+  .home .hi .reach a {
+    color: var(--color-ink);
+    text-decoration-color: var(--color-ink);
+  }
+  .home .hi .reach a:first-child {
+    flex-basis: 100%;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4.4vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  @media (min-width: 761px) {
+    .home .desk {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr) 1.5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  body {
+    overflow-x: clip;
+  }
+  .home .rv {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .home .rv.in {
+    opacity: 1;
+    transform: none;
+  }
+  .home .theme.rv {
+    clip-path: inset(0 100% 0 0);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      clip-path 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .home .theme.rv.in {
+    clip-path: inset(0 0 0 0);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .home .hero h1,
+    .home .hero-copy p,
+    .home .hero-foot {
+      animation: hero-in 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+    .home .hero-copy p {
+      animation-delay: 160ms;
+    }
+    .home .hero-foot {
+      animation-delay: 420ms;
+    }
+  }
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+    }
+  }
+</style>

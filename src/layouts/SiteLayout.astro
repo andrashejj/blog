@@ -34,7 +34,7 @@ const year = new Date().getFullYear();
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <title>{seo.title}</title>
     <meta name='description' content={seo.description} />
-    <meta name='theme-color' content='#f1e6cf' />
+    <meta name='theme-color' content='#fff5dc' />
     <link rel='canonical' href={seo.canonicalUrl} />
     <meta property='og:type' content={type} />
     <meta property='og:title' content={seo.title} />
@@ -58,16 +58,13 @@ const year = new Date().getFullYear();
     <div class='grid min-h-dvh grid-rows-[auto_1fr_auto]'>
       <header class='reveal reveal-1 sticky top-0 z-20 border-b border-rule bg-paper/85 backdrop-blur-[6px]'>
         <div class='mx-auto flex w-[min(100%-2rem,1120px)] items-center justify-between py-4'>
-          <a href='/' class='no-rule group flex items-baseline gap-3' aria-label={site.name}>
-            <span
-              class='font-display text-2xl leading-none text-ink'
-              style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 600;'
-            >A<span class='italic text-terracotta'>·</span>H</span>
-            <span class='hidden font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted sm:inline'>Andras Hejj · Field Notes</span>
-          </a>
-          <nav class='flex items-center gap-6 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-ink-soft'>
+          <a
+            href='/'
+            class='no-rule font-display text-[1.45rem] leading-none tracking-[-0.03em] text-ink transition hover:text-terracotta'
+            style='font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 800;'
+          >Andras Hejj</a>
+          <nav class='flex items-center gap-6 font-mono text-[0.78rem] font-bold uppercase tracking-[0.14em] text-ink'>
             <a class='no-rule transition hover:text-terracotta' href='/blog'>Blog</a>
-            <a class='no-rule transition hover:text-terracotta' href='/about'>About</a>
             <a
               class='no-rule inline-flex items-center gap-1.5 transition hover:text-terracotta'
               href='/subscribe'
@@ -85,19 +82,18 @@ const year = new Date().getFullYear();
         <slot />
       </main>
 
-      <footer class='border-t border-rule bg-paper-deep/40'>
+      <footer class='border-t border-rule'>
         <div class='mx-auto w-[min(100%-2rem,1120px)] py-8'>
-          <div class='rule-horizontal mb-6'></div>
           <div class='flex flex-col items-start justify-between gap-4 text-ink-soft md:flex-row md:items-center'>
             <div class='flex items-baseline gap-3'>
-              <span class='font-display text-lg' style='font-variation-settings: "SOFT" 100, "WONK" 1;'>
-                © {year}
+              <span class='font-display text-lg' style='font-variation-settings: "SOFT" 100, "WONK" 1; font-weight: 700;'>
+                © {year} Andras Hejj
               </span>
-              <span class='font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted'>
+              <span class='font-mono text-[0.72rem] uppercase tracking-[0.14em] text-muted'>
                 Budapest · Zürich · Mauritius
               </span>
             </div>
-            <div class='flex items-center gap-5 font-mono text-[0.72rem] uppercase tracking-[0.22em]'>
+            <div class='flex items-center gap-5 font-mono text-[0.76rem] font-bold uppercase tracking-[0.14em]'>
               <a href={site.social.github} target='_blank' rel='noreferrer' class='no-rule hover:text-terracotta'>GitHub</a>
               <a href={site.social.linkedin} target='_blank' rel='noreferrer' class='no-rule hover:text-terracotta'>LinkedIn</a>
               <a href={site.social.x} target='_blank' rel='noreferrer' class='no-rule hover:text-terracotta'>X</a>
