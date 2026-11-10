@@ -67,7 +67,7 @@ Defined in `@layer components` of [src/styles/global.css](src/styles/global.css#
 
 ## Voice the design supports
 
-The copy speaks as "field notes" / "dispatches" from a person based in Budapest · Zürich · Mauritius. Design choices reinforce that frame: dispatch labels on post cards, "Field Notes" in the wordmark, mono coordinates in the footer. New surfaces should pick a similar editorial noun ("ledger," "log," "register," "index") rather than product nouns ("dashboard," "feed").
+The copy speaks as "field notes" / "dispatches" from a person based in Budapest · Zug · Tamarin. Design choices reinforce that frame: dispatch labels on post cards, "Field Notes" in the wordmark, mono coordinates in the footer. New surfaces should pick a similar editorial noun ("ledger," "log," "register," "index") rather than product nouns ("dashboard," "feed").
 
 ## Adding something new
 
